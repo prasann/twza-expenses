@@ -1,0 +1,8 @@
+defaults: &defaults
+  host: localhost
+
+
+development:
+  <<: *defaults
+  database: sample
+

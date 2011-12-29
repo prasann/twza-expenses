@@ -1,0 +1,6 @@
+MONGODB [WARNING] Please note that logging negatively impacts client-side performance. You should set your logging level no lower than :info in production.
+MONGODB admin['$cmd'].find({:ismaster=>1}).limit(-1)
+MONGODB sample['system.namespaces'].find({})
+MONGODB sample['samples'].insert([{"title"=>"ashok", "pub_date"=>2011-12-29 00:00:00 UTC, "_id"=>BSON::ObjectId('4efc2e5336f5b77b27000001')}])
+MONGODB sample['$cmd'].find({"count"=>"samples", "query"=>{}, "fields"=>nil}).limit(-1)
+MONGODB sample['samples'].find({:title=>"ashok"})
