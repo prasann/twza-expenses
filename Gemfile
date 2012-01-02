@@ -5,6 +5,8 @@ gem 'rspec'
 gem 'rspec-rails'
 gem 'mongoid'
 gem 'bson_ext'
+gem 'roo'
+
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
