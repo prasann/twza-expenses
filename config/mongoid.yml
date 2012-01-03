@@ -6,3 +6,6 @@ development:
   <<: *defaults
   database: sample
 
+test:
+  <<: *defaults
+  database: test
