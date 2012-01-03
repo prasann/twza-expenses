@@ -4,5 +4,8 @@ defaults: &defaults
 
 development:
   <<: *defaults
-  database: sample
+  database: dev
 
+test:
+  <<: *defaults
+  database: test

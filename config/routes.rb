@@ -1,4 +1,6 @@
 Mankatha::Application.routes.draw do
+  get "expense_report/fetch"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
