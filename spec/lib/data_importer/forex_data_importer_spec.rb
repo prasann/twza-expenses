@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'forex_data_importer'
+require 'data_importer/forex_data_importer'
 
 
 describe ForexDataImporter do

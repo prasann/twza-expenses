@@ -1,4 +1,4 @@
-require 'forex_data_importer'
+require 'data_importer/forex_data_importer'
 require 'travel_data_importer'
 
 namespace :data_import do
