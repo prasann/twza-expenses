@@ -8,10 +8,10 @@ module ExcelDataExtractor
     file = handler(file_name)
     file.default_sheet = file.sheets[sheet_id]
     2.upto(file.last_row) do |line|
-        extractor = Proc.new{|column|
-                           file.cell(line, column)
-                    }
-        callback.call(extractor)
+      extractor = Proc.new{|column|
+        file.cell(line, column)
+      }
+      callback.call(extractor)
     end
   end
 
