@@ -11,20 +11,36 @@ class ExpenseReport
 			if is_written
 				all_rows = CSV.read("data/temp_file.csv")
 				header = all_rows.shift
-				header.each do |key|
-					key.downcase!
-					key.gsub!(" ", "_")
-				end 
+				
+				convert_to_keys header
+				expense_creator = create_expense header
+				
 				all_rows.each do |row|
-					row_obj = Hash.new
-					header.each_index do |i|
-						row_obj[header[i]] = row[i]
-					end
-					Expense.create(row_obj)
+					expense_creator.call(row)
 				end
+				
 				File.delete("data/temp_file.csv")
 			end
 		end	
+	end
+
+	def self.create_expense(header)
+		convert_to_keys header
+		return Proc.new {|row|
+				row_obj = Hash.new
+				header.each_index do |i|
+					row_obj[header[i]] = row[i]
+				end
+				Expense.create(row_obj)	
+			}
+	end
+
+	def self.convert_to_keys(arr)
+		arr.each do |key|
+			key.downcase!
+			key.gsub!(" ", "_")
+		end
+		return arr
 	end
 end
 

@@ -5,10 +5,9 @@ require 'data_importer/forex_data_importer'
 describe ForexDataImporter do
 
   before(:each) do
-    @expected_date = Date.new
+    @expected_date = Date.today
     @expected_text_value = "some text"
   end
-
 
   it "should read the forex details from the spreadsheet and load the details into the database" do
 
@@ -18,7 +17,7 @@ describe ForexDataImporter do
 
       def file.cell(line, column)
         return 1 if ['C', 'E', 'N'].include?(column)
-        return Date.new if ['B', 'G', 'L'].include?(column)
+        return Date.today if ['B', 'G', 'L'].include?(column)
         'some text'
       end
 
@@ -45,7 +44,7 @@ describe ForexDataImporter do
       def file.cell(line, column)
         return "wrong data" if line == 2
         return 1 if ['C', 'E', 'N'].include?(column)
-        return Date.new if ['B', 'G', 'L'].include?(column)
+        return Date.today if ['B', 'G', 'L'].include?(column)
         'some text'
       end
 
