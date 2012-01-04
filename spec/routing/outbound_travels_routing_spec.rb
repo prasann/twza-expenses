@@ -7,6 +7,10 @@ describe OutboundTravelsController do
       get("/outbound_travels").should route_to("outbound_travels#index")
     end
 
+    it "routes to index" do
+      get("/outbound_travels/index/1").should route_to("outbound_travels#index", :page => "1")
+    end
+
     it "routes to #new" do
       get("/outbound_travels/new").should route_to("outbound_travels#new")
     end

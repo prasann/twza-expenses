@@ -1,10 +1,9 @@
 Mankatha::Application.routes.draw do
 
-  resources :deletes
 
   resources :outbound_travels
-
-  resources :samples
+  
+  match 'outbound_travels/index/:page' => 'outbound_travels#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

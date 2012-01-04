@@ -8,9 +8,12 @@ describe OutboundTravelsController do
 
   describe "GET index" do
     it "assigns all outbound_travels as @outbound_travels" do
-      outbound_travel = OutboundTravel.create! valid_attributes
-      get :index
-      assigns(:outbound_travels).should eq([outbound_travel])
+      outbound_travel_1 = OutboundTravel.create! valid_attributes
+      outbound_travel_2 = OutboundTravel.create! valid_attributes
+      get :index, :page => 1, :per_page => 1
+      assigns(:outbound_travels).should eq([outbound_travel_1])
+      get :index, :page => 2, :per_page => 1
+      assigns(:outbound_travels).should eq([outbound_travel_2])
     end
   end
 

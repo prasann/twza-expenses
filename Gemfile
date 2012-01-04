@@ -6,7 +6,7 @@ gem 'rspec-rails'
 gem 'mongoid'
 gem 'bson_ext'
 gem 'roo'
-
+gem 'kaminari'
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 

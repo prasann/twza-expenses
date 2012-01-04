@@ -39,7 +39,8 @@
   </tr>
 <% end %>
 </table>
-
 <br />
-
+<div>
+  <%= paginate @outbound_travels%>
+</div>
 <%= link_to 'New Outbound travel', new_outbound_travel_path %>
