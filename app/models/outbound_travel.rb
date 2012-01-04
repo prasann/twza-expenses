@@ -7,10 +7,10 @@ class OutboundTravel
   field :travel_duration
   field :payroll_effect
   field :departure_date, type: Date
-  field :foreign_payroll_transfer, type: Date
+  field :foreign_payroll_transfer
   field :return_date, type: Date
-  field :return_payroll_transfer, type: Date
-  field :expected_return_date, type: Date
+  field :return_payroll_transfer
+  field :expected_return_date  
   field :project
   field :comments
   field :actions

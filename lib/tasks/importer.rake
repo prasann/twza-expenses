@@ -9,6 +9,6 @@ namespace :data_import do
 
   desc "Import outbound travel details"
   task :travel => :environment do
-    TravelDataImporter.new.import('')
+    TravelDataImporter.new.import('data/Inbound-Outbound Travel.xls')
   end
 end
