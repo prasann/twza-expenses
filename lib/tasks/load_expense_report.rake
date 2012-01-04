@@ -1,5 +1,5 @@
 
-require Rails.root.join('lib/file_helpers/expense_report')
+require Rails.root.join('lib/helpers/expense_report')
 
 namespace :data_import do
   desc "Imports Expense sheet into DB"

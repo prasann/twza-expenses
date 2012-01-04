@@ -1,4 +1,4 @@
-require 'excel_data_extractor'
+require 'helpers/excel_data_extractor'
 
 class ForexDataImporter
   include ExcelDataExtractor

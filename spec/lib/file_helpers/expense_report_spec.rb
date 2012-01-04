@@ -1,5 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require Rails.root.join("lib/file_helpers/expense_report")
+require Rails.root.join("lib/helpers/expense_report")
 require Rails.root.join("app/models/expense")
 
 describe "expense_report" do

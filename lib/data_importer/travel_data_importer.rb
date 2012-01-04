@@ -1,4 +1,4 @@
-require 'excel_data_extractor'
+require 'helpers/excel_data_extractor'
 
 class TravelDataImporter
   include ExcelDataExtractor
@@ -31,4 +31,3 @@ class TravelDataImporter
     return (cell_value.instance_of?Date) ? cell_value.to_s : cell_value
   end
 end
-
