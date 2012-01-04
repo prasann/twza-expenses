@@ -12,7 +12,7 @@ describe ExpenseReportController do
     it "fetches expenses from db for emplid" do
       Expense.stub!(:where).with({:empl_id => "EMP1"}).and_return(@criteria_mock)
 	    @criteria_mock.should_receive(:to_a).and_return(@expenses)
-	    get :fetch, :empl_id => 1
+	    get :list, :id => 1
       assigns(:expenses).should == @expenses
       response.should be_success
     end

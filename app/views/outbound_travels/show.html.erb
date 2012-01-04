@@ -1,0 +1,51 @@
+<p id="notice"><%= notice %></p>
+<div>
+  <b>Employee Id</b>
+  <%= @outbound_travel.emp_id %></br>
+  <b>Employee Name</b>
+  <%= @outbound_travel.emp_name %></br>
+
+  <b>Place </b>
+  <%= @outbound_travel.place %></br>
+
+  <b>Travel Duration </b>
+  <%= @outbound_travel.travel_duration %></br>
+
+  <b>Payroll Effect </b>
+  <%= @outbound_travel.payroll_effect %></br>
+
+  <b>Departure Date </b>
+  <%= @outbound_travel.departure_date %></br>
+
+  <b>Foreign Payroll Transfer </b>
+  <%= @outbound_travel.foreign_payroll_transfer %></br>
+
+  <b>Return Date </b>
+  <%= @outbound_travel.return_date %></br>
+
+  <b>Return Payroll Date </b>
+  <%= @outbound_travel.expected_return_date %></br>
+
+  <b>Project </b>
+  <%= @outbound_travel.project %></br>
+
+  <b>Commets </b>
+  <%= @outbound_travel.comments %></br>
+
+  <b>Actions </b>
+  <%= @outbound_travel.actions %></br>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<%= link_to 'Edit', edit_outbound_travel_path(@outbound_travel) %> |
+<%= link_to 'Back', outbound_travels_path %>
