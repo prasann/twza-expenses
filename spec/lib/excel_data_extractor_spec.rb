@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'excel_data_extractor'
+require 'helpers/excel_data_extractor'
 
 describe "Excel data extractor" do
 
