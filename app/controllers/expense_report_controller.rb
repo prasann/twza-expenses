@@ -9,4 +9,12 @@ class ExpenseReportController < ApplicationController
 		end
   end
 
+	def load_by_travel
+		travel_id = params[:id]
+		if(travel_id)
+			travel = OutboundTravel.find(travel_id)
+			@expenses = Expense.fetch_for travel.emp_id, travel.departure_date, travel.return_date
+			#@forex = Forex.fetch_for travel.emp_id, travel.departure_date, travel.return_date 
+		end
+	end
 end
