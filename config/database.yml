@@ -1,0 +1,5 @@
+development:
+  adapter: mysql
+  host: localhost
+  database: rampup_development
+  username: root

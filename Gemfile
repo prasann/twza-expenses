@@ -7,6 +7,7 @@ gem 'mongoid'
 gem 'bson_ext'
 gem 'roo'
 gem 'kaminari'
+gem 'mysql'
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
