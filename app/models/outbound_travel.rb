@@ -10,7 +10,7 @@ class OutboundTravel
   field :foreign_payroll_transfer
   field :return_date, type: Date
   field :return_payroll_transfer
-  field :expected_return_date  
+  field :expected_return_date
   field :project
   field :comments
   field :actions
