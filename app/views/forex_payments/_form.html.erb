@@ -1,10 +1,10 @@
-<%= form_for(@outbound_travel) do |f| %>
-  <% if @outbound_travel.errors.any? %>
+<%= form_for(@forex_payment) do |f| %>
+  <% if @forex_payment.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@outbound_travel.errors.count, "error") %> prohibited this outbound_travel from being saved:</h2>
+      <h2><%= pluralize(@forex_payment.errors.count, "error") %> prohibited this outbound_travel from being saved:</h2>
 
       <ul>
-        <% @outbound_travel.errors.full_messages.each do |msg| %>
+        <% @forex_payment.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
         <% end %>
       </ul>
@@ -21,13 +21,36 @@
     <%= f.text_field :issue_date%></br>
 
     <%= f.label :amount, 'Amount'%>:
-    <%= f.text_field :amount%></br>
+    <%= f.text_field :amount %></br>
 
-    <%= f.label :currency 'Currency'%>:
+    <%= f.label :currency, 'Currency'%>:
     <%= f.text_field :currency%></br>
 
     <%= f.label :place, 'Place'%>:
     <%= f.text_field :place%></br>
+
+    <%= f.label :travel_date, 'Travel Date'%>:
+    <%= f.text_field :travel_date%></br>
+
+    <%= f.label :project, 'Project'%>:
+    <%= f.text_field :project%></br>
+
+    <%= f.label :vendor_name, 'Vendor Name'%>:
+    <%= f.text_field :vendor_name%></br>
+
+    <%= f.label :card_number, 'Card Number'%>:
+    <%= f.text_field :card_number%></br>
+
+    <%= f.label :expiry_date, 'Expiry Date'%>:
+    <%= f.text_field :expiry_date%></br>
+
+    <%= f.label :office, 'Office'%>:
+    <%= f.text_field :office%></br>
+
+    <%= f.label :inr, 'INR'%>:
+    <%= f.text_field :inr%></br>
+
+
   </div>
 
   <div class="actions">

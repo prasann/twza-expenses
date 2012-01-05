@@ -16,14 +16,8 @@
     <th>Travel Duration</th>
     <th>Payroll Effect</th>
     <th>Departure Date</th>
-    <th>Foreign Payroll Transfer</th>
     <th>Return Date</th>
-    <th>Return Payroll Date</th>
-    <th>Expected Return Date</th>
-    <th>Projects</th>
-    <th>Comments</th>
-    <th>Actions</th>
-  </tr>
+     </tr>
 
   <% @outbound_travels.each do |outbound_travel| %>
     <tr>
@@ -33,13 +27,7 @@
       <td><%= outbound_travel.travel_duration%></td>
       <td><%= outbound_travel.payroll_effect%></td>
       <td><%= outbound_travel.departure_date%></td>
-      <td><%= outbound_travel.foreign_payroll_transfer%></td>
       <td><%= outbound_travel.return_date%></td>
-      <td><%= outbound_travel.return_payroll_transfer%></td>
-      <td><%= outbound_travel.expected_return_date%></td>
-      <td><%= outbound_travel.project%></td>
-      <td><%= outbound_travel.comments%></td>
-      <td><%= outbound_travel.actions%></td>
 
       <td><%= link_to 'Show', outbound_travel %></td>
       <td><%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %></td>
