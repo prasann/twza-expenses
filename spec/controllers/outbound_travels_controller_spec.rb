@@ -128,4 +128,13 @@ describe OutboundTravelsController do
     end
   end
 
+  describe "GET Search" do
+    it "searches for the given emp_id" do
+      outbound_travel_1 = OutboundTravel.create!(emp_id: 1001)
+      outbound_travel_2 = OutboundTravel.create!(emp_id: 1002)
+      get :search, :emp_id => 1001
+      assigns(:outbound_travels).should eq([outbound_travel_1])
+    end
+  end
+
 end

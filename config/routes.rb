@@ -1,11 +1,17 @@
 Mankatha::Application.routes.draw do
 
-
-  resources :outbound_travels
-  
   match 'outbound_travels/index/:page' => 'outbound_travels#index'
 
   resources :forex_payments, :only => :index
+  resources :deletes
+
+  resources :outbound_travels do
+    collection do
+      get  :search
+    end
+  end
+
+  resources :samples
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

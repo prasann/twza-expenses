@@ -1,5 +1,13 @@
 <h1>Listing Outbound Travels</h1>
 
+<form action='/outbound_travels/search', method = "get">
+  <%= text_field_tag :emp_id, params[:emp_id]%>
+  <%= submit_tag "Search", :name => nil%>
+</form
+
+<div>
+  <%= paginate @outbound_travels%>
+</div>
 <table>
   <tr>
     <th>Employee Id</th>
@@ -17,30 +25,27 @@
     <th>Actions</th>
   </tr>
 
-<% @outbound_travels.each do |outbound_travel| %>
-  <tr>
-    <td><%= outbound_travel.emp_id %></td>
-    <td><%= outbound_travel.emp_name%></td>
-    <td><%= outbound_travel.place%></td>
-    <td><%= outbound_travel.travel_duration%></td>
-    <td><%= outbound_travel.payroll_effect%></td>
-    <td><%= outbound_travel.departure_date%></td>
-    <td><%= outbound_travel.foreign_payroll_transfer%></td>
-    <td><%= outbound_travel.return_date%></td>
-    <td><%= outbound_travel.return_payroll_transfer%></td>
-    <td><%= outbound_travel.expected_return_date%></td>
-    <td><%= outbound_travel.project%></td>
-    <td><%= outbound_travel.comments%></td>
-    <td><%= outbound_travel.actions%></td>
+  <% @outbound_travels.each do |outbound_travel| %>
+    <tr>
+      <td><%= outbound_travel.emp_id %></td>
+      <td><%= outbound_travel.emp_name%></td>
+      <td><%= outbound_travel.place%></td>
+      <td><%= outbound_travel.travel_duration%></td>
+      <td><%= outbound_travel.payroll_effect%></td>
+      <td><%= outbound_travel.departure_date%></td>
+      <td><%= outbound_travel.foreign_payroll_transfer%></td>
+      <td><%= outbound_travel.return_date%></td>
+      <td><%= outbound_travel.return_payroll_transfer%></td>
+      <td><%= outbound_travel.expected_return_date%></td>
+      <td><%= outbound_travel.project%></td>
+      <td><%= outbound_travel.comments%></td>
+      <td><%= outbound_travel.actions%></td>
 
-    <td><%= link_to 'Show', outbound_travel %></td>
-    <td><%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %></td>
-    <td><%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
+      <td><%= link_to 'Show', outbound_travel %></td>
+      <td><%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %></td>
+      <td><%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %></td>
+    </tr>
+  <% end %>
 </table>
 <br />
-<div>
-  <%= paginate @outbound_travels%>
-</div>
 <%= link_to 'New Outbound travel', new_outbound_travel_path %>
