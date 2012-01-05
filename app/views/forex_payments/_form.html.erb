@@ -1,0 +1,36 @@
+<%= form_for(@outbound_travel) do |f| %>
+  <% if @outbound_travel.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@outbound_travel.errors.count, "error") %> prohibited this outbound_travel from being saved:</h2>
+
+      <ul>
+        <% @outbound_travel.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="fields">
+    <%= f.label :emp_id, 'Employee Id'%>:
+    <%= f.text_field :emp_id%></br>
+
+    <%= f.label :emp_name, 'Employee Name'%>:
+    <%= f.text_field :emp_name%></br>
+
+    <%= f.label :issue_date, 'Issue Date'%>:
+    <%= f.text_field :issue_date%></br>
+
+    <%= f.label :amount, 'Amount'%>:
+    <%= f.text_field :amount%></br>
+
+    <%= f.label :currency 'Currency'%>:
+    <%= f.text_field :currency%></br>
+
+    <%= f.label :place, 'Place'%>:
+    <%= f.text_field :place%></br>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

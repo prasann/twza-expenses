@@ -1,8 +1,14 @@
 Mankatha::Application.routes.draw do
 
   match 'outbound_travels/index/:page' => 'outbound_travels#index'
+  match 'forex_payments/index/:page' => 'forex_payments#index'
 
-  resources :forex_payments, :only => :index
+
+  resources :forex_payments do
+    collection do
+      get :search
+    end
+  end
   resources :deletes
 
   resources :outbound_travels do
