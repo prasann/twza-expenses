@@ -42,7 +42,6 @@ class OutboundTravelsController < ApplicationController
   end
 
   def search
-    default_per_page = params[:per_page] || 20
     @outbound_travels = OutboundTravel.page(params[:page]).where(emp_id: params[:emp_id])
     render :index
   end

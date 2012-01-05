@@ -3,7 +3,7 @@
 <form action='/outbound_travels/search', method = "get">
   <%= text_field_tag :emp_id, params[:emp_id]%>
   <%= submit_tag "Search", :name => nil%>
-</form
+</form>
 
 <div>
   <%= paginate @outbound_travels%>

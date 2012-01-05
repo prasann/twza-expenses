@@ -1,35 +1,36 @@
 <html>
-    <head>
-      <title>Forex Payments</title>
-    </head>
+  <head>
+    <title>Forex Payments</title>
+  </head>
 
-    <body>
-    <%= form_tag({:controller => "forex_payments", :action => "index"}, :method => "get") do%>
-        Enter emp id:
-        <input name="emp_id"/>
-        <input type="submit" value="Fetch"/>
-    <% end %>
-
-        <table>
-          <tr>
-            <th>Employee Id</th>
-            <th>Name</th>
-            <th>Issue Date</th>
-            <th>Amount</th>
-            <th>Currency</th>
-            <th>Place</th>
-           </tr>
-        <% @forex_payments.each do |payment| %>
-          <tr>
-            <td><%= payment.emp_id %></td>
-            <td><%= payment.emp_name %></td>
-            <td><%= payment.issue_date%></td>
-            <td><%= payment.amount%></td>
-            <td><%= payment.currency %></td>
-            <td><%= payment.place%></td>
-          </tr>
-        <% end %>
-        </table>
-    </body>
+  <body>
+    <form action='/forex_payments/search', method = "get">
+      <%= text_field_tag :emp_id, params[:emp_id]%>
+      <%= submit_tag "Search", :name => nil%>
+    </form>
+    <div>
+      <%= paginate @forex_payments%>
+    </div>
+    <table>
+      <tr>
+        <th>Employee Id</th>
+        <th>Name</th>
+        <th>Issue Date</th>
+        <th>Amount</th>
+        <th>Currency</th>
+        <th>Place</th>
+      </tr>
+      <% @forex_payments.each do |payment| %>
+        <tr>
+          <td><%= payment.emp_id %></td>
+          <td><%= payment.emp_name %></td>
+          <td><%= payment.issue_date%></td>
+          <td><%= payment.amount%></td>
+          <td><%= payment.currency %></td>
+          <td><%= payment.place%></td>
+        </tr>
+      <% end %>
+    </table>
+  </body>
 
 </html>
