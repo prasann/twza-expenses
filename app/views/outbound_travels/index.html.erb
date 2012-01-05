@@ -17,7 +17,8 @@
     <th>Payroll Effect</th>
     <th>Departure Date</th>
     <th>Return Date</th>
-     </tr>
+    <th>&nbsp;</th>
+  </tr>
 
   <% @outbound_travels.each do |outbound_travel| %>
     <tr>
@@ -28,11 +29,12 @@
       <td><%= outbound_travel.payroll_effect%></td>
       <td><%= outbound_travel.departure_date%></td>
       <td><%= outbound_travel.return_date%></td>
-
-      <td><%= link_to 'Show', outbound_travel %></td>
-      <td><%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %></td>
-      <td><%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %></td>
-    </tr>
+	  <td><%= link_to 'Show', outbound_travel %>&nbsp;
+		<%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %>&nbsp;
+    	<%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %><br>
+		<%= link_to 'Expenses', :controller => "expense_report", :action => "load_by_travel", :id => outbound_travel.id.to_s%>
+	  </td>
+  </tr>
   <% end %>
 </table>
 <br />
