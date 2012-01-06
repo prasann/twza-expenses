@@ -1,12 +1,12 @@
 <h1>Forex Payments</h1>
 
 <div class="no_emp hide error">No employee found for given name.</div>
-<form action='/forex_payments/search', method = "get">
+<form action='/forex_payments/search' method = "get">
   <%= label_tag 'Employee Id' %>:-
   <%= text_field_tag :emp_id, params[:emp_id], :class => 'emp_id'%></br>
   <%= label_tag 'Employee Name' %>:-
   <%= text_field_tag :name, params[:name], :class => 'emp_name' %></br>
-  <%= submit_tag "Search", :name => nil%>
+  <%= submit_tag "Search", :name=>nil%>
 </form>
 <div>
   <%= paginate @forex_payments%>
