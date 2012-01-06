@@ -1,10 +1,7 @@
 class Profile < ActiveRecord::Base
   
-  def to_json
-    {:id => employee_id, :name => name}
+  def to_special_s
+    name + ' - ' + employee_id
   end
 
-  def as_json(*args)
-    to_json
-  end
 end
