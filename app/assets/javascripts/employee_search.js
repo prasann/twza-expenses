@@ -3,6 +3,7 @@ $('.emp_name').autocomplete({
    source: '/profiles/list', 
    minLength: 2,
    select: function(event, ui) {
+    
    },
    noresults: function() {
    },

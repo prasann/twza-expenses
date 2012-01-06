@@ -10,7 +10,7 @@ describe ProfilesController do
     get :list, :term => 'test'
     assigns(:profiles).first.should be profile
     response.should be_success
-    response.body.should be "[\"test - 1\"]"
+    response.body.should == "[\"test - 1\"]"
   end
 
 end
