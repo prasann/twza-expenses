@@ -3,8 +3,8 @@ Mankatha::Application.routes.draw do
   match '/' => 'home#index'
   match 'outbound_travels/index/:page' => 'outbound_travels#index'
   match 'forex_payments/index/:page' => 'forex_payments#index'
-  match 'profiles/list' => 'profiles#list'
-
+  match 'profiles/search_by_name' => 'profiles#search_by_name'
+  match 'profiles/search_by_id' => 'profiles#search_by_id'
   resources :forex_payments do
     collection do
       get :search
