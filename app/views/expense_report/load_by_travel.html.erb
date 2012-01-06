@@ -1,9 +1,13 @@
 <html>
 	<body>
 		<div>For travel <%=@expense_report.travel_id%> of Employee <%=@expense_report.empl_id%></div>
+		<%=form_tag({:action => 'generate_report'}, :method => 'post') do%>
+		<input type=hidden name="empl_id" value="<%=@expense_report.empl_id%>" />
+		<input type=hidden name="travel_id" value="<%=@expense_report.travel_id%>" />
 		<div>Forex</div>
 		<table>
           <tr>
+			<th>&nbsp;</th>
             <th>Employee Id</th>
             <th>Name</th>
             <th>Issue Date</th>
@@ -13,6 +17,7 @@
            </tr>
  			<%@expense_report.forex_payments.each do|payment|%>
 			<tr>
+				<td><%= check_box_tag 'forex_payments[]', payment.id.to_s, :checked => true%></td>
             	<td><%= payment.emp_id %></td>
 	            <td><%= payment.emp_name %></td>
     	        <td><%= payment.issue_date%></td>
@@ -26,6 +31,7 @@
 		<div>Expenses</div>
 		<table>
 		<tr>
+			<th>&nbsp;</th>
 			<th>Expense Report Id</th>
 			<th>Project Code</th>
 			<th>Expense Date</th>
@@ -36,6 +42,7 @@
 		</tr>
 		<%@expense_report.expenses.each do|expense|%>
 		<tr>
+			<td><%= check_box_tag 'expenses[]', expense.id.to_s, :checked => true%></td>
 			<td><%=expense.expense_rpt_id%></td>		
 			<td><%=expense.project%></td>		
 			<td><%=expense.expense_date%></td>		
@@ -46,5 +53,7 @@
 		</tr>
 		<% end %>
 		</table>
+		<%=submit_tag%>
+		<% end %>
 	</body>
 </html>
