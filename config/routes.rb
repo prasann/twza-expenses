@@ -1,5 +1,6 @@
 Mankatha::Application.routes.draw do
 
+  match '/' => 'home#index'
   match 'outbound_travels/index/:page' => 'outbound_travels#index'
   match 'forex_payments/index/:page' => 'forex_payments#index'
   match 'profiles/list/:name' => 'profiles#list'
