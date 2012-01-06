@@ -18,7 +18,7 @@ class ForexPaymentsController < ApplicationController
   end
 
   def create
-    @forex_payment = ForexPayment.new(params[:outbound_travel])
+    @forex_payment = ForexPayment.new(params[:forex_payment])
     if @forex_payment.save
       redirect_to @forex_payment, notice: 'Forex payment options are successfully created.'
     else

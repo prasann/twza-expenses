@@ -3,9 +3,9 @@ require 'spec_helper'
 describe ForexPaymentsController do
 
   def valid_attributes
-    {}
+    {:emp_id => '123', :emp_name => 'test', :amount => 120.25, :currency => 'INR', :travel_date => Date.today, 
+     :office => 'Chennai', :inr => 5001.50}
   end
-
 
   describe "GET index" do
     it "assigns all forex_payments as @forex_payments" do
@@ -133,8 +133,8 @@ describe ForexPaymentsController do
 
   describe "GET Search" do
     it "searches for the given employee id" do
-      forex_payments_1 = ForexPayment.create!(emp_id: 10001)
-      forex_payments_2 = ForexPayment.create!(emp_id: 10002)
+      forex_payments_1 = ForexPayment.create!(valid_attributes.merge!(emp_id: 10001))
+      forex_payments_2 = ForexPayment.create!(valid_attributes.merge!(emp_id: 10002))
       get :search, :emp_id => 10001
       assigns(:forex_payments).should eq([forex_payments_1])
     end

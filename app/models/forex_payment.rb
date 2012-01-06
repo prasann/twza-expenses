@@ -15,6 +15,8 @@ class ForexPayment
   field :office
   field :inr, type: BigDecimal
 
+  validates_presence_of :emp_id, :emp_name, :amount, :currency, :travel_date, :office, :inr
+
   def self.fetch_for(empl_id, date_from, date_to)
 	emp_forex = ForexPayment.where(emp_id: empl_id).and("travel_date" => {"$gte" => date_from, "$lte" => date_to}).to_a
 	return emp_forex
