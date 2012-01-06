@@ -14,8 +14,8 @@
 </div>
 <table>
   <tr>
-    <th>Employee Id</th>
-    <th>Employee Name</th>
+    <th>Id</th>
+    <th>Name</th>
     <th>Place</th>
     <th>Travel Duration</th>
     <th>Payroll Effect</th>
@@ -25,17 +25,17 @@
   </tr>
 
   <% @outbound_travels.each do |outbound_travel| %>
-    <tr>
+    <tr class="<%= cycle("even", "odd") %>">
       <td><%= outbound_travel.emp_id %></td>
       <td><%= outbound_travel.emp_name%></td>
       <td><%= outbound_travel.place%></td>
       <td><%= outbound_travel.travel_duration%></td>
       <td><%= outbound_travel.payroll_effect%></td>
-      <td><%= outbound_travel.departure_date%></td>
-      <td><%= outbound_travel.return_date%></td>
-	  <td><%= link_to 'Show', outbound_travel %>&nbsp;
-		<%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %>&nbsp;
-    	<%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %><br>
+      <td><%= date_fmt(outbound_travel.departure_date)%></td>
+      <td><%= date_fmt(outbound_travel.return_date)%></td>
+	  <td><%= link_to 'Show', outbound_travel %> |
+		<%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %> |
+    	<%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %> |
 		<%= link_to 'Expenses', :controller => "expense_report", :action => "load_by_travel", :id => outbound_travel.id.to_s%>
 	  </td>
   </tr>

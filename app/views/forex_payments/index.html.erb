@@ -13,18 +13,16 @@
 </div>
 <table>
   <tr>
-    <th>Employee Id</th>
+    <th>Id</th>
     <th>Name</th>
     <th>Issue Date</th>
     <th>Amount</th>
     <th>Currency</th>
     <th>Place</th>
     <th></th>
-    <th></th>
-    <th></th>
   </tr>
   <% @forex_payments.each do |payment| %>
-    <tr>
+    <tr class="<%= cycle("even", "odd") %>">
       <td><%= payment.emp_id %></td>
       <td><%= payment.emp_name %></td>
       <td><%= payment.issue_date%></td>
@@ -32,9 +30,9 @@
       <td><%= payment.currency %></td>
       <td><%= payment.place%></td>
 
-      <td><%= link_to 'Show', payment %></td>
-      <td><%= link_to 'Edit',edit_forex_payment_path(payment) %></td>
-      <td><%= link_to 'Destroy', payment, confirm: 'Are you sure?', method: :delete %></td>
+      <td><%= link_to 'Show', payment %> |
+      <%= link_to 'Edit',edit_forex_payment_path(payment) %> |
+      <%= link_to 'Destroy', payment, confirm: 'Are you sure?', method: :delete %></td>
 
     </tr>
   <% end %>

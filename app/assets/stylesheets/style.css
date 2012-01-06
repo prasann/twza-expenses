@@ -2,11 +2,6 @@ body{
 	font: 13px helvetica,arial,freesans,clean,sans-serif
 }
 
-.pagination{
-	padding: 10px;
-	font-size: 125%;
-}
-
 input {
 	padding: 5px;
 	font-size: 15px;
@@ -45,6 +40,70 @@ td{
 th,tr.odd{
 	background-color: #E8E1DA;
 }
+
+/* Styling for Pagination -- Starts */
+.pagination {
+ font: 83%/1.4 arial, helvetica, sans-serif;
+    padding: 1em;
+    margin: 1em 0;
+    clear: left;
+    font-size: 85%;
+}
+
+.pagination a{
+	color:#512E2E;
+    display: block;
+    float: left;
+    padding: 0.2em 0.5em;
+    margin-right: 0.1em;
+    border: 1px solid #fff;
+    background: #fff;
+}
+
+.pagination span.current{
+	float: left;
+	padding: 0.2em 0.5em;
+    margin-right: 0.1em;
+    border: 1px solid #E8E1DA;
+    font-weight: bold;
+    background: #512E2E;
+    color: #fff;
+}
+
+.pagination span.gap{
+	float: left;
+	padding: 0.2em 0.5em;
+    margin-right: 0.1em;
+    border: 1px solid #E8E1DA;
+    font-weight: bold;
+}
+
+.pagination a {
+    border: 1px solid #512E2E;
+    text-decoration: none;
+}
+
+.pagination a:hover {
+    border-color: #E8E1DA;
+}
+
+.pagination a.next {
+    font-weight: bold;
+}
+
+.pagination span.next {
+    color: #666;
+}
+
+.pagination span.next {
+    border: 1px solid #ddd;
+    color: #999;
+}
+
+.pagination .nextprev-next {
+    float: right;
+}
+
 
 
 
