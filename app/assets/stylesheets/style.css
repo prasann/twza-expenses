@@ -41,13 +41,56 @@ th,tr.odd{
 	background-color: #E8E1DA;
 }
 
+.hide{
+	/*display: none;*/
+}
+
+/* Error, Warning divs - Starts */
+.info, .success, .warning, .error, .validation {
+    border: 1px solid;
+    margin: 10px 0px;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    -webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	border: 1px solid #717171;
+	-webkit-box-shadow: 1px 1px 0px #E8E1DA;
+	-moz-box-shadow: 1px 1px 0px #E8E1DA;
+	box-shadow:  1px 1px 0px #E8E1DA;
+	width: 50%;
+
+}
+.info {
+    color: #00529B;
+    background-color: #BDE5F8;
+    background-image: url('images/info.png');
+}
+.success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+    background-image:url('images/success.png');
+}
+.warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+    background-image: url('images/warning.png');
+}
+.error {
+    color: #D8000C;
+    background-color: #FFBABA;
+    background-image: url('error.png');
+}
+
+/* Error, Warning divs - Ends*/
 /* Styling for Pagination -- Starts */
 .pagination {
  font: 83%/1.4 arial, helvetica, sans-serif;
     padding: 1em;
     margin: 1em 0;
     clear: left;
-    font-size: 85%;
+    font-size: 100%;
 }
 
 .pagination a{
@@ -103,6 +146,7 @@ th,tr.odd{
 .pagination .nextprev-next {
     float: right;
 }
+/* Styling for Pagination -- Ends */
 
 
 
