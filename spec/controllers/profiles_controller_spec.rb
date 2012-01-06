@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ProfileController do
+describe ProfilesController do
 
   it "should fetch the profile for the given name using like" do
     profiles = Profile.new
