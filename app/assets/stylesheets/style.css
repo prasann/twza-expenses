@@ -1,5 +1,5 @@
 body{
-	font: 13px helvetica,arial,freesans,clean,sans-serif
+	font: 13px helvetica,arial,freesans,clean,sans-serif !important
 }
 
 input {
@@ -24,6 +24,7 @@ table {
     border-collapse: collapse;
     margin: 1em auto;
     width: 100%;
+    font-size: 13px;
 }
 
 th{
@@ -39,6 +40,10 @@ td{
 
 th,tr.odd{
 	background-color: #E8E1DA;
+}
+
+tr.even{
+    background-color: #ffffff;
 }
 
 .hide{
@@ -65,17 +70,17 @@ th,tr.odd{
 .info {
     color: #00529B;
     background-color: #BDE5F8;
-    background-image: url('info.png');
+    background-image: url(info.png);
 }
 .success {
     color: #4F8A10;
     background-color: #DFF2BF;
-    background-image:url('success.png');
+    background-image:url(success.png);
 }
 .warning {
     color: #9F6000;
     background-color: #FEEFB3;
-    background-image: url('warning.png');
+    background-image: url(warning.png);
 }
 .errors {
     color: #D8000C;
@@ -94,7 +99,6 @@ th,tr.odd{
 /* Styling for Pagination -- Starts */
 .pagination {
  font: 83%/1.4 arial, helvetica, sans-serif;
-    padding: 1em;
     margin: 1em 0;
     clear: left;
     font-size: 100%;
@@ -153,18 +157,34 @@ th,tr.odd{
 .pagination .nextprev-next {
     float: right;
 }
-/* Styling for Pagination -- Ends */
-
-/* Autocomplete styling -- Starts*/
-
-
-/* Autocomplete styling -- Ends*/
 
 .search_by {
     font-weight: bold;
     font-size: 125%;
 }
 
+.top_bar{
+    background: url("images/ui-bg_diagonals-medium_brown.png") repeat scroll 50% bottom #FEF1EC; 
+    height: 90px; 
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 1px solid #717171;
+    -webkit-box-shadow: 1px 1px 0px #E8E1DA;
+    -moz-box-shadow: 1px 1px 0px #E8E1DA;
+    box-shadow:  1px 1px 0px #E8E1DA; 
+    margin-bottom: 10px; 
+}
+
+.top_bar .thought_works{
+    font-size: 300%;
+    padding: 10px;
+}
+
+.top_bar .text{
+    float: right;
+    font-size: 200%;
+}
 
 
 

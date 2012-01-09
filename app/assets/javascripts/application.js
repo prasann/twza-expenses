@@ -8,3 +8,16 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require_tree .
+$(document).ready(function(){
+	$(function($) {
+   		$('#menu').tabs({
+			ajaxOptions: {
+				error: function( xhr, status, index, anchor ) {
+					$( anchor.hash ).html(
+						"Couldn't load this tab. We'll try to fix this as soon as possible. " +
+						"If this wouldn't be a demo." );
+				}
+			}
+		});
+	});       
+});
