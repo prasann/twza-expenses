@@ -7,17 +7,24 @@ module ExcelDataExporter
   @file_headers = []
   @model = nil
   @file_name = nil
+  @serial_number_column_needed = false
 
- #private
+ private
  def stream_data(declared_fields)
     row = []
+    row_count = 1
     csv_data = CSV.generate do |csv|
       csv << @file_headers
       @data_to_export.each do |model_obj|
-        csv << declared_fields.collect { |field| ((model_obj[field.to_sym]).instance_of? Time) ?
+        row_values = declared_fields.collect { |field| ((model_obj[field.to_sym]).instance_of? Time) ?
             (model_obj[field.to_sym].strftime("%d-%b-%Y"))
         : \
-              (model_obj[field.to_sym].to_s) }
+              (model_obj[field.to_sym].to_s.strip) }
+        if @serial_number_column_needed
+           row_values.unshift row_count
+           row_count = row_count + 1
+        end
+        csv << row_values
       end
     end
     csv_data
@@ -25,7 +32,6 @@ module ExcelDataExporter
 
   def export_data
     if (@data_to_export.length > 0 and @file_headers.length > 0 and @file_name != nil and @model != nil)
-      puts 'Using model: ', @model.class.name, ', file name: ', @file_name, ', headers: ', @file_headers
       declared_fields = @model.fields.select_map {
           |field| field[1].name if field[1].name != '_id' && field[1].name != '_type' && field[1].name != 'nil'
       }

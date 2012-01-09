@@ -1,4 +1,13 @@
+require 'csv'
+require "#{Rails.root}/lib/helpers/excel_data_exporter"
+
 class ForexPaymentsController < ApplicationController
+  include ExcelDataExporter
+
+  HEADERS = [
+      'Sl.No','Month','EMP ID','Employee\'s Name','Forex Amt','Fx Crrn','Travelled Date','Place','Project',
+      'Vendor Name','Card No','Exp Date','Office','INR'
+  ]
 
   def index
     default_per_page = params[:per_page] || 20
@@ -44,5 +53,15 @@ class ForexPaymentsController < ApplicationController
   def search
     @forex_payments = ForexPayment.page(params[:page]).where(emp_id: params[:emp_id])
     render :index
+  end
+
+  def export
+    @data_to_export = ForexPayment.all
+    @file_headers = HEADERS
+    @file_name = 'Forex Details'
+    @model = ForexPayment
+    @serial_number_column_needed = true
+
+    export_data
   end
 end
