@@ -1,7 +1,7 @@
 <%= form_for(@outbound_travel) do |f| %>
   <% if @outbound_travel.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@outbound_travel.errors.count, "error") %> prohibited this outbound_travel from being saved:</h2>
+      <h2><%= pluralize(@outbound_travel.errors.count, "error") %> prohibited this Outbound Travel from being saved:</h2>
 
       <ul>
       <% @outbound_travel.errors.full_messages.each do |msg| %>
@@ -10,12 +10,14 @@
       </ul>
     </div>
  <% end %>
+
+    <div class="no_emp hide error">No employee found for given name.</div>
     <div class="fields">
     <%= f.label :emp_id, 'Employee Id'%>:
-    <%= f.text_field :emp_id%><br/>
+    <%= f.text_field :emp_id, :class => 'emp_id'%><br/>
     
     <%= f.label :emp_name, 'Employee Name'%>:
-    <%= f.text_field :emp_name%><br/>
+    <%= f.text_field :emp_name, :class => 'emp_name'%><br/>
 
     <%= f.label :place, 'Place'%>:
     <%= f.text_field :place%><br/>
