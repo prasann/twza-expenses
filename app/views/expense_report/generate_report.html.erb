@@ -1,6 +1,31 @@
 <html>
 	<body>
 		<table>
+          <tr>
+            <th>Employee Id</th>
+            <th>Name</th>
+            <th>Issue Date</th>
+            <th>Amount</th>
+            <th>Currency</th>
+            <th>Place</th>
+			<th>Amount INR</th>
+           </tr>
+			<tr><td colspan="7">Forex Payments</td></tr>
+			<%
+			conversion_rate_hash=@expense_report.get_conversion_rates_for_currency() 
+			@expense_report.get_forex_payments.each do|payment|%>
+			<tr>
+            	<td><%= payment.emp_id %></td>
+	            <td><%= payment.emp_name %></td>
+    	        <td><%= payment.issue_date%></td>
+        	    <td><%= payment.amount%></td>
+            	<td><%= payment.currency %></td>
+	            <td><%= payment.place%></td>
+				<td><%= payment.convert_inr(conversion_rate_hash[payment.currency])%></td>
+			</tr>
+			<% end %>
+		</table>
+	 	<table>
 			<tr>
 				<th>Expense Report ID</th>
 				<th>Description</th>
@@ -9,6 +34,7 @@
 				<th>Conversion Rate</th>
 				<th>Amount in INR</th>
 			</tr>
+			<tr><td colspan="6">Expenses</td></tr>
 			<%@expense_report.consolidated_expenses.each do|expense|%>
 				<tr>
 					<td><%=expense["report_id"]%></td>

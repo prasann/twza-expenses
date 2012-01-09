@@ -2468,3 +2468,16 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
   -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
   box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
 }
+.pagination{
+	padding: 10px;
+	/*font-size: 125%;*/
+}
+.pagination.page{
+	
+}
+.pagination.gap{
+	
+}
+.pagination.current{
+	
+}
