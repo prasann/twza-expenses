@@ -12,8 +12,10 @@
            </tr>
 			<tr><td colspan="7">Forex Payments</td></tr>
 			<%
-			conversion_rate_hash=@expense_report.get_conversion_rates_for_currency() 
-			@expense_report.get_forex_payments.each do|payment|%>
+			forex_inr_total=0
+			@expense_report.get_forex_payments.each do|payment|
+			forex_inr_total += payment.inr
+			%>
 			<tr>
             	<td><%= payment.emp_id %></td>
 	            <td><%= payment.emp_name %></td>
@@ -21,9 +23,13 @@
         	    <td><%= payment.amount%></td>
             	<td><%= payment.currency %></td>
 	            <td><%= payment.place%></td>
-				<td><%= payment.convert_inr(conversion_rate_hash[payment.currency])%></td>
+				<td><%= payment.inr%></td>
 			</tr>
 			<% end %>
+			<tr>
+				<td colspan="6">Total</td>
+				<td><%=forex_inr_total%></td>
+			</tr>
 		</table>
 	 	<table>
 			<tr>
@@ -35,7 +41,11 @@
 				<th>Amount in INR</th>
 			</tr>
 			<tr><td colspan="6">Expenses</td></tr>
-			<%@expense_report.consolidated_expenses.each do|expense|%>
+			<%
+			expense_inr_total=0
+			@expense_report.consolidated_expenses.each do|expense|
+			expense_inr_total += expense["local_currency_amount"]
+			%>
 				<tr>
 					<td><%=expense["report_id"]%></td>
 					<td></td>
@@ -45,6 +55,11 @@
 					<td><%=expense["local_currency_amount"]%></td>
 				</tr>
 			<% end %>
+			<tr>
+				<td colspan="5">Total</td>
+				<td><%=(expense_inr_total*100).round.to_f/100%></td>
+			</tr>
+	
 		</table>	
 	</body>
 </html>
