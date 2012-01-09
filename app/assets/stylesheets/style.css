@@ -42,7 +42,7 @@ th,tr.odd{
 }
 
 .hide{
-	/*display: none;*/
+	display: none;
 }
 
 /* Error, Warning divs - Starts */
@@ -65,17 +65,17 @@ th,tr.odd{
 .info {
     color: #00529B;
     background-color: #BDE5F8;
-    background-image: url('images/info.png');
+    background-image: url('info.png');
 }
 .success {
     color: #4F8A10;
     background-color: #DFF2BF;
-    background-image:url('images/success.png');
+    background-image:url('success.png');
 }
 .warning {
     color: #9F6000;
     background-color: #FEEFB3;
-    background-image: url('images/warning.png');
+    background-image: url('warning.png');
 }
 .errors {
     color: #D8000C;
@@ -87,7 +87,7 @@ th,tr.odd{
 .error {
     color: #D8000C;
     background-color: #FFBABA;
-    background-image: url('error.png');
+    background-image: url(error.png);
 }
 
 /* Error, Warning divs - Ends*/
@@ -154,6 +154,16 @@ th,tr.odd{
     float: right;
 }
 /* Styling for Pagination -- Ends */
+
+/* Autocomplete styling -- Starts*/
+
+
+/* Autocomplete styling -- Ends*/
+
+.search_by {
+    font-weight: bold;
+    font-size: 125%;
+}
 
 
 

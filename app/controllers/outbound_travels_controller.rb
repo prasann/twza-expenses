@@ -64,8 +64,7 @@ class OutboundTravelsController < ApplicationController
       outbound_travels.each do |outbound_travel|
         csv << declared_fields.collect { |field| ((outbound_travel[field.to_sym]).instance_of? Time) ?
             (outbound_travel[field.to_sym].strftime("%d-%b-%Y"))
-        : \
-                                      (outbound_travel[field.to_sym].to_s) }
+        : (outbound_travel[field.to_sym].to_s) }
       end
     end
 
