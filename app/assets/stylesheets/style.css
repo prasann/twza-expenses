@@ -77,6 +77,13 @@ th,tr.odd{
     background-color: #FEEFB3;
     background-image: url('warning.png');
 }
+.errors {
+    color: #D8000C;
+    background-color: #FFBABA;
+    padding: 2px;
+    border: solid;
+    border-width: 1px;
+}
 .error {
     color: #D8000C;
     background-color: #FFBABA;

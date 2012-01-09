@@ -9,7 +9,7 @@ $('.emp_name').autocomplete({
      $('.emp_id').val(name_id[1]);
      return false;
    },
-       change: function(event, ui) {
+     change: function(event, ui) {
      $('.emp_id').val('');
      $('.no_emp').show();
 

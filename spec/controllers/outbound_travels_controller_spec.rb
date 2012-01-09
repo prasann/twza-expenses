@@ -3,7 +3,7 @@ require 'spec_helper'
 describe OutboundTravelsController do
 
   def valid_attributes
-    {}
+    {:emp_id => '123', :emp_name => 'test', :departure_date => Time.now, :expected_return_date => Time.now + 2}
   end
 
   describe "GET index" do
@@ -130,20 +130,23 @@ describe OutboundTravelsController do
 
   describe "GET Search" do
     it "searches for the given emp_id" do
-      outbound_travel_1 = OutboundTravel.create!(emp_id: 1001)
-      outbound_travel_2 = OutboundTravel.create!(emp_id: 1002)
+      outbound_travel_1 = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1001}))
+      outbound_travel_2 = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1002}))
       get :search, :emp_id => 1001
-      assigns(:outbound_travels).should eq([outbound_travel_1])
+      assigns(:outbound_travels).to_a.should == [outbound_travel_1]
     end
   end
 
   describe "GET export" do
     it "should return an excel dump of all the outbound travel data" do
-      outbound_travel_emp_1001 = OutboundTravel.create!(emp_id: 1001, emp_name: 'John Smith', \
-                                                        place: 'UK', \
-                                                        departure_date: Time.parse('2011-10-01'), \
-                                                        return_date: Time.parse('2011-11-30'))
-      outbound_travel_emp_1002 = OutboundTravel.create!(emp_id: 1002, emp_name: 'David Warner')
+      outbound_travel_emp_1001 = OutboundTravel.create!(emp_id: 1001, emp_name: 'John Smith', 
+                                                        place: 'UK', 
+                                                        departure_date: Time.parse('2011-10-01'), 
+                                                        expected_return_date: Time.parse('2011-11-30'))
+      outbound_travel_emp_1002 = OutboundTravel.create!(emp_id: 1002, emp_name: 'David Warner',
+                                                        departure_date: Time.parse('2012-10-01'), 
+                                                        expected_return_date: Time.parse('2012-11-30'))
+ 
       get :export
       date = Time.now.strftime("%m-%d-%Y")
       response.headers['Content-Type'].should == 'application/excel; charset=UTF-8; header-present'
@@ -153,8 +156,8 @@ describe OutboundTravelsController do
           "#,PSID,Employee Name,Country of visit,Duration of Stay	(apprx),Payroll effect in India,"\
           "Departure date from India,Foreign country payroll transfer date,Return date to India,"\
           "Payroll transfer date to India,Expected return date,Project Code,Comment,Actions\n"\
-          "1001,John Smith,UK,\"\",\"\",01-Oct-2011,\"\",30-Nov-2011,\"\",\"\",\"\",\"\",\"\"\n"\
-          "1002,David Warner,\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"\n"
+          "1001,John Smith,UK,\"\",\"\",01-Oct-2011,\"\",\"\",\"\",30-Nov-2011,\"\",\"\",\"\"\n"\
+          "1002,David Warner,\"\",\"\",\"\",01-Oct-2012,\"\",\"\",\"\",30-Nov-2012,\"\",\"\",\"\"\n"
       end
   end
 
