@@ -24,7 +24,7 @@ describe 'forex_payment' do
 	valid_forex_payments.should include forex_3
   end
 
-  it "should not validtae presence of :emp_id, :emp_name, :amount, :currency, :travel_date, :office, :inr" do
+  it "should not save without the presence of :emp_id, :emp_name, :amount, :currency, :travel_date, :office, :inr" do
     forex_payment = ForexPayment.new()
     forex_payment.valid?.should be_false
     error_msgs = forex_payment.errors.messages
