@@ -42,7 +42,7 @@ th,tr.odd{
 }
 
 .hide{
-	/*display: none;*/
+	display: none;
 }
 
 /* Error, Warning divs - Starts */
