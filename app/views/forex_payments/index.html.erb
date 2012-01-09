@@ -10,6 +10,9 @@
   <%= text_field_tag :emp_id, params[:emp_id], :class => 'emp_id'%>
   <%= submit_tag "Search", :name => nil%>
 </form>
+<div class="right">
+  <%= link_to "Export as Excel", export_forex_payments_url %>
+</div>
 <div>
   <%= paginate @forex_payments%>
 </div>

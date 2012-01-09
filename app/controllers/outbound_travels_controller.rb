@@ -1,11 +1,16 @@
 require 'csv'
+require "#{Rails.root}/lib/helpers/excel_data_exporter"
 
 class OutboundTravelsController < ApplicationController
-  HEADERS = ['#', 'PSID', 'Employee Name', 'Country of visit', 'Duration of Stay	(apprx)',
-             'Payroll effect in India', 'Departure date from India',
-             'Foreign country payroll transfer date',
-             'Return date to India', 'Payroll transfer date to India',
-             'Expected return date', 'Project Code', 'Comment', 'Actions']
+  include ExcelDataExporter
+
+  HEADERS = [
+      '#', 'PSID', 'Employee Name', 'Country of visit', 'Duration of Stay	(apprx)',
+       'Payroll effect in India', 'Departure date from India',
+       'Foreign country payroll transfer date',
+       'Return date to India', 'Payroll transfer date to India',
+       'Expected return date', 'Project Code', 'Comment', 'Actions'
+  ]
 
   def index
     default_per_page = params[:per_page] || 20
@@ -54,22 +59,13 @@ class OutboundTravelsController < ApplicationController
   end
 
   def export
-    outbound_travels = OutboundTravel.all
+    @data_to_export = OutboundTravel.all
+    @file_headers = HEADERS
+    @file_name = 'Outbound_Travel'
+    @model = OutboundTravel
+    @serial_number_column_needed = true
 
-    declared_fields = OutboundTravel.fields.select_map { |field| field[1].name if field[1].name != '_id' && field[1].name != '_type' && field[1].name != 'nil' }
-
-    row = []
-    csv_data = CSV.generate do |csv|
-      csv << HEADERS
-      outbound_travels.each do |outbound_travel|
-        csv << declared_fields.collect { |field| ((outbound_travel[field.to_sym]).instance_of? Time) ?
-            (outbound_travel[field.to_sym].strftime("%d-%b-%Y"))
-        : (outbound_travel[field.to_sym].to_s) }
-      end
-    end
-
-    file_name = "Outbound_Travel_" + Time.now.strftime("%m-%d-%Y") + ".xls"
-    send_data(csv_data, :type=>"application/excel; charset=UTF-8; header-present", :disposition=>'attachment', :filename => file_name)
+    export_data
 
     flash[:notice] = "Outbound Travel data export complete!"
   end

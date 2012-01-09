@@ -21,4 +21,9 @@ class ForexPayment
 	emp_forex = ForexPayment.where(emp_id: empl_id).and("travel_date" => {"$gte" => date_from, "$lte" => date_to}).to_a
 	return emp_forex
   end
+
+	def convert_inr(conversion_factor)
+		conversion_factor = conversion_factor||1
+		((amount.to_f*conversion_factor)*100).round.to_f/100
+	end
 end

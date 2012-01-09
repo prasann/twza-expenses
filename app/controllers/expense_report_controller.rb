@@ -32,7 +32,7 @@ class ExpenseReportController < ApplicationController
 	def generate_report
 		@expense_report = ExpenseReport.new
 		@expense_report.expenses = params[:expenses]
-		#@expense_report.forex_payments = params[:forex_payments]
+		@expense_report.forex_payments = params[:forex_payments]
 		@expense_report.empl_id = params[:empl_id]
 		@expense_report.travel_id = params[:travel_id]
 		@expense_report.save
