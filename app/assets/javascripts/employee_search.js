@@ -11,7 +11,6 @@ $('.emp_name').autocomplete({
    },
      change: function(event, ui) {
      $('.emp_id').val('');
-     $('.no_emp').show();
 
    }
 })
@@ -27,7 +26,6 @@ $('.emp_name').autocomplete({
         },
     change: function(event, ui) {
     $('.emp_names').val('');
-    $('.no_emp').show();
    }
 })
 });
