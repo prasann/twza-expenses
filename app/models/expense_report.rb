@@ -49,11 +49,11 @@ class ExpenseReport
 	end
  			
 	def get_forex_payments
-		(forex_payments && !forex_payments.empty?)?ForexPayment.find(forex_payments):[]
+		(forex_payments && !forex_payments.empty?) ? ForexPayment.find(forex_payments) : []
 	end
 
 	def get_conversion_rate
 		conversion_hash = get_conversion_rates_for_currency()
-		conversion_hash.values.first
+		(conversion_hash && !conversion_hash.empty?) ? conversion_hash.values.first : 0
 	end
 end

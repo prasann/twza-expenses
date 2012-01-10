@@ -19,10 +19,18 @@ class ExpenseReportController < ApplicationController
 			forex_from_date = travel.departure_date - FOREX_PAYMENT_DATES_PADDED_BY
 			forex_to_date = travel.return_date + FOREX_PAYMENT_DATES_PADDED_BY
 
-			processed_expenses = ExpenseReport.where(empl_id:travel.emp_id.to_s, processed: true).only(:expenses).to_a
-			processed_expense_ids = processed_expenses.collect{|expense_rpt|expense_rpt.expenses}.flatten
+			processed_expenses = ExpenseReport.where(empl_id:travel.emp_id.to_s, processed: true).only(:expenses, :forex_payments).to_a
+			processed_expense_ids = []
+			processed_forex_ids = []
+			processed_expenses.each do |expense_rpt|
+				processed_expense_ids.push(expense_rpt.expenses)
+				processed_forex_ids.push(expense_rpt.forex_payments)
+			end
+			processed_expense_ids.flatten!
+			processed_forex_ids.flatten!
+
 			expenses = Expense.fetch_for travel.emp_id,expenses_from_date,expenses_to_date,processed_expense_ids 
-			forex_payments = ForexPayment.fetch_for travel.emp_id,forex_from_date,forex_to_date
+			forex_payments = ForexPayment.fetch_for travel.emp_id,forex_from_date,forex_to_date, processed_forex_ids
 			@expense_report = ExpenseReport.new(:expenses => expenses, 
 												:forex_payments => forex_payments, 
 												:empl_id => travel.emp_id,
