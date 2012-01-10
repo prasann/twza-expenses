@@ -5,7 +5,7 @@
 <span class="search_by">Search by:</span>
   <%= label_tag 'Employee Name' %>:
   <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
-  (or)
+  <span class="or_field">(or)</span>
   <%= label_tag 'Employee Id' %>:
   <%= text_field_tag :emp_id, params[:emp_id], :class => 'emp_id'%>
   <%= submit_tag "Search", :name => nil%>

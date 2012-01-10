@@ -51,7 +51,7 @@ class ForexPaymentsController < ApplicationController
   end
 
   def search
-    @forex_payments = ForexPayment.page(params[:page]).where(emp_id: params[:emp_id])
+    @forex_payments = ForexPayment.page(params[:page]).any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]})
     render :index
   end
 

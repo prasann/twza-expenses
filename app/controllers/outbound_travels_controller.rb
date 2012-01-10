@@ -54,7 +54,7 @@ class OutboundTravelsController < ApplicationController
   end
 
   def search
-    @outbound_travels = OutboundTravel.page(params[:page]).where(emp_id: params[:emp_id])
+    @outbound_travels = OutboundTravel.page(params[:page]).any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]})
     render :index
   end
 
