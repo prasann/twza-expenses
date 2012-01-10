@@ -1,6 +1,7 @@
 <html>
 	<body>
 		<table>
+		  <tr><td colspan="7">Forex Payments</td></tr>
           <tr>
             <th>Employee Id</th>
             <th>Name</th>
@@ -10,7 +11,6 @@
             <th>Place</th>
 			<th>Amount INR</th>
            </tr>
-			<tr><td colspan="7">Forex Payments</td></tr>
 			<%
 			forex_inr_total=0
 			@expense_report.get_forex_payments.each do|payment|
@@ -23,15 +23,16 @@
         	    <td><%= payment.amount%></td>
             	<td><%= payment.currency %></td>
 	            <td><%= payment.place%></td>
-				<td><%= payment.inr%></td>
+				<td><%=format_two_decimal_places(payment.inr)%></td>
 			</tr>
 			<% end %>
 			<tr>
 				<td colspan="6">Total</td>
-				<td><%=forex_inr_total%></td>
+				<td><%=format_two_decimal_places(forex_inr_total)%></td>
 			</tr>
 		</table>
 	 	<table>
+			<tr><td colspan="6">Expenses</td></tr>
 			<tr>
 				<th>Expense Report ID</th>
 				<th>Description</th>
@@ -40,7 +41,6 @@
 				<th>Conversion Rate</th>
 				<th>Amount in INR</th>
 			</tr>
-			<tr><td colspan="6">Expenses</td></tr>
 			<%
 			expense_inr_total=0
 			@expense_report.consolidated_expenses.each do|expense|
@@ -57,9 +57,21 @@
 			<% end %>
 			<tr>
 				<td colspan="5">Total</td>
-				<td><%=(expense_inr_total*100).round.to_f/100%></td>
+				<td><%=format_two_decimal_places(expense_inr_total)%></td>
 			</tr>
-	
-		</table>	
+
+			</table>
+			<table>
+			<tr>
+				<td>Cash Handed over:</td>
+				<td><%=@expense_report.cash_handover%></td>
+				<td><%=@expense_report.get_conversion_rate%></td>
+				<td><%=refund_from_employee=format_two_decimal_places(@expense_report.cash_handover*@expense_report.get_conversion_rate)%></td>
+			</tr>
+			<tr>
+				<td colspan="3">Recievable from employee (Payable in (-)):</td>
+				<td><%=format_two_decimal_places((forex_inr_total-(expense_inr_total+refund_from_employee)))%></td>
+			</tr>
+		</table>
 	</body>
 </html>
