@@ -5,7 +5,7 @@ class ExpenseReport
 	field :forex_payments, type: Array
 	field :empl_id, type: String
 	field :travel_id, type: String 
-
+	field :cash_handover, type: Float
 
 	def consolidated_expenses
 		expenses_detailed = Expense.find(expenses)
@@ -29,7 +29,7 @@ class ExpenseReport
 																con_exp["currency"]=expense_cur.original_currency
 																con_exp["amount"]=con_exp["amount"]+BigDecimal.new(expense_cur.original_cost)
 																con_exp["conversion_rate"]=conversion_rate_hash[con_exp["currency"]]||1
-																con_exp["local_currency_amount"]=con_exp["amount"]*con_exp["conversion_rate"]
+																con_exp["local_currency_amount"]=(con_exp["amount"]*con_exp["conversion_rate"]*100).round.to_f/100
 															end
 											con_exp
 											end
@@ -43,9 +43,13 @@ class ExpenseReport
 		end
 		conversion_rates
 	end
-
+ 			
 	def get_forex_payments
 		ForexPayment.find(forex_payments)
 	end
 
+	def get_conversion_rate
+		conversion_hash = get_conversion_rates_for_currency()
+		conversion_hash.values.first
+	end
 end
