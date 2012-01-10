@@ -9,3 +9,7 @@ development:
 test:
   <<: *defaults
   database: test
+
+uat:
+  <<: *defaults
+  database: uat
