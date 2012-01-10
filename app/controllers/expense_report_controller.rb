@@ -19,8 +19,9 @@ class ExpenseReportController < ApplicationController
 			forex_from_date = travel.departure_date - FOREX_PAYMENT_DATES_PADDED_BY
 			forex_to_date = travel.return_date + FOREX_PAYMENT_DATES_PADDED_BY
 
-
-			expenses = Expense.fetch_for travel.emp_id,expenses_from_date,expenses_to_date 
+			processed_expenses = ExpenseReport.where(empl_id:travel.emp_id.to_s, processed: true).only(:expenses).to_a
+			processed_expense_ids = processed_expenses.collect{|expense_rpt|expense_rpt.expenses}.flatten
+			expenses = Expense.fetch_for travel.emp_id,expenses_from_date,expenses_to_date,processed_expense_ids 
 			forex_payments = ForexPayment.fetch_for travel.emp_id,forex_from_date,forex_to_date
 			@expense_report = ExpenseReport.new(:expenses => expenses, 
 												:forex_payments => forex_payments, 
@@ -36,6 +37,14 @@ class ExpenseReportController < ApplicationController
 		@expense_report.forex_payments = params[:forex_payments]
 		@expense_report.empl_id = params[:empl_id]
 		@expense_report.travel_id = params[:travel_id]
+		@expense_report.processed = false
 		@expense_report.save
+	end
+
+	def set_processed
+		expense_report = ExpenseReport.find(params[:id])
+		expense_report.processed = true
+		expense_report.save
+		redirect_to outbound_travels_path
 	end
 end
