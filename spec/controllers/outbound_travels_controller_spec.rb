@@ -156,8 +156,8 @@ describe OutboundTravelsController do
           "#,PSID,Employee Name,Country of visit,Duration of Stay	(apprx),Payroll effect in India,"\
           "Departure date from India,Foreign country payroll transfer date,Return date to India,"\
           "Payroll transfer date to India,Expected return date,Project Code,Comment,Actions\n"\
-          "1,1001,John Smith,UK,\"\",\"\",01-Oct-2011,\"\",\"\",\"\",30-Nov-2011,\"\",\"\",\"\"\n"\
-          "2,1002,David Warner,\"\",\"\",\"\",01-Oct-2012,\"\",\"\",\"\",30-Nov-2012,\"\",\"\",\"\"\n"
+          "1,1001,John Smith,UK,\"\",\"\",01-Oct-2011,\"\",\"\",\"\",29-Nov-2011,\"\",\"\",\"\"\n"\
+          "2,1002,David Warner,\"\",\"\",\"\",01-Oct-2012,\"\",\"\",\"\",29-Nov-2012,\"\",\"\",\"\"\n"
       end
   end
 
