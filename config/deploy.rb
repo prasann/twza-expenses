@@ -34,7 +34,12 @@ namespace :deploy do
     run "cd #{current_path}; bin/passenger stop"
   end
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "touch #{current_path}/tmp/restart.txt"
+    #run "touch #{current_path}/tmp/restart.txt"
+    run "cd #{current_path}; rm -rf #{current_path}/tmp/pids; rm -rf #{current_path}/log; bin/passenger start -euat -d "
+  end
+
+  task :remove do
+    run "cd #{current_path}; bin/passenger stop"
   end
 end
 
@@ -52,5 +57,6 @@ namespace :bundler do
 
 end
 
+before 'deploy:symlink', 'deploy:remove'
 after 'deploy:update_code', 'bundler:symlink_bundled_gems'
 after 'deploy:update_code', 'bundler:install'
