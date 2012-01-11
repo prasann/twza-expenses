@@ -32,7 +32,7 @@ class ExpenseReport
 																con_exp["report_id"]=expense_cur.expense_rpt_id
 																con_exp["currency"]=expense_cur.original_currency
 																con_exp["amount"]=con_exp["amount"]+BigDecimal.new(expense_cur.original_cost)
-																con_exp["conversion_rate"]=conversion_rate_hash[con_exp["currency"]]||1
+																con_exp["conversion_rate"]=get_conversion_rate_for(conversion_rate_hash, expense_cur)
 																con_exp["local_currency_amount"]=con_exp["amount"]*con_exp["conversion_rate"]
 															end
 											con_exp
@@ -55,5 +55,9 @@ class ExpenseReport
 	def get_conversion_rate
 		conversion_hash = get_conversion_rates_for_currency()
 		(conversion_hash && !conversion_hash.empty?) ? conversion_hash.values.first : 0
-	end
+  end
+
+  def get_conversion_rate_for(conversion_rate_hash, expense_currency)
+    conversion_rate_hash[expense_currency.original_currency]||(expense_currency.cost_in_home_currency.to_f/expense_currency.original_cost.to_f)
+  end
 end
