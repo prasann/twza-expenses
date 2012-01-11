@@ -6,6 +6,12 @@ set :scm, :git
 set :user, 'mankatha'
 set :deploy_to, '/home/mankatha/mangatha'
 set :use_sudo, false
+set :bundle_cmd, '~/.rvm/bin/rvm exec bundle'
+set :shared_path, '/home/MY-SITENAME/MY-SITENAME/shared'
+set :bundle_gemfile, "Gemfile"
+set :budnle_dir, File.join(fetch(:shared_path), 'bundle')
+set :bundle_flags,    "--deployment --quiet"
+set :bundle_without,  [:development, :test]
 
 role :web,'10.10.5.34'    # Your HTTP server, Apache/etc
 role :app, '10.10.5.34'   # This may be the same as your `Web` server
@@ -16,12 +22,11 @@ role :app, '10.10.5.34'   # This may be the same as your `Web` server
 # If you are using Passenger mod_rails uncomment this:
 namespace :deploy do
   task :start do 
-    run "rvm 1.9.2 do ruby #{current_path}/script/rails s -d -e uat"
+    run "touch #{current_path}/tmp/restart.txt"
   end
   task :stop do 
   end
   task :restart, :roles => :app, :except => { :no_release => true } do
-  #  run "cd #{current_path}; rvmsudo script/rails server stop"
-    run " touch #{File.join(current_path,'tmp','restart.txt')}"
+    run "touch #{current_path}/tmp/restart.txt"
   end
 end
