@@ -5,7 +5,7 @@
 		<input type=hidden name="travel_id" value="<%=@expense_report.travel_id%>" />
 		<br/>
 
-		<div>Forex</div>
+		<span class="heading">Forex Information</span>
 		<table>
           <tr>
 			<th>&nbsp;</th>
@@ -17,7 +17,7 @@
             <th>Place</th>
            </tr>
  			<%@expense_report.forex_payments.each do|payment|%>
-			<tr>
+			<tr class="<%= cycle("even", "odd") %>">
 				<td><%= check_box_tag 'forex_payments[]', payment.id.to_s, :checked => true%></td>
             	<td><%= payment.emp_id %></td>
 	            <td><%= payment.emp_name %></td>
@@ -29,7 +29,7 @@
 			<% end %>
         </table>
 
-		<div>Expenses</div>
+		<span class="heading">Expenses</span>
 		<table>
 		<tr>
 			<th>&nbsp;</th>
@@ -42,7 +42,7 @@
 			<th>Payment Type</th>
 		</tr>
 		<%@expense_report.expenses.each do|expense|%>
-		<tr>
+		<tr class="<%= cycle("even", "odd") %>">
 			<td><%= check_box_tag 'expenses[]', expense.id.to_s, :checked => true%></td>
 			<td><%=expense.expense_rpt_id%></td>		
 			<td><%=expense.project%></td>		

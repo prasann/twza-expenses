@@ -15,6 +15,7 @@ class OutboundTravelsController < ApplicationController
   def index
     default_per_page = params[:per_page] || 20
     @outbound_travels = OutboundTravel.page(params[:page]).per(default_per_page)
+    render :layout => 'tabs'
   end
 
   def show
@@ -55,7 +56,7 @@ class OutboundTravelsController < ApplicationController
 
   def search
     @outbound_travels = OutboundTravel.page(params[:page]).any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]})
-    render :index
+    render :index, :layout => 'tabs'
   end
 
   def export

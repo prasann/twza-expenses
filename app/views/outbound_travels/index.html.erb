@@ -1,4 +1,8 @@
-<h1>Listing Outbound Travels</h1>
+<div class="right_align">
+  <%= link_to image_tag("new_link.png") + "Create Outbound Travel", new_outbound_travel_path%>
+</div>
+
+<h1>Outbound Travels</h1>
 
 <div class="no_emp hide error">No employee found for given name.</div>
 <form action='/outbound_travels/search' method = "get">
@@ -11,14 +15,14 @@
   <%= submit_tag "Search", :name => nil%>
 </form>
 
-<div class="right">
-  <%= link_to "Export as Excel", export_outbound_travels_url %>
-
+<div class="right_align">
+  <%= link_to image_tag("excel.png") + "Export in Excel" , export_outbound_travels_url %>
 </div>
 
 <div>
   <%= paginate @outbound_travels%>
 </div>
+
 <table>
   <tr>
     <th>Id</th>
@@ -49,4 +53,3 @@
   <% end %>
 </table>
 <br />
-<%= link_to 'New Outbound travel', new_outbound_travel_path %>

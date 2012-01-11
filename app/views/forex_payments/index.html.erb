@@ -1,7 +1,11 @@
+<div class="right_align">
+  <%= link_to image_tag("new_link.png") + "Create Forex Payments", new_forex_payment_path%>
+</div>
+
 <h1>Forex Payments</h1>
 
 <div class="no_emp hide error">No employee found for given name.</div>
-<form action='/forex_payments/search' method = "get">
+<form id="forex_search" action='/forex_payments/search#forex_payments' method = "get">
 <span class="search_by">Search by:</span>
   <%= label_tag 'Employee Name' %>:
   <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
@@ -10,13 +14,15 @@
   <%= text_field_tag :emp_id, params[:emp_id], :class => 'emp_id'%>
   <%= submit_tag "Search", :name => nil%>
 </form>
-<div class="right">
-  <%= link_to "Export as Excel", export_forex_payments_url %>
+
+<div class="right_align">
+  <%= link_to image_tag("excel.png") + "Export in Excel" , export_outbound_travels_url %>
 </div>
+
 <div>
   <%= paginate @forex_payments%>
 </div>
-<table>
+<table id="forex_payment_content">
   <tr>
     <th>Id</th>
     <th>Name</th>
@@ -35,11 +41,10 @@
       <td><%= payment.currency %></td>
       <td><%= payment.place%></td>
 
-      <td><%= link_to 'Show', payment %> |
-      <%= link_to 'Edit',edit_forex_payment_path(payment) %> |
+      <td><%= link_to 'Show', payment%> |
+      <%= link_to 'Edit',edit_forex_payment_path(payment)+'#forex_payments' %> |
       <%= link_to 'Destroy', payment, confirm: 'Are you sure?', method: :delete %></td>
 
     </tr>
   <% end %>
 </table>
-<%= link_to 'New Forex Payment', new_forex_payment_path %>

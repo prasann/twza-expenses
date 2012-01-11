@@ -8,14 +8,18 @@
 	  <%= csrf_meta_tags %>
 	</head>
 	<body>
-		<div class="top_bar">
+	<div class="top_bar">
 			<div class="thought_works"><b>Thought</b>Works</div>
 			<div class="title"><a href="/">Expense Reimbursement System</a></div>
-		</div>
-		<div class="content">
-			<div id="panel" title="out">
-			</div>
+	</div>
+		<div class="content">	
+			<div id="menu">
+				<ul class="tabs">
+					<li><a href="#outbound_travels" title="Outbound Travels">Outbound Travels</a></li>
+				 	<li><a href="#forex_payments" title="Forex Payments">Forex Payments</a></li>
+				</ul>
 			<%= yield %>
+			</div>
 		</div>
 	</body>
 </html>

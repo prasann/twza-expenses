@@ -95,6 +95,9 @@ tr.even{
     background-image: url(error.png);
 }
 
+.content{
+}
+
 /* Error, Warning divs - Ends*/
 /* Styling for Pagination -- Starts */
 .pagination {
@@ -178,18 +181,66 @@ tr.even{
 
 .top_bar .thought_works{
     font-size: 300%;
-    padding: 10px;
+    padding: 10px 10px 0 10px;
 }
 
-.top_bar .text{
+.top_bar .title{
     float: right;
     font-size: 200%;
 }
 
+.top_bar .title a{
+    text-decoration: none;
+}
+
+.top_bar .title a:visited{
+    color: black;
+}
 .or_field{
     font-size: 150%;
     font-weight: bold;
 }
+
+.heading{
+    font-size: 150%;
+    font-weight: bold;
+    text-align: center;
+}
+
+.right_align{
+    float: right;
+    font-size: 120%;
+    padding: 1% 1%;
+}
+
+.left_align{
+    float: left;
+    font-size: 120%;
+    padding: 1% 1%;
+}
+
+
+.fields table{
+    border: 0;
+    width: 70%;
+    margin: 0;
+}
+
+.fields td{
+    border: 0;
+}
+
+.fields .text{
+    text-align: right;
+}
+
+.actions{
+    padding: 10px;
+    margin-left: 25em;
+}
+
+
+
 
 
 

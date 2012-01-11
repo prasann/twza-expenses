@@ -17,7 +17,11 @@ $(document).ready(function(){
 						"Couldn't load this tab. We'll try to fix this as soon as possible. " +
 						"If this wouldn't be a demo." );
 				}
-			}
+			},
+			select: function(event, ui){
+   				 if(ui.index == 0){ window.location = "/outbound_travels#outbound_travels";}
+   				 if(ui.index == 1){ window.location = "/forex_payments#forex_payments";} 
+  			}
 		});
 	});       
 });

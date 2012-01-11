@@ -12,10 +12,12 @@ class ForexPaymentsController < ApplicationController
   def index
     default_per_page = params[:per_page] || 20
     @forex_payments = ForexPayment.page(params[:page]).per(default_per_page)
+    render :layout => 'tabs'
   end
 
   def show
     @forex_payment = ForexPayment.find(params[:id])
+    render 
   end
 
   def new
@@ -52,7 +54,7 @@ class ForexPaymentsController < ApplicationController
 
   def search
     @forex_payments = ForexPayment.page(params[:page]).any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]})
-    render :index
+    render :index, :layout => 'tabs'
   end
 
   def export
