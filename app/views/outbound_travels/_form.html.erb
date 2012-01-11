@@ -36,7 +36,7 @@
       </tr>
       <tr>
         <td><%= f.label :departure_date, 'Departure Date'%>:</td>
-        <td><%= f.text_field :departure_date%></td>
+        <td><%= f.text_field :departure_date , :class=> 'date_picker'%></td>
       </tr>
       <tr>
         <td><%= f.label :foreign_payroll_transfer, 'Foreign Payroll Transfer Date'%>:</td>
@@ -44,7 +44,7 @@
       </tr>
       <tr>
         <td><%= f.label :return_date, 'Return Date'%>:</td>
-        <td><%= f.text_field :return_date%></td>
+        <td><%= f.text_field :return_date , :class=> 'date_picker'%></td>
       </tr>
       <tr></tr>
       <tr>
@@ -60,7 +60,7 @@
         <td><%= f.text_field :project%></td>
       </tr>
       <tr>
-        <td><%= f.label :comments, 'Commets'%>:</td>
+        <td><%= f.label :comments, 'Comments'%>:</td>
         <td><%= f.text_field :comments%></td>
       </tr>
       <tr>
@@ -74,4 +74,10 @@
   <div class="actions">
     <%= f.submit %>
   </div>
+
+  <script>
+    $(document).ready(function(){
+      populateFormFields();
+    });
+  </script>
 <% end %>

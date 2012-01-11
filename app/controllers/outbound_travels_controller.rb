@@ -59,6 +59,10 @@ class OutboundTravelsController < ApplicationController
     render :index, :layout => 'tabs'
   end
 
+  def search_by_place
+    render :text => OutboundTravel.all.distinct(:place).delete_if{|x| x.nil?};     
+  end
+
   def export
     @data_to_export = OutboundTravel.all
     @file_headers = HEADERS

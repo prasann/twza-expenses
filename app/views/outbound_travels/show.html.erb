@@ -12,8 +12,8 @@
 <tr>
   <td><%= @outbound_travel.place %></td>
   <td><%= @outbound_travel.travel_duration %></td>
-  <td><%= @outbound_travel.departure_date %></td>
-  <td><%= @outbound_travel.return_date %></td>
+  <td><%= date_fmt(@outbound_travel.departure_date) %></td>
+  <td><%= date_fmt(@outbound_travel.return_date) %></td>
 </tr>
 </table>
 

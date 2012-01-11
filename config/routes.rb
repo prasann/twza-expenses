@@ -5,6 +5,8 @@ Mankatha::Application.routes.draw do
   match 'forex_payments/index/:page' => 'forex_payments#index'
   match 'profiles/search_by_name' => 'profiles#search_by_name'
   match 'profiles/search_by_id' => 'profiles#search_by_id'
+  match 'outbound_travels/search_by_place' => 'outbound_travels#search_by_place'
+  
   resources :forex_payments do
     collection do
       get :search

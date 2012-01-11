@@ -1,2 +1,10 @@
-// Place all the behaviors and hooks related to the matching controller here.
-// All this logic will automatically be available in application.js.
+function populateFormFields(){
+	var places;
+	$.getJSON('/outbound_travels/search_by_place',function(data){
+		places = data;
+	});
+	$('#outbound_travel_place').autocomplete({
+		source: places, 
+		minLength: 0
+	}) 
+};    
