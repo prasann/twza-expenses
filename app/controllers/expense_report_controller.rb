@@ -54,5 +54,12 @@ class ExpenseReportController < ApplicationController
 		expense_report.processed = true
 		expense_report.save
 		redirect_to outbound_travels_path
-	end
+  end
+
+  def notify
+    expense_report = ExpenseReport.find(params[:id])
+    profile = Profile.find_all_by_employee_id(expense_report[:empl_id])
+    EmployeeMailer.expense_settlement(profile, expense_report).deliver
+    redirect_to(:back)
+  end
 end

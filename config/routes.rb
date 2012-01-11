@@ -23,6 +23,11 @@ Mankatha::Application.routes.draw do
     end
   end
 
+  resources :expense_report do
+    member do
+      post  :notify
+    end
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
