@@ -1,18 +1,4 @@
 $(document).ready(function(){
-<<<<<<< Updated upstream
-$('.emp_name').autocomplete({
-   source: '/profiles/search_by_name', 
-   minLength: 2,
-   select: function(event, ui) {
-     $('.no_emp').hide();
-     name_id = ui.item.value.split('-');
-     $('.emp_name').val(name_id[0]);
-     $('.emp_id').val(name_id[1]);
-     return false;
-   },
-     change: function(event, ui) {
-     $('.emp_id').val('');
-
   $('.emp_name').autocomplete({
     source: '/profiles/search_by_name', 
     minLength: 2,
@@ -25,7 +11,6 @@ $('.emp_name').autocomplete({
     },
     change: function(event, ui) {
       $('.emp_id').val('');
-      $('.no_emp').show();
     }
   })
   $('.emp_id').autocomplete({
@@ -41,10 +26,5 @@ $('.emp_name').autocomplete({
     change: function(event, ui) {
     $('.emp_names').val('');
    }
-})
-
-      $('.emp_names').val('');
-      $('.no_emp').show();
-    }
   })
 });
