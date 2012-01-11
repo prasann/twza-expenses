@@ -15,8 +15,8 @@ test:
 uat:
   adapter: mysql
   database: rampup_production
-  username: rampup
-  password: password
+  username: root
+  password: PASSWORD 
   host: 10.10.1.79
   port: 3306
 
