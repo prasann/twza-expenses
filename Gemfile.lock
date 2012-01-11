@@ -169,6 +169,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionmailer
   bson_ext
   capistrano
   jquery-rails

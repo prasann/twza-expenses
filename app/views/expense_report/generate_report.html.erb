@@ -1,79 +1,8 @@
 <html>
 	<body>
-		<table>
-		  <tr><td colspan="7"><span class="heading">Forex Payments</span></td></tr>
-          <tr>
-            <th>Employee Id</th>
-            <th>Name</th>
-            <th>Issue Date</th>
-            <th>Amount</th>
-            <th>Currency</th>
-            <th>Place</th>
-			<th>Amount INR</th>
-           </tr>
-			<%
-			forex_inr_total=0
-			@expense_report.get_forex_payments.each do|payment|
-			forex_inr_total += payment.inr
-			%>
-			<tr>
-            	<td><%= payment.emp_id %></td>
-	            <td><%= payment.emp_name %></td>
-    	        <td><%= payment.issue_date%></td>
-        	    <td><%= payment.amount%></td>
-            	<td><%= payment.currency %></td>
-	            <td><%= payment.place%></td>
-				<td><%=format_two_decimal_places(payment.inr)%></td>
-			</tr>
-			<% end %>
-			<tr>
-				<td colspan="6">Total</td>
-				<td><%=format_two_decimal_places(forex_inr_total)%></td>
-			</tr>
-		</table>
-	 	<table>
-			<tr><td colspan="6"><span class=heading">Expenses</span></td></tr>
-			<tr>
-				<th>Expense Report ID</th>
-				<th>Description</th>
-				<th>Currency</th>
-				<th>Amount</th>
-				<th>Conversion Rate</th>
-				<th>Amount in INR</th>
-			</tr>
-			<%
-			expense_inr_total=0
-			@expense_report.consolidated_expenses.each do|expense|
-			expense_inr_total += expense["local_currency_amount"]
-			%>
-				<tr>
-					<td><%=expense["report_id"]%></td>
-					<td></td>
-					<td><%=expense["currency"]%></td>
-					<td><%=expense["amount"]%></td>
-					<td><%=format_two_decimal_places(expense["conversion_rate"])%></td>
-					<td><%=format_two_decimal_places(expense["local_currency_amount"])%></td>
-				</tr>
-			<% end %>
-			<tr>
-				<td colspan="5">Total</td>
-				<td><%=format_two_decimal_places(expense_inr_total)%></td>
-			</tr>
-
-			</table>
-			<table>
-			<tr>
-				<td>Cash Handed over:</td>
-				<td><%=@expense_report.cash_handover%></td>
-				<td><%=format_two_decimal_places(@expense_report.get_conversion_rate)%></td>
-				<td><%=refund_from_employee=format_two_decimal_places(@expense_report.cash_handover*@expense_report.get_conversion_rate)%></td>
-			</tr>
-			<tr>
-				<td colspan="3">Recievable from employee (Payable in (-)):</td>
-				<td><%=format_two_decimal_places((forex_inr_total-(expense_inr_total+refund_from_employee)))%></td>
-			</tr>
-		</table>
+		<%= render :partial => '/partial/expense_settlement/report' %>
 		<div style="float:left;padding-top:5px"><input type="button" value="<< Back" onclick="javascript:history.back(-1)"/></div>
 		<div style="float:right;padding-top:5px"><%=button_to 'Mark as Processed', :action => 'set_processed', :id => @expense_report.id.to_s%></div>
+        <div style="float:right;padding-top:5px"><%=button_to 'Notify employee', :action => 'notify', :id => @expense_report.id.to_s%></div>
 	</body>
 </html>
