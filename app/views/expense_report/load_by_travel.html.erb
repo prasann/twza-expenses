@@ -16,7 +16,10 @@
             <th>Currency</th>
             <th>Place</th>
            </tr>
- 			<%@expense_report.forex_payments.each do|payment|%>
+ 		<%
+		forexes_avlbl=@expense_report.forex_payments && !@expense_report.forex_payments.empty?
+		if(forexes_avlbl)
+			@expense_report.forex_payments.each do|payment|%>
 			<tr class="<%= cycle("even", "odd") %>">
 				<td><%= check_box_tag 'forex_payments[]', payment.id.to_s, :checked => true%></td>
             	<td><%= payment.emp_id %></td>
@@ -26,7 +29,10 @@
             	<td><%= payment.currency %></td>
 	            <td><%= payment.place%></td>
 			</tr>
-			<% end %>
+			<% end 
+		else%>
+			<tr><td colspan="7">No Forexes available around the chosen travel dates</td></tr>
+		<%end%>
         </table>
 
 		<span class="heading">Expenses</span>
@@ -41,7 +47,10 @@
 			<th>Amount</th>
 			<th>Payment Type</th>
 		</tr>
-		<%@expense_report.expenses.each do|expense|%>
+	<%
+	expenses_avlbl=@expense_report.expenses && !@expense_report.expenses.empty?
+	if(expenses_avlbl)
+		@expense_report.expenses.each do|expense|%>
 		<tr class="<%= cycle("even", "odd") %>">
 			<td><%= check_box_tag 'expenses[]', expense.id.to_s, :checked => true%></td>
 			<td><%=expense.expense_rpt_id%></td>		
@@ -52,12 +61,17 @@
 			<td><%=expense.original_cost%> <%=expense.original_currency%></td>
 			<td><%=expense.payment_type%></td>		
 		</tr>
-		<% end %>
+		<% end
+	else%>
+			<tr><td colspan="8">No expenses available around the chosen travel dates</td></tr>
+	<%end%>
 		</table>
-		<div>
-			<label for="cash_handover">Cash handed over by Employee: </label><%= text_field_tag 'cash_handover'%>
+		<div style="display:block;float:right">
+			<label for="cash_handover">Cash handed over by Employee: </label>&nbsp;<%= text_field_tag 'cash_handover'%>
 		</div>
-		<div style="float:right"><%=submit_tag 'Generate Report >>'%></div>
+		<br/><br/>
+		<div style="display:block;float:left;padding-top: 10px;"><input type="button" value="<< Back" onclick="javascript:history.go(-1)"/></div>
+		<div style="display:block;float:right;padding-top: 10px;"><%=(forexes_avlbl && expenses_avlbl)?submit_tag('Generate Report >>'):''%></div>
 		<% end %>
 
 	</body>

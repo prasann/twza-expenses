@@ -1,7 +1,7 @@
 <html>
 	<body>
 		<table>
-		  <tr><td colspan="7">Forex Payments</td></tr>
+		  <tr><td colspan="7"><span class="heading">Forex Payments</span></td></tr>
           <tr>
             <th>Employee Id</th>
             <th>Name</th>
@@ -32,7 +32,7 @@
 			</tr>
 		</table>
 	 	<table>
-			<tr><td colspan="6">Expenses</td></tr>
+			<tr><td colspan="6"><span class=heading">Expenses</span></td></tr>
 			<tr>
 				<th>Expense Report ID</th>
 				<th>Description</th>
@@ -73,6 +73,7 @@
 				<td><%=format_two_decimal_places((forex_inr_total-(expense_inr_total+refund_from_employee)))%></td>
 			</tr>
 		</table>
-		<%=button_to 'Mark as Processed', :action => 'set_processed', :id => @expense_report.id.to_s%>
+		<div style="float:left;padding-top:5px"><input type="button" value="<< Back" onclick="javascript:history.back(-1)"/></div>
+		<div style="float:right;padding-top:5px"><%=button_to 'Mark as Processed', :action => 'set_processed', :id => @expense_report.id.to_s%></div>
 	</body>
 </html>
