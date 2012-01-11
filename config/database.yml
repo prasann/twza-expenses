@@ -4,6 +4,7 @@ development:
   username: root
   host: localhost
   port: 3306
+  password: pwd
 
 test:
   adapter: mysql
@@ -11,6 +12,7 @@ test:
   username: root
   host: localhost
   port: 3306
+  password: pwd
 
 uat:
   adapter: mysql
