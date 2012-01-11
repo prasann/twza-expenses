@@ -247,6 +247,12 @@ tr.even{
     text-align: center  ;
 }
 
+#expense_report_accordion{
+    width: 90%;
+    margin-left:5%;
+    margin-bottom:5%;
+}
+
 
 
 
