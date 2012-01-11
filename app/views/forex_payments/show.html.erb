@@ -1,21 +1,42 @@
 <p id="notice"><%= notice %></p>
+<h1>Forex Details</h1>
+<h1 class="center_text"><%= @forex_payment.emp_name %> (Emp Id: <%= @forex_payment.emp_id %>)</h1>
 <div>
-  <b>Employee Id</b>
-  <%= @forex_payment.emp_id %><br/>
-  <b>Employee Name</b>
-  <%= @forex_payment.emp_name %><br/>
+<h3 class="center_text"> <%= date_fmt(@forex_payment.issue_date)%> </h3>
+<h3 class="center_text"> Card Details </h3>
+<table class="display_table">
+<tr>
+  <th>Card Number</th>
+  <th>Vendor Name</th>
+  <th>Amount</th>
+  <th>Currency</th>
+  <th>INR Value</th>
+  <th>Expiry Date</th>
+</tr>
+<tr>
+  <td><%= @forex_payment.card_number %></td>
+  <td><%= @forex_payment.vendor_name %></td>
+  <td><%= @forex_payment.amount %></td>
+  <td><%= @forex_payment.currency %></td>
+  <td><%= @forex_payment.inr %></td>
+  <td><%= date_fmt(@forex_payment.expiry_date)%></td>
+</tr>
+</table>
 
-  <b>Issue Date</b>
-  <%= @forex_payment.issue_date %><br/>
+<h3 class="center_text"> Travel Details </h3>
 
-  <b>Amount</b>
-  <%= @forex_payment.amount %><br/>
-
-  <b>Currency </b>
-  <%= @forex_payment.currency %><br/>
-
-  <b>Place </b>
-  <%= @forex_payment.place %><br/>
+<table class="display_table">
+  <tr>
+    <th>Project Details</th>
+    <th>Place of Travel</th>
+    <th>Office</th>
+  </tr>
+  <tr>
+    <td><%= @forex_payment.project %></td>
+    <td><%= @forex_payment.place %></td>
+    <td><%= @forex_payment.office %></td>
+  </tr>
+</table>
 </div>
 
 <%= link_to 'Edit', edit_forex_payment_path(@forex_payment) %> |

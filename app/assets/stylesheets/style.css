@@ -239,6 +239,14 @@ tr.even{
     margin-left: 25em;
 }
 
+.display_table{
+    width:80%;
+}
+
+.center_text{
+    text-align: center  ;
+}
+
 
 
 
