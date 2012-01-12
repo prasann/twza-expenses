@@ -1,15 +1,19 @@
 require 'mongoid'
 
-class ExpenseReportController < ApplicationController
+class ExpenseSettlementController < ApplicationController
     FOREX_PAYMENT_DATES_PADDED_BY=15
 	EXPENSE_DATES_PADDED_BY=5
 	
-	def list
+	def index
+    	default_per_page = params[:per_page] || 20
 		if(params[:empl_id])
-			@expense_reports = ExpenseReport.where(empl_id: params[:empl_id]).to_a
+			@expense_settlements = ExpenseReport.where(empl_id: params[:empl_id])
+										.page(params[:page]).per(default_per_page)
 		else
-			@expense_reports = ExpenseReport.all.to_a
+			@expense_settlements = ExpenseReport
+										.page(params[:page]).per(default_per_page)
 		end
+    	render :layout => 'tabs'
 	end
 
 	def load_by_travel
@@ -62,7 +66,7 @@ class ExpenseReportController < ApplicationController
 
   def notify
     expense_report = ExpenseReport.find(params[:id])
-    expense_report.populate_instance_data
+	expense_report.populate_instance_data
     profile = Profile.find_all_by_employee_id(expense_report[:empl_id])
     EmployeeMailer.expense_settlement(profile, expense_report).deliver
     redirect_to(:back)

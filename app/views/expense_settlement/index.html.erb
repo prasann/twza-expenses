@@ -1,0 +1,48 @@
+<html>
+<head>
+	<%= stylesheet_link_tag "style" %>
+</head>
+<body>
+<br/>
+<div>
+<%= form_tag({:controller => "expense_settlement"}, :method => "get") do%>
+<h1>Expense Settlement</h1>
+<span class="search_by">Search by:</span>
+<%= label_tag 'Employee Name' %>:
+<%= text_field_tag :name, params[:name], :class => 'emp_name' %>
+<span class="or_field">(or)</span>
+<%= label_tag 'Employee Id' %>:
+<%= text_field_tag :empl_id, params[:empl_id], :class => 'emp_id'%>
+<%= submit_tag "Search", :name => nil%>
+<% end %>
+</div>
+<% if @expense_settlements %>
+<div>
+  <%= paginate @expense_settlements%>
+</div>
+<table>
+<tr>
+	<th>Employee Id</th>
+	<th>Travel Date</th>
+	<th>Return Date</th>
+	<th>Amount</th>
+	<th>Status</th>
+	<th>Completed On</th>
+</tr>
+<%@expense_settlements.each do |expense_settlement|
+	expense_settlement.populate_instance_data
+	travel = expense_settlement.outbound_travel
+	%>
+	<tr class="<%= cycle("even", "odd") %>">
+		<td><%=expense_settlement.empl_id%></td>		
+		<td><%=date_fmt(travel.departure_date)%></td>
+		<td><%=date_fmt(travel.return_date)%></td>
+		<td><%=format_two_decimal_places(expense_settlement.get_recievable_amount)%></td>
+		<td><%=expense_settlement.processed%></td>		
+		<td>&nbsp;</td>
+	</tr>
+<% end %>
+</table>
+<% end %>
+</body>
+</html>
