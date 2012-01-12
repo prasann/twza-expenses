@@ -74,7 +74,7 @@ class ExpenseReport
     	@conversion_rates[expense_currency.original_currency]||(expense_currency.cost_in_home_currency.to_f/expense_currency.original_cost.to_f)
 	end
 
-	def get_recievable_amount
+	def get_receivable_amount
 		all_expenses = @consolidated_expenses
 		all_forex = get_forex_payments
 		expense_inr_amount = 0

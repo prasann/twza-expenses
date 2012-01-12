@@ -30,7 +30,7 @@
 			</tr>
 		</table>
 	 	<table>
-			<tr><td colspan="6"><span class=heading">Expenses</span></td></tr>
+			<tr><td colspan="6"><span class="heading">Expenses</span></td></tr>
 			<tr>
 				<th>Expense Report ID</th>
 				<th>Description</th>
@@ -67,7 +67,7 @@
 				<td><%=refund_from_employee=format_two_decimal_places(@expense_report.cash_handover*@expense_report.get_conversion_rate)%></td>
 			</tr>
 			<tr>
-				<td colspan="3">Recievable from employee (Payable in (-)):</td>
-				<td><%=format_two_decimal_places(@expense_report.get_recievable_amount)%></td>
+				<td colspan="3">Receivable from employee (Payable in (-)):</td>
+				<td><%=format_two_decimal_places(@expense_report.get_receivable_amount)%></td>
 			</tr>
 		</table>
