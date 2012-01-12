@@ -53,8 +53,8 @@ class ExpenseSettlementController < ApplicationController
 
   def notify
     expense_report = ExpenseReport.find(params[:id])
-	expense_report.populate_instance_data
-    profile = Profile.find_all_by_employee_id(expense_report[:empl_id])
+	  expense_report.populate_instance_data
+    profile = Profile.find_all_by_employee_id(expense_report.empl_id)
     EmployeeMailer.expense_settlement(profile, expense_report).deliver
     redirect_to(:back)
   end
@@ -62,7 +62,7 @@ class ExpenseSettlementController < ApplicationController
   private
   def padded_dates(travel)
 		@expenses_from_date = params[:expense_from] ? Date.parse(params[:expense_from]) : travel.departure_date - EXPENSE_DATES_PADDED_BY
-		@expenses_to_date = params[:expenses_to] ? Date.parse(params[:expense_to]) : travel.return_date + EXPENSE_DATES_PADDED_BY
+		@expenses_to_date = params[:expense_to] ? Date.parse(params[:expense_to]) : travel.return_date + EXPENSE_DATES_PADDED_BY
 		@forex_from_date = params[:forex_from] ? Date.parse(params[:forex_from]) : travel.departure_date - FOREX_PAYMENT_DATES_PADDED_BY
 		@forex_to_date = params[:forex_to] ? Date.parse(params[:forex_to]) : travel.return_date + FOREX_PAYMENT_DATES_PADDED_BY
   end
