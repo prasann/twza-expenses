@@ -1,10 +1,47 @@
 <html>
+<head>
+<style media="screen" type="text/css">
+table {
+    border: 1px solid #512E2E;
+    border-collapse: collapse;
+    margin: 1em auto;
+    width: 100%;
+    font-size: 13px;
+}
+
+th{
+	padding: 10px;
+	font-size: 125%;
+	border: 1px solid #512E2E;
+}
+
+td{
+	padding: 5px;
+	border-right: 1px solid #512E2E;
+}
+
+th,tr.odd{
+	background-color: #E8E1DA;
+}
+
+tr.even{
+    background-color: #ffffff;
+}
+
+.heading{
+    font-size: 150%;
+    font-weight: bold;
+    text-align: center;
+}
+
+</style>
+</head>
 <body>
 Dear Padmanabhan, <br/>
 
 Please refer the travel expense settlement sheet. Kindly confirm the same from your end for payroll processing. <br/>
 
-
+<%= render :partial => '/partial/expense_settlement/report' %>
 
 <br/>
 ThoughtWorks Finance Team

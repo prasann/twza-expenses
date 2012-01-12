@@ -5,11 +5,11 @@ class OutboundTravelsController < ApplicationController
   include ExcelDataExporter
 
   HEADERS = [
-      '#', 'PSID', 'Employee Name', 'Country of visit', 'Duration of Stay	(apprx)',
-       'Payroll effect in India', 'Departure date from India',
-       'Foreign country payroll transfer date',
-       'Return date to India', 'Payroll transfer date to India',
-       'Expected return date', 'Project Code', 'Comment', 'Actions'
+    '#', 'PSID', 'Employee Name', 'Country of visit', 'Duration of Stay (apprx)',
+    'Payroll effect in India', 'Departure date from India',
+    'Foreign country payroll transfer date',
+    'Return date to India', 'Payroll transfer date to India',
+    'Expected return date', 'Project Code', 'Comment', 'Actions'
   ]
 
   def index
@@ -59,10 +59,6 @@ class OutboundTravelsController < ApplicationController
     render :index, :layout => 'tabs'
   end
 
-  def search_by_place
-    render :text => OutboundTravel.all.distinct(:place).delete_if{|x| x.nil?};     
-  end
-
   def export
     @data_to_export = OutboundTravel.all
     @file_headers = HEADERS
@@ -74,4 +70,18 @@ class OutboundTravelsController < ApplicationController
 
     flash[:notice] = "Outbound Travel data export complete!"
   end
+
+  def data_to_suggest
+    @outbound_travels = OutboundTravel.all
+    create_hash_field('place','payroll_effect');
+    render :text => @fields.to_json
+  end
+
+  private
+  def create_hash_field(*args)
+    @fields = Hash.new
+    args.each do |field_name|
+      @fields[field_name] = @outbound_travels.collect{|x| x[field_name]}.uniq.delete_if{|x| x.nil?}
+    end
+  end  
 end

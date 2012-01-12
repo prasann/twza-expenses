@@ -46,8 +46,10 @@
       <td><%= date_fmt(outbound_travel.return_date)%></td>
 	  <td><%= link_to 'Show', outbound_travel %> |
 		<%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %> |
-    	<%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %> |
-		<%= link_to 'Expenses', :controller => "expense_report", :action => "load_by_travel", :id => outbound_travel.id.to_s%>
+    	<%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %>
+		<%if(outbound_travel.expense_report == nil)%>
+		| <%=link_to 'Expenses', :controller => "expense_settlement", :action => "load_by_travel", :id => outbound_travel.id.to_s %>
+		<%end%>
 	  </td>
   </tr>
   <% end %>
