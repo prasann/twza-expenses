@@ -7,6 +7,31 @@ describe ExpenseReportController do
     @expenses = [Expense.new]
   end
 
+  describe "load by travel" do
+
+    it "should load the forex and expenses for the given expense id" do
+      outbound_travel = mock("outbound_travel", :id => 123, :emp_id => 1, :departure_date => Date.today - 10, :return_date => Date.today + 5)
+      mockProcessedExpenses = [mock("expense", :expenses => [[2]], :forex_payments => [[3]])]
+      mockExpenseReportCriteria = mock("Crietria", :to_a => mockProcessedExpenses)
+      mockExpenses = mock("expenses")
+      mockForex = mock("forex")
+      OutboundTravel.should_receive(:find).with("123").and_return(outbound_travel)
+      ExpenseReport.should_receive(:where).with({:empl_id=>"1", :processed=>true}).and_return(mockExpenseReportCriteria)
+      mockExpenseReportCriteria.should_receive(:only).with(:expenses, :forex_payments).and_return(mockProcessedExpenses)
+      Expense.should_receive(:fetch_for).with(1,outbound_travel.departure_date - ExpenseReportController::EXPENSE_DATES_PADDED_BY,
+                                               outbound_travel.return_date + ExpenseReportController::EXPENSE_DATES_PADDED_BY,
+                                               [2]).and_return(mockExpenses)
+      ForexPayment.should_receive(:fetch_for).with(1,outbound_travel.departure_date - ExpenseReportController::FOREX_PAYMENT_DATES_PADDED_BY,
+                                               outbound_travel.return_date + ExpenseReportController::FOREX_PAYMENT_DATES_PADDED_BY,
+                                               [3]).and_return(mockForex)
+      mockExpenseReport = mock("expense_report")
+      ExpenseReport.should_receive(:new).with(:expenses => mockExpenses, 
+                                              :forex_payments => mockForex, :empl_id => 1, :travel_id => "123").and_return(mockExpenseReport)
+      get :load_by_travel, :id => 123
+      assigns(:expense_report).should == mockExpenseReport
+    end
+  end
+
   describe "GET 'fetch'" do
 
     it "fetches expenses from db for emplid" do
