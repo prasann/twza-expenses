@@ -18,13 +18,9 @@ describe EmployeeMailer do
                 :currency => 'USD', :amount=>1000, :conversion_rate=> 52.30
             }
     )
-    travel = mock(OutboundTravel, :__id__ => travel_id)
-    @expense_report = ExpenseReport.create(
-        :attributes =>
-            {
-                :empl_id => employee_id, :cash_handover => 0
-            }
-    )
+    travel = mock(OutboundTravel, :__id__ => travel_id, :place=>'UK', :departure_date => Time.parse('2011-10-01'))
+    @expense_report = mock(ExpenseReport, :empl_id => employee_id, :cash_handover => 0, :outbound_travel => travel)
+    @expense_report.should_receive(:populate_instance_data)
     expense = Hash.new
     expense['report_id'] = @expense[:expense_rpt_id]
     expense['currency'] = @expense[:currency]
@@ -34,6 +30,8 @@ describe EmployeeMailer do
     @expense_report.populate_instance_data
     @expense_report.stub(:get_consolidated_expenses).and_return([expense])
     @expense_report.stub(:get_forex_payments).and_return([@forex])
+    @expense_report.stub(:get_conversion_rate).and_return(@expense[:conversion_rate])
+    @expense_report.stub(:get_receivable_amount).and_return(52300)
   end
 
   it "should render successfully" do
@@ -51,7 +49,7 @@ describe EmployeeMailer do
       @email.to[0].should == @profile[:email]
       @email.from.size.should == 1
       @email.from[0].should == EmployeeMailer.class_variable_get(:@@SENDER)
-      @email.subject.should == EmployeeMailer.class_variable_get(:@@EXPENSE_SETTLEMENT_SUBJECT)
+      @email.subject.should == EmployeeMailer.class_variable_get(:@@EXPENSE_SETTLEMENT_SUBJECT) + ' to UK starting 01-Oct-2011'
       @email.body.should include(@expense_report.get_receivable_amount)
     end
 
