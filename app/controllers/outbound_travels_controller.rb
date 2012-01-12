@@ -63,6 +63,10 @@ class OutboundTravelsController < ApplicationController
     render :text => OutboundTravel.all.distinct(:place).delete_if{|x| x.nil?};     
   end
 
+  def search_by_payroll_effect
+    render :text => OutboundTravel.all.distinct(:payroll_effect).delete_if{|x| x.nil?};     
+  end
+
   def export
     @data_to_export = OutboundTravel.all
     @file_headers = HEADERS
