@@ -1,6 +1,6 @@
 require 'mongoid'
 
-class ExpenseReportController < ApplicationController
+class ExpenseSettlementController < ApplicationController
   FOREX_PAYMENT_DATES_PADDED_BY=15
 	EXPENSE_DATES_PADDED_BY=5
 	
