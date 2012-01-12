@@ -9,9 +9,6 @@ $(document).ready(function(){
       $('.emp_id').val(name_id[1]);
       return false;
     },
-    change: function(event, ui) {
-      $('.emp_id').val('');
-    }
   })
   $('.emp_id').autocomplete({
     source: '/profiles/search_by_id',
@@ -23,8 +20,5 @@ $(document).ready(function(){
       $('.emp_name').val(name_id[0]);
       return false;
     },
-    change: function(event, ui) {
-    $('.emp_names').val('');
-   }
   })
 });
