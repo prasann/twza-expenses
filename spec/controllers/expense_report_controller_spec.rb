@@ -1,19 +1,20 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require Rails.root.join("app/models/expense_report")
 
 describe ExpenseReportController do
 
   before(:each) do
-    @criteria_mock = mock(Mongoid::Criteria)
-    @expenses = [Expense.new]
+	@criteria_mock = mock(Mongoid::Criteria)
+	@expense_reports = [ExpenseReport.new]
   end
 
   describe "GET 'fetch'" do
 
     it "fetches expenses from db for emplid" do
-      Expense.stub!(:where).with({:empl_id => "EMP1"}).and_return(@criteria_mock)
-      @criteria_mock.should_receive(:to_a).and_return(@expenses)
-      get :list, :id => 1
-      assigns(:expenses).should == @expenses
+      ExpenseReport.stub!(:where).with({:empl_id => "1"}).and_return(@criteria_mock)
+	    @criteria_mock.should_receive(:to_a).and_return(@expense_reports)
+	    get :list, :empl_id => 1
+      assigns(:expense_reports).should == @expense_reports
       response.should be_success
     end
 

@@ -5,33 +5,36 @@
 <body>
 <br/>
 <div>
-<%= form_tag({:controller => "expense_report", :action => "fetch"}, :method => "get") do%>
- <label for="empl_id">Fetch expenses for:</label>
+<%= form_tag({:controller => "expense_report", :action => "list"}, :method => "get") do%>
+ <label for="empl_id">Fetch expense reports for:</label>
 	<input name="empl_id"/>
  <input type="submit" value="Fetch"/>
 <% end %>
 </div>
-<% if @expenses %>
+<% if @expense_reports %>
 <div>Expenses</div>
 <table>
 <tr>
-	<th>Expense Report Id</th>
-	<th>Project Code</th>
-	<th>Expense Date</th>
-	<th>Expense Type</th>
-	<th>Description</th>
+	<th>Travel Settlement Id</th>
+	<th>Employee Id</th>
+	<th>Travel Date</th>
+	<th>Return Date</th>
 	<th>Amount</th>
-	<th>Payment Type</th>
+	<th>Status</th>
+	<th>Completed On</th>
 </tr>
-<%@expenses.each do |expense|%>
+<%@expense_reports.each do |expense_report|
+	travel = expense_report.outbound_travel
+	%>
 	<tr>
-		<td><%=expense.expense_rpt_id%></td>		
-		<td><%=expense.project%></td>		
-		<td><%=expense.expense_date%></td>		
-		<td><%=expense.expense_type%></td>		
-		<td><%=expense.description%></td>		
-		<td><%=expense.original_cost%> <%=expense.original_currency%></td>
-		<td><%=expense.payment_type%></td>		
+		<td><%=expense_report.expense_rpt_id%></td>		
+		<td><%=expense_report.empl_id%></td>		
+		<td><%=travel.departure_date%></td>
+		<td><%=travel.return_date%></td>
+		<td><%=tra%></td>		
+		<td><%=expense_report.description%></td>		
+		<td><%=expense_report.original_cost%> <%=expense_report.original_currency%></td>
+		<td><%=expense_report.payment_type%></td>		
 	</tr>
 <% end %>
 </table>

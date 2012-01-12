@@ -3,10 +3,12 @@ require 'mongoid'
 class ExpenseReportController < ApplicationController
     FOREX_PAYMENT_DATES_PADDED_BY=15
 	EXPENSE_DATES_PADDED_BY=5
+	
 	def list
-		if(params[:id])
-			converted_empl_id = "EMP" + params[:id]
-			@expenses = Expense.where(empl_id: converted_empl_id).to_a
+		if(params[:empl_id])
+			@expense_reports = ExpenseReport.where(empl_id: params[:empl_id]).to_a
+		else
+			@expense_reports = ExpenseReport.all.to_a
 		end
 	end
 
@@ -39,14 +41,16 @@ class ExpenseReportController < ApplicationController
 	end
 
 	def generate_report
-		@expense_report = ExpenseReport.new
-		@expense_report.expenses = params[:expenses]
-		@expense_report.cash_handover = params[:cash_handover].to_i
-		@expense_report.forex_payments = params[:forex_payments]
-		@expense_report.empl_id = params[:empl_id]
-		@expense_report.travel_id = params[:travel_id]
-		@expense_report.processed = false
-		@expense_report.save
+		outbound_travel = OutboundTravel.find(params[:travel_id])
+		outbound_travel.create_expense_report(expenses: params[:expenses],
+											  forex_payments: params[:forex_payments],
+											  cash_handover: params[:cash_handover].to_i,
+											  empl_id: params[:empl_id],
+											  processed: false)
+
+		@expense_report = outbound_travel.expense_report
+		@expense_report.populate_instance_data()
+		@expense_report
 	end
 
 	def set_processed
