@@ -50,13 +50,12 @@ describe ExpenseSettlementController do
     end
   end
 
-  describe "GET 'fetch'" do
+  describe "GET 'index'" do
 
-    it "fetches expenses from db for emplid" do
-      ExpenseReport.stub!(:where).with({:empl_id => "1"}).and_return(@criteria_mock)
-      @criteria_mock.should_receive(:to_a).and_return(@expense_settlements)
-      get :index, :id => 1
-      assigns(:expense_settlements).should == @expense_settlements
+  it "index expenses from db for emplid" do
+      ExpenseReport.stub_chain(:where, :page, :per).and_return(@expense_reports)
+	  get :index, :empl_id => 1
+      assigns(:expense_settlements).should == @expense_reports
       response.should be_success
     end
 
