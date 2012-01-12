@@ -22,7 +22,7 @@
         </tr>
         <tr>
           <td class="text"><%= f.label :issue_date, 'Issue Date'%>:</td>
-          <td><%= f.text_field :issue_date%></td>
+          <td><%= f.text_field :issue_date , :class => 'date_picker'%></td>
         </tr>
         <tr>
           <td class="text"><%= f.label :amount, 'Amount'%>:</td>
@@ -38,7 +38,7 @@
         </tr>
         <tr>
           <td class="text"><%= f.label :travel_date, 'Travel Date'%>:</td>
-          <td><%= f.text_field :travel_date%></td>
+          <td><%= f.text_field :travel_date, :class => 'date_picker'%></td>
         </tr>
         <tr>
           <td class="text"><%= f.label :project, 'Project'%>:</td>
@@ -54,7 +54,7 @@
         </tr>
         <tr>
           <td class="text"><%= f.label :expiry_date, 'Expiry Date'%>:</td>
-          <td><%= f.text_field :expiry_date%></td>
+          <td><%= f.text_field :expiry_date, :class => 'date_picker'%></td>
         </tr>
         <tr>
           <td class="text"><%= f.label :office, 'Office'%>:</td>
@@ -69,4 +69,10 @@
     <div class="actions">
       <%= f.submit %>
     </div>
+
+    <script>
+      $(document).ready(function(){
+        populateForexFields();
+      });
+    </script>
   <% end %>

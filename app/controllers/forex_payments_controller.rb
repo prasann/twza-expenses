@@ -66,4 +66,18 @@ class ForexPaymentsController < ApplicationController
 
     export_data
   end
+
+  def data_to_suggest
+    @forex_payments = ForexPayment.all
+    create_hash_field('currency','vendor_name','place');
+    render :text => @fields.to_json
+  end
+
+  private
+  def create_hash_field(*args)
+    @fields = Hash.new
+    args.each do |field_name|
+      @fields[field_name] = @forex_payments.collect{|x| x[field_name]}.uniq.delete_if{|x| x.nil?}
+    end
+  end  
 end

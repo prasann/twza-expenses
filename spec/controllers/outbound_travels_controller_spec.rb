@@ -153,7 +153,7 @@ describe OutboundTravelsController do
       response.headers['Content-Disposition'].should == 'attachment; filename="Outbound_Travel_'+date+'.xls"'
       response.headers["Cache-Control"].should == "no-cache, no-store, max-age=0, must-revalidate"
       response.body.should eq \
-          "#,PSID,Employee Name,Country of visit,Duration of Stay	(apprx),Payroll effect in India,"\
+          "#,PSID,Employee Name,Country of visit,Duration of Stay (apprx),Payroll effect in India,"\
           "Departure date from India,Foreign country payroll transfer date,Return date to India,"\
           "Payroll transfer date to India,Expected return date,Project Code,Comment,Actions\n"\
           "1,1001,John Smith,UK,\"\",\"\",01-Oct-2011,\"\",\"\",\"\",29-Nov-2011,\"\",\"\",\"\"\n"\
@@ -161,4 +161,12 @@ describe OutboundTravelsController do
       end
   end
 
+  describe "GET populate autosuggest data" do
+    it "should populate unique and non nullable data for auto suggestion" do
+      outbound_travel_1 = OutboundTravel.create!(valid_attributes.merge!({place: 'US'}))
+      outbound_travel_2 = OutboundTravel.create!(valid_attributes.merge!({place: 'US', payroll_effect: '100%'}))     
+      get :data_to_suggest
+      assigns(:fields).should be_eql ({'place' => ["US"], 'payroll_effect' => ['100%']})
+    end
+  end  
 end
