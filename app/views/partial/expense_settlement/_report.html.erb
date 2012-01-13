@@ -1,71 +1,71 @@
-<table>
-		  <tr><td colspan="7"><span class="heading">Forex Payments</span></td></tr>
-          <tr>
-            <th>Employee Id</th>
-            <th>Name</th>
-            <th>Issue Date</th>
-            <th>Amount</th>
-            <th>Currency</th>
-            <th>Place</th>
-			<th>Amount INR</th>
-           </tr>
-			<%
-			forex_inr_total=0
-			@expense_report.get_forex_payments.each do|payment|
-			forex_inr_total += payment.inr
-			%>
-			<tr>
-            	<td><%= payment.emp_id %></td>
-	            <td><%= payment.emp_name %></td>
-    	        <td><%= payment.issue_date%></td>
-        	    <td><%= payment.amount%></td>
-            	<td><%= payment.currency %></td>
-	            <td><%= payment.place%></td>
-				<td><%=format_two_decimal_places(payment.inr)%></td>
-			</tr>
-			<% end %>
-			<tr>
-				<td colspan="6">Total</td>
-				<td><%=format_two_decimal_places(forex_inr_total)%></td>
-			</tr>
-		</table>
-	 	<table>
-			<tr><td colspan="6"><span class="heading">Expenses</span></td></tr>
-			<tr>
-				<th>Expense Report ID</th>
-				<th>Currency</th>
-				<th>Amount</th>
-				<th>Conversion Rate</th>
-				<th>Amount in INR</th>
-			</tr>
-			<%
-			expense_inr_total=0
-			@expense_report.get_consolidated_expenses.each do|expense|
-			expense_inr_total+=expense["local_currency_amount"]
-			%>
-				<tr>
-					<td><%=expense["report_id"]%></td>
-					<td><%=expense["currency"]%></td>
-					<td><%=expense["amount"]%></td>
-					<td><%=format_two_decimal_places(expense["conversion_rate"])%></td>
-					<td><%=format_two_decimal_places(expense["local_currency_amount"])%></td>
-				</tr>
-			<% end %>
-			<tr>
-				<td colspan="5">Total</td>
-				<td><%=format_two_decimal_places(expense_inr_total)%></td>
-			</tr>
+<div class='heading'>Forex Payments</div>
+<table class="settlement_report">
+  <tr>
+    <th>Employee Id</th>
+    <th>Name</th>
+    <th>Issue Date</th>
+    <th>Amount</th>
+    <th>Currency</th>
+    <th>Place</th>
+    <th>Amount INR</th>
+  </tr>
+  <%
+    forex_inr_total=0
+    @expense_report.get_forex_payments.each do|payment|
+      forex_inr_total += payment.inr
+    %>
+    <tr class="<%= cycle("even", "odd") %>">
+      <td><%= payment.emp_id %></td>
+      <td><%= payment.emp_name %></td>
+      <td><%= payment.issue_date%></td>
+      <td><%= payment.amount%></td>
+      <td><%= payment.currency %></td>
+      <td><%= payment.place%></td>
+      <td class='right_align'><%=format_two_decimal_places(payment.inr)%></td>
+    </tr>
+  <% end %>
+  <tr class="heading_no_align">
+    <td colspan="6">Total </td>
+    <td class='right_align'><%=format_two_decimal_places(forex_inr_total)%></td>
+  </tr>
+</table>
+<div class='heading'>Expenses</div>
+<table class="settlement_report">
+  <tr>
+    <th>Expense Report ID</th>
+    <th>Currency</th>
+    <th>Amount</th>
+    <th>Conversion Rate</th>
+    <th>Amount in INR</th>
+  </tr>
+  <%
+    expense_inr_total=0
+    @expense_report.get_consolidated_expenses.each do|expense|
+      expense_inr_total+=expense["local_currency_amount"]
+    %>
+    <tr class="<%= cycle("even", "odd") %>">
+      <td><%=expense["report_id"]%></td>
+      <td><%=expense["currency"]%></td>
+      <td><%=expense["amount"]%></td>
+      <td><%=format_two_decimal_places(expense["conversion_rate"])%></td>
+      <td class='right_align'><%=format_two_decimal_places(expense["local_currency_amount"])%></td>
+    </tr>
+  <% end %>
+  <tr class="heading_no_align">
+    <td colspan="4">Total</td>
+    <td class='right_align'><%=format_two_decimal_places(expense_inr_total)%></td>
+  </tr>
 
-			</table>
-			<table>
-			<tr>
-				<td>Cash Handed over:</td>
-				<td><%=@expense_report.cash_handover%></td>
-				<td><%=format_two_decimal_places(@expense_report.get_conversion_rate)%></td>
-				<td><%=refund_from_employee=format_two_decimal_places(@expense_report.cash_handover*@expense_report.get_conversion_rate)%></td>
-			</tr>
-			<tr>
-				<td colspan="3">Receivable from employee (Payable in (-)):</td>
-				<td><%=format_two_decimal_places(@expense_report.get_receivable_amount)%></td>
-			</tr>
-		</table>
+</table>
+<table class="settlement_report">
+  <trclass="<%= cycle("even","odd") %>">
+  <td>Cash Handed over:</td>
+  <td><%=@expense_report.cash_handover%></td>
+  <td><%=format_two_decimal_places(@expense_report.get_conversion_rate)%></td>
+  <td class='right_align'><%=refund_from_employee=format_two_decimal_places(@expense_report.cash_handover*@expense_report.get_conversion_rate)%></td>
+</tr>
+<tr>
+  <td colspan="3">Receivable from employee (Payable in (-)):</td>
+  <td class='right_align heading_no_align			'><%=format_two_decimal_places(@expense_report.get_receivable_amount)%></td>
+</tr>
+</table>

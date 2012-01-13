@@ -1,8 +1,12 @@
 <html>
-	<body>
-		<%= render :partial => '/partial/expense_settlement/report' %>
-		<div style="float:left;padding-top:5px"><input type="button" value="<< Back" onclick="javascript:history.back(-1)"/></div>
-		<div style="float:right;padding-top:5px"><%=button_to 'Mark as Processed', :action => 'set_processed', :id => @expense_report.id.to_s%></div>
-        <div style="float:right;padding-top:5px"><%=button_to 'Notify employee', :action => 'notify', :id => @expense_report.id.to_s%></div>
-	</body>
+  <body>
+    <%= render :partial => '/partial/expense_settlement/report' %>
+    <table id="report_buttons">
+      <tr>
+        <td><div style="float:left;padding-top:5px"><input type="button" value="<< Back" onclick="javascript:history.back(-1)"/></div></td>
+        <td><div><%=button_to 'Notify employee', :action => 'notify', :id => @expense_report.id.to_s%></div></td>
+        <td><div><%=button_to 'Mark as Processed', :action => 'set_processed', :id => @expense_report.id.to_s%></div></td>
+      </tr>
+    </table>
+  </body>
 </html>

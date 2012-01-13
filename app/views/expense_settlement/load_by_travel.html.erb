@@ -54,34 +54,34 @@
         if(expenses_avlbl)
           expense_map = @expense_report['expenses'].group_by{|x| x[:expense_rpt_id].to_s}%>
           <div id="expense_report_accordion">
-          <%expense_map.each do |report_id,expenses|%>
-            <h2><a href="#"><input type='checkbox' checked='checked' name='<%=report_id%>'><%= report_id %></a></h2>
-            <div>	
-            <table id="<%=report_id%>_table">
-              <tr>
-                <th>&nbsp;</th>
-                <th>Expense Report Id</th>
-                <th>Project Code</th>
-                <th>Expense Date</th>
-                <th>Expense Type</th>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Payment Type</th>
-              </tr>
-              <% expenses.each do |expense| %>
-                <tr class="<%= cycle("even", "odd") %>">
-                  <td><%= check_box_tag 'expenses[]', expense.id.to_s, :checked => true%></td>
-                  <td><%=expense.expense_rpt_id%></td>		
-                  <td><%=expense.project%></td>		
-                  <td><%=expense.expense_date%></td>		
-                  <td><%=expense.expense_type%></td>		
-                  <td><%=expense.description%></td>		
-                  <td><%=expense.original_cost%> <%=expense.original_currency%></td>
-                  <td><%=expense.payment_type%></td>		
-                </tr>
-              <% end %>
-            </table></div>
-          <% end %>
+            <%expense_map.each do |report_id,expenses|%>
+              <h2><a href="#"><input type='checkbox' checked='checked' name='<%=report_id%>'><%= report_id %></a></h2>
+              <div>	
+                <table id="<%=report_id%>_table">
+                  <tr>
+                    <th>&nbsp;</th>
+                    <th>Expense Report Id</th>
+                    <th>Project Code</th>
+                    <th>Expense Date</th>
+                    <th>Expense Type</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Payment Type</th>
+                  </tr>
+                  <% expenses.each do |expense| %>
+                    <tr class="<%= cycle("even", "odd") %>">
+                      <td><%= check_box_tag 'expenses[]', expense.id.to_s, :checked => true%></td>
+                      <td><%=expense.expense_rpt_id%></td>		
+                      <td><%=expense.project%></td>		
+                      <td><%=expense.expense_date%></td>		
+                      <td><%=expense.expense_type%></td>		
+                      <td><%=expense.description%></td>		
+                      <td><%=expense.original_cost%> <%=expense.original_currency%></td>
+                      <td><%=expense.payment_type%></td>		
+                    </tr>
+                  <% end %>
+              </table></div>
+            <% end %>
           </div>
         <% else%>
           <table>
@@ -89,12 +89,17 @@
           </table>
         <%end%>
 
-        <div style="display:block;float:right">
+        <div>
           <label for="cash_handover">Cash handed over by Employee: </label>&nbsp;<%= text_field_tag 'cash_handover'%>
         </div>
         <br/><br/>
-        <div style="display:block;float:left;padding-top: 10px;"><input type="button" value="<< Back" onclick="javascript:history.go(-1)"/></div>
-        <div style="display:block;float:right;padding-top: 10px;"><%=(forexes_avlbl && expenses_avlbl)?submit_tag('Generate Report >>'):''%></div>
+        <table id='report_buttons'>
+          <tr>
+            <td>
+              <div><input type="button" value="<< Back" onclick="javascript:history.go(-1)"/></div></td>
+            <td><div><%=(forexes_avlbl && expenses_avlbl)?submit_tag('Generate Report >>'):''%></div></td>
+          </tr>
+        </table>
       <% end %>
 
     </body>

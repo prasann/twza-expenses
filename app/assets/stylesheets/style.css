@@ -244,7 +244,7 @@ tr.even{
 }
 
 .center_text{
-    text-align: center  ;
+    text-align: center;
 }
 
 #expense_report_accordion{
@@ -258,6 +258,28 @@ tr.even{
     width:80%;
     margin-left:10%;
 }
+
+/* Expense Settlement Page - Starts */
+.settlement_report{
+    width:95%;
+}
+
+.heading_no_align{
+    font-size: 120%;
+    font-weight: bold;
+}
+
+#report_buttons{
+    border: 0 none;
+    width: 90%;
+    text-align: right;
+}
+
+#report_buttons td{
+    border-right: 0;
+}
+/* Expense Settlement Page - Ends */
+
 
 
 
