@@ -254,6 +254,11 @@ tr.even{
     margin-top: 1%;
 }
 
+#uploaded_expenses_table{
+    width:80%;
+    margin-left:10%;
+}
+
 
 
 

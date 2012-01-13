@@ -50,23 +50,43 @@ class ExpenseSettlementController < ApplicationController
 
   def notify
     expense_report = ExpenseReport.find(params[:id])
-	expense_report.populate_instance_data
+    expense_report.populate_instance_data
     profile = Profile.find_all_by_employee_id(expense_report.empl_id)
     EmployeeMailer.expense_settlement(profile, expense_report).deliver
-    redirect_to(:back)
+    #redirect_to(:back)
   end
-  
-  def file_upload  
-	  require 'fileutils'
-	  tmp = params[:file_upload][:my_file].tempfile
-	  file = File.join("public", params[:file_upload][:my_file].original_filename)
-	  FileUtils.cp tmp.path, file
-	  ExpenseReportImporter.load_expense(file)
-	  FileUtils.rm file
-	  render :upload_success
+
+  def upload
+    @uploaded_files = UploadedExpense.all
   end
-  
+
+  def file_upload
+    require 'fileutils'
+    @file_name = params[:file_upload][:my_file].original_filename
+    if file_exists? @file_name
+      flash[:error] = 'This file has already been uploaded'
+      redirect_to :action => 'upload'
+    else
+      load_to_db
+      UploadedExpense.create(file_name: @file_name)
+      flash[:success] = 'File: '+ @file_name +' has been uploaded successfully'
+      redirect_to :action => 'upload'
+    end
+  end
+
   private
+  def file_exists?(file_name)
+    !UploadedExpense.where(file_name: file_name).blank?
+  end
+
+  def load_to_db
+    tmp = params[:file_upload][:my_file].tempfile
+    file = File.join("public", @file_name)
+    FileUtils.cp tmp.path, file
+    ExpenseReport.load_expense(file)
+    FileUtils.rm file
+  end
+
   def padded_dates(travel)
     @expenses_from_date = params[:expense_from] ? Date.parse(params[:expense_from]) : travel.departure_date - EXPENSE_DATES_PADDED_BY
     @expenses_to_date = params[:expense_to] ? Date.parse(params[:expense_to]) : travel.return_date + EXPENSE_DATES_PADDED_BY

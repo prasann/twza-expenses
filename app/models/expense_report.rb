@@ -11,12 +11,12 @@ class ExpenseReport
 	field :processed, type: Boolean
 
 	belongs_to :outbound_travel
-
+										
 	def populate_instance_data
 		populate_forex_payments
 		populate_consolidated_expenses
 	end
-
+	
 	def populate_consolidated_expenses
 		@consolidated_expenses = []
 		if(expenses && !expenses.empty?)

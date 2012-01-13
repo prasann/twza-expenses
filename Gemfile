@@ -9,6 +9,8 @@ gem 'roo'
 gem 'kaminari'
 gem 'mysql'
 gem 'actionmailer'
+gem 'roadie'
+
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
