@@ -30,7 +30,7 @@ describe ApplicationHelper do
       message = flash_message
       message.should include "<div class=\"error notification\">Could not save expense report</div>"
       message.should include "<div class=\"success notification\">Email sent successfully</div>"
-      message.should include javascript_include_tag('$(\'.notification\').fadeOut(5000);')
+      message.should include javascript_tag('$(\'.notification\').fadeOut(5000);')
     end
   end
 end

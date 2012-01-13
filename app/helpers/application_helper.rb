@@ -18,7 +18,7 @@ module ApplicationHelper
         messages += div_tag
       end
     }
-    messages << javascript_include_tag("$('.notification').fadeOut(5000);")
+    messages << javascript_tag("$('.notification').fadeOut(5000);")
     messages.html_safe
   end
 end
