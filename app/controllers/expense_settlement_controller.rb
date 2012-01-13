@@ -86,7 +86,7 @@ class ExpenseSettlementController < ApplicationController
     tmp = params[:file_upload][:my_file].tempfile
     file = File.join("public", @file_name)
     FileUtils.cp tmp.path, file
-    ExpenseReport.load_expense(file)
+    ExpenseReportImporter.load_expense(file)
     FileUtils.rm file
   end
 
