@@ -1,3 +1,5 @@
+require 'mongoid'
+
 class ExpenseReport
 	include Mongoid::Document
 

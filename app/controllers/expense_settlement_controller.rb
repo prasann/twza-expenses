@@ -1,5 +1,5 @@
 require 'mongoid'
-require 'helpers/expense_report'
+require 'helpers/expense_report_importer'
 
 class ExpenseSettlementController < ApplicationController
   FOREX_PAYMENT_DATES_PADDED_BY=15
@@ -8,11 +8,9 @@ class ExpenseSettlementController < ApplicationController
   def index
     default_per_page = params[:per_page] || 20
     if(params[:empl_id])
-      @expense_settlements = ExpenseReport.where(empl_id: params[:empl_id])
-      .page(params[:page]).per(default_per_page)
+      @expense_settlements = ExpenseReport.where(empl_id: params[:empl_id]).page(params[:page]).per(default_per_page)
     else
-      @expense_settlements = ExpenseReport
-      .page(params[:page]).per(default_per_page)
+      @expense_settlements = ExpenseReport.all.page(params[:page]).per(default_per_page)
     end
     render :layout => 'tabs'
   end
@@ -20,16 +18,17 @@ class ExpenseSettlementController < ApplicationController
   def load_by_travel
     travel = OutboundTravel.find(params[:id])
     padded_dates(travel)
-    processed_expenses = ExpenseReport.where(empl_id:travel.emp_id.to_s, processed: true).only(:expenses, :forex_payments).to_a
+    processed_expenses = ExpenseReport.where(processed: true, empl_id: travel.emp_id.to_s).only(:expenses, :forex_payments).to_a
     processed_expense_ids = processed_expenses.collect(&:expenses).flatten
     processed_forex_ids = processed_expenses.collect(&:forex_payments).flatten
 
     expenses = Expense.fetch_for travel.emp_id,@expenses_from_date,@expenses_to_date,processed_expense_ids
-    forex_payments = ForexPayment.fetch_for travel.emp_id,@forex_from_date,@forex_to_date, processed_forex_ids
-    @expense_report = ExpenseReport.new(:expenses => expenses,
-    :forex_payments => forex_payments,
-    :empl_id => travel.emp_id,
-    :travel_id => travel.id.to_s)
+    forex_payments = ForexPayment.fetch_for travel.emp_id,@forex_from_date,@forex_to_date,processed_forex_ids
+    @expense_report = Hash.new
+	@expense_report["expenses"] = expenses
+    @expense_report["forex_payments"] = forex_payments
+    @expense_report["empl_id"] = travel.emp_id
+    @expense_report["travel_id"] = travel.id.to_s
   end
 
   def generate_report
@@ -65,7 +64,7 @@ class ExpenseSettlementController < ApplicationController
 	  tmp = params[:file_upload][:my_file].tempfile
 	  file = File.join("public", params[:file_upload][:my_file].original_filename)
 	  FileUtils.cp tmp.path, file
-	  ExpenseReport.load_expense(file)
+	  ExpenseReportImporter.load_expense(file)
 	  FileUtils.rm file
 	  render :upload_success
   end

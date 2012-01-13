@@ -24,11 +24,14 @@ describe ExpenseSettlementController do
       ForexPayment.should_receive(:fetch_for).with(1,outbound_travel.departure_date - ExpenseSettlementController::FOREX_PAYMENT_DATES_PADDED_BY,
                                                outbound_travel.return_date + ExpenseSettlementController::FOREX_PAYMENT_DATES_PADDED_BY,
                                                [3]).and_return(mockForex)
-      mockExpenseReport = mock("expense_report")
-      ExpenseReport.should_receive(:new).with(:expenses => mockExpenses, 
-                                              :forex_payments => mockForex, :empl_id => 1, :travel_id => "123").and_return(mockExpenseReport)
-      get :load_by_travel, :id => 123
-      assigns(:expense_report).should == mockExpenseReport
+      expected_result_hash = Hash.new
+ 	  expected_result_hash["expenses"]=mockExpenses
+      expected_result_hash["forex_payments"]=mockForex
+	  expected_result_hash["empl_id"]=1
+	  expected_result_hash["travel_id"]="123"
+      
+	  get :load_by_travel, :id => 123
+      assigns(:expense_report).should == expected_result_hash
     end
 
     it "should use the date for forex and expenses if they are passed as params" do
@@ -43,10 +46,15 @@ describe ExpenseSettlementController do
       mockExpenseReportCriteria.should_receive(:only).with(:expenses, :forex_payments).and_return(mockProcessedExpenses)
       Expense.should_receive(:fetch_for).with(1,expense_from,expense_to,[2]).and_return(mockExpenses)
       ForexPayment.should_receive(:fetch_for).with(1,forex_from,forex_to,[3]).and_return(mockForex)
-      mockExpenseReport = mock("expense_report")
-      ExpenseReport.should_receive(:new).with(:expenses => mockExpenses, 
-                                              :forex_payments => mockForex, :empl_id => 1, :travel_id => "123").and_return(mockExpenseReport)
-      get :load_by_travel, :id => 123, :forex_from => forex_from, :forex_to => forex_to, :expense_from => expense_from, :expense_to => expense_to
+      
+	  expected_result_hash = Hash.new
+ 	  expected_result_hash["expenses"]=mockExpenses
+      expected_result_hash["forex_payments"]=mockForex
+	  expected_result_hash["empl_id"]=1
+	  expected_result_hash["travel_id"]="123"
+      
+	  get :load_by_travel, :id => 123, :forex_from => forex_from, :forex_to => forex_to, :expense_from => expense_from, :expense_to => expense_to
+      assigns(:expense_report).should == expected_result_hash
     end
   end
 

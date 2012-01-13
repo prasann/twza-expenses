@@ -3,7 +3,7 @@ require 'csv'
 require 'mongoid'
 require Rails.root.join("app/models/expense")
 
-class ExpenseReport
+class ExpenseReportImporter
 	def self.load
 		all_files = Dir.glob("data/TWIND*.xlsx")
 		all_files.each do |excelxfile|
