@@ -1,16 +1,21 @@
 <html>
   <body>
     <%=form_tag({:action => 'generate_report'}, :method => 'post') do%>
-      <input type=hidden name="empl_id" value="<%=@expense_report['empl_id']%>" />
-      <input type=hidden name="travel_id" id="travel_id" value="<%=@expense_report['travel_id']%>" />
+	  <input type="hidden" name="settlement_id" value="<%=@expense_report['id']%>" />
+      <input type="hidden" name="empl_id" value="<%=@expense_report['empl_id']%>" />
+      <input type="hidden" name="travel_id" id="travel_id" value="<%=@expense_report['travel_id']%>" />
       <br/>
 
       <span class="heading">Forex Information</span>
       <div>
+	  	<div style="display: inline-block; padding-right: 10px;">
         <h4>From Date</h4>
-        <input type="text" id="forex_from" class="date_picker refresh" value=<%= @forex_from_date.strftime('%d-%b-%Y') %> />
+        <input type="text" id="forex_from" name="forex_from" class="date_picker refresh" value=<%= @forex_from_date.strftime('%d-%b-%Y') %> />
+		</div>
+		<div style="display: inline-block; padding-right: 10px;">
         <h4>To Date</h4>
-        <input type="text" id="forex_to" class="date_picker refresh" value=<%= @forex_to_date.strftime('%d-%b-%Y') %> />
+        <input type="text" name="forex_to" id="forex_to" class="date_picker refresh" value=<%= @forex_to_date.strftime('%d-%b-%Y') %> />
+		</div>
       </div>
       <table>
         <tr>
@@ -44,10 +49,14 @@
       <span class="heading">Expenses</span>
 
       <div>
+	  	<div style="display: inline-block; padding-right: 10px;">
         <h4>From Date</h4>
-        <input type="text" id="expense_from" class="date_picker refresh" value=<%= @expenses_from_date.strftime('%d-%b-%Y') %> />
+        <input type="text" id="expense_from" name="expense_from" class="date_picker refresh" value=<%= @expenses_from_date.strftime('%d-%b-%Y') %> />
+		</div>
+		<div style="display: inline-block; padding-right: 10px;">
         <h4>To Date</h4>
-        <input type="text" id="expense_to" class="date_picker refresh" value=<%= @expenses_to_date.strftime('%d-%b-%Y') %> />
+        <input type="text" id="expense_to" name="expense_to" class="date_picker refresh" value=<%= @expenses_to_date.strftime('%d-%b-%Y') %> />
+		</div>
       </div>
       <%
         expenses_avlbl=@expense_report['expenses'] && !@expense_report['expenses'].empty?

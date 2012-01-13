@@ -34,7 +34,7 @@
 	travel = expense_settlement.outbound_travel
 	%>
 	<tr class="<%= cycle("even", "odd") %>">
-		<td><%=expense_settlement.empl_id%></td>		
+		<td><%=link_to expense_settlement.empl_id, :action => 'show', :id => expense_settlement.id.to_s%></td>		
 		<td><%=date_fmt(travel.departure_date)%></td>
 		<td><%=date_fmt(travel.return_date)%></td>
 		<td><%=format_two_decimal_places(expense_settlement.get_receivable_amount)%></td>

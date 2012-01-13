@@ -18,23 +18,31 @@ class ExpenseSettlementController < ApplicationController
   def load_by_travel
     travel = OutboundTravel.find(params[:id])
     padded_dates(travel)
-    processed_expenses = ExpenseReport.where(processed: true, empl_id: travel.emp_id.to_s).only(:expenses, :forex_payments).to_a
-    processed_expense_ids = processed_expenses.collect(&:expenses).flatten
-    processed_forex_ids = processed_expenses.collect(&:forex_payments).flatten
+	create_settlement_report_from_dates(travel)
+  end
 
-    expenses = Expense.fetch_for travel.emp_id,@expenses_from_date,@expenses_to_date,processed_expense_ids
-    forex_payments = ForexPayment.fetch_for travel.emp_id,@forex_from_date,@forex_to_date,processed_forex_ids
-    @expense_report = {'expenses' => expenses,'forex_payments' => forex_payments,
-                       'empl_id' => travel.emp_id,'travel_id' => travel.id.to_s}
+  def show
+  	@settlement_from_db = ExpenseReport.find(params[:id])
+	@settlement_from_db.populate_instance_data()
+	@expenses_from_date=Date.parse(@settlement_from_db.expense_from)
+	@expenses_to_date=Date.parse(@settlement_from_db.expense_to)
+	@forex_from_date=Date.parse(@settlement_from_db.forex_from)
+	@forex_to_date=Date.parse(@settlement_from_db.forex_to)
+	create_settlement_report_from_dates(@settlement_from_db.outbound_travel)
+	render 'load_by_travel'
   end
 
   def generate_report
     outbound_travel = OutboundTravel.find(params[:travel_id])
     outbound_travel.create_expense_report(expenses: params[:expenses],
-    forex_payments: params[:forex_payments],
-    cash_handover: params[:cash_handover].to_i,
-    empl_id: params[:empl_id],
-    processed: false)
+    						forex_payments: params[:forex_payments],
+						    cash_handover: params[:cash_handover].to_i,
+						    empl_id: params[:empl_id],
+						    processed: false,
+							expense_from: params[:expense_from],
+							expense_to: params[:expense_to],
+							forex_from: params[:forex_from],
+							forex_to: params[:forex_to])
 
     @expense_report = outbound_travel.expense_report
     @expense_report.populate_instance_data
@@ -92,5 +100,19 @@ class ExpenseSettlementController < ApplicationController
     @expenses_to_date = params[:expense_to] ? Date.parse(params[:expense_to]) : travel.return_date + EXPENSE_DATES_PADDED_BY
     @forex_from_date = params[:forex_from] ? Date.parse(params[:forex_from]) : travel.departure_date - FOREX_PAYMENT_DATES_PADDED_BY
     @forex_to_date = params[:forex_to] ? Date.parse(params[:forex_to]) : travel.return_date + FOREX_PAYMENT_DATES_PADDED_BY
+  end
+
+  def create_settlement_report_from_dates(travel)
+	processed_expenses = ExpenseReport.where(processed: true, empl_id: travel.emp_id.to_s).only(:expenses, :forex_payments).to_a
+    processed_expense_ids = processed_expenses.collect(&:expenses).flatten
+    processed_forex_ids = processed_expenses.collect(&:forex_payments).flatten
+
+    expenses = Expense.fetch_for travel.emp_id,@expenses_from_date,@expenses_to_date,processed_expense_ids
+    forex_payments = ForexPayment.fetch_for travel.emp_id,@forex_from_date,@forex_to_date,processed_forex_ids
+    @expense_report = {"expenses" => expenses, 
+					   "forex_payments" => forex_payments,
+    				   "empl_id" => travel.emp_id,
+    				   "travel_id" => travel.id.to_s}
+
   end
 end
