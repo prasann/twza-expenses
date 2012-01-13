@@ -49,7 +49,8 @@ describe EmployeeMailer do
       @email.to[0].should == @profile[:email]
       @email.from.size.should == 1
       @email.from[0].should == EmployeeMailer.class_variable_get(:@@SENDER)
-      @email.subject.should == EmployeeMailer.class_variable_get(:@@EXPENSE_SETTLEMENT_SUBJECT) + ' to UK starting 01-Oct-2011'
+      @email.subject.should == EmployeeMailer.class_variable_get(:@@EXPENSE_SETTLEMENT_SUBJECT).sub('$place','UK')
+                                                                .sub('$start_date','01-Oct-2011')
       @email.body.should include(@expense_report.get_receivable_amount)
     end
 
