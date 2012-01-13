@@ -9,8 +9,8 @@ describe ForexPaymentsController do
 
   describe "GET index" do
     it "assigns all forex_payments as @forex_payments" do
-      forex_payments_1 = ForexPayment.create! valid_attributes
-      forex_payments_2 = ForexPayment.create! valid_attributes
+      forex_payments_1 = ForexPayment.create! (valid_attributes.merge!({travel_date: Time.now + 3}))
+      forex_payments_2 = ForexPayment.create! (valid_attributes.merge!({travel_date: Time.now - 3}))
       get :index, :page => 1, :per_page => 1
       assigns(:forex_payments).should eq([forex_payments_1])
       get :index, :page => 2, :per_page => 1

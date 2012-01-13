@@ -64,7 +64,8 @@ class ExpenseSettlementController < ApplicationController
     expense_report.populate_instance_data
     profile = Profile.find_all_by_employee_id(expense_report.empl_id)
     EmployeeMailer.expense_settlement(profile, expense_report).deliver
-    #redirect_to(:back)
+    flash[:success] = "Expense settlement e-mail successfully sent to '"+profile[0].common_name+"'"
+    redirect_to(:action => :index, :anchor=>'expense_settlement', :empl_id => expense_report.empl_id)
   end
 
   def upload

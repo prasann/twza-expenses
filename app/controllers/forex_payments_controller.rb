@@ -11,7 +11,7 @@ class ForexPaymentsController < ApplicationController
 
   def index
     default_per_page = params[:per_page] || 20
-    @forex_payments = ForexPayment.page(params[:page]).per(default_per_page)
+    @forex_payments = ForexPayment.desc(:travel_date).page(params[:page]).per(default_per_page)
     render :layout => 'tabs'
   end
 
