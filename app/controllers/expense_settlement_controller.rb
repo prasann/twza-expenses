@@ -24,11 +24,8 @@ class ExpenseSettlementController < ApplicationController
 
     expenses = Expense.fetch_for travel.emp_id,@expenses_from_date,@expenses_to_date,processed_expense_ids
     forex_payments = ForexPayment.fetch_for travel.emp_id,@forex_from_date,@forex_to_date,processed_forex_ids
-    @expense_report = Hash.new
-	@expense_report["expenses"] = expenses
-    @expense_report["forex_payments"] = forex_payments
-    @expense_report["empl_id"] = travel.emp_id
-    @expense_report["travel_id"] = travel.id.to_s
+    @expense_report = {'expenses' => expenses,'forex_payments' => forex_payments,
+                       'empl_id' => travel.emp_id,'travel_id' => travel.id.to_s}
   end
 
   def generate_report
@@ -40,7 +37,7 @@ class ExpenseSettlementController < ApplicationController
     processed: false)
 
     @expense_report = outbound_travel.expense_report
-    @expense_report.populate_instance_data()
+    @expense_report.populate_instance_data
     @expense_report
   end
 

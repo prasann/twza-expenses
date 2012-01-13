@@ -13,8 +13,8 @@ class ExpenseReport
 	belongs_to :outbound_travel
 
 	def populate_instance_data
-		populate_forex_payments()
-		populate_consolidated_expenses()
+		populate_forex_payments
+		populate_consolidated_expenses
 	end
 
 	def populate_consolidated_expenses
@@ -49,7 +49,7 @@ class ExpenseReport
 							end
 	end
 
-	def get_conversion_rates_for_currency()
+	def get_conversion_rates_for_currency
 		relevant_forex = get_forex_payments
 		@conversion_rates = relevant_forex.group_by(&:currency)
 		@conversion_rates.collect do |currency,forexes|

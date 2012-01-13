@@ -55,7 +55,6 @@
           expense_map = @expense_report['expenses'].group_by{|x| x[:expense_rpt_id].to_s}%>
           <div id="expense_report_accordion">
           <%expense_map.each do |report_id,expenses|%>
-  			        
             <h2><a href="#"><input type='checkbox' checked='checked' name='<%=report_id%>'><%= report_id %></a></h2>
             <div>	
             <table id="<%=report_id%>_table">
