@@ -182,10 +182,12 @@ tr.even{
 .top_bar .thought_works{
     font-size: 300%;
     padding: 10px 10px 0 10px;
+    float: right;
 }
 
 .top_bar .title{
-    float: right;
+    float: left;
+    padding: 10px 10px 0 10px;
     font-size: 200%;
 }
 

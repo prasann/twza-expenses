@@ -8,10 +8,7 @@
 	  <%= csrf_meta_tags %>
 	</head>
 	<body>
-		<div class="top_bar">
-			<div class="thought_works"><b>Thought</b>Works</div>
-			<div class="title"><a href="/">Expense Reimbursement System</a></div>
-		</div>
+		<%= render :partial => '/layouts/top_bar' %>
 		<div class="content">
 			<div id="panel" title="out">
 			</div>
