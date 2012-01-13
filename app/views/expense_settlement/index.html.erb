@@ -4,9 +4,10 @@
 </head>
 <body>
 <br/>
+<%= flash_message %>
 <div>
-<%= form_tag({:controller => "expense_settlement"}, :method => "get") do%>
-<h1>Expense Settlement</h1>
+  <%= form_tag({:controller => "expense_settlement"}, :method => "get") do%>
+      <h1>Expense Settlement</h1>
 <span class="search_by">Search by:</span>
 <%= label_tag 'Employee Name' %>:
 <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
