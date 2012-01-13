@@ -18,35 +18,38 @@ class ExpenseSettlementController < ApplicationController
   def load_by_travel
     travel = OutboundTravel.find(params[:id])
     padded_dates(travel)
-	create_settlement_report_from_dates(travel)
+	  create_settlement_report_from_dates(travel)
   end
 
   def show
-  	@settlement_from_db = ExpenseReport.find(params[:id])
-	@settlement_from_db.populate_instance_data()
-	@expenses_from_date=Date.parse(@settlement_from_db.expense_from)
-	@expenses_to_date=Date.parse(@settlement_from_db.expense_to)
-	@forex_from_date=Date.parse(@settlement_from_db.forex_from)
-	@forex_to_date=Date.parse(@settlement_from_db.forex_to)
-	create_settlement_report_from_dates(@settlement_from_db.outbound_travel)
-	render 'load_by_travel'
+    settlement_from_db = ExpenseReport.find(params[:id])
+    settlement_from_db.populate_instance_data()
+    @expenses_from_date=Date.parse(settlement_from_db.expense_from)
+    @expenses_to_date=Date.parse(settlement_from_db.expense_to)
+    @forex_from_date=Date.parse(settlement_from_db.forex_from)
+    @forex_to_date=Date.parse(settlement_from_db.forex_to)
+    create_settlement_report_from_dates(settlement_from_db.outbound_travel)
+    @expense_report["id"] = settlement_from_db.id.to_s
+    render 'load_by_travel'
   end
 
   def generate_report
     outbound_travel = OutboundTravel.find(params[:travel_id])
-    outbound_travel.create_expense_report(expenses: params[:expenses],
-    						forex_payments: params[:forex_payments],
-						    cash_handover: params[:cash_handover].to_i,
-						    empl_id: params[:empl_id],
-						    processed: false,
-							expense_from: params[:expense_from],
-							expense_to: params[:expense_to],
-							forex_from: params[:forex_from],
-							forex_to: params[:forex_to])
+    if(outbound_travel.expense_report == nil)
+      outbound_travel.create_expense_report()
+    end
+    outbound_travel.expense_report.update_attributes(expenses: params[:expenses],
+                                               forex_payments: params[:forex_payments],
+                                               cash_handover: params[:cash_handover].to_i,
+                                               empl_id: params[:empl_id],
+                                               processed: false,
+                                               expense_from: params[:expense_from],
+                                               expense_to: params[:expense_to],
+                                               forex_from: params[:forex_from],
+                                               forex_to: params[:forex_to])
 
     @expense_report = outbound_travel.expense_report
     @expense_report.populate_instance_data
-    @expense_report
   end
 
   def set_processed

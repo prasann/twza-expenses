@@ -32,6 +32,7 @@
           if(forexes_avlbl)
             @expense_report['forex_payments'].each do|payment|%>
               <tr class="<%= cycle("even", "odd") %>">
+
                 <td><%= check_box_tag 'forex_payments[]', payment.id.to_s, :checked => true%></td>
                 <td><%= payment.emp_id %></td>
                 <td><%= payment.emp_name %></td>
@@ -40,7 +41,7 @@
                 <td><%= payment.currency %></td>
                 <td><%= payment.place%></td>
               </tr>
-            <% end 
+            <% end
           else%>
           <tr><td colspan="7">No Forexes available around the chosen travel dates</td></tr>
         <%end%>
@@ -65,7 +66,7 @@
           <div id="expense_report_accordion">
             <%expense_map.each do |report_id,expenses|%>
               <h2><a href="#"><input type='checkbox' checked='checked' name='<%=report_id%>'><%= report_id %></a></h2>
-              <div>	
+              <div>
                 <table id="<%=report_id%>_table">
                   <tr>
                     <th>&nbsp;</th>
@@ -80,13 +81,13 @@
                   <% expenses.each do |expense| %>
                     <tr class="<%= cycle("even", "odd") %>">
                       <td><%= check_box_tag 'expenses[]', expense.id.to_s, :checked => true%></td>
-                      <td><%=expense.expense_rpt_id%></td>		
-                      <td><%=expense.project%></td>		
-                      <td><%=expense.expense_date%></td>		
-                      <td><%=expense.expense_type%></td>		
-                      <td><%=expense.description%></td>		
+                      <td><%=expense.expense_rpt_id%></td>
+                      <td><%=expense.project%></td>
+                      <td><%=expense.expense_date%></td>
+                      <td><%=expense.expense_type%></td>
+                      <td><%=expense.description%></td>
                       <td><%=expense.original_cost%> <%=expense.original_currency%></td>
-                      <td><%=expense.payment_type%></td>		
+                      <td><%=expense.payment_type%></td>
                     </tr>
                   <% end %>
               </table></div>
