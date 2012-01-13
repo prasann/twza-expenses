@@ -8,8 +8,8 @@ describe OutboundTravelsController do
 
   describe "GET index" do
     it "assigns all outbound_travels as @outbound_travels" do
-      outbound_travel_1 = OutboundTravel.create! valid_attributes
-      outbound_travel_2 = OutboundTravel.create! valid_attributes
+      outbound_travel_1 = OutboundTravel.create! (valid_attributes.merge!({departure_date: Time.now + 3}))
+      outbound_travel_2 = OutboundTravel.create! (valid_attributes.merge!({departure_date: Time.now - 3}))
       get :index, :page => 1, :per_page => 1
       assigns(:outbound_travels).should eq([outbound_travel_1])
       get :index, :page => 2, :per_page => 1

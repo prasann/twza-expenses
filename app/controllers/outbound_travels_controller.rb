@@ -14,7 +14,7 @@ class OutboundTravelsController < ApplicationController
 
   def index
     default_per_page = params[:per_page] || 20
-    @outbound_travels = OutboundTravel.page(params[:page]).per(default_per_page)
+    @outbound_travels = OutboundTravel.desc(:departure_date).page(params[:page]).per(default_per_page)
     render :layout => 'tabs'
   end
 
