@@ -33,7 +33,6 @@
 			<tr><td colspan="6"><span class="heading">Expenses</span></td></tr>
 			<tr>
 				<th>Expense Report ID</th>
-				<th>Description</th>
 				<th>Currency</th>
 				<th>Amount</th>
 				<th>Conversion Rate</th>
@@ -46,7 +45,6 @@
 			%>
 				<tr>
 					<td><%=expense["report_id"]%></td>
-					<td></td>
 					<td><%=expense["currency"]%></td>
 					<td><%=expense["amount"]%></td>
 					<td><%=format_two_decimal_places(expense["conversion_rate"])%></td>
