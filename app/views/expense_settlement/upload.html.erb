@@ -1,4 +1,21 @@
+<% flash.each do |key, value| %>
+    <%= content_tag(:div, value, :class => "flash #{key}") %>
+<% end %>
+
 <%= form_for :file_upload,:url => {:action => 'file_upload'}, :html => {:multipart => true} do |f| %>
   <%= f.file_field :my_file %>
   <%= f.submit "Upload" %>
 <% end %>
+
+<table id="uploaded_expenses_table">
+	<tr>
+		<th>File Name</th>
+		<th>Uploaded At</th>
+	</tr>
+	<% @uploaded_files.each do |file| %>
+		<tr class="<%= cycle("even", "odd") %>">
+			<td><%= file.file_name %></td>
+			<td><%= file.created_at.strftime("%d-%b-%Y :: %H:%M:%S") %></td>
+		</tr>
+	<% end %>
+</table>

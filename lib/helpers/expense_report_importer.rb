@@ -7,12 +7,11 @@ class ExpenseReportImporter
 	def self.load
 		all_files = Dir.glob("data/TWIND*.xlsx")
 		all_files.each do |excelxfile|
-			
+			load_expense excelxfile		
 		end	
 	end
 
 	def self.load_expense(excelxfile)
-		puts '*****************' << excelxfile
 		is_written = Excelx.new(excelxfile).to_csv("data/temp_file.csv")
 		if is_written
 			all_rows = CSV.read("data/temp_file.csv")
@@ -23,8 +22,7 @@ class ExpenseReportImporter
 			
 			all_rows.each do |row|
 				expense_creator.call(row)
-			end
-			
+			end		
 			File.delete("data/temp_file.csv")
 		end
 	end
