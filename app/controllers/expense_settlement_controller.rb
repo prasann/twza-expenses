@@ -42,7 +42,7 @@ class ExpenseSettlementController < ApplicationController
                                                forex_payments: params[:forex_payments],
                                                cash_handover: params[:cash_handover].to_i,
                                                empl_id: params[:empl_id],
-                                               processed: false,
+                                               status: 'Generated Draft',
                                                expense_from: params[:expense_from],
                                                expense_to: params[:expense_to],
                                                forex_from: params[:forex_from],
@@ -54,7 +54,7 @@ class ExpenseSettlementController < ApplicationController
 
   def set_processed
     expense_report = ExpenseReport.find(params[:id])
-    expense_report.processed = true
+    expense_report.status='Complete'
     expense_report.save
     redirect_to outbound_travels_path
   end
@@ -64,6 +64,8 @@ class ExpenseSettlementController < ApplicationController
     expense_report.populate_instance_data
     profile = Profile.find_all_by_employee_id(expense_report.empl_id)
     EmployeeMailer.expense_settlement(profile, expense_report).deliver
+	expense_report.status='Notified Employee'
+	expense_report.save()
     flash[:success] = "Expense settlement e-mail successfully sent to '"+profile[0].common_name+"'"
     redirect_to(:action => :index, :anchor=>'expense_settlement', :empl_id => expense_report.empl_id)
   end

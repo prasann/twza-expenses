@@ -29,6 +29,7 @@
 	<th>Amount</th>
 	<th>Status</th>
 	<th>Last Updated</th>
+	<th>Action</th>
 </tr>
 <%@expense_settlements.each do |expense_settlement|
 	expense_settlement.populate_instance_data
@@ -39,8 +40,15 @@
 		<td><%=date_fmt(travel.departure_date)%></td>
 		<td><%=date_fmt(travel.return_date)%></td>
 		<td><%=format_two_decimal_places(expense_settlement.get_receivable_amount)%></td>
-		<td><%=expense_settlement.processed%></td>		
+		<td><%=expense_settlement.status%></td>		
 		<td><%=date_fmt(expense_settlement.updated_at)%></td>
+		<td>
+			<%if expense_settlement.status=='Notified Employee'%>
+        		<%=button_to 'Mark as Processed', :action => 'set_processed', :id => expense_settlement.id.to_s%>
+			<%else%>
+				<label>N/A</label>
+			<%end%>
+		</td>
 	</tr>
 <% end %>
 </table>

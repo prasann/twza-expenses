@@ -9,7 +9,7 @@ class ExpenseReport
 	field :empl_id, type: String
 	 
 	field :cash_handover, type: Float
-	field :processed, type: Boolean
+	field :status, type: String
 
 	belongs_to :outbound_travel
 										
