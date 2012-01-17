@@ -21,7 +21,7 @@ class ExpenseSettlementController < ApplicationController
 	  create_settlement_report_from_dates(travel)
   end
 
-  def show
+  def edit
     settlement_from_db = ExpenseReport.find(params[:id])
     settlement_from_db.populate_instance_data()
     @expenses_from_date=Date.parse(settlement_from_db.expense_from)
@@ -31,6 +31,12 @@ class ExpenseSettlementController < ApplicationController
     create_settlement_report_from_dates(settlement_from_db.outbound_travel)
     @expense_report["id"] = settlement_from_db.id.to_s
     render 'load_by_travel'
+  end
+
+  def show
+  	@expense_report=ExpenseReport.find(params[:id])
+	@expense_report.populate_instance_data
+	render 'generate_report'
   end
 
   def generate_report
