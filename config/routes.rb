@@ -17,6 +17,12 @@ Mankatha::Application.routes.draw do
     end
   end
 
+  resources :forex_payments do
+    collection do
+      get  :export
+    end
+  end
+
   resources :outbound_travels do
     collection do
       get  :search

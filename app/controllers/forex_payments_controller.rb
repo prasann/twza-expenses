@@ -63,7 +63,6 @@ class ForexPaymentsController < ApplicationController
     @file_name = 'Forex Details'
     @model = ForexPayment
     @serial_number_column_needed = true
-
     export_data
   end
 

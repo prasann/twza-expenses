@@ -1,0 +1,48 @@
+<h1> Forex Reports </h1>
+
+<form id="forex_report" action="/forex_report/search" method="get">
+    <%= label_tag 'Reports from '%>:
+	<%= text_field_tag :reports_from,params[:reports_from],:class => 'date_picker'%>
+	<%= label_tag 'till'%>:
+	<%= text_field_tag :reports_till,params[:reports_till],:class => 'date_picker'%>
+	<%= label_tag 'Currency'%>:
+	<%= text_field_tag :forex_payment_currency,params[:forex_payment_currency]%>
+	<%= label_tag 'Vendor Name'%>:
+	<%= text_field_tag :forex_payment_vendor_name ,params[:forex_payment_vendor_name]%>
+	<%= submit_tag "Search", :name => nil%>
+</form>
+
+<%unless @forex_payments.nil?%>
+	<div>
+	  <%= paginate @forex_payments%>
+	</div>
+	<%= link_to image_tag("excel.png") + "Export in Excel" , 'export?reports_from='+params[:reports_from]+'&reports_till='+params[:reports_till]+'&forex_payment_currency='+params[:forex_payment_currency]+'&forex_payment_vendor_name='+ params[:forex_payment_vendor_name]%>
+	<table id="forex_report_content">
+	  <tr>
+	    <th>Id</th>
+	    <th>Name</th>
+	    <th>Issue Date</th>
+	    <th>Amount</th>
+	    <th>Currency</th>
+	    <th>Place</th>
+	    <th>Vendor Name</th>
+	  </tr>
+	  <% @forex_payments.each do |payment| %>
+	    <tr class="<%= cycle("even", "odd") %>">
+	      <td><%= payment.emp_id %></td>
+	      <td><%= payment.emp_name %></td>
+	      <td><%= payment.issue_date%></td>
+	      <td><%= payment.amount%></td>
+	      <td><%= payment.currency %></td>
+	      <td><%= payment.place%></td>
+	      <td><%= payment.vendor_name%></td>
+	    </tr>
+	  <% end %>
+	</table>
+<% end %>
+
+<script>
+      $(document).ready(function(){
+        populateForexFields();
+      });
+ </script>
