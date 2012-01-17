@@ -2,6 +2,7 @@ require 'mongoid'
 
 class ExpenseReport
 	include Mongoid::Document
+	include Mongoid::Timestamps
 
 	field :expenses, type: Array
 	field :forex_payments, type: Array

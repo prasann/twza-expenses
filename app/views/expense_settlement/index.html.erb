@@ -28,7 +28,7 @@
 	<th>Return Date</th>
 	<th>Amount</th>
 	<th>Status</th>
-	<th>Completed On</th>
+	<th>Last Updated</th>
 </tr>
 <%@expense_settlements.each do |expense_settlement|
 	expense_settlement.populate_instance_data
@@ -40,7 +40,7 @@
 		<td><%=date_fmt(travel.return_date)%></td>
 		<td><%=format_two_decimal_places(expense_settlement.get_receivable_amount)%></td>
 		<td><%=expense_settlement.processed%></td>		
-		<td>&nbsp;</td>
+		<td><%=date_fmt(expense_settlement.updated_at)%></td>
 	</tr>
 <% end %>
 </table>
