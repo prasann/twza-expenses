@@ -1,9 +1,9 @@
 <h1> Forex Reports </h1>
-
-<form id="forex_report" action="/forex_report/search" method="get">
-    <%= label_tag 'Reports from '%>:
+<div class='required'> * - Mandatory fields </div>
+<form id="forex_report" action="/forex_reports/search" method="get">
+    <%= label_tag 'Reports from *', nil, :class => 'required'%>:
 	<%= text_field_tag :reports_from,params[:reports_from],:class => 'date_picker'%>
-	<%= label_tag 'till'%>:
+	<%= label_tag 'till *', nil, :class => 'required'%>:
 	<%= text_field_tag :reports_till,params[:reports_till],:class => 'date_picker'%>
 	<%= label_tag 'Currency'%>:
 	<%= text_field_tag :forex_payment_currency,params[:forex_payment_currency]%>
@@ -13,11 +13,11 @@
 </form>
 
 <%unless @forex_payments.nil?%>
-	<div class='right_align'>
-	
-	<%= link_to image_tag("excel.png") + "Export results as .xls" , url_for(params.merge!({format: 'xls', action: 'export'}))%>
-	</div>
+	<div>
 	  <%= paginate @forex_payments%>
+	</div>
+	<div class='right_align'>
+		<%= link_to image_tag("excel.png") + "Export results as .xls" , url_for(params.merge!({format: 'xls', action: 'export'}))%>
 	</div>
 	<table id="forex_report_content">
 	  <tr>

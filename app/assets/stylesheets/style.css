@@ -282,6 +282,12 @@ tr.even{
 #report_buttons td{
     border-right: 0;
 }
+
+.required{
+    color: #512E2E;
+    font-weight: bold;
+    margin-bottom: 0.5%;
+}
 /* Expense Settlement Page - Ends */
 
 
