@@ -16,7 +16,7 @@ describe ExpenseSettlementController do
       mockExpenses = mock("expenses")
       mockForex = mock("forex")
       OutboundTravel.should_receive(:find).with("123").and_return(outbound_travel)
-      ExpenseReport.should_receive(:where).with({:empl_id=>"1", :processed=>true}).and_return(mockExpenseReportCriteria)
+      ExpenseSettlement.should_receive(:where).with({:empl_id=>"1", :processed=>true}).and_return(mockExpenseReportCriteria)
       mockExpenseReportCriteria.should_receive(:only).with(:expenses, :forex_payments).and_return(mockProcessedExpenses)
       Expense.should_receive(:fetch_for).with(1,outbound_travel.departure_date - ExpenseSettlementController::EXPENSE_DATES_PADDED_BY,
                                                outbound_travel.return_date + ExpenseSettlementController::EXPENSE_DATES_PADDED_BY,
@@ -42,7 +42,7 @@ describe ExpenseSettlementController do
       mockForex = mock("forex")
       forex_from, forex_to, expense_to, expense_from = Date.today, Date.today + 1, Date.today + 2, Date.today + 3
       OutboundTravel.should_receive(:find).with("123").and_return(outbound_travel)
-      ExpenseReport.should_receive(:where).with({:empl_id=>"1", :processed=>true}).and_return(mockExpenseReportCriteria)
+      ExpenseSettlement.should_receive(:where).with({:empl_id=>"1", :processed=>true}).and_return(mockExpenseReportCriteria)
       mockExpenseReportCriteria.should_receive(:only).with(:expenses, :forex_payments).and_return(mockProcessedExpenses)
       Expense.should_receive(:fetch_for).with(1,expense_from,expense_to,[2]).and_return(mockExpenses)
       ForexPayment.should_receive(:fetch_for).with(1,forex_from,forex_to,[3]).and_return(mockForex)
@@ -61,7 +61,7 @@ describe ExpenseSettlementController do
   describe "GET 'index'" do
 
   it "index expenses from db for emplid" do
-      ExpenseReport.stub_chain(:where, :page, :per).and_return(@expense_reports)
+      ExpenseSettlement.stub_chain(:where, :page, :per).and_return(@expense_reports)
 	  get :index, :empl_id => 1
       assigns(:expense_settlements).should == @expense_reports
       response.should be_success
@@ -73,9 +73,9 @@ describe ExpenseSettlementController do
     it "should send notification to employee upon expense settlement computation" do
       expense_report_id = '1'
       employee_id = 1
-      expense_report = mock("expense_report", :empl_id => employee_id, :populate_instance_data => "nothing")
+      expense_report = mock("expense_settlement", :empl_id => employee_id, :populate_instance_data => "nothing")
       mock_profile = mock(Profile, :employee_id => employee_id, :common_name => 'John Smith')
-      ExpenseReport.should_receive(:find).with(expense_report_id).and_return(expense_report)
+      ExpenseSettlement.should_receive(:find).with(expense_report_id).and_return(expense_report)
       Profile.should_receive(:find_all_by_employee_id).with(employee_id).and_return([mock_profile])
       EmployeeMailer.stub(:expense_settlement).and_return(mock('mailer', :deliver => 'nothing'))
 	  expense_report.should_receive(:save)
@@ -91,32 +91,32 @@ describe ExpenseSettlementController do
   describe "generate report" do
 
     it "should create expense report for chosen expenses, forex and travel" do
-      expense_report = ExpenseReport.new
+      expense_settlement = ExpenseSettlement.new
       outbound_travel = OutboundTravel.new()
-      outbound_travel.stub(:create_expense_report){outbound_travel.expense_report = expense_report}
+      outbound_travel.stub(:create_expense_settlement){outbound_travel.expense_settlement = expense_settlement}
       OutboundTravel.stub!(:find).with("1").and_return(outbound_travel)
-      outbound_travel.should_receive(:create_expense_report)
-      expense_report.should_receive(:update_attributes)
-      expense_report.should_receive(:populate_instance_data)
+      outbound_travel.should_receive(:create_expense_settlement)
+      expense_settlement.should_receive(:update_attributes)
+      expense_settlement.should_receive(:populate_instance_data)
 
       post :generate_report, :travel_id => 1
       #TODO: find how to fix this as "_routes" => nil is added to the hash
-      #assigns(@expense_report).should == expense_report
+      #assigns(@expense_report).should == expense_settlement
 
     end
 
     it "should update expense report if it already exists in the travel" do
-      expense_report = ExpenseReport.new
-      outbound_travel = OutboundTravel.new(:expense_report => expense_report)
+      expense_settlement = ExpenseSettlement.new
+      outbound_travel = OutboundTravel.new(:expense_settlement => expense_settlement)
 
       OutboundTravel.stub!(:find).with("1").and_return(outbound_travel)
-      outbound_travel.should_not_receive(:create_expense_report)
-      expense_report.should_receive(:update_attributes)
-      expense_report.should_receive(:populate_instance_data)
+      outbound_travel.should_not_receive(:create_expense_settlement)
+      expense_settlement.should_receive(:update_attributes)
+      expense_settlement.should_receive(:populate_instance_data)
 
       post :generate_report, :travel_id => 1
       #TODO: find how to fix this as "_routes" => nil is added to the hash
-      #assigns(@expense_report).should == expense_report
+      #assigns(@expense_report).should == expense_settlement
 
     end
   end

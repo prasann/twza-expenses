@@ -8,9 +8,9 @@ class ExpenseSettlementController < ApplicationController
   def index
     default_per_page = params[:per_page] || 20
     if(params[:empl_id])
-      @expense_settlements = ExpenseReport.where(empl_id: params[:empl_id]).page(params[:page]).per(default_per_page)
+      @expense_settlements = ExpenseSettlement.where(empl_id: params[:empl_id]).page(params[:page]).per(default_per_page)
     else
-      @expense_settlements = ExpenseReport.all.page(params[:page]).per(default_per_page)
+      @expense_settlements = ExpenseSettlement.all.page(params[:page]).per(default_per_page)
     end
     render :layout => 'tabs'
   end
@@ -22,7 +22,7 @@ class ExpenseSettlementController < ApplicationController
   end
 
   def edit
-    settlement_from_db = ExpenseReport.find(params[:id])
+    settlement_from_db = ExpenseSettlement.find(params[:id])
     settlement_from_db.populate_instance_data()
     @expenses_from_date=Date.parse(settlement_from_db.expense_from)
     @expenses_to_date=Date.parse(settlement_from_db.expense_to)
@@ -34,17 +34,17 @@ class ExpenseSettlementController < ApplicationController
   end
 
   def show
-  	@expense_report=ExpenseReport.find(params[:id])
+  	@expense_report=ExpenseSettlement.find(params[:id])
 	@expense_report.populate_instance_data
 	render 'generate_report'
   end
 
   def generate_report
     outbound_travel = OutboundTravel.find(params[:travel_id])
-    if(outbound_travel.expense_report == nil)
-      outbound_travel.create_expense_report()
+    if(outbound_travel.expense_settlement == nil)
+      outbound_travel.create_expense_settlement()
     end
-    outbound_travel.expense_report.update_attributes(expenses: params[:expenses],
+    outbound_travel.expense_settlement.update_attributes(expenses: params[:expenses],
                                                forex_payments: params[:forex_payments],
                                                cash_handover: params[:cash_handover].to_i,
                                                empl_id: params[:empl_id],
@@ -54,19 +54,19 @@ class ExpenseSettlementController < ApplicationController
                                                forex_from: params[:forex_from],
                                                forex_to: params[:forex_to])
 
-    @expense_report = outbound_travel.expense_report
+    @expense_report = outbound_travel.expense_settlement
     @expense_report.populate_instance_data
   end
 
   def set_processed
-    expense_report = ExpenseReport.find(params[:id])
+    expense_report = ExpenseSettlement.find(params[:id])
     expense_report.status='Complete'
     expense_report.save
     redirect_to outbound_travels_path
   end
 
   def notify
-    expense_report = ExpenseReport.find(params[:id])
+    expense_report = ExpenseSettlement.find(params[:id])
     expense_report.populate_instance_data
     profile = Profile.find_all_by_employee_id(expense_report.empl_id)
     EmployeeMailer.expense_settlement(profile, expense_report).deliver
@@ -115,7 +115,7 @@ class ExpenseSettlementController < ApplicationController
   end
 
   def create_settlement_report_from_dates(travel)
-	processed_expenses = ExpenseReport.where(processed: true, empl_id: travel.emp_id.to_s).only(:expenses, :forex_payments).to_a
+	processed_expenses = ExpenseSettlement.where(processed: true, empl_id: travel.emp_id.to_s).only(:expenses, :forex_payments).to_a
     processed_expense_ids = processed_expenses.collect(&:expenses).flatten
     processed_forex_ids = processed_expenses.collect(&:forex_payments).flatten
 

@@ -1,6 +1,6 @@
 require 'mongoid'
 
-class ExpenseReport
+class ExpenseSettlement
 	include Mongoid::Document
 	include Mongoid::Timestamps
 
