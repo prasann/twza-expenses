@@ -3,8 +3,8 @@ require 'spec_helper'
 describe ForexPaymentsController do
 
   def valid_attributes
-    {:emp_id => '123', :emp_name => 'test', :amount => 120.25, :currency => 'INR', :travel_date => Date.today, 
-     :office => 'Chennai', :inr => 5001.50}
+    {:emp_id => '123', :emp_name => 'test', :amount => 120.25, :currency => 'INR', :travel_date => Date.today,
+    :office => 'Chennai', :inr => 5001.50}
   end
 
   describe "GET index" do
@@ -20,7 +20,7 @@ describe ForexPaymentsController do
 
   describe "GET show" do
     it "assigns the requested forex_payment as @forex_payment" do
-    forex_payment = ForexPayment.create! valid_attributes
+      forex_payment = ForexPayment.create! valid_attributes
       get :show, :id => forex_payment.id
       assigns(:forex_payment).should eq(forex_payment)
     end
@@ -141,33 +141,33 @@ describe ForexPaymentsController do
   describe "GET export" do
     it "should return an excel dump of all the outbound travel data" do
       ForexPayment.create!(emp_id: 1001, emp_name: 'John Smith', currency: 'GBP', amount: 1000,
-                                                        place: 'UK', office: 'Bangalore',inr: 50,
-                                                        issue_date: Time.parse('2011-10-01'),
-                                                        travel_date: Time.parse('2011-11-30'))
+      place: 'UK', office: 'Bangalore',inr: 50,
+      issue_date: Time.parse('2011-10-01'),
+      travel_date: Time.parse('2011-11-30'))
       ForexPayment.create!(emp_id: 1002, emp_name: 'David Warner', currency: 'USD', place: 'US',
-                                                        amount: 2000, office: 'Chennai', inr: 30,
-                                                        issue_date: Time.parse('2012-10-01'),
-                                                        travel_date: Time.parse('2012-11-30'))
+      amount: 2000, office: 'Chennai', inr: 30,
+      issue_date: Time.parse('2012-10-01'),
+      travel_date: Time.parse('2012-11-30'))
 
       get :export
       date = Time.now.strftime("%m-%d-%Y")
       response.headers['Content-Type'].should == 'application/excel; charset=UTF-8; header-present'
       response.headers['Content-Disposition'].should == 'attachment; filename="Forex Details_'+date+'.xls"'
       response.body.should eq \
-          "Sl.No,Month,EMP ID,Employee's Name,Forex Amt,Fx Crrn,Travelled Date,Place,Project,"\
-          "Vendor Name,Card No,Exp Date,Office,INR\n"\
-          "1,01-Oct-2011,1001,John Smith,1000,GBP,30-Nov-2011,UK,\"\",\"\",\"\",\"\",Bangalore,50\n"\
-          "2,01-Oct-2012,1002,David Warner,2000,USD,30-Nov-2012,US,\"\",\"\",\"\",\"\",Chennai,30\n"
-      end
+      "Sl.No,Month,EMP ID,Employee's Name,Forex Amt,Fx Crrn,Travelled Date,Place,Project,"\
+      "Vendor Name,Card No,Exp Date,Office,INR\n"\
+      "1,01-Oct-2011,1001,John Smith,1000,GBP,30-Nov-2011,UK,\"\",\"\",\"\",\"\",Bangalore,50\n"\
+      "2,01-Oct-2012,1002,David Warner,2000,USD,30-Nov-2012,US,\"\",\"\",\"\",\"\",Chennai,30\n"
+    end
   end
 
   describe "GET populate autosuggest data" do
     it "should populate unique and non nullable data for auto suggestion" do
       outbound_travel_1 = ForexPayment.create!(valid_attributes.merge!({place: 'US', currency: 'GBP'}))
-      outbound_travel_2 = ForexPayment.create!(valid_attributes.merge!({place: 'US', vendor_name: 'VFC', currency: 'USD'}))     
+      outbound_travel_2 = ForexPayment.create!(valid_attributes.merge!({place: 'US', vendor_name: 'VFC', currency: 'USD'}))
       get :data_to_suggest
       assigns(:fields).should be_eql ({'place' => ["US"], 'vendor_name' => ['VFC'], 'currency' => ['GBP','USD']})
     end
-  end  
+  end
 
 end

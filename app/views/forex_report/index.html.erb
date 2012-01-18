@@ -13,10 +13,11 @@
 </form>
 
 <%unless @forex_payments.nil?%>
-	<div>
+	<div class='right_align'>
+	<%= link_to image_tag("excel.png") + "Export results as .xls" , 'export?reports_from='+params[:reports_from]+'&reports_till='+params[:reports_till]+'&forex_payment_currency='+params[:forex_payment_currency]+'&forex_payment_vendor_name='+ params[:forex_payment_vendor_name]%>
+	</div>
 	  <%= paginate @forex_payments%>
 	</div>
-	<%= link_to image_tag("excel.png") + "Export in Excel" , 'export?reports_from='+params[:reports_from]+'&reports_till='+params[:reports_till]+'&forex_payment_currency='+params[:forex_payment_currency]+'&forex_payment_vendor_name='+ params[:forex_payment_vendor_name]%>
 	<table id="forex_report_content">
 	  <tr>
 	    <th>Id</th>

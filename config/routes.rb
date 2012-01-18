@@ -32,7 +32,7 @@ Mankatha::Application.routes.draw do
     end
   end
 
-  resources :expense_report do
+  resources :expense_settlement do
     member do
       post  :notify
     end

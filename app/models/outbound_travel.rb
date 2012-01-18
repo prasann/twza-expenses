@@ -15,7 +15,7 @@ class OutboundTravel
   field :comments
   field :actions
 
-  has_one :expense_report
+  has_one :expense_settlement
 
   validates_presence_of :emp_id, :emp_name, :departure_date
 end
