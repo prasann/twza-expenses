@@ -5,7 +5,7 @@ class OutboundTravelsController < ApplicationController
   include ExcelDataExporter
 
   HEADERS = [
-    '#', 'PSID', 'Employee Name', 'Country of visit', 'Duration of Stay (apprx)',
+    'PSID', 'Employee Name', 'Country of visit', 'Duration of Stay (apprx)',
     'Payroll effect in India', 'Departure date from India',
     'Foreign country payroll transfer date',
     'Return date to India', 'Payroll transfer date to India',
@@ -60,15 +60,7 @@ class OutboundTravelsController < ApplicationController
   end
 
   def export
-    @data_to_export = OutboundTravel.all
-    @file_headers = HEADERS
-    @file_name = 'Outbound_Travel'
-    @model = OutboundTravel
-    @serial_number_column_needed = true
-
-    export_data
-
-    flash[:notice] = "Outbound Travel data export complete!"
+    export_xls(OutboundTravel,HEADERS)
   end
 
   def data_to_suggest

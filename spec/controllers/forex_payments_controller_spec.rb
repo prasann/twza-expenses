@@ -138,28 +138,28 @@ describe ForexPaymentsController do
     end
   end
 
-  describe "GET export" do
-    it "should return an excel dump of all the outbound travel data" do
-      ForexPayment.create!(emp_id: 1001, emp_name: 'John Smith', currency: 'GBP', amount: 1000,
-      place: 'UK', office: 'Bangalore',inr: 50,
-      issue_date: Time.parse('2011-10-01'),
-      travel_date: Time.parse('2011-11-30'))
-      ForexPayment.create!(emp_id: 1002, emp_name: 'David Warner', currency: 'USD', place: 'US',
-      amount: 2000, office: 'Chennai', inr: 30,
-      issue_date: Time.parse('2012-10-01'),
-      travel_date: Time.parse('2012-11-30'))
+  # describe "GET export" do
+  #   it "should return an excel dump of all the outbound travel data" do
+  #     ForexPayment.create!(emp_id: 1001, emp_name: 'John Smith', currency: 'GBP', amount: 1000,
+  #     place: 'UK', office: 'Bangalore',inr: 50,
+  #     issue_date: Time.parse('2011-10-01'),
+  #     travel_date: Time.parse('2011-11-30'))
+  #     ForexPayment.create!(emp_id: 1002, emp_name: 'David Warner', currency: 'USD', place: 'US',
+  #     amount: 2000, office: 'Chennai', inr: 30,
+  #     issue_date: Time.parse('2012-10-01'),
+  #     travel_date: Time.parse('2012-11-30'))
 
-      get :export
-      date = Time.now.strftime("%m-%d-%Y")
-      response.headers['Content-Type'].should == 'application/excel; charset=UTF-8; header-present'
-      response.headers['Content-Disposition'].should == 'attachment; filename="Forex Details_'+date+'.xls"'
-      response.body.should eq \
-      "Sl.No,Month,EMP ID,Employee's Name,Forex Amt,Fx Crrn,Travelled Date,Place,Project,"\
-      "Vendor Name,Card No,Exp Date,Office,INR\n"\
-      "1,01-Oct-2011,1001,John Smith,1000,GBP,30-Nov-2011,UK,\"\",\"\",\"\",\"\",Bangalore,50\n"\
-      "2,01-Oct-2012,1002,David Warner,2000,USD,30-Nov-2012,US,\"\",\"\",\"\",\"\",Chennai,30\n"
-    end
-  end
+  #     get :export
+  #     date = Time.now.strftime("%m-%d-%Y")
+  #     response.headers['Content-Type'].should == 'application/excel; charset=UTF-8; header-present'
+  #     response.headers['Content-Disposition'].should == 'attachment; filename="Forex Details_'+date+'.xls"'
+  #     response.body.should eq \
+  #     "Sl.No,Month,EMP ID,Employee's Name,Forex Amt,Fx Crrn,Travelled Date,Place,Project,"\
+  #     "Vendor Name,Card No,Exp Date,Office,INR\n"\
+  #     "1,01-Oct-2011,1001,John Smith,1000,GBP,30-Nov-2011,UK,\"\",\"\",\"\",\"\",Bangalore,50\n"\
+  #     "2,01-Oct-2012,1002,David Warner,2000,USD,30-Nov-2012,US,\"\",\"\",\"\",\"\",Chennai,30\n"
+  #   end
+  # end
 
   describe "GET populate autosuggest data" do
     it "should populate unique and non nullable data for auto suggestion" do
