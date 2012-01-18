@@ -2,9 +2,9 @@ require "spec_helper"
 
 describe EmployeeMailer do
   before(:each) do
-    employee_id = 1
-    travel_id = 1
-    @profile = Profile.stub(:employee_id => employee_id, :email => 'padmana@thoughtworks.com')
+    @employee_id = 1
+    @travel_id = 1
+    @profile = mock(Profile,:employee_id => @employee_id, :email_id => 'padmana@thoughtworks.com')
     @forex = ForexPayment.create(
         :attributes =>
             {
@@ -18,8 +18,8 @@ describe EmployeeMailer do
                 :currency => 'USD', :amount=>1000, :conversion_rate=> 52.30
             }
     )
-    travel = mock(OutboundTravel, :__id__ => travel_id, :place=>'UK', :departure_date => Time.parse('2011-10-01'))
-    @expense_report = mock(ExpenseSettlement, :empl_id => employee_id, :cash_handover => 0, :outbound_travel => travel)
+    travel = mock(OutboundTravel, :__id__ => @travel_id, :place=>'UK', :departure_date => Time.parse('2011-10-01'))
+    @expense_report = mock(ExpenseSettlement, :empl_id => @employee_id, :cash_handover => 0, :outbound_travel => travel)
     @expense_report.should_receive(:populate_instance_data)
     expense = Hash.new
     expense['report_id'] = @expense[:expense_rpt_id]
@@ -45,15 +45,27 @@ describe EmployeeMailer do
 
     it "should have the e-mail components properly set" do
       @email.to.size.should == 1
-      @email.to[0].should == @profile[:email]
+      @email.to[0].should == @profile.email_id
       @email.from.size.should == 1
-      @email.from[0].should == EmployeeMailer.class_variable_get(:@@SENDER)
-      @email.subject.should == EmployeeMailer.class_variable_get(:@@EXPENSE_SETTLEMENT_SUBJECT).sub('$place','UK')
+      @email.from[0].should == ::Rails.application.config.email_sender
+      @email.subject.should == EmployeeMailer::EXPENSE_SETTLEMENT_SUBJECT.sub('$place','UK')
                                                                 .sub('$start_date','01-Oct-2011')
       @email.body.should include(@expense_report.get_receivable_amount)
     end
 
     it "should have receivable amount" do
+      @email.body.should include(@expense_report.get_receivable_amount)
+    end
+
+    it "should have use employee id and domain to send e-mail if email_id is not available" do
+      profile = mock(@profile, :email_id => '')
+      @email = EmployeeMailer.expense_settlement(profile, @expense_report)
+      @email.to.size.should == 1
+      @email.to[0].should == @employee_id.to_s+::Rails.application.config.email_domain
+      @email.from.size.should == 1
+      @email.from[0].should == ::Rails.application.config.email_sender
+      @email.subject.should == EmployeeMailer::EXPENSE_SETTLEMENT_SUBJECT.sub('$place','UK')
+                                                                .sub('$start_date','01-Oct-2011')
       @email.body.should include(@expense_report.get_receivable_amount)
     end
 

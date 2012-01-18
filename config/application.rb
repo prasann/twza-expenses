@@ -50,5 +50,11 @@ module Mankatha
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    config.email_sender   = 'twindfinance@thoughtworks.com'
+
+    config.email_domain   = '@thoughtworks.com'
+
   end
 end
+

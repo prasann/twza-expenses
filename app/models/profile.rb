@@ -1,6 +1,6 @@
 class Profile < ActiveRecord::Base
  
-  default_scope select("common_name, employee_id")
+  default_scope select("common_name, employee_id, email_id")
 
   def to_special_s
     common_name + '-' + employee_id
