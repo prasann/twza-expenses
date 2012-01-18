@@ -40,11 +40,10 @@ describe EmployeeMailer do
 
   describe "rendered without error" do
     before(:each) do
-      @email = EmployeeMailer.expense_settlement(@profile, @expense_report).deliver
+      @email = EmployeeMailer.expense_settlement(@profile, @expense_report)
     end
 
     it "should have the e-mail components properly set" do
-      ActionMailer::Base.deliveries.empty?.should == false
       @email.to.size.should == 1
       @email.to[0].should == @profile[:email]
       @email.from.size.should == 1
