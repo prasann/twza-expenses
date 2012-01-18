@@ -5,8 +5,8 @@ class ForexPaymentsController < ApplicationController
   include ExcelDataExporter
 
   HEADERS = [
-      'Sl.No','Month','EMP ID','Employee\'s Name','Forex Amt','Fx Crrn','Travelled Date','Place','Project',
-      'Vendor Name','Card No','Exp Date','Office','INR'
+    'Month','EMP ID','Employee\'s Name','Forex Amt','Fx Crrn','Travelled Date','Place','Project',
+    'Vendor Name','Card No','Exp Date','Office','INR'
   ]
 
   def index
@@ -17,7 +17,7 @@ class ForexPaymentsController < ApplicationController
 
   def show
     @forex_payment = ForexPayment.find(params[:id])
-    render 
+    render
   end
 
   def new
@@ -58,12 +58,7 @@ class ForexPaymentsController < ApplicationController
   end
 
   def export
-    @data_to_export = ForexPayment.all
-    @file_headers = HEADERS
-    @file_name = 'Forex Details'
-    @model = ForexPayment
-    @serial_number_column_needed = true
-    export_data
+    export_xls(ForexPayment,HEADERS)
   end
 
   def data_to_suggest
@@ -78,5 +73,5 @@ class ForexPaymentsController < ApplicationController
     args.each do |field_name|
       @fields[field_name] = @forex_payments.collect{|x| x[field_name]}.uniq.delete_if{|x| x.nil?}
     end
-  end  
+  end
 end

@@ -10,6 +10,7 @@ gem 'kaminari'
 gem 'mysql'
 gem 'actionmailer'
 gem 'premailer-rails3'
+gem 'to_xls'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
