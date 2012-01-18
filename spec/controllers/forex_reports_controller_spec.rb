@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ForexReportController do
+describe ForexReportsController do
 
   def valid_attributes
     {:emp_id => '123', :emp_name => 'test', :amount => 120.25, :currency => 'INR', :travel_date => Date.today,

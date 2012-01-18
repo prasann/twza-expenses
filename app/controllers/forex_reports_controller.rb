@@ -1,9 +1,11 @@
 require 'mongoid'
-class ForexReportController < ApplicationController
-  include ExcelDataExporter
+require "#{Rails.root}/lib/helpers/excel_data_exporter"
 
+class ForexReportsController < ApplicationController
+  include ExcelDataExporter
+  
   HEADERS = [
-    'Sl.No','Month','EMP ID','Employee\'s Name','Forex Amt','Fx Crrn','Travelled Date','Place','Project',
+    'Month','EMP ID','Employee\'s Name','Forex Amt','Fx Crrn','Travelled Date','Place','Project',
     'Vendor Name','Card No','Exp Date','Office','INR'
   ]
 
@@ -13,12 +15,7 @@ class ForexReportController < ApplicationController
   end
 
   def export
-    @data_to_export = get_results
-    @file_headers = HEADERS
-    @file_name = 'Forex Details'
-    @model = ForexPayment
-    @serial_number_column_needed = true
-    export_data
+    export_xls(ForexPayment,HEADERS)
   end
 
   private
