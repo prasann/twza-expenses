@@ -55,7 +55,10 @@ class OutboundTravelsController < ApplicationController
   end
 
   def search
-    @outbound_travels = OutboundTravel.page(params[:page]).any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]})
+    criteria = {}
+    criteria.merge!({:emp_id => params[:emp_id].to_i}) unless params[:emp_id].blank?
+    criteria.merge!({:departure_date.gte => params[:departure_date].try(:to_time)}) unless params[:departure_date].blank?
+    @outbound_travels = OutboundTravel.page(params[:page]).all_of(criteria)
     render :index, :layout => 'tabs'
   end
 
@@ -70,6 +73,7 @@ class OutboundTravelsController < ApplicationController
   end
 
   private
+
   def create_hash_field(*args)
     @fields = Hash.new
     args.each do |field_name|

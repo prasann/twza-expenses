@@ -135,6 +135,25 @@ describe OutboundTravelsController do
       get :search, :emp_id => 1001
       assigns(:outbound_travels).to_a.should == [outbound_travel_1]
     end
+
+    it "searches all outbound travels greater than departure date" do
+      now = Time.now
+      tomorrow = Time.now + 1.day
+      outbound_travel_1 = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1001, departure_date: now}))
+      outbound_travel_2 = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1001, departure_date: tomorrow}))
+      get :search, :departure_date => Date.today + 1
+      assigns(:outbound_travels).to_a.should == [outbound_travel_2]
+    end
+    it "should do an and search if departure date and emp id" do
+      now = Time.now
+      tomorrow = Time.now + 1.day
+      outbound_travel_1_now = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1001, departure_date: now}))
+      outbound_travel_1_tomorrow = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1001, departure_date: tomorrow}))
+      outbound_travel_2 = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1002, departure_date: tomorrow}))
+      get :search, :emp_id => 1001, :departure_date => Date.today + 1
+      assigns(:outbound_travels).to_a.should == [outbound_travel_1_tomorrow]
+    end
+
   end
 
   # describe "GET export" do
