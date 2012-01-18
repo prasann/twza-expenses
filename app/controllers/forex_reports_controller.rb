@@ -15,6 +15,7 @@ class ForexReportsController < ApplicationController
   end
 
   def export
+    @data_to_export = get_results
     export_xls(ForexPayment,HEADERS)
   end
 

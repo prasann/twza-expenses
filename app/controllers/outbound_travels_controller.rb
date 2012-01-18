@@ -63,6 +63,7 @@ class OutboundTravelsController < ApplicationController
   end
 
   def export
+    @data_to_export = OutboundTravel.all
     export_xls(OutboundTravel,HEADERS)
   end
 
