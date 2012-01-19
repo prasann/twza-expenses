@@ -5,6 +5,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(params[:user])
+    puts '--------------------------'+@user.inspect+'----------------------------'
     if @user.save
       redirect_to root_url, :notice => "Signed up!"
     else
