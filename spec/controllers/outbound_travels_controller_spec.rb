@@ -156,29 +156,21 @@ describe OutboundTravelsController do
 
   end
 
-  # describe "GET export" do
-  #   it "should return an excel dump of all the outbound travel data" do
-  #     OutboundTravel.create!(emp_id: 1001, emp_name: 'John Smith',
-  #                                                       place: 'UK', 
-  #                                                       departure_date: Time.parse('2011-10-01'), 
-  #                                                       expected_return_date: Time.parse('2011-11-30'))
-  #     OutboundTravel.create!(emp_id: 1002, emp_name: 'David Warner',
-  #                                                       departure_date: Time.parse('2012-10-01'), 
-  #                                                       expected_return_date: Time.parse('2012-11-30'))
- 
-  #     get :export
-  #     date = Time.now.strftime("%m-%d-%Y")
-  #     response.headers['Content-Type'].should == 'application/excel; charset=UTF-8; header-present'
-  #     response.headers['Content-Disposition'].should == 'attachment; filename="Outbound_Travel_'+date+'.xls"'
-  #     response.headers["Cache-Control"].should == "no-cache, no-store, max-age=0, must-revalidate"
-  #     response.body.should eq \
-  #         "#,PSID,Employee Name,Country of visit,Duration of Stay (apprx),Payroll effect in India,"\
-  #         "Departure date from India,Foreign country payroll transfer date,Return date to India,"\
-  #         "Payroll transfer date to India,Expected return date,Project Code,Comment,Actions\n"\
-  #         "1,1001,John Smith,UK,\"\",\"\",01-Oct-2011,\"\",\"\",\"\",29-Nov-2011,\"\",\"\",\"\"\n"\
-  #         "2,1002,David Warner,\"\",\"\",\"\",01-Oct-2012,\"\",\"\",\"\",29-Nov-2012,\"\",\"\",\"\"\n"
-  #     end
-  # end
+  describe "GET export" do
+    it "should return an excel dump of all the outbound travel data" do
+      declared_fields = [:emp_id, :emp_name, :place, :departure_date, :expected_return_date]
+      controller.should_receive(:declared_fields).with(OutboundTravel).and_return(declared_fields)
+      xls_options = {:columns => declared_fields, :headers => OutboundTravelsController::HEADERS}
+      Time.stub(:now).and_return(Time.parse('2011-10-01'))
+      file_options = {:filename => OutboundTravel.to_s+'_01-Oct-2011'+ExcelDataExporter::FILE_EXTENSION}
+      controller.should_receive(:send_data).with(OutboundTravel.all.to_xls(xls_options), file_options).and_return(:nothing => true)
+      get :export, :format=>:xls
+      Mime::XLS.to_sym.should==:xls
+      Mime::XLS.to_s.should == 'application/vnd.ms-excel'
+      response.headers["Content-Type"].should == "application/vnd.ms-excel; charset=utf-8"
+      response.headers["Cache-Control"].should == "no-cache, no-store, max-age=0, must-revalidate"
+    end
+  end
 
   describe "GET populate autosuggest data" do
     it "should populate unique and non nullable data for auto suggestion" do

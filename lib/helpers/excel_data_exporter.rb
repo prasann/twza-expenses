@@ -1,14 +1,21 @@
 module ExcelDataExporter
+  DATE_FORMAT = "%d-%b-%Y"
   FILE_EXTENSION = ".xls"
 
   def export_xls(model,headers)
-    declared_fields = model.fields.select_map {
+    respond_to do |format|
+      format.xls { send_data model.all.to_xls(
+                                 :headers => headers,
+                                 :columns => declared_fields(model)
+                             ),
+                              :filename => model.to_s+'_'+Time.now.strftime(DATE_FORMAT) + FILE_EXTENSION}
+      render :nothing=>true
+    end
+  end
+
+  def declared_fields(model)
+    model.fields.select_map {
       |field| field[1].name if !['_id','_type','nil'].include?(field[1].name)
     }
-    respond_to do |format|
-      format.xls { send_data @data_to_export.to_xls(:headers => headers,
-        :columns => declared_fields),
-      :filename => model.to_s+FILE_EXTENSION}
-    end
   end
 end
