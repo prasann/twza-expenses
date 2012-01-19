@@ -1,6 +1,18 @@
 <div class="top_bar">
+	<div id='user_nav' class='right_align'>
+		<% if current_user %>
+		    Logged in as <%= current_user.user_name %>.
+		    <%= link_to "Log out", log_out_path %>
+		<% else %>
+		    <%= link_to "Sign up", sign_up_path %> or
+		    <%= link_to "log in", log_in_path %>
+		 <% end %>  
+	</div>
 	<div class="thought_works"><b>Thought</b>Works</div>
-	<div class="title"><a href="/">
-	<img src="/assets/logo.png" alt="Expense Reimbursement System"/>
-	</a></div>
+	<div class="title">
+	<a href="/">
+		<img src="/assets/logo.png" alt="Expense Reimbursement System"/>
+		</a>
+	</div>
+	
 </div>

@@ -11,6 +11,7 @@ gem 'mysql'
 gem 'actionmailer'
 gem 'premailer-rails3'
 gem 'to_xls'
+gem "bcrypt-ruby"
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'

@@ -181,7 +181,7 @@ tr.even{
 
 .top_bar .thought_works{
     font-size: 300%;
-    padding: 10px 10px 0 10px;
+    clear: right;
     float: right;
 }
 
