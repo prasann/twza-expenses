@@ -68,10 +68,10 @@ class ExpenseSettlementController < ApplicationController
   def notify
     expense_report = ExpenseSettlement.find(params[:id])
     expense_report.populate_instance_data
-    profile = Profile.find_all_by_employee_id(expense_report.empl_id)
+    profile = Profile.find_by_employee_id(expense_report.empl_id)
     EmployeeMailer.expense_settlement(profile, expense_report).deliver
-	expense_report.status='Notified Employee'
-	expense_report.save()
+    expense_report.status='Notified Employee'
+    expense_report.save()
     flash[:success] = "Expense settlement e-mail successfully sent to '"+profile[0].common_name+"'"
     redirect_to(:action => :index, :anchor=>'expense_settlement', :empl_id => expense_report.empl_id)
   end
@@ -115,16 +115,16 @@ class ExpenseSettlementController < ApplicationController
   end
 
   def create_settlement_report_from_dates(travel)
-	processed_expenses = ExpenseSettlement.where(processed: true, empl_id: travel.emp_id.to_s).only(:expenses, :forex_payments).to_a
+    processed_expenses = ExpenseSettlement.where(processed: true, empl_id: travel.emp_id.to_s).only(:expenses, :forex_payments).to_a
     processed_expense_ids = processed_expenses.collect(&:expenses).flatten
     processed_forex_ids = processed_expenses.collect(&:forex_payments).flatten
 
-    expenses = Expense.fetch_for travel.emp_id,@expenses_from_date,@expenses_to_date,processed_expense_ids
-    forex_payments = ForexPayment.fetch_for travel.emp_id,@forex_from_date,@forex_to_date,processed_forex_ids
-    @expense_report = {"expenses" => expenses, 
-					   "forex_payments" => forex_payments,
-    				   "empl_id" => travel.emp_id,
-    				   "travel_id" => travel.id.to_s}
+    expenses = Expense.fetch_for travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids
+    forex_payments = ForexPayment.fetch_for travel.emp_id, @forex_from_date, @forex_to_date, processed_forex_ids
+    @expense_report = {"expenses" => expenses,
+                       "forex_payments" => forex_payments,
+                       "empl_id" => travel.emp_id,
+                       "travel_id" => travel.id.to_s}
 
   end
 end

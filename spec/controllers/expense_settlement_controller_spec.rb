@@ -76,15 +76,15 @@ describe ExpenseSettlementController do
       expense_report = mock("expense_settlement", :empl_id => employee_id, :populate_instance_data => "nothing")
       mock_profile = mock(Profile, :employee_id => employee_id, :common_name => 'John Smith')
       ExpenseSettlement.should_receive(:find).with(expense_report_id).and_return(expense_report)
-      Profile.should_receive(:find_all_by_employee_id).with(employee_id).and_return([mock_profile])
+      Profile.should_receive(:find_by_employee_id).with(employee_id).and_return([mock_profile])
       EmployeeMailer.stub(:expense_settlement).and_return(mock('mailer', :deliver => 'nothing'))
-	  expense_report.should_receive(:save)
+      expense_report.should_receive(:save)
       expense_report.should_receive(:status=).with('Notified Employee')
-      
-	  post :notify, :id => expense_report_id
-      
-	  flash[:success].should == "Expense settlement e-mail successfully sent to 'John Smith'"
-      response.should redirect_to(:action =>:index, :anchor=>'expense_settlement',:empl_id => employee_id)
+
+      post :notify, :id => expense_report_id
+
+      flash[:success].should == "Expense settlement e-mail successfully sent to 'John Smith'"
+      response.should redirect_to(:action =>:index, :anchor=>'expense_settlement', :empl_id => employee_id)
     end
   end
 
