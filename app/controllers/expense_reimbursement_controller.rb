@@ -11,7 +11,7 @@ class ExpenseReimbursementController < ApplicationController
         reimbursement_expense_ids.push(expense_reimbursement.expenses.collect { |expense| expense['expense_id'] })
       end
       processed_expense_ids = reimbursement_expense_ids.flatten.push(expense_ids_from_travel).flatten
-      unprocessed_expenses = Expense.fetch_for(params[:empl_id], processed_expense_ids).group_by(&:expense_rpt_id)
+      unprocessed_expenses = Expense.fetch_for_employee(params[:empl_id], processed_expense_ids).group_by(&:expense_rpt_id)
       unprocessed_expenses.each do |expense_report_id, expenses|
         if (!expenses.empty?)
           @expense_reimbursements.push(ExpenseReimbursement.new(:expense_report_id => expense_report_id,
