@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   end
 
   def logged_in?
-    if current_user.nil? && ![log_in_url,root_url,sign_up_url,sessions_url].include?(request.url)
+    if current_user.nil?
       redirect_to log_in_url
     end
   end

@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  skip_filter :logged_in?
+  
   def new
   end
 
