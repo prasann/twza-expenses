@@ -8,4 +8,5 @@ class ExpenseReimbursement
 	field :status, type: String
 	field :submitted_on, type: Date
 	field :total_amount, type: Float
+	field :notes, type: String
 end

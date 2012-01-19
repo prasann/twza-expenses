@@ -1,0 +1,74 @@
+<html>
+<body>
+<h1>Expense Reimbursement</h1>
+
+<%= label_tag 'Employee Name : ' %>
+<% #label_tag @expense_reimbursement.
+%>
+
+<%= label_tag 'Employee Id : ' %>
+<%= label_tag 'employee_id', @expense_reimbursement['empl_id'] %>
+
+<%= label_tag 'Expense Report Id : ' %>
+<%= label_tag 'employee_rpt_id', @expense_reimbursement['expense_report_id'] %>
+
+<%= label_tag 'Created Date : ' %>
+<%= label_tag @expense_reimbursement['submitted_on'] %>
+
+<%= label_tag 'Total Amount : ' %>
+<%= label_tag @expense_reimbursement['total_amount'] %>
+<%= form_tag({:action => 'process_reimbursement'}, :method => 'post') do %>
+    <% @all_expenses.each do |project_code, expenses| %>
+        <%= label_tag 'Project Code' %>
+        <%= label_tag project_code %>
+        <table>
+          <tr>
+            <th/>
+            <th>Expense Type</th>
+            <th>Expense Date</th>
+            <th>Cost</th>
+            <th>Currency</th>
+            <th>Description</th>
+            <th>Vendor</th>
+            <th>Payment Type</th>
+            <th>Attendees</th>
+            <th>Personal</th>
+          </tr>
+          <% expenses.each do |expense| %>
+              <tr class="<%= cycle("even", "odd") %>">
+                <td><%= check_box_tag 'selected_expenses[]', expense.id.to_s, :checked => true %></td>
+                <td><%= expense.expense_type %></td>
+                <td><%= date_fmt(Date.parse(expense.expense_date)) %></td>
+                <td><input type="text" name="expense_amount[<%= expense.id.to_s %>]"
+                           value="<%= format_two_decimal_places(expense.original_cost.to_f) %>"/></td>
+                <td><%= expense.original_currency %></td>
+                <td><%= expense.description %></td>
+                <td><%= expense.vendor %></td>
+                <td><%= expense.payment_type %></td>
+                <td><%= expense.attendees %></td>
+                <td><%= expense.is_personal %></td>
+              </tr>
+          <% end %>
+        </table>
+    <% end %>
+    <input type="hidden" name="submitted_on" value="<%= @expense_reimbursement['submitted_on'] %>"/>
+    <input type="hidden" name="empl_id" value="<%= @expense_reimbursement['empl_id'] %>"/>
+    <input type="hidden" name="expense_report_id" value="<%= @expense_reimbursement['expense_report_id'] %>"/>
+
+    <div style="float:left;width:100%">
+      <%= label_tag "Notes : " %>
+      <textarea name="notes"></textarea>
+    </div>
+    <br/>
+
+    <div style="float:left;">
+      <input type="button" name='Back' value="Back" onclick="javascript:history.go(-1);"/>
+    </div>
+    <div style="float:right;display:inline-block;">
+      <%= submit_tag "Process", :name=>"process_reimbursement" %>
+      <%= submit_tag "Mark as Faulty", :name=>"mark_as_faulty" %>
+    </div>
+    </div>
+<% end %>
+</body>
+</html>
