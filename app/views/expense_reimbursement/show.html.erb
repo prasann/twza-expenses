@@ -37,7 +37,8 @@
           <tr class="<%= cycle("even", "odd") %>">
             <td><%= expense.expense_type %></td>
             <td><%= date_fmt(Date.parse(expense.expense_date)) %></td>
-            <td><%= format_two_decimal_places(expense.original_cost.to_f) %></td>
+            <td><%= modified_expense = @expense_reimbursement.expenses.select{|e| e['expense_id']==expense.id.to_s}
+                    modified_expense.first["modified_amount"] %></td>
             <td><%= expense.original_currency %></td>
             <td><%= expense.description %></td>
             <td><%= expense.vendor %></td>
