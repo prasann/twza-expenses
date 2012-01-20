@@ -11,7 +11,7 @@
   <%= label_tag 'Employee Id' %>:
   <%= text_field_tag :empl_id, params[:empl_id], :class => 'emp_id'%>
   <%= label_tag 'Expense Report Id' %>:
-  <%= text_field_tag :expense_rpt_id, params[:expense_rpt_id], :class => 'emp_id'%>
+  <%= text_field_tag :expense_rpt_id, params[:expense_rpt_id], :class => 'expense_rpt_id'%>
   <%= submit_tag "Search", :name => nil%>
 </form>
 <%if(@expense_reimbursements && !@expense_reimbursements.empty?)%>

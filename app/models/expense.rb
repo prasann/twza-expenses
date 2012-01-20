@@ -14,6 +14,11 @@ class Expense
         not_in(_id: ids_to_be_excluded).excludes(payment_type: 'TW Billed by Vendor').to_a
   end
 
+  def self.fetch_for_report(expense_report_id, ids_to_be_excluded)
+    Expense.where(expense_rpt_id: expense_report_id).
+        not_in(_id: ids_to_be_excluded).excludes(payment_type: 'TW Billed by Vendor').to_a
+  end
+
   def get_employee_id
     empl_id.gsub('EMP','')
   end

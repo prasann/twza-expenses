@@ -1,12 +1,13 @@
 Mankatha::Application.routes.draw do
 
-  root :to => 'sessions#new'
+  root :to => 'outbound_travels#index'
   get 'log_out' => 'sessions#destroy'
   get 'log_in' => 'sessions#new'
   get 'sign_up' => 'users#new'
   resources :users
   resources :sessions
 
+  match 'expense_settlement/upload' => 'expense_settlement#upload'
   match 'outbound_travels/index/:page' => 'outbound_travels#index'
   match 'forex_payments/index/:page' => 'forex_payments#index'
   match 'profiles/search_by_name' => 'profiles#search_by_name'
