@@ -119,7 +119,7 @@ class ExpenseSettlementController < ApplicationController
     processed_expense_ids = processed_expenses.collect(&:expenses).flatten
     processed_forex_ids = processed_expenses.collect(&:forex_payments).flatten
 
-    expenses = Expense.fetch_for travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids
+    expenses = Expense.fetch_for_employee_between_dates travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids
     forex_payments = ForexPayment.fetch_for travel.emp_id, @forex_from_date, @forex_to_date, processed_forex_ids
     @expense_report = {"expenses" => expenses,
                        "forex_payments" => forex_payments,

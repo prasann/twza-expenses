@@ -3,11 +3,12 @@ class User
   include Mongoid::Document
 
   attr_accessor :password
-  before_save :encrypt_password
+  before_save :encrypt_password, :define_role
 
-  field :user_name, :type => String
-  field :password_hash, :type => String
-  field :password_salt, :type => String
+  field :user_name
+  field :password_hash
+  field :password_salt
+  field :role
 
   validates_presence_of :password, :on => :create
   validates_confirmation_of :password
@@ -31,4 +32,16 @@ class User
     end
   end
 
+  def define_role
+    self.role = nil
+  end
+
+  def admin?
+    self.role == 'admin'
+  end
+
+  def superadmin?
+    self.role == 'superadmin'
+  end
+  
 end
