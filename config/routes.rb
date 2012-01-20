@@ -7,6 +7,7 @@ Mankatha::Application.routes.draw do
   resources :users
   resources :sessions
 
+  match 'expense_settlement/upload' => 'expense_settlement#upload'
   match 'outbound_travels/index/:page' => 'outbound_travels#index'
   match 'forex_payments/index/:page' => 'forex_payments#index'
   match 'profiles/search_by_name' => 'profiles#search_by_name'
