@@ -15,10 +15,10 @@ class EmployeeMailer < ActionMailer::Base
     subject = EXPENSE_SETTLEMENT_SUBJECT.sub("$place",travel.place)
                                           .sub('$start_date',travel.departure_date.strftime("%d-%b-%Y"))
     if (profile.email_id == nil || profile.email_id.length == 0)
-      email_id = expense_report.empl_id.to_s + ::Rails.application.config.email_domain
+      email_id = expense_report.empl_id.to_s
     end
 
-    mail(:to => email_id, :subject => subject, :content_type => "text/html") do |format|
+    mail(:to => email_id + ::Rails.application.config.email_domain, :subject => subject, :content_type => "text/html") do |format|
       format.html { render :action => 'expense_settlement' }
     end
   end

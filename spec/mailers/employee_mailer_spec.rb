@@ -4,7 +4,7 @@ describe EmployeeMailer do
   before(:each) do
     @employee_id = 1
     @travel_id = 1
-    @profile = mock(Profile,:employee_id => @employee_id, :email_id => 'padmana@thoughtworks.com')
+    @profile = mock(Profile,:employee_id => @employee_id, :email_id => 'padmana')
     @forex = ForexPayment.create(
         :attributes =>
             {
@@ -45,7 +45,7 @@ describe EmployeeMailer do
 
     it "should have the e-mail components properly set" do
       @email.to.size.should == 1
-      @email.to[0].should == @profile.email_id
+      @email.to[0].should == @profile.email_id+::Rails.application.config.email_domain
       @email.from.size.should == 1
       @email.from[0].should == ::Rails.application.config.email_sender
       @email.subject.should == EmployeeMailer::EXPENSE_SETTLEMENT_SUBJECT.sub('$place','UK')
