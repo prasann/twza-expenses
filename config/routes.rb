@@ -1,6 +1,6 @@
 Mankatha::Application.routes.draw do
 
-  root :to => 'sessions#new'
+  root :to => 'outbound_travels#index'
   get 'log_out' => 'sessions#destroy'
   get 'log_in' => 'sessions#new'
   get 'sign_up' => 'users#new'
