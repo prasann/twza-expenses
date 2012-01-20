@@ -72,7 +72,7 @@ class ExpenseSettlementController < ApplicationController
     EmployeeMailer.expense_settlement(profile, expense_report).deliver
     expense_report.status='Notified Employee'
     expense_report.save()
-    flash[:success] = "Expense settlement e-mail successfully sent to '"+profile[0].common_name+"'"
+    flash[:success] = "Expense settlement e-mail successfully sent to '"+profile.common_name+"'"
     redirect_to(:action => :index, :anchor=>'expense_settlement', :empl_id => expense_report.empl_id)
   end
 
