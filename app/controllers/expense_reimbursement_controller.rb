@@ -2,9 +2,8 @@ class ExpenseReimbursementController < ApplicationController
 
   def filter
     @expense_reimbursements=[]
-    if (params[:empl_id])
-      @expense_reimbursements=ExpenseReimbursement.any_of({empl_id: params[:empl_id]},
-                                                          {status: params[:status]}).to_a
+    if (!params[:empl_id].blank?)
+      @expense_reimbursements=ExpenseReimbursement.where(empl_id: params[:empl_id]).to_a
       expense_ids_from_travel = ExpenseSettlement.where(empl_id: params[:empl_id]).to_a.collect { |settlement| settlement.expenses }.flatten
       reimbursement_expense_ids=[]
       @expense_reimbursements.each do |expense_reimbursement|
@@ -16,6 +15,22 @@ class ExpenseReimbursementController < ApplicationController
         if (!expenses.empty?)
           @expense_reimbursements.push(ExpenseReimbursement.new(:expense_report_id => expense_report_id,
                                                                 :empl_id => params[:empl_id],
+                                                                :status => 'Unprocessed',
+                                                                :submitted_on=> expenses.first.report_submitted_at,
+                                                                :total_amount => expenses.sum { |expense| expense.original_cost.to_f }))
+        end
+      end
+    elsif (!params[:expense_rpt_id].blank?)
+      @expense_reimbursements=ExpenseReimbursement.where(expense_report_id: params[:expense_rpt_id]).to_a
+      reimbursement_expense_ids=[]
+      @expense_reimbursements.each do |expense_reimbursement|
+        reimbursement_expense_ids.push(expense_reimbursement.expenses.collect { |expense| expense['expense_id'] })
+      end
+      unprocessed_expenses = Expense.fetch_for_report(params[:expense_rpt_id], reimbursement_expense_ids.flatten).group_by(&:expense_rpt_id)
+      unprocessed_expenses.each do |expense_report_id, expenses|
+        if (!expenses.empty?)
+          @expense_reimbursements.push(ExpenseReimbursement.new(:expense_report_id => expense_report_id,
+                                                                :empl_id => expenses.first.get_employee_id,
                                                                 :status => 'Unprocessed',
                                                                 :submitted_on=> expenses.first.report_submitted_at,
                                                                 :total_amount => expenses.sum { |expense| expense.original_cost.to_f }))
