@@ -19,18 +19,18 @@ describe ExpenseSettlementController do
       ExpenseSettlement.should_receive(:where).with({:empl_id=>"1", :processed=>true}).and_return(mockExpenseReportCriteria)
       mockExpenseReportCriteria.should_receive(:only).with(:expenses, :forex_payments).and_return(mockProcessedExpenses)
       Expense.should_receive(:fetch_for_employee_between_dates).with(1,outbound_travel.departure_date - ExpenseSettlementController::EXPENSE_DATES_PADDED_BY,
-                                               outbound_travel.return_date + ExpenseSettlementController::EXPENSE_DATES_PADDED_BY,
-                                               [2]).and_return(mockExpenses)
+      outbound_travel.return_date + ExpenseSettlementController::EXPENSE_DATES_PADDED_BY,
+      [2]).and_return(mockExpenses)
       ForexPayment.should_receive(:fetch_for).with(1,outbound_travel.departure_date - ExpenseSettlementController::FOREX_PAYMENT_DATES_PADDED_BY,
-                                               outbound_travel.return_date + ExpenseSettlementController::FOREX_PAYMENT_DATES_PADDED_BY,
-                                               [3]).and_return(mockForex)
+      outbound_travel.return_date + ExpenseSettlementController::FOREX_PAYMENT_DATES_PADDED_BY,
+      [3]).and_return(mockForex)
       expected_result_hash = Hash.new
- 	  expected_result_hash["expenses"]=mockExpenses
+      expected_result_hash["expenses"]=mockExpenses
       expected_result_hash["forex_payments"]=mockForex
-	  expected_result_hash["empl_id"]=1
-	  expected_result_hash["travel_id"]="123"
-      
-	  get :load_by_travel, :id => 123
+      expected_result_hash["empl_id"]=1
+      expected_result_hash["travel_id"]="123"
+
+      get :load_by_travel, :id => 123
       assigns(:expense_report).should == expected_result_hash
     end
 
@@ -46,23 +46,23 @@ describe ExpenseSettlementController do
       mockExpenseReportCriteria.should_receive(:only).with(:expenses, :forex_payments).and_return(mockProcessedExpenses)
       Expense.should_receive(:fetch_for_employee_between_dates).with(1,expense_from,expense_to,[2]).and_return(mockExpenses)
       ForexPayment.should_receive(:fetch_for).with(1,forex_from,forex_to,[3]).and_return(mockForex)
-      
-	  expected_result_hash = Hash.new
- 	  expected_result_hash["expenses"]=mockExpenses
+
+      expected_result_hash = Hash.new
+      expected_result_hash["expenses"]=mockExpenses
       expected_result_hash["forex_payments"]=mockForex
-	  expected_result_hash["empl_id"]=1
-	  expected_result_hash["travel_id"]="123"
-      
-	  get :load_by_travel, :id => 123, :forex_from => forex_from, :forex_to => forex_to, :expense_from => expense_from, :expense_to => expense_to
+      expected_result_hash["empl_id"]=1
+      expected_result_hash["travel_id"]="123"
+
+      get :load_by_travel, :id => 123, :forex_from => forex_from, :forex_to => forex_to, :expense_from => expense_from, :expense_to => expense_to
       assigns(:expense_report).should == expected_result_hash
     end
   end
 
   describe "GET 'index'" do
 
-  it "index expenses from db for emplid" do
+    it "index expenses from db for emplid" do
       ExpenseSettlement.stub_chain(:where, :page, :per).and_return(@expense_reports)
-	  get :index, :empl_id => 1
+      get :index, :empl_id => 1
       assigns(:expense_settlements).should == @expense_reports
       response.should be_success
     end
