@@ -290,6 +290,16 @@ tr.even{
 }
 /* Expense Settlement Page - Ends */
 
+.reimb_heading{
+    font-weight: bold;
+    font-size: 120%
+}
+
+.reimb_value{
+    font-size: 120%;
+    margin-right: 20%;
+}
+
 
 
 

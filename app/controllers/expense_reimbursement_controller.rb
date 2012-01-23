@@ -1,5 +1,9 @@
 class ExpenseReimbursementController < ApplicationController
 
+  def index
+    render :layout => 'tabs'
+  end
+
   def filter
     @expense_reimbursements=[]
     if (!params[:empl_id].blank?)
@@ -38,7 +42,7 @@ class ExpenseReimbursementController < ApplicationController
       end
 
     end
-    render 'index'
+    render 'index', :layout => 'tabs'
   end
 
   def show

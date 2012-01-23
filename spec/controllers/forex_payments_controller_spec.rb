@@ -145,7 +145,7 @@ describe ForexPaymentsController do
       xls_options = {:columns => declared_fields, :headers => ForexPaymentsController::HEADERS}
       Time.stub(:now).and_return(Time.parse('2011-10-01'))
       file_options = {:filename => ForexPayment.to_s+'_01-Oct-2011'+ExcelDataExporter::FILE_EXTENSION}
-      controller.should_receive(:send_data).with(ForexPayment.all.to_xls(xls_options), file_options).and_return(:nothing => true)
+      controller.should_receive(:send_data).with(ForexPayment.all.to_xls(xls_options), file_options)
       get :export, :format=>:xls
       Mime::XLS.to_sym.should==:xls
       Mime::XLS.to_s.should == 'application/vnd.ms-excel'
