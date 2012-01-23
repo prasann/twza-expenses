@@ -4,7 +4,7 @@ describe EmployeeMailer do
   before(:each) do
     @employee_id = 1
     @travel_id = 1
-    @profile = mock(Profile,:employee_id => @employee_id, :email_id => 'padmana')
+    @profile = mock(Profile,:employee_id => @employee_id, :email_id => 'johns', :common_name => 'John Smith')
     @forex = ForexPayment.create(
         :attributes =>
             {
@@ -58,8 +58,8 @@ describe EmployeeMailer do
     end
 
     it "should have use employee id and domain to send e-mail if email_id is not available" do
-      profile = mock(@profile, :email_id => '')
-      @email = EmployeeMailer.expense_settlement(profile, @expense_report)
+      @profile.stub(:email_id).and_return('')
+      @email = EmployeeMailer.expense_settlement(@profile, @expense_report)
       @email.to.size.should == 1
       @email.to[0].should == @employee_id.to_s+::Rails.application.config.email_domain
       @email.from.size.should == 1
