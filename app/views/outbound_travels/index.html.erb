@@ -50,7 +50,11 @@
 		<%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %> |
     	<%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %>
 		<%if(outbound_travel.expense_settlement == nil)%>
-		| <%=link_to 'Expenses', :controller => "expense_settlement", :action => "load_by_travel", :id => outbound_travel.id.to_s %>
+            <%if(outbound_travel.return_date == nil)%>
+                <%= link_to_function 'Expenses', 'no_travel_return_date()', :class => 'no_travel_return_date' %>
+            <%else%>
+                <%=link_to 'Expenses', :controller => "expense_settlement", :action => "load_by_travel", :id => outbound_travel.id.to_s %>
+            <%end%>
 		<%end%>
 	  </td>
   </tr>

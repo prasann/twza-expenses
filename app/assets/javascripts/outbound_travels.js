@@ -13,5 +13,13 @@ function populateTravelFields(){
 		}).focus(function(){            
             $(this).trigger(down_arrow_event);
         });
-	});	
-};    
+	});
+};
+
+$(document).ready(function(){
+	$(function($){
+		$('.no_travel_return_date').click(function(){
+            alert('Please submit return date for the selected travel and then process the expenses')
+        })
+	})
+});
