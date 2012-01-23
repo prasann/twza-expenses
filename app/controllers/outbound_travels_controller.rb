@@ -68,7 +68,7 @@ class OutboundTravelsController < ApplicationController
 
   def data_to_suggest
     @outbound_travels = OutboundTravel.all
-    create_hash_field('place','payroll_effect');
+    create_hash_field('place','payroll_effect','project');
     render :text => @fields.to_json
   end
 

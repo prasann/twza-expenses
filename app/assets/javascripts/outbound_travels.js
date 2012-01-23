@@ -7,6 +7,12 @@ function populateTravelFields(){
 			source: data.place, 
 			minLength: 0
 		});
+
+		$('#outbound_travel_project').autocomplete({
+			source: data.project, 
+			minLength: 0
+		});
+		
 		$('#outbound_travel_payroll_effect').autocomplete({
 			source: data.payroll_effect, 
 			minLength: 0
