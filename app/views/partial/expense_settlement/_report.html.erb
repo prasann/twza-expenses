@@ -58,7 +58,7 @@
 
 </table>
 <table class="settlement_report">
-  <trclass="<%= cycle("even","odd") %>">
+  <tr class="<%= cycle("even","odd") %>">
   <td>Cash Handed over:</td>
   <td><%=@expense_report.cash_handover%></td>
   <td><%=format_two_decimal_places(@expense_report.get_conversion_rate)%></td>
