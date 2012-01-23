@@ -11,6 +11,8 @@ class ForexPaymentsController < ApplicationController
 
   def index
     default_per_page = params[:per_page] || 20
+    conditions = params[:empl_id] ? ({:empl_id => params[:emp_id]}) : nil
+    @forex_ids_with_settlement= ExpenseSettlement.find(:all,:conditions => conditions).map{|item| item.forex_payments}
     @forex_payments = ForexPayment.desc(:travel_date).page(params[:page]).per(default_per_page)
     render :layout => 'tabs'
   end
@@ -53,6 +55,7 @@ class ForexPaymentsController < ApplicationController
   end
 
   def search
+    @forex_ids_with_settlement= ExpenseSettlement.find(:all,:conditions => {:empl_id => params[:emp_id]}).map{|item| item.forex_payments}.flatten
     @forex_payments = ForexPayment.page(params[:page]).any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]})
     render :index, :layout => 'tabs'
   end

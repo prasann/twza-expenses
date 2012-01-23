@@ -33,6 +33,7 @@
     <th>Place</th>
     <th></th>
   </tr>
+
   <% @forex_payments.each do |payment| %>
     <tr class="<%= cycle("even", "odd") %>">
       <td><%= payment.emp_id %></td>
@@ -43,8 +44,10 @@
       <td><%= payment.place%></td>
 
       <td><%= link_to 'Show', payment%> |
-      <%= link_to 'Edit',edit_forex_payment_path(payment)+'#forex_payments' %> |
-      <%= link_to 'Destroy', payment, confirm: 'Are you sure?', method: :delete %></td>
+      <%= link_to 'Edit',edit_forex_payment_path(payment)+'#forex_payments' %>
+      <% if (@forex_ids_with_settlement && @forex_ids_with_settlement.length && !@forex_ids_with_settlement.include?(payment[:_id].to_s)) %>
+        | <%= link_to 'Destroy', payment, confirm: 'Are you sure?', method: :delete %></td>
+      <% end %>
 
     </tr>
   <% end %>

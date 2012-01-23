@@ -132,9 +132,12 @@ describe ForexPaymentsController do
   describe "GET Search" do
     it "searches for the given employee id" do
       forex_payments_1 = ForexPayment.create!(valid_attributes.merge!(emp_id: 10001))
-      forex_payments_2 = ForexPayment.create!(valid_attributes.merge!(emp_id: 10002))
+      forex_payments_2 = ForexPayment.create!(valid_attributes.merge!(emp_id: 10001))
+      expense_settlement = ExpenseSettlement.create!(empl_id: 10001, forex_payments: [forex_payments_1[:_id]])
       get :search, :emp_id => 10001
-      assigns(:forex_payments).should eq([forex_payments_1])
+      assigns(:forex_payments).should eq([forex_payments_1, forex_payments_2])
+      assigns(:forex_ids_with_settlement).size.should == 1
+      assigns(:forex_ids_with_settlement).should include(forex_payments_1[:_id])
     end
   end
 
