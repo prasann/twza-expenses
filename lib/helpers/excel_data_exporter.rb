@@ -9,7 +9,6 @@ module ExcelDataExporter
                                  :columns => declared_fields(model)
                              ),
                               :filename => model.to_s+'_'+Time.now.strftime(DATE_FORMAT) + FILE_EXTENSION}
-      render :nothing=>true
     end
   end
 
