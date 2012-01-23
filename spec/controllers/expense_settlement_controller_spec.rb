@@ -34,6 +34,27 @@ describe ExpenseSettlementController do
       assigns(:expense_report).should == expected_result_hash
     end
 
+    it "should show forex and travel properly for the given expense id even if return travel date is nil" do
+      outbound_travel = mock("outbound_travel", :id => 123, :emp_id => 1, :departure_date => Date.today - 10, :return_date => nil)
+      mockExpenses = mock(Expense)
+      mockForex = mock(ForexPayment)
+      OutboundTravel.should_receive(:find).with("123").and_return(outbound_travel)
+      Expense.should_receive(:fetch_for_employee_between_dates).with(1, outbound_travel.departure_date - ExpenseSettlementController::EXPENSE_DATES_PADDED_BY,
+                                                                     nil,[]).and_return(mockExpenses)
+      ForexPayment.should_receive(:fetch_for).with(1, outbound_travel.departure_date - ExpenseSettlementController::FOREX_PAYMENT_DATES_PADDED_BY,
+                                                   nil,[]).and_return(mockForex)
+      expected_result_hash = Hash.new
+      expected_result_hash["expenses"]=mockExpenses
+      expected_result_hash["forex_payments"]=mockForex
+      expected_result_hash["empl_id"]=1
+      expected_result_hash["travel_id"]="123"
+
+      get :load_by_travel, :id => 123
+      assigns(:expense_report).should == expected_result_hash
+      assigns(:expenses_to_date).should == nil
+      assigns(:forex_to_date).should == nil
+    end
+
     it "should use the date for forex and expenses if they are passed as params" do
       outbound_travel = mock("outbound_travel", :id => 123, :emp_id => 1, :departure_date => Date.today - 10, :return_date => Date.today + 5)
       mockProcessedExpenses = [mock("expense", :expenses => [[2]], :forex_payments => [[3]])]
