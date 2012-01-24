@@ -77,7 +77,7 @@ class ExpenseSettlementController < ApplicationController
   end
 
   def upload
-    @uploaded_files = UploadedExpense.all
+    @uploaded_files = UploadedExpense.all.desc(:created_at)
   end
 
   def file_upload

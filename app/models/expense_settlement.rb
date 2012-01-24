@@ -1,6 +1,7 @@
 require 'mongoid'
 
 class ExpenseSettlement
+	include ApplicationHelper
 	include Mongoid::Document
 	include Mongoid::Timestamps
 
@@ -60,7 +61,7 @@ class ExpenseSettlement
 				inr_sum += forex.inr.to_f
 				original_amount_sum += forex.amount
 			end
-			@conversion_rates[currency] = inr_sum/original_amount_sum
+			@conversion_rates[currency] = format_two_decimal_places(inr_sum/original_amount_sum)
 		end
 		@conversion_rates
 	end
