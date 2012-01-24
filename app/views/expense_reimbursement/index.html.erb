@@ -27,7 +27,7 @@
 	</tr>	
 	<% @expense_reimbursements.each do |expense_reimbursement| %>
     <tr class="<%= cycle("even", "odd") %>">
-      <% if (expense_reimbursement.status == 'Processed') %>
+      <% if (expense_reimbursement.status == 'Processed' || expense_reimbursement.status == 'Faulty' ) %>
           <td><%= link_to expense_reimbursement.expense_report_id, :action=> 'show', :id => expense_reimbursement.id %></td>
       <% else %>
           <td>

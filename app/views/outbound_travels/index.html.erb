@@ -1,28 +1,28 @@
 <div class="right_align">
-  <%= link_to image_tag("new_link.png") + "Create Outbound Travel", new_outbound_travel_path%>
+  <%= link_to image_tag("new_link.png") + "Create Outbound Travel", new_outbound_travel_path %>
 </div>
 
 <h1>Outbound Travels</h1>
 
 <div class="no_emp hide error">No employee found for given name.</div>
-<form action='/outbound_travels/search' method = "get">
+<form action='/outbound_travels/search' method="get">
   <span class="search_by">Search by:</span>
   <%= label_tag 'Departure From' %>
-  <%= text_field_tag :departure_date, params[:departure_date] || Date.today.beginning_of_year.strftime('%d-%b-%Y'), :class => 'date_picker'%>
+  <%= text_field_tag :departure_date, params[:departure_date] || Date.today.beginning_of_year.strftime('%d-%b-%Y'), :class => 'date_picker' %>
   <%= label_tag 'Employee Name' %>:
   <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
   <span class="or_field">(or)</span>
   <%= label_tag 'Employee Id' %>:
-  <%= text_field_tag :emp_id, params[:emp_id], :class => 'emp_id'%>
-  <%= submit_tag "Search", :name => nil%>
+  <%= text_field_tag :emp_id, params[:emp_id], :class => 'emp_id' %>
+  <%= submit_tag "Search", :name => nil %>
 </form>
 
 <div class="right_align">
-  <%= link_to image_tag("excel.png") + "Export in Excel" , export_outbound_travels_url(:format => 'xls') %>
+  <%= link_to image_tag("excel.png") + "Export in Excel", export_outbound_travels_url(:format => 'xls') %>
 </div>
 
 <div>
-  <%= paginate @outbound_travels%>
+  <%= paginate @outbound_travels %>
 </div>
 
 <table>
@@ -38,26 +38,28 @@
   </tr>
 
   <% @outbound_travels.each do |outbound_travel| %>
-    <tr class="<%= cycle("even", "odd") %>">
-      <td><%= outbound_travel.emp_id %></td>
-      <td><%= outbound_travel.emp_name%></td>
-      <td><%= outbound_travel.place%></td>
-      <td><%= outbound_travel.travel_duration%></td>
-      <td><%= outbound_travel.payroll_effect%></td>
-      <td><%= date_fmt(outbound_travel.departure_date)%></td>
-      <td><%= date_fmt(outbound_travel.return_date)%></td>
-	  <td><%= link_to 'Show', outbound_travel %> |
-		<%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %> |
-    	<%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %>
-		<%if(outbound_travel.expense_settlement == nil)%>
-            <%if(outbound_travel.return_date == nil)%>
-                <%= link_to_function 'Expenses', 'no_travel_return_date()', :class => 'no_travel_return_date' %>
-            <%else%>
-                <%=link_to 'Expenses', :controller => "expense_settlement", :action => "load_by_travel", :id => outbound_travel.id.to_s %>
-            <%end%>
-		<%end%>
-	  </td>
-  </tr>
+      <tr class="<%= cycle("even", "odd") %>">
+        <td><%= outbound_travel.emp_id %></td>
+        <td><%= outbound_travel.emp_name %></td>
+        <td><%= outbound_travel.place %></td>
+        <% if(outbound_travel.return_date.nil? )%>
+        <% return_date= outbound_travel.return_date.nil? ? (Date.parse(outbound_travel.expected_return_date)) : outbound_travel.return_date %>
+        <td><%= (return_date - outbound_travel.departure_date).to_i %></td>
+        <td><%= outbound_travel.payroll_effect %></td>
+        <td><%= date_fmt(outbound_travel.departure_date) %></td>
+        <td><%= date_fmt(outbound_travel.return_date) %></td>
+        <td><%= link_to 'Show', outbound_travel %> |
+          <%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %> |
+          <%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %>
+          <% if (outbound_travel.expense_settlement == nil) %>
+              <% if (outbound_travel.return_date == nil) %>
+                  <%= link_to_function 'Expenses', 'no_travel_return_date()', :class => 'no_travel_return_date' %>
+              <% else %>
+                  <%= link_to 'Expenses', :controller => "expense_settlement", :action => "load_by_travel", :id => outbound_travel.id.to_s %>
+              <% end %>
+          <% end %>
+        </td>
+      </tr>
   <% end %>
 </table>
-<br />
+<br/>
