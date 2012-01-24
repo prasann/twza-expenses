@@ -43,12 +43,14 @@
         <td><%= outbound_travel.emp_name %></td>
         <td><%= outbound_travel.place %></td>
         <% if (outbound_travel.return_date.nil?) %>
-            <% if (outbound_travel.expected_return_date != 'NA') %>
-                <td><%= (Date.parse(outbound_travel.expected_return_date) - outbound_travel.departure_date).to_i %></td>
-            <% else %>
-                <td>N/A</td>
+            <td>
+            <% begin %>
+                <%= (Date.parse(outbound_travel.expected_return_date) - outbound_travel.departure_date).to_i %>
+            <% rescue %>
+                <%= outbound_travel.expected_return_date %>
             <% end %>
-        <% else %>
+            </td>
+      <% else %>
             <td><%= (outbound_travel.return_date- outbound_travel.departure_date).to_i %></td>
         <% end %>
         <td><%= outbound_travel.payroll_effect %></td>
