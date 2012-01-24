@@ -1,8 +1,6 @@
 class Expense
   include Mongoid::Document
 
-  before_save :initialize_undefined_fields
-
   def self.fetch_for_employee_between_dates(employee_id, date_from, date_to, ids_to_be_excluded)
     all_expenses = fetch_for_employee(employee_id, ids_to_be_excluded)
     valid_expenses = all_expenses.reject { |expense|
@@ -23,11 +21,5 @@ class Expense
 
   def get_employee_id
     empl_id.gsub('EMP','')
-  end
-
-  def initialize_undefined_fields
-    self[:project] = nil
-    self[:description] = nil
-    self[:payment_type] = nil
   end
 end

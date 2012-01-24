@@ -26,6 +26,11 @@ $(document).ready(function(){
   			}
 		});
 
+		$('.edit').editable('http://www.example.com/save.php', { 
+	         id   : 'elementid',
+	         name : 'newvalue'
+     	});
+
 		$('.date_picker').datepicker({
 			dateFormat: 'dd-M-yy'
 		});

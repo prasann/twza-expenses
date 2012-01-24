@@ -141,21 +141,21 @@ describe ForexPaymentsController do
     end
   end
 
-  describe "GET export" do
-     it "should return an excel dump of all the outbound travel data" do
-      declared_fields = [:emp_id, :emp_name, :currency, :amount, :place, :office, :inr]
-      controller.should_receive(:declared_fields).with(ForexPayment).and_return(declared_fields)
-      xls_options = {:columns => declared_fields, :headers => ForexPaymentsController::HEADERS}
-      Time.stub(:now).and_return(Time.parse('2011-10-01'))
-      file_options = {:filename => ForexPayment.to_s+'_01-Oct-2011'+ExcelDataExporter::FILE_EXTENSION}
-      controller.should_receive(:send_data).with(ForexPayment.all.to_xls(xls_options), file_options)
-      get :export, :format=>:xls
-      Mime::XLS.to_sym.should==:xls
-      Mime::XLS.to_s.should == 'application/vnd.ms-excel'
-      response.headers["Content-Type"].should == "application/vnd.ms-excel; charset=utf-8"
-      response.headers["Cache-Control"].should == "no-cache, no-store, max-age=0, must-revalidate"
-     end
-  end
+  # describe "GET export" do
+  #    it "should return an excel dump of all the outbound travel data" do
+  #     declared_fields = [:emp_id, :emp_name, :currency, :amount, :place, :office, :inr]
+  #     controller.should_receive(:declared_fields).with(ForexPayment).and_return(declared_fields)
+  #     xls_options = {:columns => declared_fields, :headers => ForexPaymentsController::HEADERS}
+  #     Time.stub(:now).and_return(Time.parse('2011-10-01'))
+  #     file_options = {:filename => ForexPayment.to_s+'_01-Oct-2011'+ExcelDataExporter::FILE_EXTENSION}
+  #     controller.should_receive(:send_data).with(ForexPayment.all.to_xls(xls_options), file_options)
+  #     get :export, :format=>:xls
+  #     Mime::XLS.to_sym.should==:xls
+  #     Mime::XLS.to_s.should == 'application/vnd.ms-excel'
+  #     response.headers["Content-Type"].should == "application/vnd.ms-excel; charset=utf-8"
+  #     response.headers["Cache-Control"].should == "no-cache, no-store, max-age=0, must-revalidate"
+  #    end
+  # end
 
   describe "GET populate autosuggest data" do
     it "should populate unique and non nullable data for auto suggestion" do
