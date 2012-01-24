@@ -2,6 +2,9 @@
 <body>
 <h1>Expense Reimbursement</h1>
 
+<%= label_tag 'Employee Name: ',nil,:class=>'reimb_heading' %>
+<%= label_tag 'employee_name: ',@empl_name,:class=>'reimb_value' %>
+
 <%= label_tag 'Employee Id : ',nil,:class=>'reimb_heading' %>
 <%= label_tag 'employee_id', @expense_reimbursement['empl_id'], :class=>'reimb_value' %>
 
@@ -36,7 +39,7 @@
                 <td><%= expense.expense_type %></td>
                 <td><%= date_fmt(Date.parse(expense.expense_date)) %></td>
                 <td><input type="text" name="expense_amount[<%= expense.id.to_s %>]"
-                           value="<%= format_two_decimal_places(expense.original_cost.to_f) %>"/></td>
+                           value="<%= format_two_decimal_places(expense.cost_in_home_currency.to_f) %>"/></td>
                 <td><%= expense.original_currency %></td>
                 <td><%= expense.description %></td>
                 <td><%= expense.vendor %></td>

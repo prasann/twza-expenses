@@ -47,12 +47,14 @@ class ExpenseReimbursementController < ApplicationController
   def show
     @expense_reimbursement=ExpenseReimbursement.find(params[:id])
     expenses = Expense.find(@expense_reimbursement.expenses.collect { |expense| expense['expense_id'] })
+    @empl_name = Profile.find_by_employee_id(@expense_reimbursement.empl_id).get_full_name
     @all_expenses = expenses.group_by { |expense| expense.project + expense.subproject }
   end
 
   def edit
     expenses = Expense.where(expense_rpt_id: params[:id]).to_a
     @all_expenses = expenses.group_by { |expense| expense.project + expense.subproject }
+    @empl_name = Profile.find_by_employee_id(expenses.first.get_employee_id.to_i).get_full_name
     @expense_reimbursement = {'expense_report_id' => params[:id],
                               'empl_id' => expenses.first.get_employee_id,
                               'submitted_on' => expenses.first.report_submitted_at,

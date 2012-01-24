@@ -2,25 +2,27 @@
 <body>
 <h1>Expense Reimbursement</h1>
 
-<%= label_tag 'Employee Name' %>:
-<% #label_tag @expense_reimbursement.
-%>
+<%= label_tag 'Employee Name: ',nil,:class=>'reimb_heading' %>
+<%= label_tag 'employee_name: ',@empl_name,:class=>'reimb_value' %>
 
-<%= label_tag 'Employee Id : ' %>
-<%= label_tag @expense_reimbursement.empl_id %>
+<%= label_tag 'Employee Id : ',nil,:class=>'reimb_heading' %>
+<%= label_tag 'employee_id', @expense_reimbursement.empl_id, :class=>'reimb_value' %>
 
-<%= label_tag 'Expense Report Id :' %>
-<%= label_tag @expense_reimbursement.expense_report_id %>
+<%= label_tag 'Expense Report Id : ',nil,:class=>'reimb_heading' %>
+<%= label_tag 'employee_rpt_id', @expense_reimbursement.expense_report_id, :class=>'reimb_value' %>
 
-<%= label_tag 'Created Date : ' %>
-<%= label_tag @expense_reimbursement.submitted_on %>
+<br/><br/>
 
-<%= label_tag 'Total Amount : ' %>
-<%= label_tag @expense_reimbursement.total_amount %>
+<%= label_tag 'Created Date : ',nil,:class=>'reimb_heading' %>
+<%= label_tag @expense_reimbursement.submitted_on,nil, :class=>'reimb_value' %>
+
+<%= label_tag 'Total Amount : ',nil,:class=>'reimb_heading' %>
+<%= label_tag @expense_reimbursement.total_amount,nil, :class=>'reimb_value' %>
+<br/><br/>
 
 <% @all_expenses.each do |project_code, expenses| %>
-    <%= label_tag 'Project Code : ' %>
-    <%= label_tag project_code %>
+    <%= label_tag 'Project Code : ',nil,:class=>'reimb_heading' %>
+    <%= label_tag project_code,nil, :class=>'reimb_value' %>
     <table>
       <tr>
         <th>Expense Type</th>
