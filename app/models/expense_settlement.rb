@@ -35,7 +35,7 @@ class ExpenseSettlement
 	end
 
 	def consolidate_by_currency(expenses_by_reportid_hash)
-		conversion_rate_hash=get_conversion_rates_for_currency()
+		get_conversion_rates_for_currency()
 		expense_values = expenses_by_reportid_hash.values
 		expense_values.collect do|expenses_by_cur|
 								con_exp = Hash.new

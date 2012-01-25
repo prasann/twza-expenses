@@ -107,7 +107,7 @@
           <tr>
             <td>
               <div><input type="button" value="<< Back" onclick="javascript:history.go(-1)"/></div></td>
-            <td><div><%=(forexes_avlbl && expenses_avlbl)?submit_tag('Generate Report >>'):''%></div></td>
+            <td><div><%=(forexes_avlbl || expenses_avlbl)?submit_tag('Generate Report >>'):''%></div></td>
           </tr>
         </table>
       <% end %>
