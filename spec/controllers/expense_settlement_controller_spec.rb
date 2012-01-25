@@ -16,14 +16,16 @@ describe ExpenseSettlementController do
       mockExpenses = mock("expenses")
       mockForex = mock("forex")
       OutboundTravel.should_receive(:find).with("123").and_return(outbound_travel)
+
       ExpenseSettlement.should_receive(:where).with({:empl_id=>"1", :processed=>true}).and_return(mockExpenseReportCriteria)
       mockExpenseReportCriteria.should_receive(:only).with(:expenses, :forex_payments).and_return(mockProcessedExpenses)
+
       Expense.should_receive(:fetch_for_employee_between_dates).with(1,outbound_travel.departure_date - ExpenseSettlementController::EXPENSE_DATES_PADDED_BY,
-      outbound_travel.return_date + ExpenseSettlementController::EXPENSE_DATES_PADDED_BY,
-      [2]).and_return(mockExpenses)
+      outbound_travel.return_date + ExpenseSettlementController::EXPENSE_DATES_PADDED_BY,[2]).and_return(mockExpenses)
+
       ForexPayment.should_receive(:fetch_for).with(1,outbound_travel.departure_date - ExpenseSettlementController::FOREX_PAYMENT_DATES_PADDED_BY,
-      outbound_travel.return_date + ExpenseSettlementController::FOREX_PAYMENT_DATES_PADDED_BY,
-      [3]).and_return(mockForex)
+      outbound_travel.return_date, [3]).and_return(mockForex)
+
       expected_result_hash = Hash.new
       expected_result_hash["expenses"]=mockExpenses
       expected_result_hash["forex_payments"]=mockForex

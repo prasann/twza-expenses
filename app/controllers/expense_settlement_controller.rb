@@ -111,7 +111,7 @@ class ExpenseSettlementController < ApplicationController
     @expenses_from_date = params[:expense_from] ? Date.parse(params[:expense_from]) : travel.departure_date - EXPENSE_DATES_PADDED_BY
     @expenses_to_date = params[:expense_to] ? Date.parse(params[:expense_to]) : (travel.return_date ? (travel.return_date + EXPENSE_DATES_PADDED_BY) : nil)
     @forex_from_date = params[:forex_from] ? Date.parse(params[:forex_from]) : travel.departure_date - FOREX_PAYMENT_DATES_PADDED_BY
-    @forex_to_date = params[:forex_to] ? Date.parse(params[:forex_to]) : (travel.return_date ? (travel.return_date + FOREX_PAYMENT_DATES_PADDED_BY) : nil)
+    @forex_to_date = params[:forex_to] ? Date.parse(params[:forex_to]) : travel.return_date
   end
 
   def create_settlement_report_from_dates(travel)
