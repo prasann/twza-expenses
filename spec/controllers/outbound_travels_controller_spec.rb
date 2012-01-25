@@ -130,8 +130,10 @@ describe OutboundTravelsController do
 
   describe "GET Search" do
     it "searches for the given emp_id" do
-      outbound_travel_1 = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1001}))
-      outbound_travel_2 = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1002}))
+
+      outbound_travel_1 = mock("outbound_travel", :emp_id => 1001)
+      outbound_travel_2 = mock("outbound_travel", :emp_id => 1002)
+      OutboundTravel.stub_chain(:page, :all_of).and_return([outbound_travel_1])
       get :search, :emp_id => 1001
       assigns(:outbound_travels).to_a.should == [outbound_travel_1]
     end
@@ -141,15 +143,20 @@ describe OutboundTravelsController do
       tomorrow = Time.now + 1.day
       outbound_travel_1 = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1001, departure_date: now}))
       outbound_travel_2 = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1001, departure_date: tomorrow}))
+      OutboundTravel.stub_chain(:page, :all_of).and_return([outbound_travel_2])
       get :search, :departure_date => Date.today + 1
       assigns(:outbound_travels).to_a.should == [outbound_travel_2]
     end
+
     it "should do an and search if departure date and emp id" do
       now = Time.now
       tomorrow = Time.now + 1.day
       outbound_travel_1_now = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1001, departure_date: now}))
       outbound_travel_1_tomorrow = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1001, departure_date: tomorrow}))
       outbound_travel_2 = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1002, departure_date: tomorrow}))
+
+      OutboundTravel.stub_chain(:page, :all_of).and_return([outbound_travel_1_tomorrow])
+
       get :search, :emp_id => 1001, :departure_date => Date.today + 1
       assigns(:outbound_travels).to_a.should == [outbound_travel_1_tomorrow]
     end
