@@ -46,9 +46,8 @@ class ExpenseReimbursementController < ApplicationController
 
   def show
     @expense_reimbursement=ExpenseReimbursement.find(params[:id])
-    expenses = Expense.find(@expense_reimbursement.expenses.collect { |expense| expense['expense_id'] })
     @empl_name = Profile.find_by_employee_id(@expense_reimbursement.empl_id).get_full_name
-    @all_expenses = expenses.group_by { |expense| expense.project + expense.subproject }
+    @all_expenses = @expense_reimbursement.get_expenses_grouped_by_project_code
   end
 
   def edit
@@ -81,6 +80,8 @@ class ExpenseReimbursementController < ApplicationController
                                                       :submitted_on=> params[:submitted_on], :notes=> params[:notes],
                                                       :total_amount => total_amount)
     @expense_reimbursement.save
+    profile = Profile.find_by_employee_id(@expense_reimbursement.empl_id)
+    EmployeeMailer.non_travel_expense_reimbursement(profile, @expense_reimbursement).deliver
     redirect_to :action => 'filter', :empl_id => params[:empl_id]
   end
 

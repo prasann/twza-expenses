@@ -5,12 +5,16 @@
     <body>
         Dear <%= @profile.get_full_name %>, <br/><br/>
 
-        Please refer the travel expense settlement sheet. Kindly confirm the same from your end for payroll processing.
-        <br/><br/>
-
-        <%= render :partial => '/partial/expense_settlement/report' %>
+        Your expense details
 
         <br/><br/>
+
+        <%= render :partial => '/partial/expense_reimbursement/report' %>
+
+        <br/><br/>
+
+        Please get in touch with the finance team for any queries.
+
         ThoughtWorks Finance Team
     </body>
 </html>

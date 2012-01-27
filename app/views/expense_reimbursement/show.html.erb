@@ -2,60 +2,7 @@
 <body>
 <h1>Expense Reimbursement</h1>
 
-<%= label_tag 'Employee Name: ',nil,:class=>'reimb_heading' %>
-<%= label_tag 'employee_name: ',@empl_name,:class=>'reimb_value' %>
-
-<%= label_tag 'Employee Id : ',nil,:class=>'reimb_heading' %>
-<%= label_tag 'employee_id', @expense_reimbursement.empl_id, :class=>'reimb_value' %>
-
-<%= label_tag 'Expense Report Id : ',nil,:class=>'reimb_heading' %>
-<%= label_tag 'employee_rpt_id', @expense_reimbursement.expense_report_id, :class=>'reimb_value' %>
-
-<br/><br/>
-
-<%= label_tag 'Created Date : ',nil,:class=>'reimb_heading' %>
-<%= label_tag @expense_reimbursement.submitted_on,nil, :class=>'reimb_value' %>
-
-<%= label_tag 'Total Amount : ',nil,:class=>'reimb_heading' %>
-<%= label_tag @expense_reimbursement.total_amount,nil, :class=>'reimb_value' %>
-<br/><br/>
-
-<% @all_expenses.each do |project_code, expenses| %>
-    <%= label_tag 'Project Code : ',nil,:class=>'reimb_heading' %>
-    <%= label_tag project_code,nil, :class=>'reimb_value' %>
-    <table>
-      <tr>
-        <th>Expense Type</th>
-        <th>Expense Date</th>
-        <th>Cost</th>
-        <th>Currency</th>
-        <th>Description</th>
-        <th>Vendor</th>
-        <th>Payment Type</th>
-        <th>Attendees</th>
-        <th>Personal</th>
-      </tr>
-      <% expenses.each do |expense| %>
-          <tr class="<%= cycle("even", "odd") %>">
-            <td><%= expense.expense_type %></td>
-            <td><%= date_fmt(Date.parse(expense.expense_date)) %></td>
-            <td><%= modified_expense = @expense_reimbursement.expenses.select{|e| e['expense_id']==expense.id.to_s}
-                    modified_expense.first["modified_amount"] %></td>
-            <td><%= expense.original_currency %></td>
-            <td><%= expense.description %></td>
-            <td><%= expense.vendor %></td>
-            <td><%= expense.payment_type %></td>
-            <td><%= expense.attendees %></td>
-            <td><%= expense.is_personal %></td>
-          </tr>
-      <% end %>
-    </table>
-<% end %>
-<div style="float: left">
-  <%= label_tag 'Notes : ' %>
-  <%= label_tag @expense_reimbursement.notes %>
-</div>
-<br/>
+<%= render :partial => '/partial/expense_reimbursement/report' %>
 
 <div style="float: left">
   <input type="button" name='Back' value="Back" onclick="javascript:history.go(-1);"/>
