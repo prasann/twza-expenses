@@ -4,9 +4,10 @@
 
 <h1>Outbound Travels</h1>
 
-<div>
-<h3>Saved Searches:</h3>
-  <%= link_to 'Recent Entries','/outbound_travels/get_recent' %>
+<div class='saved_search'>
+<span class='search_by' >Saved Searches:</span>
+  <%= link_to image_tag("search.png") + 'Recent Entries','/outbound_travels/get_recent' %>
+  <%= link_to image_tag("search.png") + 'Update Return Date','/outbound_travels/travels_without_return_date' %>
 </div>
 
 <div class="no_emp hide error">No employee found for given name.</div>

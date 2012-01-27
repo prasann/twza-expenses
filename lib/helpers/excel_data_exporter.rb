@@ -2,9 +2,9 @@ module ExcelDataExporter
   DATE_FORMAT = "%d-%b-%Y"
   FILE_EXTENSION = ".xls"
 
-  def export_xls(model,headers)
+  def export_xls(model,headers,data_to_export)
     respond_to do |format|
-      format.xls { send_data model.all.to_xls(
+      format.xls { send_data data_to_export.to_xls(
                                  :headers => headers,
                                  :columns => declared_fields(model)
                              ),

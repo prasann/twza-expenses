@@ -61,8 +61,7 @@ class ForexPaymentsController < ApplicationController
   end
 
   def export
-    @data_to_export = ForexPayment.all
-    export_xls(ForexPayment,HEADERS)
+    export_xls(ForexPayment,HEADERS,ForexPayment.all)
   end
 
   def data_to_suggest

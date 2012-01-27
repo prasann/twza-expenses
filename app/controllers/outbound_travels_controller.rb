@@ -63,7 +63,7 @@ class OutboundTravelsController < ApplicationController
   end
 
   def export
-    export_xls(OutboundTravel,HEADERS)
+    export_xls(OutboundTravel,HEADERS,OutboundTravel.all)
   end
 
   def data_to_suggest
@@ -80,6 +80,11 @@ class OutboundTravelsController < ApplicationController
 
   def get_recent
     @outbound_travels = OutboundTravel.where(:comments => nil).page(params[:page])
+    render :index, :layout => 'tabs'
+  end
+
+  def travels_without_return_date
+    @outbound_travels = OutboundTravel.where(:return_date => nil).page(params[:page])
     render :index, :layout => 'tabs'
   end
 

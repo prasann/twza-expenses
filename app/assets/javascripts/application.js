@@ -40,9 +40,9 @@ $(document).ready(function(){
       cancel : 'Cancel'
     });
 
-    $('.date_picker').datepicker(
-    	 "option", "dateFormat", "dd-mm-yy"
-    );
+    $('.date_picker').datepicker({
+      dateFormat : 'dd-M-yy'
+    });
 
     function saveValue(value,settings,_this){
       var obj_id = $(_this).parent().attr('id');
