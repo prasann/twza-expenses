@@ -65,7 +65,11 @@
   <td class='right_align'><%=refund_from_employee=format_two_decimal_places(@expense_report.cash_handover*@expense_report.get_conversion_rate)%></td>
 </tr>
 <tr>
-  <td colspan="3">Receivable from employee (Payable in (-)):</td>
+  <%if @expense_report.get_receivable_amount > 0%>
+    <td colspan="3">Receivable from employee :</td>
+  <%else%>
+    <td colspan="3">Payable to employee :</td>
+  <%end%>
   <td class='right_align heading_no_align'><%=format_two_decimal_places(@expense_report.get_receivable_amount)%></td>
 </tr>
 </table>
