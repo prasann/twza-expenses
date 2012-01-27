@@ -9,7 +9,7 @@
 <div class="right_align">
 <%= link_to image_tag("upload.png") + "Upload Export Report (from Sharon)" , 'expense_settlement/upload' %>
 </div>	
-  <%= form_tag({:controller => "expense_settlement"}, :method => "get") do%>
+  <%= form_tag({:controller => "expense_settlement#expense_settlement"}, :method => "get") do%>
   <h1>Expense Settlement</h1>
 <span class="search_by">Search by:</span>
 <%= label_tag 'Employee Name' %>:
