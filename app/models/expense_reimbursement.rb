@@ -14,4 +14,7 @@ class ExpenseReimbursement
     _expenses = Expense.find(expenses.collect { |expense| expense['expense_id'] })
     _expenses.group_by { |expense| expense.project + expense.subproject }
   end
+  def get_expenses
+    Expense.find(expenses.collect { |expense| expense['expense_id'] })
+  end
 end

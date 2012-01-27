@@ -52,8 +52,15 @@ class ExpenseReimbursementController < ApplicationController
 
   def edit
     expenses = Expense.where(expense_rpt_id: params[:id]).to_a
-    @all_expenses = expenses.group_by { |expense| expense.project + expense.subproject }
     @empl_name = Profile.find_by_employee_id(expenses.first.get_employee_id.to_i).get_full_name
+
+    existing_expense_reimbursements = ExpenseReimbursement.where(expense_report_id: params[:id]).to_a
+    if (existing_expense_reimbursements.empty?)
+      @all_expenses = expenses.group_by { |expense| expense.project + expense.subproject }
+    else
+      expenses = expenses-existing_expense_reimbursements.collect{ |existing_expense_reimbursement| existing_expense_reimbursement.get_expenses }.flatten
+      @all_expenses = expenses.group_by { |expense| expense.project + expense.subproject }
+    end
     @expense_reimbursement = {'expense_report_id' => params[:id],
                               'empl_id' => expenses.first.get_employee_id,
                               'submitted_on' => expenses.first.report_submitted_at,
@@ -68,7 +75,7 @@ class ExpenseReimbursementController < ApplicationController
     expenses = []
 
     expense_map = Hash.new()
-    Expense.fetch_for_report(params[:expense_report_id],[]).map{|expense| expense_map[expense.id.to_s] = expense}
+    Expense.fetch_for_report(params[:expense_report_id], []).map { |expense| expense_map[expense.id.to_s] = expense }
     expense_ids.each do |expense_id|
       modified_amount=expense_amount[expense_id].to_f*expense_map[expense_id].cost_in_home_currency.to_f/expense_map[expense_id].original_cost.to_f
       expenses.push({'expense_id' => expense_id, 'modified_amount' => modified_amount})
