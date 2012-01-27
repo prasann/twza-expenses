@@ -51,7 +51,7 @@
     </table>
 <% end %>
 <div style="float: left">
-  <%= label_tag 'Notes : ' %>
-  <%= label_tag @expense_reimbursement.notes %>
+  <%= label_tag 'Notes : ' ,nil, :class=>'reimb_heading'%>
+  <%= label_tag @expense_reimbursement.notes,nil, :class=>'reimb_value'  %>
 </div>
 <br/>
