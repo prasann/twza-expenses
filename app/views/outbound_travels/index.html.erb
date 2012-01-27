@@ -14,7 +14,7 @@
 <form action='/outbound_travels/search' method="get">
   <span class="search_by">Search by:</span>
   <%= label_tag 'Departure From' %>
-  <%= text_field_tag :departure_date, params[:departure_date] || Date.today.beginning_of_year.strftime('%d-%b-%Y'), :class => 'date_picker' %>
+  <%= text_field_tag :departure_date, params[:departure_date], :class => 'date_picker' %>
   <%= label_tag 'Employee Name' %>:
   <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
   <span class="or_field">(or)</span>
@@ -43,6 +43,7 @@
     <th>Return date to India</th>
     <th>Comments</th>
     <th>&nbsp;</th>
+    <th>&nbsp;</th>
   </tr>
 
   <% @outbound_travels.each do |outbound_travel| %>
@@ -56,17 +57,18 @@
       <td class='edit_date_picker' name='expected_return_date'><%= date_fmt(date_from_str(outbound_travel.expected_return_date))%></td>
       <td class='edit_date_picker' name='return_date'><%= date_fmt(outbound_travel.return_date) %></td>
       <td class='edit' name='comments'><%= outbound_travel.comments %></td>
-      <td><%= link_to 'Show', outbound_travel %> |
-        <%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %> |
-        <%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %>
-        <% if (outbound_travel.expense_settlement == nil) %>
+      <td><% if (outbound_travel.expense_settlement == nil) %>
           <% if (outbound_travel.return_date == nil) %>
-            <%= link_to_function 'Expenses', 'no_travel_return_date()', :class => 'no_travel_return_date' %>
+            <%= link_to_function 'Process Expense', 'no_travel_return_date()', :class => 'no_travel_return_date' %>
           <% else %>
-            <%= link_to 'Expenses', :controller => "expense_settlement", :action => "load_by_travel", :id => outbound_travel.id.to_s %>
+            <%= link_to 'Process Expense', :controller => "expense_settlement", :action => "load_by_travel", :id => outbound_travel.id.to_s %>
           <% end %>
         <% end %>
       </td>
+      <td><%= link_to 'Show', outbound_travel %> |
+        <%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %> |
+        <%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %>
+              </td>
     </tr>
   <% end %>
 </table>
