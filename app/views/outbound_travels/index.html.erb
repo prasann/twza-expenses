@@ -29,45 +29,48 @@
   <tr>
     <th>Id</th>
     <th>Name</th>
-    <th>Place</th>
-    <th>Travel Duration</th>
-    <th>Payroll Effect</th>
-    <th>Departure Date</th>
-    <th>Return Date</th>
+    <th>Country of Visit</th>
+    <th>Duration of Stay</th>
+    <th>Payroll effect in India</th>
+    <th>Departure date from India</th>
+    <th>Expected return Date</th>
+    <th>Return date to India</th>
     <th>&nbsp;</th>
   </tr>
 
   <% @outbound_travels.each do |outbound_travel| %>
-      <tr class="<%= cycle("even", "odd") %>">
-        <td><%= outbound_travel.emp_id %></td>
-        <td><%= outbound_travel.emp_name %></td>
-        <td><%= outbound_travel.place %></td>
-        <% if (outbound_travel.return_date.nil?) %>
-            <td>
-            <% begin %>
-                <%= (Date.parse(outbound_travel.expected_return_date) - outbound_travel.departure_date).to_i %>
-            <% rescue %>
-                <%= outbound_travel.expected_return_date %>
-            <% end %>
-            </td>
-      <% else %>
-            <td><%= (outbound_travel.return_date- outbound_travel.departure_date).to_i %></td>
-        <% end %>
-        <td><%= outbound_travel.payroll_effect %></td>
-        <td><%= date_fmt(outbound_travel.departure_date) %></td>
-        <td><%= date_fmt(outbound_travel.return_date) %></td>
-        <td><%= link_to 'Show', outbound_travel %> |
-          <%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %> |
-          <%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %>
-          <% if (outbound_travel.expense_settlement == nil) %>
-              <% if (outbound_travel.return_date == nil) %>
-                  <%= link_to_function 'Expenses', 'no_travel_return_date()', :class => 'no_travel_return_date' %>
-              <% else %>
-                  <%= link_to 'Expenses', :controller => "expense_settlement", :action => "load_by_travel", :id => outbound_travel.id.to_s %>
-              <% end %>
+    <tr id = '<%= outbound_travel.id %>' class="<%= cycle("even", "odd") %>">
+      <td><%= outbound_travel.emp_id %></td>
+      <td><%= outbound_travel.emp_name %></td>
+      <td><%= outbound_travel.place %></td>
+      <% if (outbound_travel.return_date.nil?) %>
+        <td>
+          <% begin %>
+            <%= (Date.parse(outbound_travel.expected_return_date) - outbound_travel.departure_date).to_i %>
+          <% rescue %>
+            <%= outbound_travel.expected_return_date %>
           <% end %>
         </td>
-      </tr>
+      <% else %>
+        <td><%= (outbound_travel.return_date- outbound_travel.departure_date).to_i %></td>
+      <% end %>
+
+      <td class='edit' name='payroll_effect'><%= outbound_travel.payroll_effect %></td>
+      <td class='edit_date_picker' name='departure_date'><%= date_fmt(outbound_travel.departure_date) %></td>
+      <td class='edit_date_picker' name='expected_return_date'><%= date_fmt(Date.parse(outbound_travel.expected_return_date))%></td>
+      <td class='edit_date_picker' name='return_date'><%= date_fmt(outbound_travel.return_date) %></td>
+      <td><%= link_to 'Show', outbound_travel %> |
+        <%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %> |
+        <%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %>
+        <% if (outbound_travel.expense_settlement == nil) %>
+          <% if (outbound_travel.return_date == nil) %>
+            <%= link_to_function 'Expenses', 'no_travel_return_date()', :class => 'no_travel_return_date' %>
+          <% else %>
+            <%= link_to 'Expenses', :controller => "expense_settlement", :action => "load_by_travel", :id => outbound_travel.id.to_s %>
+          <% end %>
+        <% end %>
+      </td>
+    </tr>
   <% end %>
 </table>
 <br/>
