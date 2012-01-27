@@ -72,6 +72,12 @@ class OutboundTravelsController < ApplicationController
     render :text => @fields.to_json
   end
 
+  def update_field
+    @outbound_travel = OutboundTravel.find(params[:id])
+    @outbound_travel.update_attributes(params[:name]=>params[:value])
+    render :nothing => true
+  end
+
   private
 
   def create_hash_field(*args)
