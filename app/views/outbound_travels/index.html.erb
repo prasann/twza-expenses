@@ -4,6 +4,11 @@
 
 <h1>Outbound Travels</h1>
 
+<div>
+<h3>Saved Searches:</h3>
+  <%= link_to 'Recent Entries','/outbound_travels/get_recent' %>
+</div>
+
 <div class="no_emp hide error">No employee found for given name.</div>
 <form action='/outbound_travels/search' method="get">
   <span class="search_by">Search by:</span>
@@ -32,9 +37,10 @@
     <th>Country of Visit</th>
     <th>Duration of Stay</th>
     <th>Payroll effect in India</th>
-    <th>Departure date from India</th>
+    <th>Departure date</th>
     <th>Expected return Date</th>
     <th>Return date to India</th>
+    <th>Comments</th>
     <th>&nbsp;</th>
   </tr>
 
@@ -43,22 +49,12 @@
       <td><%= outbound_travel.emp_id %></td>
       <td><%= outbound_travel.emp_name %></td>
       <td><%= outbound_travel.place %></td>
-      <% if (outbound_travel.return_date.nil?) %>
-        <td>
-          <% begin %>
-            <%= (Date.parse(outbound_travel.expected_return_date) - outbound_travel.departure_date).to_i %>
-          <% rescue %>
-            <%= outbound_travel.expected_return_date %>
-          <% end %>
-        </td>
-      <% else %>
-        <td><%= (outbound_travel.return_date- outbound_travel.departure_date).to_i %></td>
-      <% end %>
-
+      <td><%= calculate_stay_duration(outbound_travel) %></td>
       <td class='edit' name='payroll_effect'><%= outbound_travel.payroll_effect %></td>
       <td class='edit_date_picker' name='departure_date'><%= date_fmt(outbound_travel.departure_date) %></td>
-      <td class='edit_date_picker' name='expected_return_date'><%= date_fmt(Date.parse(outbound_travel.expected_return_date))%></td>
+      <td class='edit_date_picker' name='expected_return_date'><%= date_fmt(date_from_str(outbound_travel.expected_return_date))%></td>
       <td class='edit_date_picker' name='return_date'><%= date_fmt(outbound_travel.return_date) %></td>
+      <td class='edit' name='comments'><%= outbound_travel.comments %></td>
       <td><%= link_to 'Show', outbound_travel %> |
         <%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %> |
         <%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %>

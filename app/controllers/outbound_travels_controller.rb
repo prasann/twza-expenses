@@ -78,6 +78,11 @@ class OutboundTravelsController < ApplicationController
     render :nothing => true
   end
 
+  def get_recent
+    @outbound_travels = OutboundTravel.where(:comments => nil).page(params[:page])
+    render :index, :layout => 'tabs'
+  end
+
   private
 
   def create_hash_field(*args)

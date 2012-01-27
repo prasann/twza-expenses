@@ -15,6 +15,7 @@ Mankatha::Application.routes.draw do
   match 'forex_payments/data_to_suggest' => 'forex_payments#data_to_suggest'
   match 'outbound_travels/data_to_suggest' => 'outbound_travels#data_to_suggest'
   match 'outbound_travels/update_field' => 'outbound_travels#update_field'
+  match 'outbound_travels/get_recent' => 'outbound_travels#get_recent'
 
   resources :forex_payments do
     collection do

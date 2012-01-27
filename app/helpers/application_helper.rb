@@ -21,4 +21,23 @@ module ApplicationHelper
     messages << javascript_tag("$('.notification').fadeOut(5000);")
     messages.html_safe
   end
+
+  def calculate_stay_duration(outbound_travel)
+    if(outbound_travel.return_date.nil?)
+      date = date_from_str(outbound_travel.expected_return_date)
+      return (date - outbound_travel.departure_date).to_i unless date.nil?
+      return date
+    else
+      return (outbound_travel.return_date- outbound_travel.departure_date).to_i
+    end
+  end
+
+  def date_from_str(date_str)
+    begin
+      date = Date.parse(date_str)
+    rescue
+      date = nil
+    end
+    return date
+  end
 end
