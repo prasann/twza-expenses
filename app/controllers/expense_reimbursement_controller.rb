@@ -52,16 +52,20 @@ class ExpenseReimbursementController < ApplicationController
 
   def edit
     expenses = Expense.where(expense_rpt_id: params[:id]).to_a
-    @empl_name = Profile.find_by_employee_id(expenses.first.get_employee_id.to_i).get_full_name
-
-    existing_expense_reimbursements = ExpenseReimbursement.where(expense_report_id: params[:id]).to_a
-    if (existing_expense_reimbursements.empty?)
+    
+	employee = Profile.find_by_employee_id(expenses.first.get_employee_id.to_i)
+	@empl_name = employee.nil? ? "" : employee.get_full_name
+    
+	existing_expense_reimbursements = ExpenseReimbursement.where(expense_report_id: params[:id]).to_a
+    
+	if (existing_expense_reimbursements.empty?)
       @all_expenses = expenses.group_by { |expense| expense.project + expense.subproject }
     else
       expenses = expenses-existing_expense_reimbursements.collect{ |existing_expense_reimbursement| existing_expense_reimbursement.get_expenses }.flatten
       @all_expenses = expenses.group_by { |expense| expense.project + expense.subproject }
     end
-    @expense_reimbursement = {'expense_report_id' => params[:id],
+    
+	@expense_reimbursement = {'expense_report_id' => params[:id],
                               'empl_id' => expenses.first.get_employee_id,
                               'submitted_on' => expenses.first.report_submitted_at,
                               'total_amount' => expenses.sum { |expense| expense.cost_in_home_currency.to_f }}

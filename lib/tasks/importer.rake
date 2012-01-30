@@ -1,5 +1,6 @@
 require 'data_importer/forex_data_importer'
 require 'data_importer/travel_data_importer'
+require 'data_importer/bank_details_importer'
 
 namespace :data_import do
   desc "Import forex details - Adds onto the existing DB"
@@ -22,5 +23,11 @@ namespace :data_import do
   task :travel => :environment do
    OutboundTravel.delete_all
    TravelDataImporter.new.import('data/Inbound-Outbound Travel.xls')
+  end
+
+  desc "Cleans and recreates bank details"
+  task :bank => :environment do
+  	BankDetail.delete_all
+	BankDetailsImporter.new.import('data/SCB_nos.xlsx')
   end
 end

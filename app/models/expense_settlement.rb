@@ -46,7 +46,7 @@ class ExpenseSettlement
 													con_exp["currency"]=expense_cur.original_currency
 													con_exp["amount"]=con_exp["amount"]+BigDecimal.new(expense_cur.original_cost)
 													con_exp["conversion_rate"]=get_conversion_rate_for(expense_cur)
-													con_exp["local_currency_amount"]=con_exp["amount"]*con_exp["conversion_rate"]
+													con_exp["local_currency_amount"]=format_two_decimal_places(con_exp["amount"]*con_exp["conversion_rate"])
 												end
 								con_exp
 							end
@@ -86,14 +86,38 @@ class ExpenseSettlement
 		forex_inr_amount = 0
 		all_expenses.each{|expense|	expense_inr_amount += expense["local_currency_amount"]}
 		all_forex.each{|forex|forex_inr_amount += forex.inr}
-		forex_inr_amount-(expense_inr_amount+cash_handover*get_conversion_rate)
+		format_two_decimal_places(forex_inr_amount - (expense_inr_amount + (cash_handover*get_conversion_rate)))
+	end
+	
+	def self.get_reimbursable_expense_reports
+		completed_settlements = ExpenseSettlement.where(status: 'Complete').to_a
+		completed_settlements.collect{|settlement| create_bank_reimbursement(settlement)}
 	end
 
-  def get_forex_payments
-  	@consolidated_forex
-  end
+	def get_forex_payments
+  		@consolidated_forex
+	end
 
-  def get_consolidated_expenses
-  	@consolidated_expenses
-  end
+	def get_consolidated_expenses
+		@consolidated_expenses
+	end
+
+	def get_unique_report_ids
+		@consolidated_expenses.collect{|expense|expense['report_id']}.uniq
+	end
+
+	private
+	def self.create_bank_reimbursement(settlement)
+		settlement.populate_instance_data
+		bank_detail = BankDetail.where(empl_id: settlement.empl_id).first
+		if(settlement.get_receivable_amount < 0)
+			return {:empl_id => settlement.empl_id,
+					:empl_name => bank_detail.empl_name,
+					:expense_report_ids => settlement.get_unique_report_ids.join(","),
+					:reimbursable_amount => settlement.get_receivable_amount.abs,
+					:bank_account_no => bank_detail.account_no
+					}
+		end
+	end
+
 end
