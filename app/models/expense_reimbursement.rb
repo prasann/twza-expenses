@@ -1,3 +1,5 @@
+require 'ostruct'
+
 class ExpenseReimbursement
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -19,18 +21,23 @@ class ExpenseReimbursement
     	Expense.find(expenses.collect { |expense| expense['expense_id'] })
   	end
 
-	def self.get_reimbursable_expense_reports
+	def self.get_reimbursable_expense_reports(mark_as_closed=false)
 		completed_reimbursements = ExpenseReimbursement.where(status: 'Processed').to_a
-		completed_reimbursements.collect{|reimbursement| create_bank_reimbursement(reimbursement)}
+		completed_reimbursements.collect{|reimbursement| create_bank_reimbursement(reimbursement, mark_as_closed)}
 	end
 
-	def self.create_bank_reimbursement(reimbursement)
+	private
+	def self.create_bank_reimbursement(reimbursement, mark_as_closed)
 		bank_detail = BankDetail.where(empl_id: reimbursement.empl_id).first
-		{:empl_id => reimbursement.empl_id,
+		if(mark_as_closed)
+			reimbursement.status = 'Closed'
+			reimbursement.save
+		end
+		OpenStruct.new({:empl_id => reimbursement.empl_id,
 		 :empl_name => bank_detail.empl_name,
 		 :expense_report_ids => reimbursement.expense_report_id,
 		 :reimbursable_amount => reimbursement.total_amount,
 		 :bank_account_no => bank_detail.account_no
-		}
+		})
 	end
 end

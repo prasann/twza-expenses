@@ -8,6 +8,8 @@
 </div>
 <div class="report_section">
 	<h2>Bank Reimbursement Statement</h2>
+	<%= link_to image_tag("excel.png") + "Mark as Sent to Bank and Generate Bank Reimbursement Statement", :controller => 'consolidated_expenses', :action => 'mark_processed_and_export', :format => 'xls' %>
+	&nbsp;
 	<%= link_to image_tag("excel.png") + "Generate Bank Reimbursement Statement", :controller => 'consolidated_expenses', :action => 'export', :format => 'xls' %>
 </div>
 <br/>

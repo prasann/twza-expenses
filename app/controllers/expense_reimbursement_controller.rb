@@ -37,9 +37,10 @@ class ExpenseReimbursementController < ApplicationController
     elsif (!params[:expense_rpt_id].blank?)
       @expense_reimbursements=ExpenseReimbursement.where(expense_report_id: params[:expense_rpt_id]).to_a
       reimbursement_expense_ids = collect_reimbursement_expense_ids()
-      unprocessed_expenses = Expense.fetch_for_report(params[:expense_rpt_id], reimbursement_expense_ids.flatten).group_by(&:expense_rpt_id)
-      empl_id = unprocessed_expenses[params[:expense_rpt_id]].get_employee_id
-      create_unprocessed_expense_reports(empl_id, unprocessed_expenses)
+      unprocessed_expenses_map = Expense.fetch_for_report(params[:expense_rpt_id], reimbursement_expense_ids.flatten).group_by(&:expense_rpt_id)
+	  unprocessed_expenses = unprocessed_expenses_map[params[:expense_rpt_id]]
+      empl_id = @expense_reimbursements.empty? ? (unprocessed_expenses.nil? ? unprocessed_expenses.first.get_employee_id : "") : @expense_reimbursements.first.get_employee_id
+      create_unprocessed_expense_reports(empl_id, unprocessed_expenses_map)
     end
     render 'index', :layout => 'tabs'
   end

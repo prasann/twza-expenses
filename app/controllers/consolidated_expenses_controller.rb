@@ -1,4 +1,3 @@
-require 'ostruct'
 
 class ConsolidatedExpensesController < ApplicationController
 
@@ -10,7 +9,20 @@ class ConsolidatedExpensesController < ApplicationController
 	end
 
 	def export
-		reimbursable_expenses = get_reimbursable_expenses().collect{|expense_hash| OpenStruct.new(expense_hash)}
+		render_excel get_reimbursable_expenses()
+	end
+
+	def mark_processed_and_export
+		render_excel get_reimbursable_expenses(true)	
+	end
+
+	private 
+	def get_reimbursable_expenses(mark_as_closed = false)
+		reimbursable_expense_reports = ExpenseSettlement.get_reimbursable_expense_reports(mark_as_closed)
+		reimbursable_expense_reports.concat(ExpenseReimbursement.get_reimbursable_expense_reports(mark_as_closed))
+	end
+
+	def render_excel(reimbursable_expenses)
 		respond_to do |format|
       		format.xls { send_data reimbursable_expenses.to_xls(:headers => HEADERS,
 										   						:columns => [:empl_id, :empl_name, 
@@ -19,11 +31,5 @@ class ConsolidatedExpensesController < ApplicationController
 								   :filename => "BankInstruction_#{Date.today.strftime('%d-%b-%Y')}.xls"
 						}
 		end
-	end
-
-	private 
-	def get_reimbursable_expenses
-		reimbursable_expense_reports = ExpenseSettlement.get_reimbursable_expense_reports
-		reimbursable_expense_reports.concat(ExpenseReimbursement.get_reimbursable_expense_reports)
 	end
 end

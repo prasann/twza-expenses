@@ -1,4 +1,5 @@
 require 'mongoid'
+require 'ostruct'
 
 class ExpenseSettlement
 	include ApplicationHelper
@@ -89,9 +90,9 @@ class ExpenseSettlement
 		format_two_decimal_places(forex_inr_amount - (expense_inr_amount + (cash_handover*get_conversion_rate)))
 	end
 	
-	def self.get_reimbursable_expense_reports
+	def self.get_reimbursable_expense_reports(mark_as_closed = false)
 		completed_settlements = ExpenseSettlement.where(status: 'Complete').to_a
-		completed_settlements.collect{|settlement| create_bank_reimbursement(settlement)}
+		completed_settlements.collect{|settlement| create_bank_reimbursement(settlement, mark_as_closed)}
 	end
 
 	def get_forex_payments
@@ -107,16 +108,20 @@ class ExpenseSettlement
 	end
 
 	private
-	def self.create_bank_reimbursement(settlement)
+	def self.create_bank_reimbursement(settlement, mark_as_closed)
 		settlement.populate_instance_data
 		bank_detail = BankDetail.where(empl_id: settlement.empl_id).first
 		if(settlement.get_receivable_amount < 0)
-			return {:empl_id => settlement.empl_id,
+			if(mark_as_closed)
+				settlement.status = 'Closed'
+				settlement.save
+			end
+			return OpenStruct.new({:empl_id => settlement.empl_id,
 					:empl_name => bank_detail.empl_name,
 					:expense_report_ids => settlement.get_unique_report_ids.join(","),
 					:reimbursable_amount => settlement.get_receivable_amount.abs,
 					:bank_account_no => bank_detail.account_no
-					}
+					})
 		end
 	end
 
