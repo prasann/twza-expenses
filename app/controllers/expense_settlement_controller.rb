@@ -47,6 +47,7 @@ class ExpenseSettlementController < ApplicationController
     outbound_travel.expense_settlement.update_attributes(expenses: params[:expenses],
                                                forex_payments: params[:forex_payments],
                                                cash_handover: params[:cash_handover].to_i,
+                                               emp_name: params[:emp_name],
                                                empl_id: params[:empl_id],
                                                status: 'Generated Draft',
                                                expense_from: params[:expense_from],
@@ -121,7 +122,7 @@ class ExpenseSettlementController < ApplicationController
 
     expenses = Expense.fetch_for_employee_between_dates travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids
     forex_payments = ForexPayment.fetch_for travel.emp_id, @forex_from_date, @forex_to_date, processed_forex_ids
-    @expense_report = {"expenses" => expenses,
+    @expense_report = {"expenses" => expenses,  
                        "forex_payments" => forex_payments,
                        "empl_id" => travel.emp_id,
                        "travel_id" => travel.id.to_s}

@@ -10,6 +10,14 @@ describe SessionsController do
       session[:user_id].should == user1.id
       response.should redirect_to(outbound_travels_path)
     end
+
+    it 'create login session for registered user' do
+      user1 = User.create!({user_name:'test',password:'password'})
+      session[:user_id].should be nil
+      post :create, :user_name => 'test' , :password => 'password1'
+      session[:user_id].should be nil
+      flash[:error].should == 'Invalid email or password'
+    end
   end
 
   describe 'GET delete sessions' do

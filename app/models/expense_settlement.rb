@@ -8,6 +8,7 @@ class ExpenseSettlement
 	field :expenses, type: Array
 	field :forex_payments, type: Array
 	field :empl_id, type: String
+	field :emp_name, type: String
 	 
 	field :cash_handover, type: Float
 	field :status, type: String

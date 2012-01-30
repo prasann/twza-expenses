@@ -2,9 +2,6 @@
   <%= link_to image_tag("new_link.png") + "Create Forex Payments", new_forex_payment_path%>
 </div>
 <h1>Forex Payments</h1>
-<div class='required'>
-  <%= link_to image_tag("reports.png") + "Generate Forex Reports", forex_reports_path%>
-</div>
 <div class="no_emp hide error">No employee found for given name.</div>
 <form id="forex_search" action='/forex_payments/search#forex_payments' method = "get">
 <span class="search_by">Search by:</span>
@@ -28,6 +25,7 @@
     <th>Id</th>
     <th>Name</th>
     <th>Issue Date</th>
+    <th>Travel Date</th>
     <th>Amount</th>
     <th>Currency</th>
     <th>Place</th>
@@ -38,7 +36,8 @@
     <tr class="<%= cycle("even", "odd") %>">
       <td><%= payment.emp_id %></td>
       <td><%= payment.emp_name %></td>
-      <td><%= payment.issue_date%></td>
+      <td><%= date_fmt(payment.issue_date)%></td>
+      <td><%= date_fmt(payment.travel_date)%></td>
       <td><%= payment.amount%></td>
       <td><%= payment.currency %></td>
       <td><%= payment.place%></td>

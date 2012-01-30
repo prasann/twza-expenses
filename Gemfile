@@ -13,6 +13,7 @@ gem 'premailer-rails3'
 gem 'to_xls'
 gem 'bcrypt-ruby'
 gem 'cancan'
+gem 'simplecov'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'

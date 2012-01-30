@@ -23,6 +23,7 @@ $(document).ready(function(){
         if(ui.index == 1){ window.location = "/forex_payments#forex_payments";} 
         if(ui.index == 2){ window.location = "/expense_settlement#expense_settlement";} 
         if(ui.index == 3){ window.location = "/expense_reimbursement#expense_reimbursement";} 
+        if(ui.index == 4){ window.location = "/reports#reports";} 
       }
     });
 
