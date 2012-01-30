@@ -7,7 +7,7 @@ class ExpenseSettlementController < ApplicationController
 
   def index
     default_per_page = params[:per_page] || 20
-    if(params[:empl_id])
+    if (params[:empl_id])
       @expense_settlements = ExpenseSettlement.where(empl_id: params[:empl_id]).page(params[:page]).per(default_per_page)
     else
       @expense_settlements = ExpenseSettlement.all.page(params[:page]).per(default_per_page)
@@ -18,7 +18,7 @@ class ExpenseSettlementController < ApplicationController
   def load_by_travel
     travel = OutboundTravel.find(params[:id])
     padded_dates(travel)
-	  create_settlement_report_from_dates(travel)
+    create_settlement_report_from_dates(travel)
   end
 
   def edit
@@ -34,26 +34,26 @@ class ExpenseSettlementController < ApplicationController
   end
 
   def show
-  	@expense_report=ExpenseSettlement.find(params[:id])
-	@expense_report.populate_instance_data
-	render 'generate_report'
+    @expense_report=ExpenseSettlement.find(params[:id])
+    @expense_report.populate_instance_data
+    render 'generate_report'
   end
 
   def generate_report
     outbound_travel = OutboundTravel.find(params[:travel_id])
-    if(outbound_travel.expense_settlement == nil)
+    if (outbound_travel.expense_settlement == nil)
       outbound_travel.create_expense_settlement()
     end
     outbound_travel.expense_settlement.update_attributes(expenses: params[:expenses],
-                                               forex_payments: params[:forex_payments],
-                                               cash_handover: params[:cash_handover].to_i,
-                                               emp_name: params[:emp_name],
-                                               empl_id: params[:empl_id],
-                                               status: 'Generated Draft',
-                                               expense_from: params[:expense_from],
-                                               expense_to: params[:expense_to],
-                                               forex_from: params[:forex_from],
-                                               forex_to: params[:forex_to])
+                                                         forex_payments: params[:forex_payments],
+                                                         cash_handover: params[:cash_handover].to_i,
+                                                         emp_name: params[:emp_name],
+                                                         empl_id: params[:empl_id],
+                                                         status: 'Generated Draft',
+                                                         expense_from: params[:expense_from],
+                                                         expense_to: params[:expense_to],
+                                                         forex_from: params[:forex_from],
+                                                         forex_to: params[:forex_to])
 
     @expense_report = outbound_travel.expense_settlement
     @expense_report.populate_instance_data
@@ -84,28 +84,23 @@ class ExpenseSettlementController < ApplicationController
   def file_upload
     require 'fileutils'
     @file_name = params[:file_upload][:my_file].original_filename
-    if file_exists? @file_name
-      flash[:error] = 'This file has already been uploaded'
+    if load_to_db
+      flash[:success] = 'File: '+ @file_name +' has been uploaded successfully'
       redirect_to :action => 'upload'
     else
-      load_to_db
-      UploadedExpense.create(file_name: @file_name)
-      flash[:success] = 'File: '+ @file_name +' has been uploaded successfully'
+      flash[:error] = 'This file has already been uploaded'
       redirect_to :action => 'upload'
     end
   end
 
   private
-  def file_exists?(file_name)
-    !UploadedExpense.where(file_name: file_name).blank?
-  end
-
   def load_to_db
     tmp = params[:file_upload][:my_file].tempfile
     file = File.join("public", @file_name)
     FileUtils.cp tmp.path, file
-    ExpenseReportImporter.load_expense(file)
+    success = ExpenseReportImporter.load_expense(file)
     FileUtils.rm file
+    success
   end
 
   def padded_dates(travel)
@@ -122,7 +117,7 @@ class ExpenseSettlementController < ApplicationController
 
     expenses = Expense.fetch_for_employee_between_dates travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids
     forex_payments = ForexPayment.fetch_for travel.emp_id, @forex_from_date, @forex_to_date, processed_forex_ids
-    @expense_report = {"expenses" => expenses,  
+    @expense_report = {"expenses" => expenses,
                        "forex_payments" => forex_payments,
                        "empl_id" => travel.emp_id,
                        "travel_id" => travel.id.to_s}
