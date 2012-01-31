@@ -53,7 +53,7 @@ $(document).ready(function(){
         url:'/outbound_travels/update_field',
         data:{id: obj_id, name: attr_name, value: value},
         success: function(){
-          $(_this).text(value)		
+          location.reload()
         }
       })
     }
