@@ -26,28 +26,34 @@ class ExpenseReimbursementController < ApplicationController
 
   def filter
     @expense_reimbursements=[]
-    if (!params[:empl_id].blank?)
+    
+	if (!params[:empl_id].blank?)
       empl_id=params[:empl_id]
       @expense_reimbursements = ExpenseReimbursement.where(empl_id: empl_id).to_a
-      expense_ids_from_travel = ExpenseSettlement.where(empl_id: empl_id).to_a.collect { |settlement| settlement.expenses }.flatten
-      reimbursement_expense_ids = collect_reimbursement_expense_ids()
-      processed_expense_ids = reimbursement_expense_ids.flatten.push(expense_ids_from_travel).flatten
-      unprocessed_expenses = Expense.fetch_for_employee(empl_id, processed_expense_ids).group_by(&:expense_rpt_id)
-      create_unprocessed_expense_reports(empl_id, unprocessed_expenses)
+      expenses_criteria = Expense.create_employee_id_criteria(empl_id)
     elsif (!params[:expense_rpt_id].blank?)
       @expense_reimbursements=ExpenseReimbursement.where(expense_report_id: params[:expense_rpt_id]).to_a
-      reimbursement_expense_ids = collect_reimbursement_expense_ids()
-      unprocessed_expenses_map = Expense.fetch_for_report(params[:expense_rpt_id], reimbursement_expense_ids.flatten).group_by(&:expense_rpt_id)
-	  unprocessed_expenses = unprocessed_expenses_map[params[:expense_rpt_id]]
-      empl_id = @expense_reimbursements.empty? ? (unprocessed_expenses.nil? ? unprocessed_expenses.first.get_employee_id : "") : @expense_reimbursements.first.get_employee_id
-      create_unprocessed_expense_reports(empl_id, unprocessed_expenses_map)
+      expenses_criteria = Expense.where(expense_rpt_id: params[:expense_rpt_id])
+      expense = expenses_criteria.first
+	  empl_id = expense.nil? ? "" : expense.get_employee_id
     end
-    render 'index', :layout => 'tabs'
+	
+	if(empl_id)
+		expense_ids_from_travel = ExpenseSettlement.where(empl_id: empl_id).to_a.collect { |settlement| settlement.expenses }.flatten
+		reimbursement_expense_ids = collect_reimbursement_expense_ids()
+		processed_expense_ids = reimbursement_expense_ids.flatten.push(expense_ids_from_travel).flatten
+		
+		unprocessed_expenses_map = Expense.fetch_for(expenses_criteria, processed_expense_ids).group_by(&:expense_rpt_id)
+		create_unprocessed_expense_reports(empl_id, unprocessed_expenses_map)
+    end
+
+	render 'index', :layout => 'tabs'
   end
 
   def show
     @expense_reimbursement=ExpenseReimbursement.find(params[:id])
-    @empl_name = Profile.find_by_employee_id(@expense_reimbursement.empl_id).get_full_name
+	profile = Profile.find_by_employee_id(@expense_reimbursement.empl_id) 
+    @empl_name = profile.nil? ? "" : profile.get_full_name
     @all_expenses = @expense_reimbursement.get_expenses_grouped_by_project_code
   end
 
@@ -80,10 +86,10 @@ class ExpenseReimbursementController < ApplicationController
     expenses = []
 
     expense_map = Hash.new()
-    Expense.fetch_for_report(params[:expense_report_id], []).map { |expense| expense_map[expense.id.to_s] = expense }
+    Expense.where(expense_rpt_id: params[:expense_report_id]).to_a.map { |expense| expense_map[expense.id.to_s] = expense }
     expense_ids.each do |expense_id|
-      modified_amount=expense_amount[expense_id].to_f*expense_map[expense_id].cost_in_home_currency.to_f/expense_map[expense_id].original_cost.to_f
-      expenses.push({'expense_id' => expense_id, 'modified_amount' => modified_amount})
+      modified_amount=expense_amount[expense_id].to_f       
+	  expenses.push({'expense_id' => expense_id, 'modified_amount' => modified_amount})
       total_amount+=modified_amount
     end
     status = params[:process_reimbursement] ? 'Processed' : 'Faulty'

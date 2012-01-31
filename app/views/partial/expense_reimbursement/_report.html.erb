@@ -40,7 +40,7 @@
             <td><%= date_fmt(Date.parse(expense.expense_date)) %></td>
             <td><%= modified_expense = @expense_reimbursement.expenses.select{|e| e['expense_id']==expense.id.to_s}
                     modified_expense.first["modified_amount"] %></td>
-            <td><%= expense.original_currency %></td>
+            <td>INR</td>
             <td><%= expense.description %></td>
             <td><%= expense.vendor %></td>
             <td><%= expense.payment_type %></td>

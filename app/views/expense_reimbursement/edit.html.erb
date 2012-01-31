@@ -44,7 +44,7 @@
                 <td><%= date_fmt(Date.parse(expense.expense_date)) %></td>
                 <td><input type="text" name="expense_amount[<%= expense.id.to_s %>]"
                            value="<%= format_two_decimal_places(expense.cost_in_home_currency.to_f) %>"  class='affects_total'/></td>
-                <td><%= expense.original_currency %></td>
+                <td>INR</td>
                 <td><%= expense.description %></td>
                 <td><%= expense.vendor %></td>
                 <td><%= expense.payment_type %></td>
