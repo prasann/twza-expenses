@@ -23,6 +23,7 @@ class ForexReportsController < ApplicationController
     return ForexPayment.where(:currency => regex_if_nil(params[:forex_payment_currency]))
     .and("issue_date" => {"$gte" => params[:reports_from], "$lte" => params[:reports_till]})
     .and(vendor_name: regex_if_nil(params[:forex_payment_vendor_name]))
+    .and(office: regex_if_nil(params[:forex_payment_office]))
   end
 
   def regex_if_nil(val)

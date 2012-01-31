@@ -13,13 +13,20 @@ function populateForexFields(){
 			minLength: 0
 		}).focus(function(){            
             $(this).trigger(down_arrow_event);
-        });;
+        });
 
 		$('#forex_payment_currency').autocomplete({
 			source: data.currency,
 			minLength: 0
 		}).focus(function(){            
             $(this).trigger(down_arrow_event);
-        });;
+        });
+
+        $('#forex_payment_office').autocomplete({
+			source: data.office,
+			minLength: 0
+		}).focus(function(){            
+            $(this).trigger(down_arrow_event);
+        });
 	});
 };    

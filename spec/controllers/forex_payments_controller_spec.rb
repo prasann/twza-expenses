@@ -159,10 +159,10 @@ describe ForexPaymentsController do
 
   describe "GET populate autosuggest data" do
     it "should populate unique and non nullable data for auto suggestion" do
-      outbound_travel_1 = ForexPayment.create!(valid_attributes.merge!({place: 'US', currency: 'GBP'}))
-      outbound_travel_2 = ForexPayment.create!(valid_attributes.merge!({place: 'US', vendor_name: 'VFC', currency: 'USD'}))
+      outbound_travel_1 = ForexPayment.create!(valid_attributes.merge!({place: 'US', currency: 'GBP', office: 'Pune'}))
+      outbound_travel_2 = ForexPayment.create!(valid_attributes.merge!({place: 'US', vendor_name: 'VFC', currency: 'USD', office: 'Chennai'}))
       get :data_to_suggest
-      assigns(:fields).should be_eql ({'place' => ["US"], 'vendor_name' => ['VFC'], 'currency' => ['GBP','USD']})
+      assigns(:fields).should be_eql ({'place' => ["US"], 'vendor_name' => ['VFC'], 'currency' => ['GBP','USD'] , 'office' => ['Pune','Chennai']})
     end
   end
 

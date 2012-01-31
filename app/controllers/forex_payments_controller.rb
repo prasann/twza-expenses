@@ -66,7 +66,7 @@ class ForexPaymentsController < ApplicationController
 
   def data_to_suggest
     @forex_payments = ForexPayment.all
-    create_hash_field('currency','vendor_name','place');
+    create_hash_field('currency','vendor_name','place','office');
     render :text => @fields.to_json
   end
 
