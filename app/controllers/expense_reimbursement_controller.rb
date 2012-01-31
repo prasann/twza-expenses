@@ -93,11 +93,10 @@ class ExpenseReimbursementController < ApplicationController
       total_amount+=modified_amount
     end
     status = params[:process_reimbursement] ? 'Processed' : 'Faulty'
-    @expense_reimbursement = ExpenseReimbursement.new(:expense_report_id => params[:expense_report_id], :expenses => expenses,
+    @expense_reimbursement = ExpenseReimbursement.create(:expense_report_id => params[:expense_report_id], :expenses => expenses,
                                                       :empl_id => params[:empl_id], :status=> status,
                                                       :submitted_on=> params[:submitted_on], :notes=> params[:notes],
                                                       :total_amount => total_amount)
-    @expense_reimbursement.save
     profile = Profile.find_by_employee_id(@expense_reimbursement.empl_id)
     EmployeeMailer.non_travel_expense_reimbursement(profile, @expense_reimbursement).deliver
     redirect_to :action => 'filter', :empl_id => params[:empl_id]
