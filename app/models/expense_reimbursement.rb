@@ -26,6 +26,18 @@ class ExpenseReimbursement
     completed_reimbursements.collect { |reimbursement| create_bank_reimbursement(reimbursement, mark_as_closed) }
   end
 
+  def profile
+    @profile ||= Profile.find_by_employee_id(self.empl_id)
+  end
+
+  def email_id
+    @email_id ||= profile.email_id.blank? ? empl_id.to_s : profile.email_id
+  end
+
+  def employee_email
+    email_id + ::Rails.application.config.email_domain
+  end
+
   private
   def self.create_bank_reimbursement(reimbursement, mark_as_closed)
     bank_detail = BankDetail.where(empl_id: reimbursement.empl_id).first
