@@ -5,21 +5,20 @@ class ForexPaymentsController < ApplicationController
   include ExcelDataExporter
 
   HEADERS = [
-    'Month','EMP ID','Employee\'s Name','Forex Amt','Fx Crrn','Travelled Date','Place','Project',
-    'Vendor Name','Card No','Exp Date','Office','INR'
+    'Month', 'EMP ID', 'Employee\'s Name', 'Forex Amt', 'Fx Crrn', 'Travelled Date', 'Place', 'Project',
+    'Vendor Name', 'Card No', 'Exp Date', 'Office', 'INR'
   ]
 
   def index
     default_per_page = params[:per_page] || 20
-    conditions = params[:empl_id] ? ({:empl_id => params[:emp_id]}) : nil
-    @forex_ids_with_settlement= ExpenseSettlement.find(:all,:conditions => conditions).map{|item| item.forex_payments}
+    criteria = params[:empl_id] ? ExpenseSettlement.for_empl_id(params[:emp_id]) : ExpenseSettlement
+    @forex_ids_with_settlement = criteria.collect(&:forex_payments)
     @forex_payments = ForexPayment.desc(:travel_date).page(params[:page]).per(default_per_page)
     render :layout => 'tabs'
   end
 
   def show
     @forex_payment = ForexPayment.find(params[:id])
-    render
   end
 
   def new
@@ -55,18 +54,18 @@ class ForexPaymentsController < ApplicationController
   end
 
   def search
-    @forex_ids_with_settlement= ExpenseSettlement.find(:all,:conditions => {:empl_id => params[:emp_id]}).map{|item| item.forex_payments}.flatten
+    @forex_ids_with_settlement = ExpenseSettlement.for_empl_id(params[:emp_id]).collect(&:forex_payments).flatten
     @forex_payments = ForexPayment.page(params[:page]).any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]})
     render :index, :layout => 'tabs'
   end
 
   def export
-    export_xls(ForexPayment,HEADERS,ForexPayment.all)
+    export_xls(ForexPayment, HEADERS, ForexPayment.all)
   end
 
   def data_to_suggest
     @forex_payments = ForexPayment.all
-    create_hash_field('currency','vendor_name','place','office');
+    create_hash_field('currency', 'vendor_name', 'place', 'office');
     render :text => @fields.to_json
   end
 

@@ -170,7 +170,7 @@ describe OutboundTravelsController do
   #     xls_options = {:columns => declared_fields, :headers => OutboundTravelsController::HEADERS}
   #     Time.stub(:now).and_return(Time.parse('2011-10-01'))
   #     file_options = {:filename => OutboundTravel.to_s+'_01-Oct-2011'+ExcelDataExporter::FILE_EXTENSION}
-  #     controller.should_receive(:send_data).with(OutboundTravel.all.to_xls(xls_options), file_options)
+  #     controller.should_receive(:send_data).with(OutboundTravel.to_xls(xls_options), file_options)
   #     get :export, :format=>:xls
   #     Mime::XLS.to_sym.should==:xls
   #     Mime::XLS.to_s.should == 'application/vnd.ms-excel'
