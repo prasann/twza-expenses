@@ -1,9 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ExpenseReimbursementController do
-
   describe "Get show " do
-
     it "should show expense reimbursement details" do
       expected_expense_reimbursement = mock("expense_reimbursement", :id => 123, :empl_id => 1234)
       profile = mock('profile')
@@ -11,7 +9,6 @@ describe ExpenseReimbursementController do
       #expense_reimbursement_2 = mock("expense_reimbursement", :id => 231, :empl_id => 231)
 
       ExpenseReimbursement.should_receive(:find).with("123").and_return(expected_expense_reimbursement)
-      #Expense.should_receive(:create_employee_id_criteria).with("123").and_return(criteria)
 
       Profile.should_receive(:find_by_employee_id).with(1234).and_return(profile)
       profile.should_receive(:get_full_name).and_return('John Smith')
@@ -25,7 +22,6 @@ describe ExpenseReimbursementController do
   end
 
   describe "Get edit " do
-
     it "should load only expenses which are not processed as part of another expense reimbursement" do
       expense_1 = mock('expense', :project=>'project', :subproject => 'subproject',
                        :cost_in_home_currency=>1000, :get_employee_id=>1234, :report_submitted_at => 'date')

@@ -115,10 +115,9 @@ describe ExpenseSettlementController do
   end
 
   describe "generate report" do
-
     it "should create expense report for chosen expenses, forex and travel" do
       expense_settlement = ExpenseSettlement.new
-      outbound_travel = OutboundTravel.new()
+      outbound_travel = OutboundTravel.new
       outbound_travel.stub(:create_expense_settlement){outbound_travel.expense_settlement = expense_settlement}
       OutboundTravel.stub!(:find).with("1").and_return(outbound_travel)
       outbound_travel.should_receive(:create_expense_settlement)

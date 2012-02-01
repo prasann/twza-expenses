@@ -24,10 +24,10 @@ describe 'forex_payment' do
   end
 
   it "should not save without the presence of :emp_id, :emp_name, :amount, :currency, :travel_date, :office, :inr" do
-    forex_payment = ForexPayment.new()
+    forex_payment = ForexPayment.new
     forex_payment.valid?.should be_false
     error_msgs = forex_payment.errors.messages
-    error_msgs.each do |k,v|
+    error_msgs.each do |k, v|
       error_msgs[k].should == ["can't be blank"]
     end
   end

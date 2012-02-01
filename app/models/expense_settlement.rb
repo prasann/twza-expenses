@@ -16,6 +16,16 @@ class ExpenseSettlement
 
   belongs_to :outbound_travel
 
+  class << self
+    def for_empl_id(empl_id)
+      where(:empl_id => empl_id)
+    end
+
+    def with_status(status)
+      where(:status => status)
+    end
+  end
+
   def profile
     @profile ||= Profile.find_by_employee_id(self.empl_id)
   end
@@ -53,26 +63,24 @@ class ExpenseSettlement
 
       grpd_by_rpt_id = expenses_detailed.group_by { |expense| expense.expense_rpt_id }
       @consolidated_expenses = grpd_by_rpt_id.values.collect do |expenses|
-        grouped_by_currency = expenses.group_by { |expense| expense.original_currency }
-        arr_rpt_id_expenses = consolidate_by_currency grouped_by_currency
-        arr_rpt_id_expenses
+        consolidate_by_currency(expenses.group_by { |expense| expense.original_currency })
       end
     end
     @consolidated_expenses.flatten!
   end
 
   def consolidate_by_currency(expenses_by_reportid_hash)
-    get_conversion_rates_for_currency()
+    get_conversion_rates_for_currency
     expense_values = expenses_by_reportid_hash.values
     expense_values.collect do |expenses_by_cur|
       con_exp = Hash.new
-      con_exp["amount"]=BigDecimal.new("0")
+      con_exp["amount"] = BigDecimal.new("0")
       expenses_by_cur.each do |expense_cur|
-        con_exp["report_id"]=expense_cur.expense_rpt_id
-        con_exp["currency"]=expense_cur.original_currency
-        con_exp["amount"]=con_exp["amount"]+BigDecimal.new(expense_cur.original_cost)
-        con_exp["conversion_rate"]=get_conversion_rate_for(expense_cur)
-        con_exp["local_currency_amount"]=format_two_decimal_places(con_exp["amount"]*con_exp["conversion_rate"])
+        con_exp["report_id"] = expense_cur.expense_rpt_id
+        con_exp["currency"] = expense_cur.original_currency
+        con_exp["amount"] = con_exp["amount"] + BigDecimal.new(expense_cur.original_cost)
+        con_exp["conversion_rate"] = get_conversion_rate_for(expense_cur)
+        con_exp["local_currency_amount"] = format_two_decimal_places(con_exp["amount"] * con_exp["conversion_rate"])
       end
       con_exp
     end
@@ -118,8 +126,7 @@ class ExpenseSettlement
   end
 
   def self.get_reimbursable_expense_reports(mark_as_closed = false)
-    # TODO: Move the building up of different where clauses into behavior methods on the models
-    completed_settlements = ExpenseSettlement.where(status: 'Complete').to_a
+    completed_settlements = ExpenseSettlement.with_status('Complete').to_a
     completed_settlements.collect { |settlement| create_bank_reimbursement(settlement, mark_as_closed) }
   end
 
@@ -138,7 +145,7 @@ class ExpenseSettlement
   private
   def self.create_bank_reimbursement(settlement, mark_as_closed)
     settlement.populate_instance_data
-    bank_detail = BankDetail.where(empl_id: settlement.empl_id).first
+    bank_detail = BankDetail.for_empl_id(settlement.empl_id).first
     if (settlement.get_receivable_amount < 0)
       if (mark_as_closed)
         settlement.status = 'Closed'

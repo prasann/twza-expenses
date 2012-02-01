@@ -12,6 +12,20 @@ class ExpenseReimbursement
   field :total_amount, type: Float
   field :notes, type: String
 
+  class << self
+    def for_empl_id(empl_id)
+      where(:empl_id => empl_id)
+    end
+
+    def for_expense_report_id(id)
+      where(:expense_report_id => id)
+    end
+
+    def with_status(status)
+      where(:status => status)
+    end
+  end
+
   def get_expenses_grouped_by_project_code
     _expenses = get_expenses
     _expenses.group_by { |expense| expense.project + expense.subproject }
@@ -21,8 +35,8 @@ class ExpenseReimbursement
     Expense.find(expenses.collect { |expense| expense['expense_id'] })
   end
 
-  def self.get_reimbursable_expense_reports(mark_as_closed=false)
-    completed_reimbursements = ExpenseReimbursement.where(status: 'Processed').to_a
+  def self.get_reimbursable_expense_reports(mark_as_closed = false)
+    completed_reimbursements = ExpenseReimbursement.with_status('Processed').to_a
     completed_reimbursements.collect { |reimbursement| create_bank_reimbursement(reimbursement, mark_as_closed) }
   end
 
@@ -40,7 +54,7 @@ class ExpenseReimbursement
 
   private
   def self.create_bank_reimbursement(reimbursement, mark_as_closed)
-    bank_detail = BankDetail.where(empl_id: reimbursement.empl_id).first
+    bank_detail = BankDetail.for_empl_id(reimbursement.empl_id).first
     if (mark_as_closed)
       reimbursement.status = 'Closed'
       reimbursement.save

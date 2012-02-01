@@ -18,9 +18,9 @@ describe 'expense_report' do
     expected_hash_3 = {'report_id' => '121', 'currency' => 'EUR', 'amount' => 300, 'conversion_rate' => 1, 'local_currency_amount' => 300}
     expected_hash_4 = {'report_id' => '121', 'currency' => 'INR', 'amount' => 1000, 'conversion_rate' => 4, 'local_currency_amount' => 4000}
 
-    exp_rpt.populate_instance_data()
+    exp_rpt.populate_instance_data
 
-    actual_consolidated = exp_rpt.get_consolidated_expenses()
+    actual_consolidated = exp_rpt.get_consolidated_expenses
     puts actual_consolidated.to_s
     actual_consolidated.count.should ==4
     actual_consolidated.should include(expected_hash_1)
@@ -46,9 +46,9 @@ describe 'expense_report' do
     expected_hash_3 = {'report_id' => '121', 'currency' => 'EUR', 'amount' => 300, 'conversion_rate' => 1, 'local_currency_amount' => 300}
     expected_hash_4 = {'report_id' => '121', 'currency' => 'INR', 'amount' => 1000, 'conversion_rate' => 4, 'local_currency_amount' => 4000}
 
-    exp_rpt.populate_instance_data()
+    exp_rpt.populate_instance_data
 
-    actual_consolidated = exp_rpt.get_consolidated_expenses()
+    actual_consolidated = exp_rpt.get_consolidated_expenses
     puts actual_consolidated.to_s
 
     actual_consolidated.count.should ==4
@@ -67,8 +67,8 @@ describe 'expense_report' do
 
     ForexPayment.stub!(:find).and_return(forex_payments)
     exp_rpt = ExpenseSettlement.new(:forex_payments => ['id1', 'id2'])
-    exp_rpt.populate_forex_payments()
-    actual_conv_rates = exp_rpt.get_conversion_rates_for_currency()
+    exp_rpt.populate_forex_payments
+    actual_conv_rates = exp_rpt.get_conversion_rates_for_currency
     actual_conv_rates.values.count == 2
     ((actual_conv_rates["USD"]*100).round.to_f/100).should == (((1000+810).to_f/(100+90))*100).round.to_f/100
     ((actual_conv_rates["EUR"]*100).round.to_f/100).should == (((2000+1800+950).to_f/(100+100+50))*100).round.to_f/100

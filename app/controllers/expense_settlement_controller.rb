@@ -8,7 +8,7 @@ class ExpenseSettlementController < ApplicationController
   def index
     default_per_page = params[:per_page] || 20
     if (params[:empl_id])
-      @expense_settlements = ExpenseSettlement.where(empl_id: params[:empl_id]).page(params[:page]).per(default_per_page)
+      @expense_settlements = ExpenseSettlement.for_empl_id(params[:empl_id]).page(params[:page]).per(default_per_page)
     else
       @expense_settlements = ExpenseSettlement.all.page(params[:page]).per(default_per_page)
     end
@@ -99,7 +99,7 @@ class ExpenseSettlementController < ApplicationController
   end
 
   def create_settlement_report_from_dates(travel)
-    processed_expenses = ExpenseSettlement.where(processed: true, empl_id: travel.emp_id.to_s).only(:expenses, :forex_payments).to_a
+    processed_expenses = ExpenseSettlement.where(processed: true).for_empl_id(travel.emp_id.to_s).only(:expenses, :forex_payments).to_a
     processed_expense_ids = processed_expenses.collect(&:expenses).flatten
     processed_forex_ids = processed_expenses.collect(&:forex_payments).flatten
 
