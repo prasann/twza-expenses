@@ -9,9 +9,7 @@ class ApplicationController < ActionController::Base
   end
 
   def logged_in?
-    if current_user.nil?
-      redirect_to log_in_url
-    end
+    redirect_to log_in_url if current_user.nil?
   end
 
   def current_user

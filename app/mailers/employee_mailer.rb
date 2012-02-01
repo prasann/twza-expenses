@@ -11,6 +11,7 @@ class EmployeeMailer < ActionMailer::Base
   def expense_settlement(expense_report)
     @expense_report = expense_report
     @profile = @expense_report.profile
+    # TODO: Repeated code to derive email_id
     email_id = @profile.email_id.blank? ? expense_report.empl_id.to_s : @profile.email_id
     travel = @expense_report.outbound_travel
     subject = EXPENSE_SETTLEMENT_SUBJECT.sub("$place", travel.place).sub('$start_date', travel.departure_date.strftime("%d-%b-%Y"))
@@ -20,17 +21,15 @@ class EmployeeMailer < ActionMailer::Base
     end
   end
 
-  def non_travel_expense_reimbursement(profile, expense_reimbursement)
-    @profile = profile
+  def non_travel_expense_reimbursement(expense_reimbursement)
+    @profile = @expense_report.profile
     @expense_reimbursement = expense_reimbursement
     @all_expenses = @expense_reimbursement.get_expenses_grouped_by_project_code
-    @empl_name = profile.get_full_name
+    @empl_name = @profile.get_full_name
 
-    email_id = profile.email_id
+    # TODO: Repeated code to derive email_id
+    email_id = @profile.email_id.blank? ? expense_report.empl_id.to_s : @profile.email_id
     subject = EXPENSE_REIMBURSEMENT_SUBJECT.sub('$expense_report_id', expense_reimbursement.expense_report_id.to_s)
-    if (profile.email_id == nil || profile.email_id.length == 0)
-      email_id = expense_reimbursement.empl_id.to_s
-    end
 
     mail(:to => email_id + ::Rails.application.config.email_domain, :subject => subject, :content_type => "text/html") do |format|
       format.html { render :action => 'non_travel_expense_reimbursement' }

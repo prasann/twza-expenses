@@ -79,11 +79,13 @@ class OutboundTravelsController < ApplicationController
   end
 
   def get_recent
+    # TODO: What logic is this?
     @outbound_travels = OutboundTravel.where(:comments => nil).page(params[:page])
     render :index, :layout => 'tabs'
   end
 
   def travels_without_return_date
+    # TODO: What logic is this?
     @outbound_travels = OutboundTravel.where(:return_date => nil).page(params[:page])
     render :index, :layout => 'tabs'
   end

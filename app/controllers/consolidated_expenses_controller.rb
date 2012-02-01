@@ -1,4 +1,3 @@
-
 class ConsolidatedExpensesController < ApplicationController
 
 	HEADERS = ['Employee Id', 'Employee Name', 'Expense Report Id(s)', 'Account No', 'Amount']
@@ -9,7 +8,7 @@ class ConsolidatedExpensesController < ApplicationController
 	end
 
 	def export
-		render_excel get_reimbursable_expenses()
+		render_excel get_reimbursable_expenses
 	end
 
 	def mark_processed_and_export

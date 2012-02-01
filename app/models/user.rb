@@ -17,7 +17,6 @@ class User
 
   def self.authenticate(user_name, password)
     user = User.where(:user_name => user_name).first
-    puts user.inspect
     if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
       user
     else

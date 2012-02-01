@@ -103,12 +103,14 @@ class ExpenseSettlement
     expense_inr_amount = 0
     forex_inr_amount = 0
     all_expenses.each { |expense| expense_inr_amount += expense["local_currency_amount"] }
+    # TODO: all_forex.sum(&:inr)
     all_forex.each { |forex| forex_inr_amount += forex.inr }
     value = forex_inr_amount - (expense_inr_amount + (cash_handover*get_conversion_rate))
     format_two_decimal_places(value)
   end
 
   def self.get_reimbursable_expense_reports(mark_as_closed = false)
+    # TODO: Move the building up of different where clauses into behavior methods on the models
     completed_settlements = ExpenseSettlement.where(status: 'Complete').to_a
     completed_settlements.collect { |settlement| create_bank_reimbursement(settlement, mark_as_closed) }
   end
@@ -142,5 +144,4 @@ class ExpenseSettlement
                             })
     end
   end
-
 end

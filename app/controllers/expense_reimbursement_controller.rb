@@ -76,8 +76,7 @@ class ExpenseReimbursementController < ApplicationController
                                                          :empl_id => params[:empl_id], :status=> status,
                                                          :submitted_on=> params[:submitted_on], :notes=> params[:notes],
                                                          :total_amount => total_amount)
-    profile = Profile.find_by_employee_id(@expense_reimbursement.empl_id)
-    EmployeeMailer.non_travel_expense_reimbursement(profile, @expense_reimbursement).deliver
+    EmployeeMailer.non_travel_expense_reimbursement(@expense_reimbursement).deliver
     redirect_to :action => 'filter', :empl_id => params[:empl_id]
   end
 
