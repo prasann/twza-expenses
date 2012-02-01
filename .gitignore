@@ -1,6 +1,7 @@
 *.log
-.idea/
-tmp/
+*.tmproj
 .gitignore
+.idea/
 config/database.yml
 tags
+tmp/
