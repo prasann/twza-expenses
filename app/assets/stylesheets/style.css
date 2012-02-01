@@ -1,22 +1,22 @@
 body{
-	font: 13px helvetica,arial,freesans,clean,sans-serif !important
+  font: 13px helvetica,arial,freesans,clean,sans-serif !important
 }
 
 input {
-	padding: 5px;
-	font-size: 15px;
-	text-shadow: 0px 1px 0px #fff;
-	outline: none;
-	background: -webkit-gradient(linear, left top, left bottom, 
-		from(#E8E1DA), to(#ffffff));
-	background: -moz-linear-gradient(top,  #E8E1DA,  #ffffff);
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	border: 1px solid #717171;
-	-webkit-box-shadow: 1px 1px 0px #E8E1DA;
-	-moz-box-shadow: 1px 1px 0px #E8E1DA;
-	box-shadow:  1px 1px 0px #E8E1DA;
+  padding: 5px;
+  font-size: 15px;
+  text-shadow: 0px 1px 0px #fff;
+  outline: none;
+  background: -webkit-gradient(linear, left top, left bottom,
+    from(#E8E1DA), to(#ffffff));
+  background: -moz-linear-gradient(top,  #E8E1DA,  #ffffff);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #717171;
+  -webkit-box-shadow: 1px 1px 0px #E8E1DA;
+  -moz-box-shadow: 1px 1px 0px #E8E1DA;
+  box-shadow:  1px 1px 0px #E8E1DA;
 }
 
 table {
@@ -28,18 +28,18 @@ table {
 }
 
 th{
-	padding: 10px;
-	font-size: 125%;
-	border: 1px solid #512E2E;
+  padding: 10px;
+  font-size: 125%;
+  border: 1px solid #512E2E;
 }
 
 td{
-	padding: 5px;
-	border-right: 1px solid #512E2E;
+  padding: 5px;
+  border-right: 1px solid #512E2E;
 }
 
 th,tr.odd{
-	background-color: #E8E1DA;
+  background-color: #E8E1DA;
 }
 
 tr.even{
@@ -47,7 +47,7 @@ tr.even{
 }
 
 .hide{
-	display: none;
+  display: none;
 }
 
 /* Error, Warning divs - Starts */
@@ -58,13 +58,13 @@ tr.even{
     background-repeat: no-repeat;
     background-position: 10px center;
     -webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	border: 1px solid #717171;
-	-webkit-box-shadow: 1px 1px 0px #E8E1DA;
-	-moz-box-shadow: 1px 1px 0px #E8E1DA;
-	box-shadow:  1px 1px 0px #E8E1DA;
-	width: 50%;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #717171;
+  -webkit-box-shadow: 1px 1px 0px #E8E1DA;
+  -moz-box-shadow: 1px 1px 0px #E8E1DA;
+  box-shadow:  1px 1px 0px #E8E1DA;
+  width: 50%;
 
 }
 .info {
@@ -108,7 +108,7 @@ tr.even{
 }
 
 .pagination a{
-	color:#512E2E;
+  color:#512E2E;
     display: block;
     float: left;
     padding: 0.2em 0.5em;
@@ -118,8 +118,8 @@ tr.even{
 }
 
 .pagination span.current{
-	float: left;
-	padding: 0.2em 0.5em;
+  float: left;
+  padding: 0.2em 0.5em;
     margin-right: 0.1em;
     border: 1px solid #E8E1DA;
     font-weight: bold;
@@ -128,8 +128,8 @@ tr.even{
 }
 
 .pagination span.gap{
-	float: left;
-	padding: 0.2em 0.5em;
+  float: left;
+  padding: 0.2em 0.5em;
     margin-right: 0.1em;
     border: 1px solid #E8E1DA;
     font-weight: bold;
@@ -167,16 +167,16 @@ tr.even{
 }
 
 .top_bar{
-    background: url("images/ui-bg_diagonals-medium_brown.png") repeat scroll 50% bottom #FEF1EC; 
-    height: 90px; 
+    background: url("images/ui-bg_diagonals-medium_brown.png") repeat scroll 50% bottom #FEF1EC;
+    height: 90px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
     border: 1px solid #717171;
     -webkit-box-shadow: 1px 1px 0px #E8E1DA;
     -moz-box-shadow: 1px 1px 0px #E8E1DA;
-    box-shadow:  1px 1px 0px #E8E1DA; 
-    margin-bottom: 10px; 
+    box-shadow:  1px 1px 0px #E8E1DA;
+    margin-bottom: 10px;
 }
 
 .top_bar .thought_works{

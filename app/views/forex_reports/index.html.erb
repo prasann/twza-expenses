@@ -1,52 +1,52 @@
 <h1> Forex Reports </h1>
 <div class='required'> * - Mandatory fields </div>
 <form id="forex_report" action="/forex_reports/search" method="get">
-    <%= label_tag 'Reports from *', nil, :class => 'required'%>:
-	<%= text_field_tag :reports_from,params[:reports_from],:class => 'date_picker'%>
-	<%= label_tag 'till *', nil, :class => 'required'%>:
-	<%= text_field_tag :reports_till,params[:reports_till],:class => 'date_picker'%>
-	<%= label_tag 'Currency'%>:
-	<%= text_field_tag :forex_payment_currency,params[:forex_payment_currency]%>
-	<%= label_tag 'Vendor Name'%>:
-	<%= text_field_tag :forex_payment_vendor_name ,params[:forex_payment_vendor_name]%>
-	<%= label_tag 'Office'%>:
-	<%= text_field_tag :forex_payment_office ,params[:forex_payment_office]%>
-	<%= submit_tag "Search", :name => nil%>
+  <%= label_tag 'Reports from *', nil, :class => 'required'%>:
+  <%= text_field_tag :reports_from, params[:reports_from],:class => 'date_picker' %>
+  <%= label_tag 'till *', nil, :class => 'required'%>:
+  <%= text_field_tag :reports_till, params[:reports_till],:class => 'date_picker' %>
+  <%= label_tag 'Currency' %>:
+  <%= text_field_tag :forex_payment_currency, params[:forex_payment_currency] %>
+  <%= label_tag 'Vendor Name'%>:
+  <%= text_field_tag :forex_payment_vendor_name, params[:forex_payment_vendor_name] %>
+  <%= label_tag 'Office' %>:
+  <%= text_field_tag :forex_payment_office, params[:forex_payment_office] %>
+  <%= submit_tag "Search", :name => nil %>
 </form>
 
-<%unless @forex_payments.nil?%>
-	<div>
-	  <%= paginate @forex_payments%>
-	</div>
-	<div class='right_align'>
-		<%= link_to image_tag("excel.png") + "Export results as .xls" , url_for(params.merge!({format: 'xls', action: 'export'}))%>
-	</div>
-	<table id="forex_report_content">
-	  <tr>
-	    <th>Id</th>
-	    <th>Name</th>
-	    <th>Issue Date</th>
-	    <th>Amount</th>
-	    <th>Currency</th>
-	    <th>Place</th>
-	    <th>Vendor Name</th>
-	  </tr>
-	  <% @forex_payments.each do |payment| %>
-	    <tr class="<%= cycle("even", "odd") %>">
-	      <td><%= payment.emp_id %></td>
-	      <td><%= payment.emp_name %></td>
-	      <td><%= payment.issue_date%></td>
-	      <td><%= payment.amount%></td>
-	      <td><%= payment.currency %></td>
-	      <td><%= payment.place%></td>
-	      <td><%= payment.vendor_name%></td>
-	    </tr>
-	  <% end %>
-	</table>
+<% unless @forex_payments.nil? %>
+  <div>
+    <%= paginate @forex_payments %>
+  </div>
+  <div class='right_align'>
+    <%= link_to image_tag("excel.png") + "Export results as .xls" , url_for(params.merge!({format: 'xls', action: 'export'}))%>
+  </div>
+  <table id="forex_report_content">
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Issue Date</th>
+      <th>Amount</th>
+      <th>Currency</th>
+      <th>Place</th>
+      <th>Vendor Name</th>
+    </tr>
+    <% @forex_payments.each do |payment| %>
+      <tr class="<%= cycle("even", "odd") %>">
+        <td><%= payment.emp_id %></td>
+        <td><%= payment.emp_name %></td>
+        <td><%= payment.issue_date%></td>
+        <td><%= payment.amount%></td>
+        <td><%= payment.currency %></td>
+        <td><%= payment.place%></td>
+        <td><%= payment.vendor_name%></td>
+      </tr>
+    <% end %>
+  </table>
 <% end %>
 
 <script>
-      $(document).ready(function(){
-        populateForexFields();
-      });
- </script>
+  $(document).ready(function(){
+    populateForexFields();
+  });
+</script>

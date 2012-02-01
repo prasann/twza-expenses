@@ -1,3 +1,3 @@
 class ReportsController < ApplicationController
-	layout 'tabs'
+  layout 'tabs'
 end

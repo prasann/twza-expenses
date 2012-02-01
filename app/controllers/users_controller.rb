@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_filter :logged_in?	
+  skip_filter :logged_in?
 
   def new
     @user = User.new
@@ -11,5 +11,4 @@ class UsersController < ApplicationController
       redirect_to root_url
     end
   end
-
 end

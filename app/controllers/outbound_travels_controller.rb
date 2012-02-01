@@ -97,5 +97,5 @@ class OutboundTravelsController < ApplicationController
     args.each do |field_name|
       @fields[field_name] = @outbound_travels.collect{|x| x[field_name]}.uniq.delete_if{|x| x.nil?}
     end
-  end  
+  end
 end

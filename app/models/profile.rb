@@ -1,5 +1,5 @@
 class Profile < ActiveRecord::Base
- 
+
   default_scope select("common_name, employee_id, email_id, name, surname")
 
   def to_special_s
@@ -17,6 +17,6 @@ class Profile < ActiveRecord::Base
   def before_destroy
     raise ActiveRecord::ReadOnlyRecord
   end
-  
+
 
 end

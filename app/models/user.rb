@@ -42,5 +42,5 @@ class User
   def superadmin?
     self.role == 'superadmin'
   end
-  
+
 end

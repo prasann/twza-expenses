@@ -1,9 +1,8 @@
 require 'spec_helper'
 
 describe 'expense' do
-  
   before(:each) do
-	Expense.delete_all
+    Expense.delete_all
   end
 
   it 'should be able to fetch reimbursable expenses for an employee between dates' do
@@ -26,4 +25,3 @@ describe 'expense' do
     actual_result.count.should == 1
   end
 end
-

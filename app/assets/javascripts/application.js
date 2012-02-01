@@ -20,23 +20,23 @@ $(document).ready(function(){
       },
       select: function(event, ui){
         if(ui.index == 0){ window.location = "/outbound_travels#outbound_travels";}
-        if(ui.index == 1){ window.location = "/forex_payments#forex_payments";} 
-        if(ui.index == 2){ window.location = "/expense_settlement#expense_settlement";} 
-        if(ui.index == 3){ window.location = "/expense_reimbursement#expense_reimbursement";} 
-        if(ui.index == 4){ window.location = "/reports#reports";} 
+        if(ui.index == 1){ window.location = "/forex_payments#forex_payments";}
+        if(ui.index == 2){ window.location = "/expense_settlement#expense_settlement";}
+        if(ui.index == 3){ window.location = "/expense_reimbursement#expense_reimbursement";}
+        if(ui.index == 4){ window.location = "/reports#reports";}
       }
     });
 
-    $('.edit_date_picker').editable(function(value, settings) {   	
+    $('.edit_date_picker').editable(function(value, settings) {
       saveValue(value,settings,this)
     }, {
       type    : 'datepicker'
     });
 
-    $('.edit').editable(function(value, settings) {   	
+    $('.edit').editable(function(value, settings) {
       saveValue(value,settings,this)
     }, {
-      type    : 'text',
+      type   : 'text',
       submit : 'Save',
       cancel : 'Cancel'
     });
@@ -47,7 +47,7 @@ $(document).ready(function(){
 
     function saveValue(value,settings,_this){
       var obj_id = $(_this).parent().attr('id');
-      var attr_name = $(_this).attr('name');  
+      var attr_name = $(_this).attr('name');
       $.ajax({
         type:'POST',
         url:'/outbound_travels/update_field',
@@ -57,5 +57,5 @@ $(document).ready(function(){
         }
       })
     }
-  });  
+  });
 });

@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html>
-	<head>
-	  <title>Expense Reimbursement</title>
-	  <%= stylesheet_link_tag    "style" %>
-	  <%= stylesheet_link_tag    "jquery-ui-custom" %>
-	  <%= javascript_include_tag "application" %>
-	  <%= csrf_meta_tags %>
-	</head>
-	<body>
-	<%= render :partial => '/layouts/top_bar' %>
-		<div class="content">	
-			<div id="menu">
-				<ul class="tabs">
-					<li><a href="#outbound_travels" title="Outbound Travels">Outbound Travels</a></li>
-				 	<li><a href="#forex_payments" title="Forex Payments">Forex Payments</a></li>
-				 	<li><a href="#expense_settlement" title="Expense Settlement">Travel Settlement</a></li>
-				 	<li><a href="#expense_reimbursement" title="Expense Reimbursement">Non-travel Reimbursement</a></li>
-				 	<li><a href="#reports" title="Reports">Uploads & Reports</a></li>
-				</ul>
-			<%= yield %>
-			</div>
-		</div>
-	</body>
+  <head>
+    <title>Expense Reimbursement</title>
+    <%= stylesheet_link_tag "style" %>
+    <%= stylesheet_link_tag "jquery-ui-custom" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+  <%= render :partial => '/layouts/top_bar' %>
+    <div class="content">
+      <div id="menu">
+        <ul class="tabs">
+          <li><a href="#outbound_travels" title="Outbound Travels">Outbound Travels</a></li>
+           <li><a href="#forex_payments" title="Forex Payments">Forex Payments</a></li>
+           <li><a href="#expense_settlement" title="Expense Settlement">Travel Settlement</a></li>
+           <li><a href="#expense_reimbursement" title="Expense Reimbursement">Non-travel Reimbursement</a></li>
+           <li><a href="#reports" title="Reports">Uploads & Reports</a></li>
+        </ul>
+        <%= yield %>
+      </div>
+    </div>
+  </body>
 </html>

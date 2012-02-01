@@ -26,11 +26,11 @@ role :app, "10.10.5.34"                          # This may be the same as your 
 # If you are using Passenger mod_rails uncomment this:
 
  namespace :deploy do
-   task :start do 
+   task :start do
      environment = ENV['env'] || 'uat'
      run "cd #{current_path}; bin/passenger start -d -e#{environment}"
    end
-   task :stop do 
+   task :stop do
      run "cd #{current_path}; bin/passenger stop"
    end
    task :restart, :roles => :app, :except => { :no_release => true } do
@@ -47,4 +47,4 @@ end
 
 after 'deploy:update_code', 'bundler:install'
 
- 
+

@@ -14,7 +14,7 @@ class Expense
   end
 
   def self.create_employee_id_criteria(employee_id)
-  	Expense.where(empl_id: 'EMP' + employee_id.to_s)
+    Expense.where(empl_id: 'EMP' + employee_id.to_s)
   end
 
   def get_employee_id

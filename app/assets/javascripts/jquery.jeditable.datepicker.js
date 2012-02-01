@@ -29,7 +29,7 @@ $.editable.addInputType( 'datepicker', {
       form.append( input );
       return input;
     },
-    
+
     /* attach jquery.ui.datepicker to the input element */
     plugin: function( settings, original ) {
       var form = this,
@@ -45,7 +45,7 @@ $.editable.addInputType( 'datepicker', {
           // submit the form and close the input field
           form.submit();
         },
-        
+
         onClose: function() {
           setTimeout( function() {
             if ( !input.is( ':focus' ) ) {
@@ -59,14 +59,14 @@ $.editable.addInputType( 'datepicker', {
               // so lets submit the form and close the input field
               form.submit();
             }
-            
+
             // the delay is necessary; calendar must be already
             // closed for the above :focus checking to work properly;
             // without a delay the form is submitted in all scenarios, which is wrong
           }, 150 );
         }
       };
-    
+
       if (settings.datepicker) {
         jQuery.extend(datepicker, settings.datepicker);
       }

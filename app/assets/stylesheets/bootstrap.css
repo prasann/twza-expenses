@@ -9,7 +9,7 @@
  * Date: Sun Dec 25 20:18:31 PST 2011
  */
 /* Reset.less
- * Props to Eric Meyer (meyerweb.com) for his CSS reset file. We're using an adapted version here	that cuts out some of the reset HTML elements we will never need here (i.e., dfn, samp, etc).
+ * Props to Eric Meyer (meyerweb.com) for his CSS reset file. We're using an adapted version here  that cuts out some of the reset HTML elements we will never need here (i.e., dfn, samp, etc).
  * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 html, body {
   margin: 0;
@@ -2469,15 +2469,15 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
   box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
 }
 .pagination{
-	padding: 10px;
-	/*font-size: 125%;*/
+  padding: 10px;
+  /*font-size: 125%;*/
 }
 .pagination.page{
-	
+
 }
 .pagination.gap{
-	
+
 }
 .pagination.current{
-	
+
 }

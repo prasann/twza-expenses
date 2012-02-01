@@ -14,7 +14,7 @@ describe ForexReportsController do
       forex_payments_3 = ForexPayment.create!(valid_attributes.merge!(vendor_name: 'B', currency: 'EUR',issue_date: Date.parse('31-12-2011')))
 
       get :search, :forex_payment_currency => 'USD', :reports_from => Date.parse('1-12-2011'), :reports_till => Date.parse('31-12-2011'), :forex_payment_vendor_name => 'A'
-      assigns(:forex_payments).should eq([forex_payments_1])	
+      assigns(:forex_payments).should eq([forex_payments_1])
 
       get :search, :forex_payment_currency => 'USD', :reports_from => Date.parse('1-12-2011'), :reports_till => Date.parse('30-12-2011'), :forex_payment_vendor_name => 'A'
       assigns(:forex_payments).should eq([])

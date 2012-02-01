@@ -15,7 +15,7 @@ class TravelDataImporter
                               comments: extractor.call("M"), actions: extractor.call("N"))
       rescue => e
         puts "Error while processing the record:
-           # Record No: #{extractor.call('A') }  
+           # Record No: #{extractor.call('A') }
            # Employee Name: #{extractor.call('C') }
            # Travelling To: #{extractor.call('D')}
            # Date of Travel: #{extractor.call('G')} "

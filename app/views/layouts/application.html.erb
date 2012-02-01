@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html>
-	<head>
-	  <title>Expense Reimbursement</title>
-	  <%= stylesheet_link_tag    "style" %>
-	  <%= stylesheet_link_tag    "jquery-ui-custom" %>
-	  <%= javascript_include_tag "application" %>
-	  <%= csrf_meta_tags %>
-	</head>
-	<body>
-		<%= render :partial => '/layouts/top_bar' %>
-		<% flash.each do |name, msg| %>
-  			<%= content_tag :div, msg, :class => "#{name}" %>
-		<% end %>
-		<div class="content">
-			<div id="panel" title="out">
-			</div>
-			<%= yield %>
-		</div>
-	</body>
+  <head>
+    <title>Expense Reimbursement</title>
+    <%= stylesheet_link_tag    "style" %>
+    <%= stylesheet_link_tag    "jquery-ui-custom" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <%= render :partial => '/layouts/top_bar' %>
+    <% flash.each do |name, msg| %>
+      <%= content_tag :div, msg, :class => "#{name}" %>
+    <% end %>
+    <div class="content">
+      <div id="panel" title="out"></div>
+      <%= yield %>
+    </div>
+  </body>
 </html>

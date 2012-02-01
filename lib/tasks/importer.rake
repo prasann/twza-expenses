@@ -21,13 +21,13 @@ namespace :data_import do
 
   desc "Cleans and recreates travel details"
   task :travel => :environment do
-   OutboundTravel.delete_all
-   TravelDataImporter.new.import('data/Inbound-Outbound Travel.xls')
+    OutboundTravel.delete_all
+    TravelDataImporter.new.import('data/Inbound-Outbound Travel.xls')
   end
 
   desc "Cleans and recreates bank details"
   task :bank => :environment do
-  	BankDetail.delete_all
-	BankDetailsImporter.new.import('data/SCB_nos.xlsx')
+    BankDetail.delete_all
+    BankDetailsImporter.new.import('data/SCB_nos.xlsx')
   end
 end

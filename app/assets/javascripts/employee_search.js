@@ -1,6 +1,6 @@
 $(document).ready(function(){
   $('.emp_name').autocomplete({
-    source: '/profiles/search_by_name', 
+    source: '/profiles/search_by_name',
     minLength: 2,
     select: function(event, ui) {
       $('.no_emp').hide();
