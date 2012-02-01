@@ -1,5 +1,4 @@
 require 'mongoid'
-require "#{Rails.root}/lib/helpers/excel_data_exporter"
 
 class ForexReportsController < ApplicationController
   include ExcelDataExporter

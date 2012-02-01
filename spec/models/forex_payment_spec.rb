@@ -19,9 +19,9 @@ describe 'forex_payment' do
     forex_5 = ForexPayment.create(valid_attributes.merge!({:emp_id => '121', :travel_date => Date.new(y=2011, m=12, d=14)}))
 
     valid_forex_payments = ForexPayment.fetch_for '123', Date.new(y=2011, m=12, d=13), Date.new(y=2011, m=12, d=17),[]
-    valid_forex_payments.count.should ==2
-    valid_forex_payments.should include forex_2
-    valid_forex_payments.should include forex_3
+    valid_forex_payments.count.should == 2
+    valid_forex_payments.should include(forex_2)
+    valid_forex_payments.should include(forex_3)
   end
 
   it "should not save without the presence of :emp_id, :emp_name, :amount, :currency, :travel_date, :office, :inr" do

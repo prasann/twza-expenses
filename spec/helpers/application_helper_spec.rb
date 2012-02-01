@@ -2,14 +2,6 @@ require 'spec_helper'
 require 'date'
 
 describe ApplicationHelper do
-  describe "format date" do
-    it "should format date properly" do
-      date = DateTime.parse('2011-10-01')
-      actual_formatted_date = date_fmt(date)
-      actual_formatted_date.should eq '01-Oct-2011'
-    end
-  end
-
   describe "format decimal numbers" do
     it "should format decimal number to two decimal places" do
       format_two_decimal_places(5678.35660).should == 5678.36
@@ -39,18 +31,4 @@ describe ApplicationHelper do
       calculate_stay_duration(outbound_travel).should == 6
     end
   end
-
-  describe "#date_from_str" do
-    it "should return a string equiv given a valid date" do
-      date = Date.new(2012,2,25)
-      date_from_str('25/2/2012').should == date
-    end
-
-    it "should return nil for an invalid date" do
-      invalid_date = '25/22/2012'
-      Date.should_receive(:parse).with(invalid_date).and_raise(RuntimeError)
-      date_from_str(invalid_date).should be nil
-    end
-  end
-
 end

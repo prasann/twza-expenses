@@ -1,7 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe ApplicationController do
-
   describe "Application Cache control" do
     controller do
       def index
@@ -15,7 +14,5 @@ describe ApplicationController do
       response.headers["Pragma"].should == "no-cache"
       response.headers["Expires"].should == "Fri, 01 Jan 1990 00:00:00 GMT"
     end
-
   end
-
 end

@@ -1,5 +1,4 @@
 require 'csv'
-require "#{Rails.root}/lib/helpers/excel_data_exporter"
 
 class OutboundTravelsController < ApplicationController
   include ExcelDataExporter

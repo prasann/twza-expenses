@@ -12,7 +12,7 @@ class EmployeeMailer < ActionMailer::Base
     @expense_report = expense_report
     @profile = @expense_report.profile
     travel = @expense_report.outbound_travel
-    subject = EXPENSE_SETTLEMENT_SUBJECT.sub("$place", travel.place).sub('$start_date', date_fmt(travel.departure_date))
+    subject = EXPENSE_SETTLEMENT_SUBJECT.sub("$place", travel.place).sub('$start_date', DateHelper.date_fmt(travel.departure_date))
 
     mail(:to => @expense_report.employee_email, :subject => subject, :content_type => "text/html") do |format|
       format.html { render :action => 'expense_settlement' }

@@ -36,8 +36,8 @@
     <tr class="<%= cycle("even", "odd") %>">
       <td><%= payment.emp_id %></td>
       <td><%= payment.emp_name %></td>
-      <td><%= date_fmt(payment.issue_date)%></td>
-      <td><%= date_fmt(payment.travel_date)%></td>
+      <td><%= DateHelper.date_fmt(payment.issue_date)%></td>
+      <td><%= DateHelper.date_fmt(payment.travel_date)%></td>
       <td><%= payment.amount%></td>
       <td><%= payment.currency %></td>
       <td><%= payment.place%></td>

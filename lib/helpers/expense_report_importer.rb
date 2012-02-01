@@ -1,7 +1,6 @@
 require 'roo'
 require 'csv'
 require 'mongoid'
-require Rails.root.join("app/models/expense")
 
 class ExpenseReportImporter
   def self.load
@@ -12,7 +11,7 @@ class ExpenseReportImporter
   end
 
   def self.load_expense(excelxfile)
-    file_name= excelxfile.split("/")[1]
+    file_name = excelxfile.split("/")[1]
 
     if (ExpenseReportImporter.file_exists?(file_name))
       return false

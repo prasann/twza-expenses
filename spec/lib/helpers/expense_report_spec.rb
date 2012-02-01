@@ -1,6 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require Rails.root.join("lib/helpers/expense_report_importer")
-require Rails.root.join("app/models/expense")
+require 'spec_helper'
 
 describe "expense_report" do
   it "should convert header names to keys" do

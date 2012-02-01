@@ -24,7 +24,7 @@ class ConsolidatedExpensesController < ApplicationController
     respond_to do |format|
       format.xls { send_data reimbursable_expenses.to_xls(:headers => HEADERS,
                                                           :columns => [:empl_id, :empl_name, :expense_report_ids, :bank_account_no, :reimbursable_amount]),
-                   :filename => "BankInstruction_#{date_fmt(Date.today)}.xls"
+                   :filename => "BankInstruction_#{DateHelper.date_fmt(Date.today)}.xls"
                  }
     end
   end

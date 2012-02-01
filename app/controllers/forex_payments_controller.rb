@@ -1,5 +1,4 @@
 require 'csv'
-require "#{Rails.root}/lib/helpers/excel_data_exporter"
 
 class ForexPaymentsController < ApplicationController
   include ExcelDataExporter
@@ -12,7 +11,7 @@ class ForexPaymentsController < ApplicationController
   def index
     default_per_page = params[:per_page] || 20
     criteria = params[:empl_id] ? ExpenseSettlement.for_empl_id(params[:emp_id]) : ExpenseSettlement
-    @forex_ids_with_settlement = criteria.collect(&:forex_payments)
+    @forex_ids_with_settlement = criteria.all.collect(&:forex_payments)
     @forex_payments = ForexPayment.desc(:travel_date).page(params[:page]).per(default_per_page)
     render :layout => 'tabs'
   end

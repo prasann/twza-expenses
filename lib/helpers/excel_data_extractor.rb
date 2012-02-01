@@ -1,7 +1,6 @@
 require 'roo'
 
 module ExcelDataExtractor
-
   EXCEL_HANDLERS = {"xls" => Excel, "xlsx" => Excelx}
 
   def read_from_excel(file_name, sheet_id, &callback)
@@ -16,8 +15,7 @@ module ExcelDataExtractor
   end
 
   def handler(file_name)
-    extension= file_name.split(".").last
+    extension = file_name.split(".").last
     EXCEL_HANDLERS[extension].new(file_name)
   end
-
 end

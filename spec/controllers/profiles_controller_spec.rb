@@ -1,7 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe ProfilesController do
-
   it "should fetch the profile for the given name using like" do
     profile = Profile.new
     profiles = [profile]
@@ -23,5 +22,4 @@ describe ProfilesController do
     response.should be_success
     response.body.should == "[\"test - 1234\"]"
   end
-
 end
