@@ -6,7 +6,7 @@ gem 'mongoid'
 gem 'bson_ext'
 gem 'roo'
 gem 'kaminari'
-gem 'mysql'   # TODO: Move to mysql2
+gem 'mysql2', '0.3.10'
 gem 'premailer-rails3'
 gem 'to_xls'
 gem 'bcrypt-ruby'

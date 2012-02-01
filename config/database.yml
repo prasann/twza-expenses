@@ -1,19 +1,19 @@
 development:
-  adapter: mysql
+  adapter: mysql2
   database: rampup_development
   username: root
   host: localhost
   port: 3306
 
 test:
-  adapter: mysql
+  adapter: mysql2
   database: rampup_test
   username: root
   host: localhost
   port: 3306
 
 uat:
-  adapter: mysql
+  adapter: mysql2
   database: rampup_production
   username: root
   password: PASSWORD
