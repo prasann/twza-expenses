@@ -11,7 +11,7 @@ describe ForexReportsController do
     it 'should search forex payments for given params' do
       forex_payments_1 = ForexPayment.create!(valid_attributes.merge!(vendor_name: 'A', currency: 'USD', issue_date: Date.parse('31-12-2011')))
       forex_payments_2 = ForexPayment.create!(valid_attributes.merge!(vendor_name: 'B', currency: 'USD', issue_date: Date.parse('31-12-2011')))
-      forex_payments_3 = ForexPayment.create!(valid_attributes.merge!(vendor_name: 'B', currency: 'EUR',issue_date: Date.parse('31-12-2011')))
+      forex_payments_3 = ForexPayment.create!(valid_attributes.merge!(vendor_name: 'B', currency: 'EUR', issue_date: Date.parse('31-12-2011')))
 
       get :search, :forex_payment_currency => 'USD', :reports_from => Date.parse('1-12-2011'), :reports_till => Date.parse('31-12-2011'), :forex_payment_vendor_name => 'A'
       assigns(:forex_payments).should eq([forex_payments_1])

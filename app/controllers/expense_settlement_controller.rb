@@ -26,10 +26,10 @@ class ExpenseSettlementController < ApplicationController
   def edit
     settlement_from_db = ExpenseSettlement.find(params[:id])
     settlement_from_db.populate_instance_data
-    @expenses_from_date = Date.parse(settlement_from_db.expense_from)
-    @expenses_to_date = Date.parse(settlement_from_db.expense_to)
-    @forex_from_date = Date.parse(settlement_from_db.forex_from)
-    @forex_to_date = Date.parse(settlement_from_db.forex_to)
+    @expenses_from_date = date_from_str(settlement_from_db.expense_from)
+    @expenses_to_date = date_from_str(settlement_from_db.expense_to)
+    @forex_from_date = date_from_str(settlement_from_db.forex_from)
+    @forex_to_date = date_from_str(settlement_from_db.forex_to)
     create_settlement_report_from_dates(settlement_from_db.outbound_travel)
     @expense_report["id"] = settlement_from_db.id.to_s
     render 'load_by_travel'
@@ -94,10 +94,10 @@ class ExpenseSettlementController < ApplicationController
   end
 
   def padded_dates(travel)
-    @expenses_from_date = params[:expense_from] ? Date.parse(params[:expense_from]) : travel.departure_date - EXPENSE_DATES_PADDED_BY
-    @expenses_to_date = params[:expense_to] ? Date.parse(params[:expense_to]) : (travel.return_date ? (travel.return_date + EXPENSE_DATES_PADDED_BY) : nil)
-    @forex_from_date = params[:forex_from] ? Date.parse(params[:forex_from]) : travel.departure_date - FOREX_PAYMENT_DATES_PADDED_BY
-    @forex_to_date = params[:forex_to] ? Date.parse(params[:forex_to]) : travel.return_date
+    @expenses_from_date = params[:expense_from] ? date_from_str(params[:expense_from]) : travel.departure_date - EXPENSE_DATES_PADDED_BY
+    @expenses_to_date = params[:expense_to] ? date_from_str(params[:expense_to]) : (travel.return_date ? (travel.return_date + EXPENSE_DATES_PADDED_BY) : nil)
+    @forex_from_date = params[:forex_from] ? date_from_str(params[:forex_from]) : travel.departure_date - FOREX_PAYMENT_DATES_PADDED_BY
+    @forex_to_date = params[:forex_to] ? date_from_str(params[:forex_to]) : travel.return_date
   end
 
   def create_settlement_report_from_dates(travel)

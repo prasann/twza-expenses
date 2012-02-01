@@ -1,12 +1,15 @@
 module ApplicationHelper
   def date_fmt(date)
-    if !date.nil?
-      return date.strftime("%d-%b-%Y");
-    end
+    date.strftime("%d-%b-%Y") if !date.nil?
+  end
+
+  def date_from_str(date_str)
+    Date.parse(date_str) rescue nil
   end
 
   def format_two_decimal_places(number)
-    (number*100).round.to_f/100
+    # TODO: Cant we do this with the number_with_precision?
+    (number * 100).round.to_f / 100
   end
 
   def flash_message
@@ -23,21 +26,12 @@ module ApplicationHelper
   end
 
   def calculate_stay_duration(outbound_travel)
-    if(outbound_travel.return_date.nil?)
+    if outbound_travel.return_date.nil?
       date = date_from_str(outbound_travel.expected_return_date)
       return (date - outbound_travel.departure_date).to_i unless date.nil?
       return date
     else
       return (outbound_travel.return_date- outbound_travel.departure_date).to_i
     end
-  end
-
-  def date_from_str(date_str)
-    begin
-      date = Date.parse(date_str)
-    rescue
-      date = nil
-    end
-    return date
   end
 end

@@ -37,7 +37,7 @@
       <% expenses.each do |expense| %>
           <tr class="<%= cycle("even", "odd") %>">
             <td><%= expense.expense_type %></td>
-            <td><%= date_fmt(Date.parse(expense.expense_date)) %></td>
+            <td><%= date_fmt(date_from_str(expense.expense_date)) %></td>
             <td><%= modified_expense = @expense_reimbursement.expenses.select{|e| e['expense_id']==expense.id.to_s}
                     modified_expense.first["modified_amount"] %></td>
             <td>INR</td>

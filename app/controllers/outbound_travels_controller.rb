@@ -63,18 +63,19 @@ class OutboundTravelsController < ApplicationController
   end
 
   def export
-    export_xls(OutboundTravel,HEADERS,OutboundTravel.all)
+    export_xls(OutboundTravel, HEADERS, OutboundTravel.all)
   end
 
   def data_to_suggest
     @outbound_travels = OutboundTravel.all
-    create_hash_field('place','payroll_effect','project');
+    create_hash_field('place', 'payroll_effect', 'project');
     render :text => @fields.to_json
   end
 
   def update_field
     @outbound_travel = OutboundTravel.find(params[:id])
-    @outbound_travel.update_attributes(params[:name]=>params[:value])
+    # TODO: What if this fails?
+    @outbound_travel.update_attributes(params[:name] => params[:value])
     render :nothing => true
   end
 
@@ -85,7 +86,6 @@ class OutboundTravelsController < ApplicationController
   end
 
   def travels_without_return_date
-    # TODO: What logic is this?
     @outbound_travels = OutboundTravel.where(:return_date => nil).page(params[:page])
     render :index, :layout => 'tabs'
   end

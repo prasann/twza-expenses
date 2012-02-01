@@ -8,7 +8,7 @@ module ExcelDataExporter
                                  :headers => headers,
                                  :columns => declared_fields(model)
                              ),
-                              :filename => model.to_s+'_'+Time.now.strftime(DATE_FORMAT) + FILE_EXTENSION}
+                              :filename => model.to_s + '_' + Date.today.strftime(DATE_FORMAT) + FILE_EXTENSION}
     end
   end
 
