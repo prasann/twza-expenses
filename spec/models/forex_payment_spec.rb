@@ -5,6 +5,7 @@ describe 'forex_payment' do
     ForexPayment.delete_all
   end
 
+  # TODO: Use factory_girl
   def valid_attributes
     {:emp_id => '123', :emp_name => 'test', :amount => 120.25, :currency => 'INR', :travel_date => Date.today,
      :office => 'Chennai', :inr => 5001.50}
