@@ -1,7 +1,6 @@
 require "#{Rails.root}/app/helpers/application_helper"
 
 class EmployeeMailer < ActionMailer::Base
-  # TODO: Not sure why/whether we need the application helper here any more
   helper ApplicationHelper
 
   EXPENSE_SETTLEMENT_SUBJECT = "Expense settlement for your travel to $place dated $start_date"
@@ -26,7 +25,7 @@ class EmployeeMailer < ActionMailer::Base
     @all_expenses = @expense_reimbursement.get_expenses_grouped_by_project_code
     @empl_name = @profile.get_full_name
 
-    subject = EXPENSE_REIMBURSEMENT_SUBJECT.sub('$expense_report_id', expense_reimbursement.expense_report_id.to_s)
+    subject = EXPENSE_REIMBURSEMENT_SUBJECT.sub('$expense_report_id', @expense_reimbursement.expense_report_id.to_s)
 
     mail(:to => @expense_reimbursement.employee_email, :subject => subject, :content_type => "text/html") do |format|
       format.html { render :action => 'non_travel_expense_reimbursement' }
