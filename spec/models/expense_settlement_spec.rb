@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'expense_report' do
 
-	it "should consolidate expenses by rpt and currency considering conversion rate" do
+	xit "should consolidate expenses by rpt and currency considering conversion rate" do
 		persisted_expenses  = [
 								Expense.new(expense_rpt_id: '123',original_currency: 'EUR', original_cost:'200', cost_in_home_currency:'200'),
 								Expense.new(expense_rpt_id: '122',original_currency: 'EUR', original_cost:'100', cost_in_home_currency:'100'),
@@ -31,7 +31,7 @@ describe 'expense_report' do
 		
 	end
 
-	it "should consolidate expenses by rpt and currency considering conversion rate from sharon sheet if no forex is available" do
+	xit "should consolidate expenses by rpt and currency considering conversion rate from sharon sheet if no forex is available" do
 		persisted_expenses  = [
 								Expense.new(expense_rpt_id: '123',original_currency: 'EUR', original_cost:'200', cost_in_home_currency:'200',currency_conversion_rate:'1'),
 								Expense.new(expense_rpt_id: '122',original_currency: 'EUR', original_cost:'100', cost_in_home_currency:'100',currency_conversion_rate:'1'),

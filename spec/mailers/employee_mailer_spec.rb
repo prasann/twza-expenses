@@ -30,6 +30,7 @@ describe EmployeeMailer do
       expense['conversion_rate'] = @expense[:conversion_rate]
       expense['local_currency_amount'] = 52300
       @expense_report.populate_instance_data
+      @expense_report.stub(:profile).and_return(@profile)
       @expense_report.stub(:get_consolidated_expenses).and_return([expense])
       @expense_report.stub(:get_forex_payments).and_return([@forex])
       @expense_report.stub(:get_conversion_rate).and_return(@expense[:conversion_rate])
@@ -37,12 +38,12 @@ describe EmployeeMailer do
     end
 
     it "should render successfully" do
-      lambda { EmployeeMailer.expense_settlement(@profile, @expense_report).deliver }.should_not raise_error
+      lambda { EmployeeMailer.expense_settlement(@expense_report).deliver }.should_not raise_error
     end
 
     describe "rendered without error" do
       before(:each) do
-        @email = EmployeeMailer.expense_settlement(@profile, @expense_report)
+        @email = EmployeeMailer.expense_settlement(@expense_report)
       end
 
       it "should have the e-mail components properly set" do
@@ -61,7 +62,7 @@ describe EmployeeMailer do
 
       it "should have use employee id and domain to send e-mail if email_id is not available" do
         @profile.stub(:email_id).and_return('')
-        @email = EmployeeMailer.expense_settlement(@profile, @expense_report)
+        @email = EmployeeMailer.expense_settlement(@expense_report)
         @email.to.size.should == 1
         @email.to[0].should == @employee_id.to_s+::Rails.application.config.email_domain
         @email.from.size.should == 1

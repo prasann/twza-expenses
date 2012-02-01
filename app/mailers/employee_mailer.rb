@@ -8,16 +8,12 @@ class EmployeeMailer < ActionMailer::Base
 
   default :from => ::Rails.application.config.email_sender
 
-  def expense_settlement(profile, expense_report)
+  def expense_settlement(expense_report)
     @expense_report = expense_report
-    @profile = profile
-    email_id = profile.email_id
+    @profile = @expense_report.profile
+    email_id = @profile.email_id.blank? ? expense_report.empl_id.to_s : @profile.email_id
     travel = @expense_report.outbound_travel
-    subject = EXPENSE_SETTLEMENT_SUBJECT.sub("$place",travel.place)
-                                          .sub('$start_date',travel.departure_date.strftime("%d-%b-%Y"))
-    if (profile.email_id == nil || profile.email_id.length == 0)
-      email_id = expense_report.empl_id.to_s
-    end
+    subject = EXPENSE_SETTLEMENT_SUBJECT.sub("$place", travel.place).sub('$start_date', travel.departure_date.strftime("%d-%b-%Y"))
 
     mail(:to => email_id + ::Rails.application.config.email_domain, :subject => subject, :content_type => "text/html") do |format|
       format.html { render :action => 'expense_settlement' }
@@ -31,7 +27,7 @@ class EmployeeMailer < ActionMailer::Base
     @empl_name = profile.get_full_name
 
     email_id = profile.email_id
-    subject = EXPENSE_REIMBURSEMENT_SUBJECT.sub('$expense_report_id',expense_reimbursement.expense_report_id.to_s)
+    subject = EXPENSE_REIMBURSEMENT_SUBJECT.sub('$expense_report_id', expense_reimbursement.expense_report_id.to_s)
     if (profile.email_id == nil || profile.email_id.length == 0)
       email_id = expense_reimbursement.empl_id.to_s
     end

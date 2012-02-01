@@ -23,7 +23,7 @@ class ExpenseSettlementController < ApplicationController
 
   def edit
     settlement_from_db = ExpenseSettlement.find(params[:id])
-    settlement_from_db.populate_instance_data()
+    settlement_from_db.populate_instance_data
     @expenses_from_date=Date.parse(settlement_from_db.expense_from)
     @expenses_to_date=Date.parse(settlement_from_db.expense_to)
     @forex_from_date=Date.parse(settlement_from_db.forex_from)
@@ -41,19 +41,11 @@ class ExpenseSettlementController < ApplicationController
 
   def generate_report
     outbound_travel = OutboundTravel.find(params[:travel_id])
-    if (outbound_travel.expense_settlement == nil)
-      outbound_travel.create_expense_settlement()
-    end
-    outbound_travel.expense_settlement.update_attributes(expenses: params[:expenses],
-                                                         forex_payments: params[:forex_payments],
-                                                         cash_handover: params[:cash_handover].to_i,
-                                                         emp_name: params[:emp_name],
-                                                         empl_id: params[:empl_id],
-                                                         status: 'Generated Draft',
-                                                         expense_from: params[:expense_from],
-                                                         expense_to: params[:expense_to],
-                                                         forex_from: params[:forex_from],
-                                                         forex_to: params[:forex_to])
+    outbound_travel.create_expense_settlement if outbound_travel.expense_settlement.nil?
+    #TODO Law of Demeter
+    outbound_travel.expense_settlement.update_attributes({:cash_handover => params[:cash_handover].to_i, :status => 'Generated Draft'}.merge(
+                                                             params.slice(:expenses, :forex_payments, :emp_name, :empl_id, :expense_from, :expense_to, :forex_from, :forex_to).symbolize_keys
+                                                         ))
 
     @expense_report = outbound_travel.expense_settlement
     @expense_report.populate_instance_data
@@ -61,20 +53,16 @@ class ExpenseSettlementController < ApplicationController
 
   def set_processed
     expense_report = ExpenseSettlement.find(params[:id])
-    expense_report.status='Complete'
-    expense_report.save
+    expense_report.complete
     redirect_to outbound_travels_path
   end
 
   def notify
     expense_report = ExpenseSettlement.find(params[:id])
-    expense_report.populate_instance_data
-    profile = Profile.find_by_employee_id(expense_report.empl_id)
-    EmployeeMailer.expense_settlement(profile, expense_report).deliver
-    expense_report.status='Notified Employee'
-    expense_report.save()
-    flash[:success] = "Expense settlement e-mail successfully sent to '"+profile.common_name+"'"
-    redirect_to(:action => :index, :anchor=>'expense_settlement', :empl_id => expense_report.empl_id)
+    expense_report.notify_employee
+    # TODO: What if the save failed?
+    flash[:success] = "Expense settlement e-mail successfully sent to '" + expense_report.profile.common_name + "'"
+    redirect_to(:action => :index, :anchor => 'expense_settlement', :empl_id => expense_report.empl_id)
   end
 
   def upload
@@ -117,10 +105,10 @@ class ExpenseSettlementController < ApplicationController
 
     expenses = Expense.fetch_for_employee_between_dates travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids
     forex_payments = ForexPayment.fetch_for travel.emp_id, @forex_from_date, @forex_to_date, processed_forex_ids
+    @all_currencies = forex_payments.map { |forex_payment| forex_payment.currency }
     @expense_report = {"expenses" => expenses,
                        "forex_payments" => forex_payments,
                        "empl_id" => travel.emp_id,
                        "travel_id" => travel.id.to_s}
-
   end
 end
