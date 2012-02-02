@@ -52,13 +52,25 @@ class ExpenseReimbursement
     email_id + ::Rails.application.config.email_domain
   end
 
+  def close
+    self.status = 'Closed'
+    self.save
+  end
+
+  # TODO: Does this clash with some mongo status of processed?
+  def is_processed?
+    self.status == 'Processed'
+  end
+
+  def is_faulty?
+    self.status == 'Faulty'
+  end
+
   private
   def self.create_bank_reimbursement(reimbursement, mark_as_closed)
     bank_detail = BankDetail.for_empl_id(reimbursement.empl_id).first
-    if (mark_as_closed)
-      reimbursement.status = 'Closed'
-      reimbursement.save
-    end
+    reimbursement.close if mark_as_closed
+
     OpenStruct.new({:empl_id => reimbursement.empl_id,
                     :empl_name => bank_detail.empl_name,
                     :expense_report_ids => reimbursement.expense_report_id,

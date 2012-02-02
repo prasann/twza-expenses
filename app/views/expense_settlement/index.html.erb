@@ -38,7 +38,7 @@
       %>
         <tr class="<%= cycle("even", "odd") %>">
           <td>
-            <% if expense_settlement.status == 'Complete' %>
+            <% if expense_settlement.is_complete? %>
             <%= link_to expense_settlement.empl_id, :action => 'show', :id => expense_settlement.id.to_s %>
             <% else %>
             <%= link_to expense_settlement.empl_id, :action => 'edit', :id => expense_settlement.id.to_s %>
@@ -51,7 +51,7 @@
           <td><%= expense_settlement.status %></td>
           <td><%= DateHelper.date_fmt(expense_settlement.updated_at) %></td>
           <td>
-            <% if expense_settlement.status == 'Notified Employee' %>
+            <% if expense_settlement.is_notified_employee? %>
               <%= button_to 'Mark as Processed', :action => 'set_processed', :id => expense_settlement.id.to_s %>
             <% else %>
               <label>N/A</label>

@@ -41,13 +41,25 @@ class ExpenseSettlement
   def notify_employee
     populate_instance_data
     EmployeeMailer.expense_settlement(self).deliver
-    self.status='Notified Employee'
+    self.status = 'Notified Employee'
     self.save
   end
 
   def complete
-    self.status='Complete'
+    self.status = 'Complete'
     self.save
+  end
+
+  def is_generated_draft?
+    self.status == 'Generated Draft'
+  end
+
+  def is_complete?
+    self.status == 'Complete'
+  end
+
+  def is_notified_employee?
+    self.status == 'Notified Employee'
   end
 
   def populate_instance_data

@@ -27,16 +27,16 @@
       </tr>
       <% @expense_reimbursements.each do |expense_reimbursement| %>
         <tr class="<%= cycle("even", "odd") %>">
-          <% if (expense_reimbursement.status == 'Processed' || expense_reimbursement.status == 'Faulty' ) %>
-            <td><%= link_to expense_reimbursement.expense_report_id, :action=> 'show', :id => expense_reimbursement.id %></td>
+          <% if (expense_reimbursement.is_processed? || expense_reimbursement.is_faulty? ) %>
+            <td><%= link_to expense_reimbursement.expense_report_id, :action => 'show', :id => expense_reimbursement.id %></td>
           <% else %>
-            <td><%= link_to expense_reimbursement.expense_report_id, :action=> 'edit', :id => expense_reimbursement.expense_report_id %></td>
+            <td><%= link_to expense_reimbursement.expense_report_id, :action => 'edit', :id => expense_reimbursement.expense_report_id %></td>
           <% end %>
-          <td><%= expense_reimbursement.empl_id%></td>
-          <td><%= DateHelper.date_fmt(expense_reimbursement.submitted_on)%></td>
-          <td><%= format_two_decimal_places(expense_reimbursement.total_amount)%></td>
-          <td><%= expense_reimbursement.status%></td>
-          <td><%= DateHelper.date_fmt(expense_reimbursement.updated_at)%></td>
+          <td><%= expense_reimbursement.empl_id %></td>
+          <td><%= DateHelper.date_fmt(expense_reimbursement.submitted_on) %></td>
+          <td><%= format_two_decimal_places(expense_reimbursement.total_amount) %></td>
+          <td><%= expense_reimbursement.status %></td>
+          <td><%= DateHelper.date_fmt(expense_reimbursement.updated_at) %></td>
         </tr>
       <% end %>
     </table>
