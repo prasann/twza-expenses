@@ -119,8 +119,8 @@ describe ExpenseSettlementController do
     it "should create expense report for chosen expenses, forex and travel" do
       expense_settlement = ExpenseSettlement.new
       outbound_travel = OutboundTravel.new
-      outbound_travel.stub(:create_expense_settlement){outbound_travel.expense_settlement = expense_settlement}
-      OutboundTravel.stub!(:find).with("1").and_return(outbound_travel)
+      outbound_travel.should_receive(:find_or_initialize_expense_settlement).and_return(expense_settlement)
+	  OutboundTravel.stub!(:find).with("1").and_return(outbound_travel)
       outbound_travel.should_receive(:create_expense_settlement)
       expense_settlement.should_receive(:update_attributes)
       expense_settlement.should_receive(:populate_instance_data)
@@ -128,7 +128,7 @@ describe ExpenseSettlementController do
       post :generate_report, :travel_id => 1
 
       #TODO: find how to fix this as "_routes" => nil is added to the hash
-      #assigns(@expense_report).should == expense_settlement
+      assigns(@expense_report).should == expense_settlement
     end
 
     it "should update expense report if it already exists in the travel" do

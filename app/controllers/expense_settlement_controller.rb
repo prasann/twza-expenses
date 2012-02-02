@@ -43,13 +43,12 @@ class ExpenseSettlementController < ApplicationController
 
   def generate_report
     outbound_travel = OutboundTravel.find(params[:travel_id])
-    outbound_travel.create_expense_settlement if outbound_travel.expense_settlement.nil?
-    #TODO Law of Demeter
-    outbound_travel.expense_settlement.update_attributes({:cash_handover => params[:cash_handover].to_i, :status => 'Generated Draft'}.merge(
-                                                             params.slice(:expenses, :forex_payments, :emp_name, :empl_id, :expense_from, :expense_to, :forex_from, :forex_to).symbolize_keys
-                                                         ))
-
-    @expense_report = outbound_travel.expense_settlement
+    @expense_report = outbound_travel.find_or_initialize_expense_settlement
+    @expense_report.update_attributes({:cash_handover => params[:cash_handover].to_i, 
+									   :status => 'Generated Draft'}.merge(params.slice(:expenses, :forex_payments, 
+									 					  							   :emp_name, :empl_id, :expense_from, 
+																					   :expense_to, :forex_from, :forex_to).symbolize_keys)
+									    )
     @expense_report.populate_instance_data
   end
 

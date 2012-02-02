@@ -18,4 +18,9 @@ class OutboundTravel
   has_one :expense_settlement
 
   validates_presence_of :emp_id, :emp_name, :departure_date
+
+  def find_or_initialize_expense_settlement
+  	self.create_expense_settlement if self.expense_settlement.nil?
+	self.expense_settlement
+  end
 end
