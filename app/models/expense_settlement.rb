@@ -76,7 +76,7 @@ class ExpenseSettlement
 
   def populate_consolidated_expenses
     @consolidated_expenses = []
-    if (expenses && !expenses.empty?)
+    if (expenses.present? && !expenses.empty?)
       expenses_detailed = Expense.find(expenses)
 
       grpd_by_rpt_id = expenses_detailed.group_by { |expense| expense.expense_rpt_id }
@@ -122,11 +122,11 @@ class ExpenseSettlement
   end
 
   def populate_forex_payments
-    @consolidated_forex = (forex_payments && !forex_payments.empty?) ? ForexPayment.find(forex_payments) : []
+    @consolidated_forex = (forex_payments.present? && !forex_payments.empty?) ? ForexPayment.find(forex_payments) : []
   end
 
   def get_conversion_rate
-    (@conversion_rates && !@conversion_rates.empty?) ? @conversion_rates.values.first : 0
+    (@conversion_rates.present? && !@conversion_rates.empty?) ? @conversion_rates.values.first : 0
   end
 
   def get_conversion_rate_for(expense_currency)

@@ -29,7 +29,7 @@
           <th>Place</th>
         </tr>
         <%
-          forexes_avlbl = @expense_report['forex_payments'] && !@expense_report['forex_payments'].empty?
+          forexes_avlbl = @expense_report['forex_payments'].present? && !@expense_report['forex_payments'].empty?
           if forexes_avlbl
             @expense_report['forex_payments'].each do |payment| %>
               <tr class="<%= cycle("even", "odd") %>">
@@ -61,7 +61,7 @@
         </div>
       </div>
       <%
-        expenses_avlbl = @expense_report['expenses'] && !@expense_report['expenses'].empty?
+        expenses_avlbl = @expense_report['expenses'].present? && !@expense_report['expenses'].empty?
         if expenses_avlbl
           expense_map = @expense_report['expenses'].group_by{|x| x[:expense_rpt_id].to_s} %>
           <div id="expense_report_accordion">

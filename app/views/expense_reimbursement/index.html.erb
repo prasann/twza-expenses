@@ -15,7 +15,7 @@
     <%= submit_tag "Search", :name => nil%>
   </form>
 
-  <% if(@expense_reimbursements && !@expense_reimbursements.empty?) %>
+  <% if (@expense_reimbursements.present? && !@expense_reimbursements.empty?) %>
     <table>
       <tr>
         <th>Expense Report Id</th>

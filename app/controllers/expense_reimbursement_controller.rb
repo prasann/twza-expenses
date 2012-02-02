@@ -44,7 +44,7 @@ class ExpenseReimbursementController < ApplicationController
 
     existing_expense_reimbursements = ExpenseReimbursement.for_expense_report_id(params[:id]).to_a
 
-    if !existing_expense_reimbursements.empty?
+    if existing_expense_reimbursements.present? && !existing_expense_reimbursements.empty?
       expenses = expenses - existing_expense_reimbursements.collect(&:get_expenses).flatten
     end
     @all_expenses = expenses.group_by { |expense| expense.project + expense.subproject }
