@@ -2,6 +2,7 @@ require 'mongoid'
 require 'ostruct'
 
 class ExpenseSettlement
+  # TODO: Should not use helper in model
   include ApplicationHelper
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -97,6 +98,7 @@ class ExpenseSettlement
         con_exp["currency"] = expense_cur.original_currency
         con_exp["amount"] = con_exp["amount"] + BigDecimal.new(expense_cur.original_cost)
         con_exp["conversion_rate"] = get_conversion_rate_for(expense_cur)
+        # TODO: Should not need to round off to 2 decimal places here - only in views
         con_exp["local_currency_amount"] = format_two_decimal_places(con_exp["amount"] * con_exp["conversion_rate"])
       end
       con_exp
@@ -113,7 +115,8 @@ class ExpenseSettlement
         inr_sum += forex.inr.to_f
         original_amount_sum += forex.amount
       end
-      @conversion_rates[currency] = format_two_decimal_places(inr_sum/original_amount_sum)
+      # TODO: Should not need to round off to 2 decimal places here - only in views
+      @conversion_rates[currency] = format_two_decimal_places(inr_sum / original_amount_sum)
     end
     @conversion_rates
   end
@@ -127,18 +130,15 @@ class ExpenseSettlement
   end
 
   def get_conversion_rate_for(expense_currency)
-    @conversion_rates[expense_currency.original_currency]||(expense_currency.cost_in_home_currency.to_f/expense_currency.original_cost.to_f)
+    @conversion_rates[expense_currency.original_currency] || (expense_currency.cost_in_home_currency.to_f / expense_currency.original_cost.to_f)
   end
 
   def get_receivable_amount
-    all_expenses = @consolidated_expenses
-    all_forex = get_forex_payments
     expense_inr_amount = 0
-    forex_inr_amount = 0
-    all_expenses.each { |expense| expense_inr_amount += expense["local_currency_amount"] }
-    # TODO: all_forex.sum(&:inr)
-    all_forex.each { |forex| forex_inr_amount += forex.inr }
-    value = forex_inr_amount - (expense_inr_amount + (cash_handover*get_conversion_rate))
+    @consolidated_expenses.each { |expense| expense_inr_amount += expense["local_currency_amount"] }
+    forex_inr_amount = get_forex_payments.sum(&:inr)
+    value = forex_inr_amount - (expense_inr_amount + (cash_handover * get_conversion_rate))
+    # TODO: Should not need to round off to 2 decimal places here - only in views
     format_two_decimal_places(value)
   end
 

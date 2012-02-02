@@ -192,9 +192,9 @@ describe ExpenseSettlementController do
                                              expense_amounts, expense_amounts_inr, forex_amounts, forex_amounts_inr)
 
       expense_settlement.should_receive(:update_attributes)
-                        .with({:expenses=>expense_settlement[:expenses],
-                               :forex_payments=>expense_settlement[:forex_payments], :cash_handover=>0,
-                               :status=>"Generated Draft"})
+                        .with({:expenses => expense_settlement[:expenses],
+                               :forex_payments => expense_settlement[:forex_payments], :cash_handover => 0,
+                               :status => "Generated Draft"})
       get :generate_report, :travel_id => travel_id, :forex_payments => expense_settlement[:forex_payments],
           :expenses => expense_settlement[:expenses], :cash_handover => 0
 
