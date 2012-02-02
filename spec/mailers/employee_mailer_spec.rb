@@ -59,18 +59,6 @@ describe EmployeeMailer do
       it "should have receivable amount" do
         @email.body.should include(@expense_report.get_receivable_amount)
       end
-
-      it "should have use employee id and domain to send e-mail if email_id is not available" do
-        pending("To be moved into the model")
-        @profile.stub(:email_id).and_return('')
-        @email = EmployeeMailer.expense_settlement(@expense_report)
-        @email.to.size.should == 1
-        @email.to[0].should == @employee_id.to_s+::Rails.application.config.email_domain
-        @email.from.size.should == 1
-        @email.from[0].should == ::Rails.application.config.email_sender
-        @email.subject.should == EmployeeMailer::EXPENSE_SETTLEMENT_SUBJECT.sub('$place','UK').sub('$start_date','01-Oct-2011')
-        @email.body.should include(@expense_report.get_receivable_amount)
-      end
     end
   end
 end

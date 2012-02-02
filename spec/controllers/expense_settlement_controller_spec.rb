@@ -116,7 +116,7 @@ describe ExpenseSettlementController do
   end
 
   describe "generate report" do
-    xit "should create expense report for chosen expenses, forex and travel" do
+    it "should create expense report for chosen expenses, forex and travel" do
       expense_settlement = ExpenseSettlement.new
       outbound_travel = OutboundTravel.new
       outbound_travel.stub(:create_expense_settlement){outbound_travel.expense_settlement = expense_settlement}
@@ -131,7 +131,7 @@ describe ExpenseSettlementController do
       #assigns(@expense_report).should == expense_settlement
     end
 
-    xit "should update expense report if it already exists in the travel" do
+    it "should update expense report if it already exists in the travel" do
       expense_settlement = ExpenseSettlement.new
       outbound_travel = OutboundTravel.new(:expense_settlement => expense_settlement)
 
@@ -171,7 +171,7 @@ describe ExpenseSettlementController do
       assigns(:all_currencies).should == test_forex_currencies
     end
 
-    xit "should handle settlement properly when forex of multiple currencies are involved" do
+    it "should handle settlement properly when forex of multiple currencies are involved" do
       travel_id = '1'
       employee_id = '12321'
       test_forex_currencies = ['EUR', 'GBP']
