@@ -37,7 +37,7 @@ class ExpenseReimbursement
 
   def self.get_reimbursable_expense_reports(mark_as_closed = false)
     completed_reimbursements = ExpenseReimbursement.with_status('Processed').to_a
-    completed_reimbursements.collect { |reimbursement| create_bank_reimbursement(reimbursement, mark_as_closed) }
+    completed_reimbursements.collect { |reimbursement| create_bank_reimbursement(reimbursement, mark_as_closed) }.compact
   end
 
   def profile

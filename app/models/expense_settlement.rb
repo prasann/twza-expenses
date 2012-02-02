@@ -50,6 +50,11 @@ class ExpenseSettlement
     self.save
   end
 
+  def closed
+    self.status = 'Closed'
+    self.save
+  end
+
   def is_generated_draft?
     self.status == 'Generated Draft'
   end
@@ -139,7 +144,7 @@ class ExpenseSettlement
 
   def self.get_reimbursable_expense_reports(mark_as_closed = false)
     completed_settlements = ExpenseSettlement.with_status('Complete').to_a
-    completed_settlements.collect { |settlement| create_bank_reimbursement(settlement, mark_as_closed) }
+    completed_settlements.collect { |settlement| create_bank_reimbursement(settlement, mark_as_closed) }.compact
   end
 
   def get_forex_payments
@@ -157,12 +162,9 @@ class ExpenseSettlement
   private
   def self.create_bank_reimbursement(settlement, mark_as_closed)
     settlement.populate_instance_data
-    bank_detail = BankDetail.for_empl_id(settlement.empl_id).first
     if (settlement.get_receivable_amount < 0)
-      if (mark_as_closed)
-        settlement.status = 'Closed'
-        settlement.save
-      end
+      settlement.closed if mark_as_closed
+      bank_detail = BankDetail.for_empl_id(settlement.empl_id).first
       return OpenStruct.new({:empl_id => settlement.empl_id,
                              :empl_name => bank_detail.empl_name,
                              :expense_report_ids => settlement.get_unique_report_ids.join(","),
