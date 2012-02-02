@@ -11,11 +11,11 @@ class ForexPayment
   field :project
   field :vendor_name
   field :card_number
-  field :expiry_date, type: Date
+  field :expiry_date
   field :office
   field :inr, type: BigDecimal
 
-  validates_presence_of :emp_id, :emp_name, :amount, :currency, :travel_date, :office, :inr
+  validates_presence_of :emp_id, :emp_name, :amount, :currency, :travel_date, :inr
 
   class << self
     def for_emp_id(emp_id)

@@ -17,7 +17,7 @@ describe ForexDataImporter do
 
       def file.cell(line, column)
         return 1 if ['C', 'E', 'N'].include?(column)
-        return Date.today if ['B', 'G', 'L'].include?(column)
+        return Date.today if ['B', 'G'].include?(column)
         'some text'
       end
 
@@ -44,7 +44,7 @@ describe ForexDataImporter do
       def file.cell(line, column)
         return "wrong data" if line == 2
         return 1 if ['C', 'E', 'N'].include?(column)
-        return Date.today if ['B', 'G', 'L'].include?(column)
+        return Date.today if ['B', 'G'].include?(column)
         'some text'
       end
 
@@ -78,7 +78,7 @@ describe ForexDataImporter do
     forex_payment.project.should == @expected_text_value
     forex_payment.vendor_name.should == @expected_text_value
     forex_payment.card_number.should == @expected_text_value
-    forex_payment.expiry_date.should == @expected_date
+    forex_payment.expiry_date.should == @expected_text_value
     forex_payment.office.should == @expected_text_value
     forex_payment.inr.should == 1
   end

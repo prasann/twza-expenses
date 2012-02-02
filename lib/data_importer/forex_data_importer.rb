@@ -4,7 +4,7 @@ class ForexDataImporter
   include ExcelDataExtractor
 
   def import(from_file)
-    read_from_excel(from_file, 3) do |extractor|
+    read_from_excel(from_file, 0) do |extractor|
       begin
         ForexPayment.create(issue_date: extractor.call("B"),
                             emp_id: extractor.call("C"), emp_name: extractor.call("D"),
