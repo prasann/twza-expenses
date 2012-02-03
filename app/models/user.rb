@@ -1,4 +1,5 @@
 require 'bcrypt'
+
 class User
   include Mongoid::Document
 
@@ -17,11 +18,7 @@ class User
 
   def self.authenticate(user_name, password)
     user = User.where(:user_name => user_name).first
-    if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
-      user
-    else
-      nil
-    end
+    user if user.present? && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
   end
 
   def encrypt_password
@@ -42,5 +39,4 @@ class User
   def superadmin?
     self.role == 'superadmin'
   end
-
 end
