@@ -44,11 +44,10 @@ class ExpenseSettlementController < ApplicationController
   def generate_report
     outbound_travel = OutboundTravel.find(params[:travel_id])
     @expense_report = outbound_travel.find_or_initialize_expense_settlement
-    @expense_report.update_attributes({:cash_handover => params[:cash_handover].to_i, 
-									   :status => 'Generated Draft'}.merge(params.slice(:expenses, :forex_payments, 
-									 					  							   :emp_name, :empl_id, :expense_from, 
-																					   :expense_to, :forex_from, :forex_to).symbolize_keys)
-									    )
+    @expense_report.update_attributes({:cash_handover => params[:cash_handover].to_i, :status => 'Generated Draft'}.merge(
+                                      params.slice(:expenses, :forex_payments, :emp_name, :empl_id, :expense_from, 
+                                                   :expense_to, :forex_from, :forex_to).symbolize_keys)
+                                     )
     @expense_report.populate_instance_data
   end
 
@@ -75,11 +74,10 @@ class ExpenseSettlementController < ApplicationController
     @file_name = params[:file_upload][:my_file].original_filename
     if load_to_db
       flash[:success] = 'File: ' + @file_name + ' has been uploaded successfully'
-      redirect_to :action => 'upload'
     else
       flash[:error] = 'This file has already been uploaded'
-      redirect_to :action => 'upload'
     end
+    redirect_to :action => 'upload'
   end
 
   private

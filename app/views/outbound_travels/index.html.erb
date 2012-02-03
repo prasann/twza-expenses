@@ -6,8 +6,9 @@
 
 <div class='saved_search'>
 <span class='search_by' >Saved Searches:</span>
-  <%= link_to image_tag("search.png") + 'Recent Entries','/outbound_travels/get_recent' %>
-  <%= link_to image_tag("search.png") + 'Update Return Date','/outbound_travels/travels_without_return_date' %>
+  <!-- TODO: Use the url helpers instead of hardcoding the url paths -->
+  <%= link_to image_tag("search.png") + 'Recent Entries', '/outbound_travels/get_recent' %>
+  <%= link_to image_tag("search.png") + 'Update Return Date', '/outbound_travels/travels_without_return_date' %>
 </div>
 
 <div class="no_emp hide error">No employee found for given name.</div>

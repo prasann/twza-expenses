@@ -50,6 +50,7 @@ $(document).ready(function(){
       var attr_name = $(_this).attr('name');
       $.ajax({
         type:'POST',
+        // TODO: Use url helpers rather than hardcoding the url
         url:'/outbound_travels/update_field',
         data:{id: obj_id, name: attr_name, value: value},
         success: function(){

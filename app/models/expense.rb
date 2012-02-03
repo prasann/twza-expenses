@@ -6,6 +6,7 @@ class Expense
       where(:empl_id => 'EMP' + employee_id.to_s)
     end
 
+    # TODO: Is this really correct? Same column/field, with 2 different semantics?
     def for_empl_id(empl_id)
       where(:empl_id => empl_id)
     end
@@ -17,6 +18,7 @@ class Expense
 
   def self.fetch_for_employee_between_dates(employee_id, date_from, date_to, ids_to_be_excluded)
     all_expenses = fetch_for(for_employee_id(employee_id), ids_to_be_excluded)
+    # TODO: Performance: Rather than loading from db into memory and then rejecting based on dates, filter in db itself?
     valid_expenses = all_expenses.reject { |expense|
       Date.parse(expense.expense_date) < date_from || Date.parse(expense.expense_date) > date_to
     }
