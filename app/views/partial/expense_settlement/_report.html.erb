@@ -72,6 +72,6 @@
     <% else %>
       <td colspan="3">Payable to employee :</td>
     <% end %>
-    <td class='right_align heading_no_align'><%= format_two_decimal_places(@expense_report.get_receivable_amount) %></td>
+    <td class='right_align heading_no_align'><%= format_two_decimal_places(@expense_report.get_receivable_amount).abs %></td>
   </tr>
 </table>
