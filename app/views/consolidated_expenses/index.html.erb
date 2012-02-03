@@ -1,27 +1,23 @@
-<html>
-  <body>
-    <div class="right_align">
-      <%= link_to image_tag("excel.png") + "Export in Excel", :action => 'export', :format => 'xls' %>
-    </div>
+<div class="right_align">
+  <%= link_to(image_tag("excel.png") + "Export in Excel", :action => 'export', :format => 'xls') %>
+</div>
 
-    <table>
-      <tr>
-        <th>Employee ID</th>
-        <th>Employee Name</th>
-        <th>Expense Report(s)</th>
-        <th>Bank Account No</th>
-        <th>Reimbursable Amount</th>
-      </tr>
+<table>
+  <tr>
+    <th>Employee ID</th>
+    <th>Employee Name</th>
+    <th>Expense Report(s)</th>
+    <th>Bank Account No</th>
+    <th>Reimbursable Amount</th>
+  </tr>
 
-      <% @reimbursable_expense_reports.each do |expense| %>
-        <tr class="<%= cycle('even','odd') %>">
-          <td><%= expense[:empl_id] %></td>
-          <td><%= expense[:empl_name] %></td>
-          <td><%= expense[:expense_report_ids] %></td>
-          <td><%= expense[:bank_account_no] %></td>
-          <td><%= expense[:reimbursable_amount] %></td>
-        </tr>
-      <% end %>
-    </table>
-  </body>
-</html>
+  <% @reimbursable_expense_reports.each do |expense| %>
+    <tr class="<%= cycle('even','odd') %>">
+      <td><%= expense[:empl_id] %></td>
+      <td><%= expense[:empl_name] %></td>
+      <td><%= expense[:expense_report_ids] %></td>
+      <td><%= expense[:bank_account_no] %></td>
+      <td><%= expense[:reimbursable_amount] %></td>
+    </tr>
+  <% end %>
+</table>

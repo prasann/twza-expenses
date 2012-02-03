@@ -1,16 +1,16 @@
 <html>
-    <head>
-        <%= stylesheet_link_tag    "style" %>
-    </head>
-    <body>
-        Dear <%= @profile.get_full_name %>, <br/><br/>
+  <head>
+    <%= stylesheet_link_tag "style" %>
+  </head>
+  <body>
+    Dear <%= @profile.get_full_name %>, <br/><br/>
 
-        Please refer the travel expense settlement sheet. Kindly confirm the same from your end for payroll processing.
-        <br/><br/>
+    Please refer the travel expense settlement sheet. Kindly confirm the same from your end for payroll processing.
+    <br/><br/>
 
-        <%= render :partial => '/partial/expense_settlement/report' %>
+    <%= render :partial => '/partial/expense_settlement/report' %>
 
-        <br/><br/>
-        ThoughtWorks Finance Team
-    </body>
+    <br/><br/>
+    ThoughtWorks Finance Team
+  </body>
 </html>

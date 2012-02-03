@@ -1,21 +1,21 @@
 <html>
-    <head>
-        <%= stylesheet_link_tag    "style" %>
-    </head>
-    <body>
-        Dear <%= @profile.get_full_name %>, <br/><br/>
+  <head>
+    <%= stylesheet_link_tag "style" %>
+  </head>
+  <body>
+    Dear <%= @profile.get_full_name %>, <br/><br/>
 
-        Your expense details
+    Your expense details
 
-        <br/><br/>
+    <br/><br/>
 
-        <%= render :partial => '/partial/expense_reimbursement/report' %>
+    <%= render :partial => '/partial/expense_reimbursement/report' %>
 
-        <br/><br/>
+    <br/><br/>
 
-        Please get in touch with the finance team for any queries.
+    Please get in touch with the finance team for any queries.
 
-        <br/><br/>
-        ThoughtWorks Finance Team
-    </body>
+    <br/><br/>
+    ThoughtWorks Finance Team
+  </body>
 </html>
