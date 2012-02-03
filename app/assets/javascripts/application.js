@@ -19,6 +19,7 @@ $(document).ready(function(){
         }
       },
       select: function(event, ui){
+        // TODO: Use url helpers rather than hardcoding the url
         if(ui.index == 0){ window.location = "/outbound_travels#outbound_travels";}
         if(ui.index == 1){ window.location = "/forex_payments#forex_payments";}
         if(ui.index == 2){ window.location = "/expense_settlement#expense_settlement";}
