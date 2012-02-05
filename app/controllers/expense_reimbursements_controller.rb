@@ -46,19 +46,20 @@ class ExpenseReimbursementsController < ApplicationController
   def edit
     expenses = Expense.for_expense_report_id(params[:id]).to_a
 
-    profile = expenses.first.profile
-    @empl_name = profile.try(:get_full_name) || ""
+    @empl_name = expenses.first.try(:profile).try(:get_full_name) || ""
 
     existing_expense_reimbursements = ExpenseReimbursement.for_expense_report_id(params[:id]).to_a
 
+    # TODO: Performance: Can we move this filter logic into the db?
     if existing_expense_reimbursements.present? && !existing_expense_reimbursements.empty?
       expenses = expenses - existing_expense_reimbursements.collect(&:get_expenses).flatten
     end
     @all_expenses = expenses.group_by { |expense| expense.project + expense.subproject }
 
+    # TODO: Should this be an OpenStruct so that we can do method calls instead of hash-like access?
     @expense_reimbursement = {'expense_report_id' => params[:id],
-                              'empl_id' => expenses.first.get_employee_id,
-                              'submitted_on' => expenses.first.report_submitted_at,
+                              'empl_id' => expenses.first.try(:get_employee_id),
+                              'submitted_on' => expenses.first.try(:report_submitted_at),
                               'total_amount' => expenses.sum { |expense| expense.cost_in_home_currency.to_f }}
   end
 

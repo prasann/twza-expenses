@@ -4,6 +4,7 @@
     <title>Expense Reimbursement</title>
     <%= stylesheet_link_tag "style" %>
     <%= stylesheet_link_tag "jquery-ui-custom" %>
+    <!-- TODO: Move this to below the body -->
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
   </head>
@@ -16,5 +17,6 @@
       <div id="panel" title="out"></div>
       <%= yield %>
     </div>
+    <%= yield :page_js %>
   </body>
 </html>

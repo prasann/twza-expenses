@@ -17,7 +17,7 @@ $(document).ready(function(){
 
     $(".refresh").change(function(){
       query_str = "forex_from=" + $('#forex_from').val() +"&forex_to="+ $('#forex_to').val() + "&expense_from="+ $('#expense_from').val() + "&expense_to="+ $('#expense_to').val();
-      window.location = "/expense_settlement/load_by_travel/" + $("#travel_id").val() + "?" + query_str;
+      window.location = "/expense_settlements/load_by_travel/" + $("#travel_id").val() + "?" + query_str;
     });
   });
 });

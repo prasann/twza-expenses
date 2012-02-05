@@ -62,7 +62,7 @@ class ExpenseSettlementsController < ApplicationController
     expense_report.notify_employee
     # TODO: What if the save failed?
     flash[:success] = "Expense settlement e-mail successfully sent to '" + expense_report.profile.common_name + "'"
-    redirect_to(:action => :index, :anchor => 'expense_settlement', :empl_id => expense_report.empl_id)
+    redirect_to(:action => :index, :anchor => 'expense_settlements', :empl_id => expense_report.empl_id)
   end
 
   def upload

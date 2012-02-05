@@ -1,7 +1,7 @@
   <br/>
   <%= flash_message %>
   <div>
-    <%= form_tag({:controller => "expense_settlement#expense_settlement"}, :method => "get") do %>
+    <%= form_tag(expense_settlements_path, :method => "get") do %>
       <h1>Expense Settlement</h1>
       <span class="search_by">Search by:</span>
       <%= label_tag 'Employee Name' %>:

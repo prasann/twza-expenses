@@ -5,7 +5,7 @@
 <h1>Outbound Travels</h1>
 
 <div class='saved_search'>
-<span class='search_by' >Saved Searches:</span>
+<span class='search_by'>Saved Searches:</span>
   <!-- TODO: Use the url helpers instead of hardcoding the url paths -->
   <%= link_to image_tag("search.png") + 'Recent Entries', '/outbound_travels/get_recent' %>
   <%= link_to image_tag("search.png") + 'Update Return Date', '/outbound_travels/travels_without_return_date' %>
@@ -48,7 +48,7 @@
   </tr>
 
   <% @outbound_travels.each do |outbound_travel| %>
-    <tr id = '<%= outbound_travel.id %>' class="<%= cycle("even", "odd") %>">
+    <tr id='<%= outbound_travel.id %>' class="<%= cycle("even", "odd") %>">
       <td><%= outbound_travel.emp_id %></td>
       <td><%= outbound_travel.emp_name %></td>
       <td><%= outbound_travel.place %></td>
@@ -62,15 +62,50 @@
           <% if (outbound_travel.return_date == nil) %>
             <%= link_to_function 'Process Expense', 'no_travel_return_date()', :class => 'no_travel_return_date' %>
           <% else %>
-            <%= link_to 'Process Expense', :controller => "expense_settlement", :action => "load_by_travel", :id => outbound_travel.id.to_s %>
+            <%= link_to 'Process Expense', :controller => "expense_settlements", :action => "load_by_travel", :id => outbound_travel.id.to_s %>
           <% end %>
         <% end %>
       </td>
-      <td><%= link_to 'Show', outbound_travel %> |
-        <%= link_to 'Edit', edit_outbound_travel_path(outbound_travel) %> |
-        <%= link_to 'Destroy', outbound_travel, confirm: 'Are you sure?', method: :delete %>
-              </td>
+      <td><%= link_to 'Show', outbound_travel_path(:id => outbound_travel.id) %> |
+          <%= link_to 'Edit', edit_outbound_travel_path(:id => outbound_travel.id) %> |
+          <%= link_to 'Destroy', outbound_travel_path(:id => outbound_travel.id), :confirm => 'Are you sure?', :method => :delete %>
+      </td>
     </tr>
   <% end %>
 </table>
 <br/>
+
+<% content_for :page_js do %>
+  <script>
+    $(document).ready(function(){
+      $('.edit_date_picker').editable(function(value, settings) {
+        saveValue(value, settings, this);
+      }, {
+        type    : 'datepicker'
+      });
+
+      $('.edit').editable(function(value, settings) {
+        saveValue(value, settings, this);
+      }, {
+        type   : 'text',
+        submit : 'Save',
+        cancel : 'Cancel'
+      });
+      
+      
+      function saveValue(value, settings, _this){
+        var obj_id = $(_this).parent().attr('id');
+        var attr_name = $(_this).attr('name');
+        $.ajax({
+          type: 'POST',
+          // TODO: Use url helpers rather than hardcoding the url
+          url: '/outbound_travels/update_field',
+          data: {id: obj_id, name: attr_name, value: value},
+          success: function(){
+            location.reload();
+          }
+        })
+      };
+    });
+  </script>
+<% end %>

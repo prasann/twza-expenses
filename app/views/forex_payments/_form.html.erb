@@ -13,66 +13,69 @@
   <div class="fields">
     <table>
       <tr>
-        <td class="text"><%= f.label :emp_id, 'Employee Id'%>:</td>
+        <td class="text"><%= f.label :emp_id, 'Employee Id' %>:</td>
         <td><%= f.text_field :emp_id,  :class => 'emp_id' %></td>
-        </tr>
-        <tr>
-          <td class="text"><%= f.label :emp_name, 'Employee Name'%>:</td>
-          <td><%= f.text_field :emp_name , :class => 'emp_name' %></td>
-        </tr>
-        <tr>
-          <td class="text"><%= f.label :issue_date, 'Issue Date'%>:</td>
-          <td><%= f.text_field :issue_date , :class => 'date_picker'%></td>
-        </tr>
-        <tr>
-          <td class="text"><%= f.label :amount, 'Amount'%>:</td>
-          <td><%= f.text_field :amount %><br/></td>
-        </tr>
-        <tr>
-          <td class="text"><%= f.label :currency, 'Currency'%>:</td>
-          <td><%= f.text_field :currency%></td>
-        </tr>
-        <tr>
-          <td class="text"><%= f.label :place, 'Place'%>:</td>
-          <td><%= f.text_field :place%></td>
-        </tr>
-        <tr>
-          <td class="text"><%= f.label :travel_date, 'Travel Date'%>:</td>
-          <td><%= f.text_field :travel_date, :class => 'date_picker'%></td>
-        </tr>
-        <tr>
-          <td class="text"><%= f.label :project, 'Project'%>:</td>
-          <td><%= f.text_field :project%></td>
-        </tr>
-        <tr>
-          <td class="text"><%= f.label :vendor_name, 'Vendor Name'%>:</td>
-          <td><%= f.text_field :vendor_name%></td>
-        </tr>
-        <tr>
-          <td class="text"><%= f.label :card_number, 'Card Number'%>:</td>
-          <td><%= f.text_field :card_number%></td>
-        </tr>
-        <tr>
-          <td class="text"><%= f.label :expiry_date, 'Expiry Date'%>:</td>
-          <td><%= f.text_field :expiry_date, :class => 'date_picker'%></td>
-        </tr>
-        <tr>
-          <td class="text"><%= f.label :office, 'Office'%>:</td>
-          <td><%= f.text_field :office%></td>
-        </tr>
-        <tr>
-          <td class="text"><%= f.label :inr, 'INR'%>:</td>
-          <td><%= f.text_field :inr%></td>
-        </tr>
-      </table>
-    </div>
-    <div class="actions">
-      <%= f.submit %>
-    </div>
+      </tr>
+      <tr>
+        <td class="text"><%= f.label :emp_name, 'Employee Name' %>:</td>
+        <td><%= f.text_field :emp_name , :class => 'emp_name' %></td>
+      </tr>
+      <tr>
+        <td class="text"><%= f.label :issue_date, 'Issue Date' %>:</td>
+        <td><%= f.text_field :issue_date , :class => 'date_picker' %></td>
+      </tr>
+      <tr>
+        <td class="text"><%= f.label :amount, 'Amount' %>:</td>
+        <td><%= f.text_field :amount %><br/></td>
+      </tr>
+      <tr>
+        <td class="text"><%= f.label :currency, 'Currency' %>:</td>
+        <td><%= f.text_field :currency %></td>
+      </tr>
+      <tr>
+        <td class="text"><%= f.label :place, 'Place' %>:</td>
+        <td><%= f.text_field :place %></td>
+      </tr>
+      <tr>
+        <td class="text"><%= f.label :travel_date, 'Travel Date' %>:</td>
+        <td><%= f.text_field :travel_date, :class => 'date_picker' %></td>
+      </tr>
+      <tr>
+        <td class="text"><%= f.label :project, 'Project' %>:</td>
+        <td><%= f.text_field :project %></td>
+      </tr>
+      <tr>
+        <td class="text"><%= f.label :vendor_name, 'Vendor Name' %>:</td>
+        <td><%= f.text_field :vendor_name %></td>
+      </tr>
+      <tr>
+        <td class="text"><%= f.label :card_number, 'Card Number' %>:</td>
+        <td><%= f.text_field :card_number %></td>
+      </tr>
+      <tr>
+        <td class="text"><%= f.label :expiry_date, 'Expiry Date' %>:</td>
+        <td><%= f.text_field :expiry_date, :class => 'date_picker' %></td>
+      </tr>
+      <tr>
+        <td class="text"><%= f.label :office, 'Office' %>:</td>
+        <td><%= f.text_field :office %></td>
+      </tr>
+      <tr>
+        <td class="text"><%= f.label :inr, 'INR' %>:</td>
+        <td><%= f.text_field :inr %></td>
+      </tr>
+    </table>
+  </div>
 
-    <script>
-      $(document).ready(function(){
-        populateForexFields();
-      });
-    </script>
-  <% end %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+<% content_for :page_js do %>
+  <script>
+    $(document).ready(function(){
+      populateForexFields();
+    });
+  </script>
+<% end %>

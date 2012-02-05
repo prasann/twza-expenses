@@ -45,8 +45,10 @@
   </table>
 <% end %>
 
-<script>
-  $(document).ready(function(){
-    populateForexFields();
-  });
-</script>
+<% content_for :page_js do %>
+  <script>
+    $(document).ready(function(){
+      populateForexFields();
+    });
+  </script>
+<% end %>

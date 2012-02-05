@@ -111,7 +111,7 @@ describe ExpenseSettlementsController do
       post :notify, :id => expense_report_id
 
       flash[:success].should == "Expense settlement e-mail successfully sent to 'John Smith'"
-      response.should redirect_to(:action =>:index, :anchor=>'expense_settlement', :empl_id => employee_id)
+      response.should redirect_to(:action => :index, :anchor => 'expense_settlements', :empl_id => employee_id)
     end
   end
 

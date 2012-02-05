@@ -1,7 +1,7 @@
 <h1>Expense Reimbursement</h1>
 
 <div class="no_emp hide error">No employee found for given name.</div>
-<form action='/expense_reimbursement/filter#expense_reimbursement' method = "get">
+<form action='/expense_reimbursements/filter#expense_reimbursements' method = "get">
   <span class="search_by">Search by:</span>
   <%= label_tag 'Employee Name' %>:
   <%= text_field_tag :name, params[:name], :class => 'emp_name' %>

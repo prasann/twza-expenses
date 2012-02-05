@@ -68,16 +68,17 @@
         <td><%= f.text_field :actions%></td>
       </tr>
     </table>
-
   </div>
 
   <div class="actions">
     <%= f.submit %>
   </div>
+<% end %>
 
+<% content_for :page_js do %>
   <script>
     $(document).ready(function(){
-      populateTravelFields();
+      populateForexFields();
     });
   </script>
 <% end %>

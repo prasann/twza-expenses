@@ -1,6 +1,14 @@
 class Expense
   include Mongoid::Document
 
+  field :empl_id, type: String
+  field :expense_date, type: Date
+  field :report_submitted_at, type: Date
+  field :payment_type, type: String
+
+  validates_presence_of :empl_id, :payment_type
+  # TODO: validate payment_type is within a certain set of values
+
   class << self
     def for_employee_id(employee_id)
       where(:empl_id => 'EMP' + employee_id.to_s)
