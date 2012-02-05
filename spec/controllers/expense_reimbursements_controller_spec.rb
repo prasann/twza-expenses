@@ -24,15 +24,15 @@ describe ExpenseReimbursementsController do
 
   describe "Get edit " do
     it "should load only expenses which are not processed as part of another expense reimbursement" do
-      expense_1 = mock('expense_1', :project=>'project', :subproject => 'subproject',
-                       :cost_in_home_currency=>1000, :get_employee_id=>1234, :report_submitted_at => 'date')
-      expense_2 = mock('expense_2', :project=>'project', :subproject => 'subproject',
-                       :cost_in_home_currency=>200, :get_employee_id=>1234, :report_submitted_at => 'date')
+      expense_1 = mock('expense_1', :project =>'project', :subproject => 'subproject',
+                       :cost_in_home_currency => 1000, :get_employee_id => 1234, :report_submitted_at => 'date')
+      expense_2 = mock('expense_2', :project => 'project', :subproject => 'subproject',
+                       :cost_in_home_currency => 200, :get_employee_id => 1234, :report_submitted_at => 'date')
 
       existing_expense_reimbursement = mock("expense_reimbursement", :id => 123,
-                                            :empl_id => 1234, :expense_report_id => 12345, :get_expenses=>[expense_2])
+                                            :empl_id => 1234, :expense_report_id => 12345, :get_expenses => [expense_2])
       profile = mock('profile')
-      expected_expenses = {"projectsubproject"=>[expense_1]}
+      expected_expenses = {"projectsubproject" => [expense_1]}
 
       expected_expense_reimbursement = {'expense_report_id' => '123',
                                         'empl_id' => 1234,
@@ -55,9 +55,9 @@ describe ExpenseReimbursementsController do
 
     it "should load all expenses for new expense reimbursement" do
       expense_1 = mock('expense_1', :project => 'project', :subproject => 'subproject',
-                       :cost_in_home_currency => 1000, :get_employee_id=>1234, :report_submitted_at => 'date')
-      expense_2 = mock('expense_2', :project=>'project', :subproject => 'subproject',
-                       :cost_in_home_currency=>200, :get_employee_id=>1234, :report_submitted_at => 'date')
+                       :cost_in_home_currency => 1000, :get_employee_id => 1234, :report_submitted_at => 'date')
+      expense_2 = mock('expense_2', :project => 'project', :subproject => 'subproject',
+                       :cost_in_home_currency => 200, :get_employee_id => 1234, :report_submitted_at => 'date')
 
       profile = mock('profile')
       expected_expenses = {"projectsubproject" => [expense_1, expense_2]}

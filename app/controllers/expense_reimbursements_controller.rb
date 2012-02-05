@@ -56,7 +56,7 @@ class ExpenseReimbursementsController < ApplicationController
     end
     @all_expenses = expenses.group_by { |expense| expense.project + expense.subproject }
 
-    # TODO: Should this be an OpenStruct so that we can do method calls instead of hash-like access?
+    # TODO: Should this be an ExpenseReimbursement so that we can do method calls instead of hash-like access?
     @expense_reimbursement = {'expense_report_id' => params[:id],
                               'empl_id' => expenses.first.try(:get_employee_id),
                               'submitted_on' => expenses.first.try(:report_submitted_at),

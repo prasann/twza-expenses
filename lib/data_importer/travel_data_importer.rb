@@ -4,7 +4,7 @@ class TravelDataImporter
   include ExcelDataExtractor
 
   def import(from_file)
-    read_from_excel(from_file,0) do |extractor|
+    read_from_excel(from_file, 0) do |extractor|
       begin
         OutboundTravel.create(emp_id: extractor.call("B"),
                               emp_name: extractor.call("C"), place: extractor.call("D"),
@@ -24,10 +24,10 @@ class TravelDataImporter
   end
 
   def to_date(cell_value)
-    return (cell_value.instance_of?Date) ? cell_value : nil
+    (cell_value.instance_of?(Date)) ? cell_value : nil
   end
 
   def to_str(cell_value)
-    return (cell_value.instance_of?Date) ? cell_value.to_s : cell_value
+    (cell_value.instance_of?(Date)) ? cell_value.to_s : cell_value
   end
 end

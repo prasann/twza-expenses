@@ -19,16 +19,4 @@ describe ApplicationHelper do
       message.should include javascript_tag('$(\'.notification\').fadeOut(5000);')
     end
   end
-
-  describe "calculate duration of stay" do
-    it "should calculate days from expected return date" do
-      outbound_travel = OutboundTravel.create! ({emp_id: 123, emp_name: 'Emp' , departure_date: Date.new(2012,2,15),expected_return_date: '19/02/2012'})
-      calculate_stay_duration(outbound_travel).should == 4
-    end
-
-    it "should calculate days from actual return date if available" do
-      outbound_travel = OutboundTravel.create! ({emp_id: 123, emp_name: 'Emp' , departure_date: Date.new(2012,2,15),expected_return_date: '19/02/2012', return_date: Date.new(2012,2,21)})
-      calculate_stay_duration(outbound_travel).should == 6
-    end
-  end
 end

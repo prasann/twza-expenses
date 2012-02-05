@@ -10,7 +10,7 @@ class OutboundTravel
   field :foreign_payroll_transfer
   field :return_date, type: Date
   field :return_payroll_transfer
-  field :expected_return_date
+  field :expected_return_date #TODO: Convert to type: Date
   field :project
   field :comments
   field :actions
@@ -22,5 +22,10 @@ class OutboundTravel
   def find_or_initialize_expense_settlement
     self.create_expense_settlement if self.expense_settlement.nil?
     self.expense_settlement
+  end
+
+  def stay_duration
+    date = self.return_date || DateHelper.date_from_str(self.expected_return_date)
+    return (date - self.departure_date).to_i if date.present?
   end
 end

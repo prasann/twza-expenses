@@ -82,7 +82,7 @@
                   <td><%= check_box_tag 'expenses[]', expense.id.to_s %></td>
                   <td><%= expense.expense_rpt_id %></td>
                   <td><%= expense.project %></td>
-                  <td><%= expense.expense_date %></td>
+                  <td><%= DateHelper.date_fmt(DateHelper.date_from_str(expense.expense_date)) %></td>
                   <td><%= expense.expense_type %></td>
                   <td><%= expense.description %></td>
                   <td><%= number_with_precision(expense.original_cost, :precision => 2) %> <%= expense.original_currency %></td>

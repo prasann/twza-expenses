@@ -3,7 +3,7 @@ require 'spec_helper'
 describe OutboundTravelsController do
   # TODO: Use factory_girl
   def valid_attributes
-    {:emp_id => '123', :emp_name => 'test', :departure_date => Time.now, :expected_return_date => Time.now + 2}
+    {:emp_id => '123', :emp_name => 'test', :departure_date => Time.now, :expected_return_date => Time.now + 2.days}
   end
 
   describe "GET index" do

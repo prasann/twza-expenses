@@ -52,7 +52,7 @@
       <td><%= outbound_travel.emp_id %></td>
       <td><%= outbound_travel.emp_name %></td>
       <td><%= outbound_travel.place %></td>
-      <td><%= calculate_stay_duration(outbound_travel) %></td>
+      <td><%= outbound_travel.stay_duration %></td>
       <td class='edit' name='payroll_effect'><%= outbound_travel.payroll_effect %></td>
       <td class='edit_date_picker' name='departure_date'><%= DateHelper.date_fmt(outbound_travel.departure_date) %></td>
       <td class='edit_date_picker' name='expected_return_date'><%= DateHelper.date_fmt(DateHelper.date_from_str(outbound_travel.expected_return_date)) %></td>
