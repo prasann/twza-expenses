@@ -4,8 +4,6 @@
     <title>Expense Reimbursement</title>
     <%= stylesheet_link_tag "style" %>
     <%= stylesheet_link_tag "jquery-ui-custom" %>
-    <!-- TODO: Move this to below the body -->
-    <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
   </head>
   <body>
@@ -22,6 +20,7 @@
         <%= yield %>
       </div>
     </div>
+    <%= javascript_include_tag "application" %>
     <%= yield :page_js %>
   </body>
 </html>
