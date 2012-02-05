@@ -12,7 +12,7 @@
   </tr>
 
   <% @reimbursable_expense_reports.each do |expense| %>
-    <tr class="<%= cycle('even','odd') %>">
+    <tr class="<%= cycle('even', 'odd') %>">
       <td><%= expense[:empl_id] %></td>
       <td><%= expense[:empl_name] %></td>
       <td><%= expense[:expense_report_ids] %></td>

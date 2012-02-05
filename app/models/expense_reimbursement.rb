@@ -36,7 +36,7 @@ class ExpenseReimbursement
 
   def self.get_reimbursable_expense_reports(mark_as_closed = false)
     completed_reimbursements = ExpenseReimbursement.with_status('Processed').to_a
-    completed_reimbursements.collect { |reimbursement| create_bank_reimbursement(reimbursement, mark_as_closed) }.compact
+    completed_reimbursements.collect { |reimbursement| reimbursement.create_bank_reimbursement(mark_as_closed) }.compact
   end
 
   def profile
@@ -66,14 +66,15 @@ class ExpenseReimbursement
   end
 
   private
-  def self.create_bank_reimbursement(reimbursement, mark_as_closed)
-    bank_detail = BankDetail.for_empl_id(reimbursement.empl_id).first
-    reimbursement.close if mark_as_closed
+  def create_bank_reimbursement(mark_as_closed)
+    self.close if mark_as_closed
 
-    OpenStruct.new({:empl_id => reimbursement.empl_id,
+    bank_detail = BankDetail.for_empl_id(self.empl_id).first
+    # TODO: What if bank_detail is nil?
+    OpenStruct.new({:empl_id => self.empl_id,
                     :empl_name => bank_detail.empl_name,
-                    :expense_report_ids => reimbursement.expense_report_id,
-                    :reimbursable_amount => reimbursement.total_amount,
+                    :expense_report_ids => self.expense_report_id,
+                    :reimbursable_amount => self.total_amount,
                     :bank_account_no => bank_detail.account_no
                    })
   end

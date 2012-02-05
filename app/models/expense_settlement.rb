@@ -51,7 +51,7 @@ class ExpenseSettlement
     self.save
   end
 
-  def closed
+  def close
     self.status = 'Closed'
     self.save
   end
@@ -144,7 +144,7 @@ class ExpenseSettlement
 
   def self.get_reimbursable_expense_reports(mark_as_closed = false)
     completed_settlements = ExpenseSettlement.with_status('Complete').to_a
-    completed_settlements.collect { |settlement| create_bank_reimbursement(settlement, mark_as_closed) }.compact
+    completed_settlements.collect { |settlement| settlement.create_bank_reimbursement(mark_as_closed) }.compact
   end
 
   def get_forex_payments
@@ -160,17 +160,19 @@ class ExpenseSettlement
   end
 
   private
-  def self.create_bank_reimbursement(settlement, mark_as_closed)
-    settlement.populate_instance_data
-    if (settlement.get_receivable_amount < 0)
-      settlement.closed if mark_as_closed
-      bank_detail = BankDetail.for_empl_id(settlement.empl_id).first
-      return OpenStruct.new({:empl_id => settlement.empl_id,
-                             :empl_name => bank_detail.empl_name,
-                             :expense_report_ids => settlement.get_unique_report_ids.join(","),
-                             :reimbursable_amount => settlement.get_receivable_amount.abs,
-                             :bank_account_no => bank_detail.account_no
-                            })
-    end
+  def create_bank_reimbursement(mark_as_closed)
+    self.populate_instance_data
+    return if self.get_receivable_amount.negative?
+
+    self.close if mark_as_closed
+
+    bank_detail = BankDetail.for_empl_id(self.empl_id).first
+    # TODO: What if bank_detail is nil?
+    OpenStruct.new({:empl_id => self.empl_id,
+                    :empl_name => bank_detail.empl_name,
+                    :expense_report_ids => self.get_unique_report_ids.join(","),
+                    :reimbursable_amount => self.get_receivable_amount.abs,
+                    :bank_account_no => bank_detail.account_no
+                   })
   end
 end
