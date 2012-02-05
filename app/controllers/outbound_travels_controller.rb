@@ -53,6 +53,7 @@ class OutboundTravelsController < ApplicationController
     redirect_to outbound_travels_url
   end
 
+  # TODO: Shouldnt this be merged in 'index' - search/filter/index are synonymous in REST
   def search
     criteria = {}
     criteria.merge!({:emp_id => params[:emp_id].to_i}) unless params[:emp_id].blank?
@@ -84,13 +85,14 @@ class OutboundTravelsController < ApplicationController
     render :index, :layout => 'tabs'
   end
 
+  # TODO: Shouldnt this be merged in 'index' - search/filter/index are synonymous in REST
   def travels_without_return_date
     @outbound_travels = OutboundTravel.where(:return_date => nil).page(params[:page])
     render :index, :layout => 'tabs'
   end
 
   private
-
+  # TODO: This seems to be a json representation of the objects in context - should be filtered from the model's attributes hash if so (rather than creating a new hash)
   def create_hash_field(*args)
     @fields = Hash.new
     args.each do |field_name|

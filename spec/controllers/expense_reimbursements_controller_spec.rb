@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ExpenseReimbursementController do
+describe ExpenseReimbursementsController do
   describe "Get show " do
     it "should show expense reimbursement details" do
       expected_expense_reimbursement = mock("expense_reimbursement", :id => 123, :empl_id => 1234)
@@ -14,7 +14,7 @@ describe ExpenseReimbursementController do
       profile.should_receive(:get_full_name).and_return('John Smith')
       expected_expense_reimbursement.should_receive(:get_expenses_grouped_by_project_code).and_return(expected_expenses)
 
-      get :show, :id => 123
+      get :show, :id => "123"
 
       assigns(:expense_reimbursement).should == expected_expense_reimbursement
       assigns(:all_expenses).should == expected_expenses

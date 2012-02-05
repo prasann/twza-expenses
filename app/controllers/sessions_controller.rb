@@ -1,3 +1,4 @@
+# TODO: Should this be merged into the users controller? How is it different?
 class SessionsController < ApplicationController
   skip_filter :logged_in?
 

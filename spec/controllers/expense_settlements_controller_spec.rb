@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ExpenseSettlementController do
+describe ExpenseSettlementsController do
   before(:each) do
     @criteria_mock = mock(Mongoid::Criteria)
     @expense_settlements = [Expense.new]
@@ -20,10 +20,10 @@ describe ExpenseSettlementController do
       mockExpenseReportCriteria.should_receive(:for_empl_id).with("1").and_return(mockExpenseReportCriteria)
       mockExpenseReportCriteria.should_receive(:only).with(:expenses, :forex_payments).and_return(mockProcessedExpenses)
 
-      Expense.should_receive(:fetch_for_employee_between_dates).with(1,outbound_travel.departure_date - ExpenseSettlementController::EXPENSE_DATES_PADDED_BY,
-      outbound_travel.return_date + ExpenseSettlementController::EXPENSE_DATES_PADDED_BY,[2]).and_return(mockExpenses)
+      Expense.should_receive(:fetch_for_employee_between_dates).with(1,outbound_travel.departure_date - ExpenseSettlementsController::EXPENSE_DATES_PADDED_BY,
+      outbound_travel.return_date + ExpenseSettlementsController::EXPENSE_DATES_PADDED_BY,[2]).and_return(mockExpenses)
 
-      ForexPayment.should_receive(:fetch_for).with(1,outbound_travel.departure_date - ExpenseSettlementController::FOREX_PAYMENT_DATES_PADDED_BY,
+      ForexPayment.should_receive(:fetch_for).with(1,outbound_travel.departure_date - ExpenseSettlementsController::FOREX_PAYMENT_DATES_PADDED_BY,
       outbound_travel.return_date, [3]).and_return(mockForex)
 
       expected_result_hash = Hash.new
@@ -43,9 +43,9 @@ describe ExpenseSettlementController do
       mockForex = mock(ForexPayment)
       mockForex.should_receive(:collect).and_return(['GBP'])
       OutboundTravel.should_receive(:find).with("123").and_return(outbound_travel)
-      Expense.should_receive(:fetch_for_employee_between_dates).with(1, outbound_travel.departure_date - ExpenseSettlementController::EXPENSE_DATES_PADDED_BY,
+      Expense.should_receive(:fetch_for_employee_between_dates).with(1, outbound_travel.departure_date - ExpenseSettlementsController::EXPENSE_DATES_PADDED_BY,
                                                                      nil,[]).and_return(mockExpenses)
-      ForexPayment.should_receive(:fetch_for).with(1, outbound_travel.departure_date - ExpenseSettlementController::FOREX_PAYMENT_DATES_PADDED_BY,
+      ForexPayment.should_receive(:fetch_for).with(1, outbound_travel.departure_date - ExpenseSettlementsController::FOREX_PAYMENT_DATES_PADDED_BY,
                                                    nil,[]).and_return(mockForex)
       expected_result_hash = Hash.new
       expected_result_hash["expenses"]=mockExpenses
@@ -117,7 +117,7 @@ describe ExpenseSettlementController do
 
   describe "generate report" do
     it "should create expense report for chosen expenses, forex and travel" do
-      pending("find how to fix this as "_routes" => nil is added to the hash")
+      pending("find how to fix this as '_routes' => nil is added to the hash")
       expense_settlement = ExpenseSettlement.new
       outbound_travel = OutboundTravel.new
       outbound_travel.should_receive(:find_or_initialize_expense_settlement).and_return(expense_settlement)
@@ -132,7 +132,7 @@ describe ExpenseSettlementController do
     end
 
     it "should update expense report if it already exists in the travel" do
-      pending("find how to fix this as "_routes" => nil is added to the hash")
+      pending("find how to fix this as '_routes' => nil is added to the hash")
       expense_settlement = ExpenseSettlement.new
       outbound_travel = OutboundTravel.new(:expense_settlement => expense_settlement)
 
@@ -159,10 +159,10 @@ describe ExpenseSettlementController do
       OutboundTravel.stub!(:find).with(travel_id).and_return(outbound_travel)
       expected_result_hash = setup_test_data(ExpenseSettlement.new,expenses, forex_payments,employee_id, travel_id, 'UK', outbound_travel,
                                              test_forex_currencies, [],[],[],[])
-      Expense.should_receive(:fetch_for_employee_between_dates).with(employee_id, outbound_travel.departure_date - ExpenseSettlementController::EXPENSE_DATES_PADDED_BY,
-                                                                     outbound_travel.return_date + ExpenseSettlementController::EXPENSE_DATES_PADDED_BY, []).and_return(expenses)
+      Expense.should_receive(:fetch_for_employee_between_dates).with(employee_id, outbound_travel.departure_date - ExpenseSettlementsController::EXPENSE_DATES_PADDED_BY,
+                                                                     outbound_travel.return_date + ExpenseSettlementsController::EXPENSE_DATES_PADDED_BY, []).and_return(expenses)
 
-      ForexPayment.should_receive(:fetch_for).with(employee_id, outbound_travel.departure_date - ExpenseSettlementController::FOREX_PAYMENT_DATES_PADDED_BY,
+      ForexPayment.should_receive(:fetch_for).with(employee_id, outbound_travel.departure_date - ExpenseSettlementsController::FOREX_PAYMENT_DATES_PADDED_BY,
                                                    outbound_travel.return_date, []).and_return(forex_payments)
 
       get :load_by_travel, :id => travel_id
@@ -195,8 +195,8 @@ describe ExpenseSettlementController do
                         .with({:expenses => expense_settlement[:expenses],
                                :forex_payments => expense_settlement[:forex_payments], :cash_handover => 0,
                                :status => "Generated Draft"})
-      get :generate_report, :travel_id => travel_id, :forex_payments => expense_settlement[:forex_payments],
-          :expenses => expense_settlement[:expenses], :cash_handover => 0
+      post :generate_report, :travel_id => travel_id, :forex_payments => expense_settlement[:forex_payments],
+           :expenses => expense_settlement[:expenses], :cash_handover => 0
 
       expense_settlement.instance_variable_get('@net_payable').to_f.should eq -25852
     end

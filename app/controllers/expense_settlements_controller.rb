@@ -1,7 +1,7 @@
 require 'mongoid'
 require 'helpers/expense_report_importer'
 
-class ExpenseSettlementController < ApplicationController
+class ExpenseSettlementsController < ApplicationController
   FOREX_PAYMENT_DATES_PADDED_BY=15
   EXPENSE_DATES_PADDED_BY=5
 
@@ -45,7 +45,7 @@ class ExpenseSettlementController < ApplicationController
     outbound_travel = OutboundTravel.find(params[:travel_id])
     @expense_report = outbound_travel.find_or_initialize_expense_settlement
     @expense_report.update_attributes({:cash_handover => params[:cash_handover].to_i, :status => 'Generated Draft'}.merge(
-                                      params.slice(:expenses, :forex_payments, :emp_name, :empl_id, :expense_from, 
+                                      params.slice(:expenses, :forex_payments, :emp_name, :empl_id, :expense_from,
                                                    :expense_to, :forex_from, :forex_to).symbolize_keys)
                                      )
     @expense_report.populate_instance_data
@@ -106,6 +106,7 @@ class ExpenseSettlementController < ApplicationController
     expenses = Expense.fetch_for_employee_between_dates travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids
     forex_payments = ForexPayment.fetch_for travel.emp_id, @forex_from_date, @forex_to_date, processed_forex_ids
     @all_currencies = forex_payments.collect(&:currency)
+    # TODO: Should this be an OpenStruct so that we can do method calls instead of hash-like access?
     @expense_report = {"expenses" => expenses,
                        "forex_payments" => forex_payments,
                        "empl_id" => travel.emp_id,

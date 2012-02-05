@@ -8,6 +8,7 @@ class ForexReportsController < ApplicationController
     'Vendor Name', 'Card No', 'Exp Date', 'Office', 'INR'
   ]
 
+  # TODO: Shouldnt this be merged in 'index' - search/filter/index are synonymous in REST
   def search
     @forex_payments = get_results.page(params[:page])
     render action: 'index'

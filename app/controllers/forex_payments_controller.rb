@@ -52,6 +52,7 @@ class ForexPaymentsController < ApplicationController
     redirect_to forex_payments_url
   end
 
+  # TODO: Shouldnt this be merged in 'index' - search/filter/index are synonymous in REST
   def search
     @forex_ids_with_settlement = ExpenseSettlement.for_empl_id(params[:emp_id]).collect(&:forex_payments).flatten
     @forex_payments = ForexPayment.page(params[:page]).any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]})
@@ -69,6 +70,7 @@ class ForexPaymentsController < ApplicationController
   end
 
   private
+  # TODO: This seems to be a json representation of the objects in context - should be filtered from the model's attributes hash if so (rather than creating a new hash)
   def create_hash_field(*args)
     @fields = Hash.new
     args.each do |field_name|

@@ -1,3 +1,4 @@
+# TODO: Dead code?
 class ExpensesController < ApplicationController
   # TODO: Which view is handling this action?
   def index
