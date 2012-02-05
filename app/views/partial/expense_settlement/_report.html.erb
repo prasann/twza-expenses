@@ -18,16 +18,16 @@
     <tr class="<%= cycle("even", "odd") %>">
       <td><%= payment.emp_id %></td>
       <td><%= payment.emp_name %></td>
-      <td><%= payment.issue_date%></td>
-      <td><%= payment.amount%></td>
+      <td><%= payment.issue_date %></td>
+      <td><%= number_with_precision(payment.amount, :precision => 2) %></td>
       <td><%= payment.currency %></td>
-      <td><%= payment.place%></td>
-      <td class='right_align'><%= format_two_decimal_places(payment.inr) %></td>
+      <td><%= payment.place %></td>
+      <td class='right_align'><%= number_with_precision(payment.inr, :precision => 2) %></td>
     </tr>
   <% end %>
   <tr class="heading_no_align">
     <td colspan="6">Total </td>
-    <td class='right_align'><%= format_two_decimal_places(forex_inr_total) %></td>
+    <td class='right_align'><%= number_with_precision(forex_inr_total, :precision => 2) %></td>
   </tr>
 </table>
 <div class='heading'>Expenses</div>
@@ -49,13 +49,13 @@
       <td><%= expense["report_id"] %></td>
       <td><%= expense["currency"] %></td>
       <td><%= expense["amount"] %></td>
-      <td><%= format_two_decimal_places(expense["conversion_rate"]) %></td>
-      <td class='right_align'><%= format_two_decimal_places(expense["local_currency_amount"]) %></td>
+      <td><%= number_with_precision(expense["conversion_rate"], :precision => 2) %></td>
+      <td class='right_align'><%= number_with_precision(expense["local_currency_amount"], :precision => 2) %></td>
     </tr>
   <% end %>
   <tr class="heading_no_align">
     <td colspan="4">Total</td>
-    <td class='right_align'><%= format_two_decimal_places(expense_inr_total) %></td>
+    <td class='right_align'><%= number_with_precision(expense_inr_total, :precision => 2) %></td>
   </tr>
 </table>
 
@@ -63,8 +63,8 @@
   <tr class="<%= cycle("even","odd") %>">
     <td>Cash Handed over:</td>
     <td><%= @expense_report.cash_handover %></td>
-    <td><%= format_two_decimal_places(@expense_report.get_conversion_rate) %></td>
-    <td class='right_align'><%= format_two_decimal_places(@expense_report.cash_handover * @expense_report.get_conversion_rate) %></td>
+    <td><%= number_with_precision(@expense_report.get_conversion_rate, :precision => 2) %></td>
+    <td class='right_align'><%= number_with_precision((@expense_report.cash_handover * @expense_report.get_conversion_rate), :precision => 2) %></td>
   </tr>
   <tr>
     <% if @expense_report.get_receivable_amount.positive? %>
@@ -72,6 +72,6 @@
     <% else %>
       <td colspan="3">Payable to employee :</td>
     <% end %>
-    <td class='right_align heading_no_align'><%= format_two_decimal_places(@expense_report.get_receivable_amount).abs %></td>
+    <td class='right_align heading_no_align'><%= number_with_precision(@expense_report.get_receivable_amount.abs, :precision => 2) %></td>
   </tr>
 </table>

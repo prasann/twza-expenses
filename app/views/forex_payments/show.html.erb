@@ -2,25 +2,25 @@
 <h1>Forex Details</h1>
 <h1 class="center_text"><%= @forex_payment.emp_name %> (Emp Id: <%= @forex_payment.emp_id %>)</h1>
 <div>
-<h3 class="center_text"> <%= DateHelper.date_fmt(@forex_payment.issue_date)%> </h3>
+<h3 class="center_text"> <%= DateHelper.date_fmt(@forex_payment.issue_date) %> </h3>
 <h3 class="center_text"> Card Details </h3>
 <table class="display_table">
-<tr>
-  <th>Card Number</th>
-  <th>Vendor Name</th>
-  <th>Amount</th>
-  <th>Currency</th>
-  <th>INR Value</th>
-  <th>Expiry Date</th>
-</tr>
-<tr>
-  <td><%= @forex_payment.card_number %></td>
-  <td><%= @forex_payment.vendor_name %></td>
-  <td><%= @forex_payment.amount %></td>
-  <td><%= @forex_payment.currency %></td>
-  <td><%= @forex_payment.inr %></td>
-  <td><%= DateHelper.date_fmt(@forex_payment.expiry_date)%></td>
-</tr>
+  <tr>
+    <th>Card Number</th>
+    <th>Vendor Name</th>
+    <th>Amount</th>
+    <th>Currency</th>
+    <th>INR Value</th>
+    <th>Expiry Date</th>
+  </tr>
+  <tr>
+    <td><%= @forex_payment.card_number %></td>
+    <td><%= @forex_payment.vendor_name %></td>
+    <td><%= number_with_precision(@forex_payment.amount, :precision => 2) %></td>
+    <td><%= @forex_payment.currency %></td>
+    <td><%= @forex_payment.inr %></td>
+    <td><%= DateHelper.date_fmt(@forex_payment.expiry_date) %></td>
+  </tr>
 </table>
 
 <h3 class="center_text"> Travel Details </h3>
@@ -40,4 +40,4 @@
 </div>
 
 <%= link_to 'Edit', edit_forex_payment_path(@forex_payment) %> |
-<%= link_to 'Back', forex_payments_path + '#forex_payments'%>
+<%= link_to 'Back', forex_payments_path + '#forex_payments' %>

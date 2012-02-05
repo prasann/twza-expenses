@@ -36,7 +36,7 @@
             <td><%= payment.emp_id %></td>
             <td><%= payment.emp_name %></td>
             <td><%= payment.issue_date %></td>
-            <td><%= payment.amount %></td>
+            <td><%= number_with_precision(payment.amount, :precision => 2) %></td>
             <td><%= payment.currency %></td>
             <td><%= payment.place %></td>
           </tr>
@@ -80,12 +80,12 @@
               <% expenses.each do |expense| %>
                 <tr class="<%= cycle("even", "odd") %>">
                   <td><%= check_box_tag 'expenses[]', expense.id.to_s %></td>
-                  <td><%= expense.expense_rpt_id%></td>
+                  <td><%= expense.expense_rpt_id %></td>
                   <td><%= expense.project %></td>
                   <td><%= expense.expense_date %></td>
                   <td><%= expense.expense_type %></td>
                   <td><%= expense.description %></td>
-                  <td><%= expense.original_cost %> <%= expense.original_currency %></td>
+                  <td><%= number_with_precision(expense.original_cost, :precision => 2) %> <%= expense.original_currency %></td>
                   <td><%= expense.payment_type %></td>
                 </tr>
               <% end %>

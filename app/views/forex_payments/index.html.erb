@@ -1,16 +1,17 @@
 <div class="right_align">
-  <%= link_to image_tag("new_link.png") + "Create Forex Payments", new_forex_payment_path%>
+  <%= link_to image_tag("new_link.png") + "Create Forex Payments", new_forex_payment_path %>
 </div>
 <h1>Forex Payments</h1>
 <div class="no_emp hide error">No employee found for given name.</div>
+<!-- TODO: Use form helper and url helper -->
 <form id="forex_search" action='/forex_payments/search#forex_payments' method = "get">
 <span class="search_by">Search by:</span>
   <%= label_tag 'Employee Name' %>:
   <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
   <span class="or_field">(or)</span>
   <%= label_tag 'Employee Id' %>:
-  <%= text_field_tag :emp_id, params[:emp_id], :class => 'emp_id'%>
-  <%= submit_tag "Search", :name => nil%>
+  <%= text_field_tag :emp_id, params[:emp_id], :class => 'emp_id' %>
+  <%= submit_tag "Search", :name => nil %>
 </form>
 
 <div class="right_align">
@@ -18,7 +19,7 @@
 </div>
 
 <div>
-  <%= paginate @forex_payments%>
+  <%= paginate @forex_payments %>
 </div>
 <table id="forex_payment_content">
   <tr>
@@ -36,18 +37,17 @@
     <tr class="<%= cycle("even", "odd") %>">
       <td><%= payment.emp_id %></td>
       <td><%= payment.emp_name %></td>
-      <td><%= DateHelper.date_fmt(payment.issue_date)%></td>
-      <td><%= DateHelper.date_fmt(payment.travel_date)%></td>
-      <td><%= payment.amount%></td>
+      <td><%= DateHelper.date_fmt(payment.issue_date) %></td>
+      <td><%= DateHelper.date_fmt(payment.travel_date) %></td>
+      <td><%= number_with_precision(payment.amount, :precision => 2) %></td>
       <td><%= payment.currency %></td>
-      <td><%= payment.place%></td>
+      <td><%= payment.place %></td>
 
       <td><%= link_to 'Show', payment%> |
-      <%= link_to 'Edit',edit_forex_payment_path(payment)+'#forex_payments' %>
+      <%= link_to 'Edit', edit_forex_payment_path(payment) + '#forex_payments' %>
       <% if (@forex_ids_with_settlement && @forex_ids_with_settlement.length && !@forex_ids_with_settlement.include?(payment[:_id].to_s)) %>
-        | <%= link_to 'Destroy', payment, confirm: 'Are you sure?', method: :delete %></td>
+        | <%= link_to 'Destroy', payment, :confirm => 'Are you sure?', :method => :delete %></td>
       <% end %>
-
     </tr>
   <% end %>
 </table>

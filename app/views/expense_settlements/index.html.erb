@@ -14,7 +14,7 @@
   </div>
   <% if @expense_settlements %>
     <div>
-      <%= paginate @expense_settlements%>
+      <%= paginate @expense_settlements %>
     </div>
     <table>
       <tr>
@@ -42,7 +42,7 @@
           <td><%= expense_settlement.emp_name %></td>
           <td><%= DateHelper.date_fmt(travel.departure_date) %></td>
           <td><%= DateHelper.date_fmt(travel.return_date) %></td>
-          <td><%= format_two_decimal_places(expense_settlement.get_receivable_amount) %></td>
+          <td><%= number_with_precision(expense_settlement.get_receivable_amount, :precision => 2) %></td>
           <td><%= expense_settlement.status %></td>
           <td><%= DateHelper.date_fmt(expense_settlement.updated_at) %></td>
           <td>

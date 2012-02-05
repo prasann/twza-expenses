@@ -3,21 +3,21 @@
 <%= label_tag('Employee Name: ', nil, :class => 'reimb_heading') %>
 <%= label_tag 'employee_name: ', @empl_name, :class => 'reimb_value' %>
 
-<%= label_tag 'Employee Id : ', nil, :class=>'reimb_heading' %>
-<%= label_tag 'employee_id', @expense_reimbursement['empl_id'], :class=>'reimb_value' %>
+<%= label_tag 'Employee Id : ', nil, :class => 'reimb_heading' %>
+<%= label_tag 'employee_id', @expense_reimbursement['empl_id'], :class => 'reimb_value' %>
 
-<%= label_tag 'Expense Report Id : ', nil, :class=>'reimb_heading' %>
-<%= label_tag 'employee_rpt_id', @expense_reimbursement['expense_report_id'], :class=>'reimb_value' %>
+<%= label_tag 'Expense Report Id : ', nil, :class => 'reimb_heading' %>
+<%= label_tag 'employee_rpt_id', @expense_reimbursement['expense_report_id'], :class => 'reimb_value' %>
 
 <br/><br/>
 
-<%= label_tag 'Created Date : ', nil, :class=>'reimb_heading' %>
-<%= label_tag @expense_reimbursement['submitted_on'], nil, :class=>'reimb_value' %>
+<%= label_tag 'Created Date : ', nil, :class => 'reimb_heading' %>
+<%= label_tag @expense_reimbursement['submitted_on'], nil, :class => 'reimb_value' %>
 <br/><br/>
 <%= form_tag({:action => 'process_reimbursement'}, :method => 'post') do %>
   <% @all_expenses.each do |project_code, expenses| %>
     <div class='center_text'>
-      <%= label_tag 'Project Code', nil, :class=>'reimb_heading' %>
+      <%= label_tag 'Project Code', nil, :class => 'reimb_heading' %>
       <%= label_tag project_code.upcase %>
     </div>
     <table>
@@ -40,7 +40,7 @@
           <td><%= expense.expense_type %></td>
           <td><%= DateHelper.date_fmt(DateHelper.date_from_str(expense.expense_date)) %></td>
           <td><input type="text" name="expense_amount[<%= expense.id.to_s %>]"
-                     value="<%= format_two_decimal_places(expense.cost_in_home_currency.to_f) %>"  class='affects_total'/></td>
+                     value="<%= number_with_precision(expense.cost_in_home_currency, :precision => 2) %>" class='affects_total'/></td>
           <td>INR</td>
           <td><%= expense.description %></td>
           <td><%= expense.vendor %></td>

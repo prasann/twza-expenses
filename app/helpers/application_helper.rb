@@ -1,6 +1,6 @@
 module ApplicationHelper
+  # TODO: Remove this method and replace with the number_with_precision?
   def format_two_decimal_places(number)
-    # TODO: Cant we do this with the number_with_precision?
     (number * 100).round.to_f / 100
   end
 

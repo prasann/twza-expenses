@@ -32,7 +32,7 @@
         <% end %>
         <td><%= expense_reimbursement.empl_id %></td>
         <td><%= DateHelper.date_fmt(expense_reimbursement.submitted_on) %></td>
-        <td><%= format_two_decimal_places(expense_reimbursement.total_amount) %></td>
+        <td><%= number_with_precision(expense_reimbursement.total_amount, :precision => 2) %></td>
         <td><%= expense_reimbursement.status %></td>
         <td><%= DateHelper.date_fmt(expense_reimbursement.updated_at) %></td>
       </tr>
