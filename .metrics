@@ -1,0 +1,7 @@
+MetricFu::Configuration.run do |config|
+  config.code_dirs = ['app', 'lib']
+  config.metrics -= [:churn]  # we are not interested in this
+  config.metrics -= [:rcov]   # doesnt work with ruby 1.9.3
+  config.metrics -= [:flog]   # doesnt work with ruby 1.9.3
+  config.metrics -= [:saikuro]   # doesnt work with ruby 1.9.3
+end

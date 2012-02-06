@@ -3,5 +3,6 @@
 .gitignore
 .idea/
 config/database.yml
+coverage
 tags
 tmp/

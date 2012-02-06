@@ -1,9 +1,8 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-if(ENV["RUN_COVERAGE"])
-  require 'simplecov'
-  SimpleCov.start 'rails'
-end
 ENV["RAILS_ENV"] ||= 'test'
+
+require 'simplecov'
+
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
