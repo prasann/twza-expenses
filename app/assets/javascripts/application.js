@@ -8,29 +8,66 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require_tree .
+$(document).ready(function() {
+    $(function($) {
+        $('#menu').tabs({
+            ajaxOptions: {
+                error: function(xhr, status, index, anchor) {
+                    $(anchor.hash).html(
+                        "Couldn't load this tab. We'll try to fix this as soon as possible. " +
+                            "If this wouldn't be a demo.");
+                }
+            },
+            select: function(event, ui) {
+                // TODO: Use url helpers rather than hardcoding the url
+                if (ui.index == 0) {
+                    window.location = "/outbound_travels#outbound_travels";
+                }
+                if (ui.index == 1) {
+                    window.location = "/forex_payments#forex_payments";
+                }
+                if (ui.index == 2) {
+                    window.location = "/expense_settlements#expense_settlements";
+                }
+                if (ui.index == 3) {
+                    window.location = "/expense_reimbursement#expense_reimbursement";
+                }
+                if (ui.index == 4) {
+                    window.location = "/reports#reports";
+                }
+            }
+        });
 
-// TODO: Move this to the specific pages that need these functions defined
-$(document).ready(function(){
-  $(function($) {
-    $('#menu').tabs({
-      ajaxOptions: {
-        error: function( xhr, status, index, anchor ) {
-          $( anchor.hash ).html(
-            "Couldn't load this tab. We'll try to fix this as soon as possible. " +
-            "If this wouldn't be a demo." );
+        $('.edit_date_picker').editable(function(value, settings) {
+            saveValue(value, settings, this)
+        }, {
+            type    : 'datepicker'
+        });
+
+        $('.edit').editable(function(value, settings) {
+            saveValue(value, settings, this)
+        }, {
+            type   : 'text',
+            submit : 'Save',
+            cancel : 'Cancel'
+        });
+
+        $('.date_picker').datepicker({
+            dateFormat : 'dd-M-yy'
+        });
+
+        function saveValue(value, settings, _this) {
+            var obj_id = $(_this).parent().attr('id');
+            var attr_name = $(_this).attr('name');
+            $.ajax({
+                type:'POST',
+                // TODO: Use url helpers rather than hardcoding the url
+                url:'/outbound_travels/update_field',
+                data:{id: obj_id, name: attr_name, value: value},
+                success: function() {
+                    location.reload()
+                }
+            })
         }
-      },
-      select: function(event, ui){
-        // TODO: This is somehow broken by Vijay - Need help to investigate and fix
-        // TODO: Use url helpers rather than hardcoding the url
-        if(ui.index == 0){ window.location = "/outbound_travels#outbound_travels";}
-        if(ui.index == 1){ window.location = "/forex_payments#forex_payments";}
-        if(ui.index == 2){ window.location = "/expense_settlements#expense_settlement";}
-        if(ui.index == 3){ window.location = "/expense_reimbursements#expense_reimbursement";}
-        if(ui.index == 4){ window.location = "/reports#reports";}
-      }
     });
-
-    $('.date_picker').datepicker({dateFormat: 'dd-M-yy'});
-  });
 });
