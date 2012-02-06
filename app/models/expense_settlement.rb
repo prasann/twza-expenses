@@ -68,6 +68,7 @@ class ExpenseSettlement
     self.status == 'Notified Employee'
   end
 
+  # TODO: Remove asap
   def populate_instance_data
     populate_forex_payments
     populate_consolidated_expenses
