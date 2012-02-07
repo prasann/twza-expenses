@@ -20,7 +20,10 @@ class ExpenseSettlementsController < ApplicationController
   def load_by_travel
     travel = OutboundTravel.find(params[:id])
     padded_dates(travel)
-    create_settlement_report_from_dates(travel)
+    expense_settlement = (params[:expense_settlement_id]) ?
+        ExpenseSettlement.find(params[:expense_settlement_id]).includes(:cash_handovers) : nil;
+    #puts expense_settlement.inspect
+    create_settlement_report_from_dates(travel,expense_settlement)
   end
 
   def edit
@@ -30,9 +33,7 @@ class ExpenseSettlementsController < ApplicationController
     @expenses_to_date = DateHelper.date_from_str(settlement_from_db.expense_to)
     @forex_from_date = DateHelper.date_from_str(settlement_from_db.forex_from)
     @forex_to_date = DateHelper.date_from_str(settlement_from_db.forex_to)
-    create_settlement_report_from_dates(settlement_from_db.outbound_travel)
-    @expense_report["id"] = settlement_from_db.id.to_s
-    render 'load_by_travel'
+    render 'load_by_travel', :expense_settlement_id => params[:id]
   end
 
   def show
@@ -100,19 +101,20 @@ class ExpenseSettlementsController < ApplicationController
     @forex_to_date = params[:forex_to] ? DateHelper.date_from_str(params[:forex_to]) : travel.return_date
   end
 
-  def create_settlement_report_from_dates(travel)
+  def create_settlement_report_from_dates(travel,expense_settlement)
     # TODO: Is this an ARel call?
     processed_expenses = ExpenseSettlement.where(processed: true).for_empl_id(travel.emp_id.to_s).only(:expenses, :forex_payments).to_a
     processed_expense_ids = processed_expenses.collect(&:expenses).flatten
     processed_forex_ids = processed_expenses.collect(&:forex_payments).flatten
 
-    expenses = Expense.fetch_for_employee_between_dates travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids
-    forex_payments = ForexPayment.fetch_for travel.emp_id, @forex_from_date, @forex_to_date, processed_forex_ids
-    @all_currencies = forex_payments.collect(&:currency).uniq
-    @expense_report = ExpenseSettlement.new(:expenses => expenses,
-                       :forex_payments => forex_payments,
-                       :empl_id => travel.emp_id,
-                       :travel_id => travel.id.to_s,
-                       :cash_handovers => [CashHandover.new])
+    @expenses = Expense.fetch_for_employee_between_dates travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids
+    @forex_payments = ForexPayment.fetch_for travel.emp_id, @forex_from_date, @forex_to_date, processed_forex_ids
+    @applicable_currencies = @forex_payments.collect(&:currency).uniq
+    @expense_report = expense_settlement.nil? ? ExpenseSettlement.new(:empl_id=> travel.emp_id,
+                                                                    :travel_id => travel.id.to_s,
+                                                                    :forex_payments => @forex_payments.collect(&:id),
+                                                                    :expenses => @expenses.collect(&:id),
+                                                                    :cash_handovers => [CashHandover.new]) :
+                                                expense_settlement
   end
 end

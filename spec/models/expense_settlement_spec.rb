@@ -98,4 +98,52 @@ describe 'expense_report' do
       email = expense_report.employee_email
       email.should == 'johns' + ::Rails.application.config.email_domain
     end
+
+  it "should compute settlement properly when forex of multiple currencies are involved" do
+      travel_id = '1'
+      employee_id = '12321'
+      test_forex_currencies = ['EUR', 'GBP']
+      expense_amounts = [300, 750]
+      expense_amounts_inr = [23032.5, 47437.5]
+      forex_amounts = [500, 1000]
+      forex_amounts_inr = [37309, 62728.5]
+      outbound_travel = mock(OutboundTravel, :place => 'UK', :emp_id => employee_id,
+                             :departure_date => Date.today - 10, :return_date => Date.today + 5, :id => travel_id)
+      expenses = []
+      forex_payments = []
+      cash_handovers = [CashHandover.new(:amount => 100, :currency=>'EUR'), CashHandover.new(:amount => 150, :currency=>'GBP')]
+      expense_settlement = setup_test_data(expenses, forex_payments, employee_id, travel_id, 'UK',
+                                           outbound_travel, test_forex_currencies,
+                                           expense_amounts, expense_amounts_inr, forex_amounts, forex_amounts_inr,
+                                           cash_handovers)
+
+      expense_settlement.populate_instance_data
+      expense_settlement.instance_variable_get('@net_payable').should eq 13732.5
+    end
+
+  private
+  def setup_test_data(expenses,forex_payments,employee_id, travel_id, place_of_visit, outbound_travel, currencies,
+      expense_amounts, expense_amounts_inr, forex_amounts, forex_amounts_inr, cash_handovers)
+    index = 0
+    currencies.length.times do
+      expenses << mock(Expense, :id => index, :empl_id => employee_id, :original_currency => currencies[index], :place => place_of_visit,
+                       :cost_in_home_currency => expense_amounts_inr[index],  :expense_rpt_id => index,
+                       :original_cost => expense_amounts[index])
+
+      forex_payments << mock(ForexPayment, :id => index,:emp_id => employee_id, :currency => currencies[index],
+                             :place => place_of_visit, :amount => forex_amounts[index], :inr => forex_amounts_inr[index])
+      index = index + 1
+    end
+
+
+    forex_ids = forex_payments.map{|forex| forex.id.to_s }
+    ForexPayment.stub!(:find).with(forex_ids).and_return(forex_payments)
+
+    expense_ids = expenses.map{|expense| expense.id.to_s }
+    Expense.stub!(:find).with(expense_ids).and_return(expenses)
+
+    ExpenseSettlement.new(:empl_id=>employee_id,:travel_id=>travel_id,:expenses => expense_ids,
+                                                          :forex_payments=>forex_ids,
+                                                          :cash_handovers=>cash_handovers)
+  end
 end

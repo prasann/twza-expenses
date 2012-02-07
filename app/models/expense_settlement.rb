@@ -18,7 +18,7 @@ class ExpenseSettlement
 
   belongs_to :outbound_travel
 
-  embeds_many :cash_handovers
+  has_many :cash_handovers
   accepts_nested_attributes_for :cash_handovers
 
   class << self

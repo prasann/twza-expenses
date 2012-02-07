@@ -3,7 +3,7 @@
     <%= settlement_form.hidden_field :id %>
     <%= settlement_form.hidden_field :empl_id %>
     <%= settlement_form.hidden_field :travel_id %>
-    <%= settlement_form.hidden_field :emp_name, :value => (@expense_report['forex_payments'].first.emp_name unless @expense_report['forex_payments'].first.nil?) %>
+    <%= settlement_form.hidden_field :emp_name, :value => (@forex_payments.first.emp_name unless @forex_payments.first.nil?) %>
     <br/>
 
     <span class="heading">Forex Information</span>
@@ -29,9 +29,13 @@
         <th>Place</th>
       </tr>
       <%
-         forexes_avlbl = @expense_report['forex_payments'].present? && !@expense_report['forex_payments'].empty?
+         puts '*****************'
+         puts 'In view, forex: '+@forex_payments.to_s
+         forexes_avlbl = @forex_payments.present? && !@forex_payments.empty?
+         puts 'Forexes_avalbl: '+forexes_avlbl.to_s
+         puts '*****************'
          if forexes_avlbl
-             @expense_report['forex_payments'].each do |payment| %>
+             @forex_payments.each do |payment| %>
               <tr class="<%= cycle("even", "odd") %>">
 
                 <td><%= check_box_tag 'forex_payments[]', payment.id.to_s, :checked => true %></td>
@@ -63,9 +67,9 @@
       </div>
     </div>
     <%
-       expenses_avlbl = @expense_report['expenses'].present? && !@expense_report['expenses'].empty?
+       expenses_avlbl = @expenses.present? && !@expenses.empty?
        if expenses_avlbl
-           expense_map = @expense_report['expenses'].group_by { |x| x[:expense_rpt_id].to_s } %>
+           expense_map = @expenses.group_by { |x| x[:expense_rpt_id].to_s } %>
         <div id="expense_report_accordion">
           <% expense_map.each do |report_id, expenses| %>
               <h2><a href="#"><input type='checkbox' name='<%= report_id %>'><%= report_id %></a></h2>
@@ -108,14 +112,14 @@
 
     <div>
       <label for="amount"><h4>Cash handed over by Employee: </h4></label>
-      <% options = @all_currencies.size() > 1 ? {:prompt => 'Select currency'} : {:selected => @all_currencies[0]} %>
+      <% options = @applicable_currencies.size() > 1 ? {:prompt => 'Select currency'} : {:selected =>@applicable_currencies[0]} %>
       <% @expense_report.cash_handovers.each do |handover_obj| %>
           <%= settlement_form.fields_for :cash_handovers do |handover_form| %>
               <table class="cash_handovers">
                 <tr class="cash_handover">
                   <td>
                     <%= handover_form.text_field :amount, class: 'amount' %>
-                    <%= handover_form.select :currency, @all_currencies, options, {:class => 'currency'} %>
+                    <%= handover_form.select :currency, @applicable_currencies, options, {:class => 'currency'} %>
                     <%= link_to 'Add Row', 'javaScript:void(0)', class: 'add_row clear_right' %>
                     <%= link_to 'Delete Row', 'javaScript:void(0)', class: 'delete_row hide' %>
                   </td>

@@ -9,6 +9,6 @@ class CashHandover
 
   field :amount, type: Float
   field :currency
-  embedded_in :expense_settlement
+  belongs_to :expense_settlement
 
 end
