@@ -55,7 +55,7 @@ class ExpenseSettlement
     self.save
   end
 
-  def close                                            expense_settlement
+  def close
     self.status = 'Closed'
     self.save
   end
