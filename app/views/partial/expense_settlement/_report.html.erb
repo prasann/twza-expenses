@@ -60,12 +60,17 @@
 </table>
 
 <table class="settlement_report">
-  <tr class="<%= cycle("even","odd") %>">
-    <td>Cash Handed over:</td>
-    <td><%= @expense_report.cash_handover %></td>
-    <td><%= number_with_precision(@expense_report.get_conversion_rate, :precision => 2) %></td>
-    <td class='right_align'><%= number_with_precision((@expense_report.cash_handover * @expense_report.get_conversion_rate), :precision => 2) %></td>
-  </tr>
+  <% if !@expense_report.cash_handovers.blank? %>
+      <tr class="<%= cycle("even", "odd") %>">
+        <td>Cash Handed over:</td>
+        <% conversion_rates = @expense_report.instance_variable_get('@conversion_rates') %>
+        <% @expense_report.cash_handovers.each do |cash_handover| %>
+            <td><%= cash_handover.amount %>&nbsp;<%= cash_handover.currency %> </td>
+            <td><%= number_with_precision(conversion_rates[cash_handover.currency], :precision => 2) %></td>
+            <td class='right_align'><%= number_with_precision(cash_handover.amount * conversion_rates[cash_handover.currency], :precision => 2) %></td>
+        <% end %>
+      </tr>
+  <% end %>
   <tr>
     <% if @expense_report.get_receivable_amount.positive? %>
       <td colspan="3">Receivable from employee :</td>

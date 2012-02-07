@@ -42,10 +42,13 @@ class ExpenseSettlementsController < ApplicationController
   end
 
   def generate_report
-    outbound_travel = OutboundTravel.find(params[:travel_id])
+    expense_settlement = params[:expense_settlement]
+    outbound_travel = OutboundTravel.find(expense_settlement[:travel_id])
     @expense_report = outbound_travel.find_or_initialize_expense_settlement
-    @expense_report.update_attributes({:cash_handover => params[:cash_handover].to_i, :status => 'Generated Draft'}.merge(
-                                      params.slice(:expenses, :forex_payments, :emp_name, :empl_id, :expense_from,
+    @expense_report.update_attributes({:cash_handovers => expense_settlement[:cash_handovers_attributes], :status => 'Generated Draft',
+                                      :empl_id => expense_settlement[:empl_id],
+                                      :emp_name => expense_settlement[:emp_name]}.merge(
+                                      params.slice(:expenses, :forex_payments,:expense_from,
                                                    :expense_to, :forex_from, :forex_to).symbolize_keys)
                                      )
     @expense_report.populate_instance_data
@@ -103,13 +106,13 @@ class ExpenseSettlementsController < ApplicationController
     processed_expense_ids = processed_expenses.collect(&:expenses).flatten
     processed_forex_ids = processed_expenses.collect(&:forex_payments).flatten
 
-    expenses = Expense.fetch_for_employee_between_dates(travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids)
-    forex_payments = ForexPayment.fetch_for(travel.emp_id, @forex_from_date, @forex_to_date, processed_forex_ids)
-    @all_currencies = forex_payments.collect(&:currency)
-    # TODO: Should this be an OpenStruct so that we can do method calls instead of hash-like access?
-    @expense_report = {"expenses" => expenses,
-                       "forex_payments" => forex_payments,
-                       "empl_id" => travel.emp_id,
-                       "travel_id" => travel.id.to_s}
+    expenses = Expense.fetch_for_employee_between_dates travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids
+    forex_payments = ForexPayment.fetch_for travel.emp_id, @forex_from_date, @forex_to_date, processed_forex_ids
+    @all_currencies = forex_payments.collect(&:currency).uniq
+    @expense_report = ExpenseSettlement.new(:expenses => expenses,
+                       :forex_payments => forex_payments,
+                       :empl_id => travel.emp_id,
+                       :travel_id => travel.id.to_s,
+                       :cash_handovers => [CashHandover.new])
   end
 end

@@ -20,7 +20,7 @@ describe EmployeeMailer do
       }
       )
       travel = mock(OutboundTravel, :__id__ => @travel_id, :place=>'UK', :departure_date => Time.parse('2011-10-01'))
-      @expense_report = mock(ExpenseSettlement, :empl_id => @employee_id, :cash_handover => 0, :outbound_travel => travel)
+      @expense_report = mock(ExpenseSettlement, :empl_id => @employee_id, :cash_handovers => [], :outbound_travel => travel)
       @expense_report.should_receive(:populate_instance_data)
       expense = Hash.new
       expense['report_id'] = @expense[:expense_rpt_id]

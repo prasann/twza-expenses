@@ -1,21 +1,25 @@
 require 'mongoid'
 require 'ostruct'
+require "#{Rails.root}/lib/helpers/mongoid_helper"
 
 class ExpenseSettlement
   # TODO: Should not use helper in model
   include ApplicationHelper
   include Mongoid::Document
   include Mongoid::Timestamps
+  include MongoidHelper
 
   field :expenses, type: Array
   field :forex_payments, type: Array
   field :empl_id, type: String
   field :emp_name, type: String
 
-  field :cash_handover, type: Float
   field :status, type: String
 
   belongs_to :outbound_travel
+
+  embeds_many :cash_handovers
+  accepts_nested_attributes_for :cash_handovers
 
   class << self
     def for_empl_id(empl_id)
@@ -51,7 +55,7 @@ class ExpenseSettlement
     self.save
   end
 
-  def close
+  def close                                            expense_settlement
     self.status = 'Closed'
     self.save
   end
@@ -96,7 +100,7 @@ class ExpenseSettlement
       con_exp["amount"] = BigDecimal.new("0")
       expenses_by_cur.each do |expense_cur|
         con_exp["report_id"] = expense_cur.expense_rpt_id
-        con_exp["currency"] = expense_cur.original_currency
+        con_exp["currency" ] = expense_cur.original_currency
         con_exp["amount"] = con_exp["amount"] + BigDecimal.new(expense_cur.original_cost)
         con_exp["conversion_rate"] = get_conversion_rate_for(expense_cur)
         # TODO: Should not need to round off to 2 decimal places here - only in views
@@ -138,7 +142,12 @@ class ExpenseSettlement
     expense_inr_amount = 0
     @consolidated_expenses.each { |expense| expense_inr_amount += expense["local_currency_amount"] }
     forex_inr_amount = get_forex_payments.sum(&:inr)
-    value = forex_inr_amount - (expense_inr_amount + (cash_handover * get_conversion_rate))
+    @cash_handover_total = 0
+    @conversion_rates ||= get_conversion_rates_for_currency
+    self.cash_handovers.each do |cash_handover|
+      @cash_handover_total += cash_handover.amount * @conversion_rates[cash_handover.currency]
+    end
+    value = forex_inr_amount - (expense_inr_amount + @cash_handover_total)
     # TODO: Should not need to round off to 2 decimal places here - only in views
     format_two_decimal_places(value)
   end

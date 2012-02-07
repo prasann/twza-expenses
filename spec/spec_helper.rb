@@ -6,6 +6,7 @@ require 'simplecov'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
+require "#{Rails.root}/lib/helpers/mongoid_helper"
 
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -43,3 +44,14 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
 end
+
+RSpec::Matchers.define :have_same_attributes_as do |expected|
+  match do |actual|
+    if (actual.is_a? MongoidHelper)
+      actual.declared_attributes == expected.declared_attributes
+    else
+      actual.attributes == expected.attributes
+    end
+  end
+end
+
