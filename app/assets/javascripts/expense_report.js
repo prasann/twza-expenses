@@ -27,9 +27,6 @@ $(document).ready(function() {
             var cloned_element = display_element.clone();
             cloned_element.find(':input').val('');
             handover_section.append(cloned_element);
-            var amount_field = display_element.find('.amount');
-            amount_field.attr('readonly', true);
-            display_element.find('.currency').attr('readonly', true);
             display_element.find('.delete_row').show();
             $(this).remove();
         });
@@ -38,15 +35,25 @@ $(document).ready(function() {
            $(this).parents('.cash_handover').last().remove();
         });
 
-        $('.generate_settlement').click(function(){
+        $('.generate_settlement').click(function(event){
             var cash_handovers_section = $('.cash_handovers');
             var handover_item_index = 0;
             cash_handovers_section.find('.cash_handover').each(function(index,item){
                 var amount = $(item).find('.amount');
                 var currency = $(item).find('.currency');
-                if (amount.val() == '' || currency.val() == '') {
+                if (amount.val() == '') {
                     $(item).remove();
                     return true;
+                }
+                if (parseInt(amount.val()) < 0) {
+                  alert('Please enter a positive forex cash handover amount');
+                  event.preventDefault();
+                  return false;
+                }
+                if (currency.val() == '')  {
+                  alert('Please select a currency from the list of applicable currencies')
+                  event.preventDefault();
+                  return false;
                 }
                 set_index_nested_form_attribute(amount, handover_item_index);
                 set_index_nested_form_attribute(currency, handover_item_index);

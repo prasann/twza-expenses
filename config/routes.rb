@@ -44,7 +44,7 @@ Mankatha::Application.routes.draw do
 
   resources :expense_settlements do
     collection do
-      post :upload
+      get :upload
       post :generate_report
       post :file_upload
     end
