@@ -29,11 +29,7 @@
         <th>Place</th>
       </tr>
       <%
-         puts '*****************'
-         puts 'In view, forex: '+@forex_payments.to_s
          forexes_avlbl = @forex_payments.present? && !@forex_payments.empty?
-         puts 'Forexes_avalbl: '+forexes_avlbl.to_s
-         puts '*****************'
          if forexes_avlbl
              @forex_payments.each do |payment| %>
               <tr class="<%= cycle("even", "odd") %>">
