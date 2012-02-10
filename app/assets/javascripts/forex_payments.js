@@ -37,11 +37,11 @@ function populateForexFields(){
       }
     })
 
-    $('.credit_card_expiry').datepicker("destroy").datepicker({dateFormat : "m/yy"});
+    $('.credit_card_expiry').datepicker("destroy").datepicker({dateFormat : "m/y"});
   });
 };
 function isValidCreditCardNumber(credit_card_number) {
-  if (!/^\d{16}[^\d]+$/.test(credit_card_number.replace(/\s/g, ''))) {
+  if (!/^\d{16}[^\d]+$/.test(credit_card_number.replace(/\s+/g, ''))) {
     alert('Please enter a valid 16-digit credit-card number');
     return false;
   }

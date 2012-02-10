@@ -39,11 +39,7 @@ class ForexPayment
 
   def expiry_date=(value)
     begin
-      puts value
-      self[:expiry_date] = Time.strptime(value, '%m/%Y')
-      if (self[:expiry_date].year < Time.now.year)
-        self[:expiry_date] = self[:expiry_date].change(:year => self[:expiry_date].year + 2000)
-      end
+      self[:expiry_date] = Time.strptime(value, '%m/%y')
     rescue
       self[:expiry_date] = nil
     end
@@ -51,26 +47,8 @@ class ForexPayment
 
   private
   def verify_credit_card_details
-    if (!card_number.blank?)
-      is_credit_card_number_valid && is_expiry_date_specified
-    end
-  end
-
-  private
-  def is_credit_card_number_valid
-    if ((/^\d{16}[^\d]+$/ =~ card_number.gsub(/\s+/, '')).blank?)
+    if (!card_number.blank? && (/^\d{16}[^\d]+/ =~ card_number.gsub(" ", "")).blank?)
       self.errors.add(:card_number, INVALID_CREDIT_CARD_MSG)
-      return false
     end
-    true
-  end
-
-  private
-  def is_expiry_date_specified
-    if (self.expiry_date.nil?)
-      self.errors.add(:expiry_date, MISSING_EXPIRY_DATE_MSG)
-      return false
-    end
-    true
   end
 end

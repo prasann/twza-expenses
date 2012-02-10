@@ -41,18 +41,8 @@ describe 'forex_payment' do
       error_msgs[k].should include ForexPayment::INVALID_CREDIT_CARD_MSG
     end
 
-    forex_with_valid_card = ForexPayment.create(valid_attributes.merge!({:card_number => '1234 3214 3212 3243 Axis',
-                                                                        :expiry_date => Date.today + 100}))
+    forex_with_valid_card = ForexPayment.create(valid_attributes.merge!({:card_number => '1234 3214 3212   3243 Axis   ',
+                                                                        :expiry_date => Time.strptime('03/13','%m/%y')}))
     forex_with_valid_card.errors.messages.size.should be 0
   end
-
-  it "should verify if credit card expiry date is specified if card number is specified" do
-    forex_without_expiry_date = ForexPayment.create(valid_attributes.merge!({:card_number => '1234 3214 3212 3243 Axis'}))
-    forex_without_expiry_date.valid?.should be_false
-    error_msgs = forex_without_expiry_date.errors.messages
-    error_msgs.each do |k, v|
-      error_msgs[k].should include ForexPayment::MISSING_EXPIRY_DATE_MSG
-    end
-  end
-
 end

@@ -22,7 +22,6 @@ class ExpenseSettlementsController < ApplicationController
     padded_dates(travel)
     expense_settlement = (params[:expense_settlement_id]) ?
         ExpenseSettlement.find(params[:expense_settlement_id]).includes(:cash_handovers) : nil;
-    #puts expense_settlement.inspect
     create_settlement_report_from_dates(travel,expense_settlement)
   end
 

@@ -3,19 +3,17 @@ require 'roo'
 module ExcelDataExtractor
   EXCEL_HANDLERS = {"xls" => Excel, "xlsx" => Excelx}
 
-  def handle_validation_error(ignored_records_count, record)
-    if (record.errors.messages.size > 0)
-      ignored_records_count = ignored_records_count + 1
-      puts
-      $stderr.puts "Record: #{record.inspect}, Error: #{record.errors.messages}"
+  def handle_validation_error(record)
+    unless record.errors.empty?
+      $stderr.puts "\nRecord: #{record.inspect}, Error: #{record.errors.messages}"
+      return 1
     end
-    ignored_records_count
+    return 0
   end
 
   def show_summary(records_count, summary_msg)
     if records_count > 0
-      puts
-      puts records_count.to_s + summary_msg
+      $stderr.puts "\n#{records_count} #{summary_msg}"
     end
   end
 
@@ -25,17 +23,15 @@ module ExcelDataExtractor
     file = handler(file_name)
     file.default_sheet = file.sheets[sheet_id]
     2.upto(file.last_row) do |line|
-      extractor = Proc.new{|column|
-        file.cell(line, column)
-      }
+      extractor = Proc.new{ |column| file.cell(line, column) }
       record = callback.call(extractor)
       begin
         record.save
-        ignored_records_count = handle_validation_error(ignored_records_count, record)
+        ignored_records_count += handle_validation_error(record)
       rescue => e
-        exception_records_count = exception_records_count + 1
-        puts e
-        puts "Error while processing the record: " + record.inspect
+        exception_records_count += 1
+        $stderr.puts e
+        $stderr.puts "Error while processing the record: #{record.inspect}"
       end
     end
     show_summary(ignored_records_count, ' records ignored due to validation errors')

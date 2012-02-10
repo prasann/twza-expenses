@@ -9,18 +9,18 @@ describe ForexDataImporter do
     @expected_text_value = "some text"
   end
 
-  xit "should read the forex details from the spreadsheet and load the details into the database" do
+  it "should read the forex details from the spreadsheet and load the details into the database" do
+    ForexPayment.delete_all
     importer = ForexDataImporter.new
-    card_number = '1234 1234 1234 1234 Axis'
-    card_expiry_date = Date.today + 100
+
     importer.stub!(:read_from_excel).and_return do |filename, sheetno, block|
       file = mock(Excel)
 
       def file.cell(line, column)
         return 1 if ['C', 'E', 'N'].include?(column)
         return Date.today if ['B', 'G'].include?(column)
-        return card_number if ['K'].include?(column)
-        return card_expiry_date if ['L'].include?(column)
+        return '1234 1234 1234 1234 Axis' if ['K'].include?(column)
+        return '04/15' if ['L'].include?(column)
         'some text'
       end
 
@@ -29,21 +29,20 @@ describe ForexDataImporter do
           file.cell(line, column)
         }
 
-        (forex_payment = block.call(extractor))
-        puts forex_payment.inspect
-        #forex_payment.save
+        forex_payment = block.call(extractor)
+        forex_payment.save
       end
     end
-
 
     importer.import('somefile')
 
     ForexPayment.find(:all).count.should == 2
     forex_payment = ForexPayment.find(:all).first
-    validate_saved_forex_details(forex_payment, card_number, card_expiry_date)
+    validate_saved_forex_details(forex_payment, '1234 1234 1234 1234 Axis', Date.strptime('04/15','%m/%y'))
   end
 
   xit "should not save the invalid forex payment record" do
+    ForexPayment.delete_all
     importer = ForexDataImporter.new
     importer.stub!(:read_from_excel).and_return do |filename, sheetno, block|
       file = mock(Excel)
@@ -51,28 +50,29 @@ describe ForexDataImporter do
       def file.cell(line, column)
         return "wrong data" if line == 2
         return 1 if ['C', 'E', 'N'].include?(column)
-        return Date.today if ['B', 'G'].include?(column)
+        return Date.today if ['B', 'G', 'L'].include?(column)
         'some text'
       end
 
       1.upto(2) do |line|
-        extractor = Proc.new { |column|
-          file.cell(line, column)
+          extractor = Proc.new { |column|
+            file.cell(line, column)
         }
-        block.call extractor
+
+        forex_payment = block.call(extractor)
+        forex_payment.save
+        if (line == 2)
+          forex_payment.errors.messages.size.should == 1
+          forex_payment.errors.messages[:departure_date].should == ["can't be blank"]
+        end
       end
     end
 
     importer.import('somefile')
 
     ForexPayment.find(:all).count.should == 1
-    forex_payment = ForexPayment.find(:all).first
-
-    validate_saved_forex_details(forex_payment)
-
 
   end
-
 
   def validate_saved_forex_details(forex_payment, card_number=nil, card_expiry_date=nil)
     forex_payment.issue_date.should == @expected_date

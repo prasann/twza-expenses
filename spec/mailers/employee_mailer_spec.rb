@@ -51,7 +51,7 @@ describe EmployeeMailer do
         @email.to[0].should == @profile.email_id + ::Rails.application.config.email_domain
         @email.from.size.should == 1
         @email.from[0].should == ::Rails.application.config.email_sender
-        @email.subject.should == EmployeeMailer::EXPENSE_SETTLEMENT_SUBJECT.sub('$place','UK')
+        @email.subject.should == 'test - '+EmployeeMailer::EXPENSE_SETTLEMENT_SUBJECT.sub('$place','UK')
         .sub('$start_date','01-Oct-2011')
         @email.body.should include(@expense_report.get_receivable_amount)
       end
