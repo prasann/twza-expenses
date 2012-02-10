@@ -76,7 +76,7 @@ class ExpenseReimbursementsController < ApplicationController
       expenses.push({'expense_id' => expense_id, 'modified_amount' => modified_amount})
       total_amount += modified_amount
     end
-    status = params[:process_reimbursement] ? 'Processed' : 'Faulty'
+    status = params[:process_reimbursement] ? ExpenseReimbursement::UNPROCESSED : ExpenseReimbursement::FAULTY
     @expense_reimbursement = ExpenseReimbursement.create(:expense_report_id => params[:expense_report_id],
                                                          :empl_id => params[:empl_id],
                                                          :submitted_on => params[:submitted_on],
@@ -94,7 +94,6 @@ class ExpenseReimbursementsController < ApplicationController
     unprocessed_expenses.each do |expense_report_id, expenses|
       @expense_reimbursements.push(ExpenseReimbursement.new(:expense_report_id => expense_report_id,
                                                             :empl_id => empl_id,
-                                                            :status => 'Unprocessed',
                                                             :submitted_on => expenses.first.report_submitted_at,
                                                             :total_amount => expenses.sum { |expense| expense.cost_in_home_currency.to_f })) if !expenses.empty?
     end

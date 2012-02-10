@@ -6,6 +6,7 @@ class BankDetail
   field :account_no, type: Integer
 
   validates_presence_of :empl_id, :account_no
+  validates_uniqueness_of :account_no
 
   class << self
     def for_empl_id(empl_id)

@@ -6,7 +6,7 @@ require 'simplecov'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
-require "#{Rails.root}/lib/helpers/mongoid_helper"
+require "#{Rails.root}/lib/helpers/model_attributes"
 
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -47,7 +47,7 @@ end
 
 RSpec::Matchers.define :have_same_attributes_as do |expected|
   match do |actual|
-    if (actual.is_a? MongoidHelper)
+    if (actual.is_a? ModelAttributes)
       actual.declared_attributes == expected.declared_attributes
     else
       actual.attributes == expected.attributes

@@ -46,7 +46,8 @@ class ExpenseSettlementsController < ApplicationController
     expense_settlement = params[:expense_settlement]
     outbound_travel = OutboundTravel.find(expense_settlement[:travel_id])
     @expense_report = outbound_travel.find_or_initialize_expense_settlement
-    @expense_report.update_attributes({:cash_handovers => expense_settlement[:cash_handovers_attributes], :status => 'Generated Draft',
+    @expense_report.update_attributes({:cash_handovers => expense_settlement[:cash_handovers_attributes],
+                                       :status => ExpenseSettlement::GENERATED_DRAFT,
                                       :empl_id => expense_settlement[:empl_id],
                                       :emp_name => expense_settlement[:emp_name]}.merge(
                                       params.slice(:expenses, :forex_payments,:expense_from,

@@ -251,6 +251,20 @@ tr.even{
     text-align: center;
 }
 
+.mandatory_mark {
+  color: #990000;
+  font-size: 1.2em;
+  margin-left: 0.3em;
+}
+
+.partial_mandatory_mark {
+  display: inline;
+}
+
+.red {
+  color: #990000;
+}
+
 #expense_report_accordion{
     width: 90%;
     margin-left:5%;

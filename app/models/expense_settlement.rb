@@ -1,13 +1,18 @@
 require 'mongoid'
 require 'ostruct'
-require "#{Rails.root}/lib/helpers/mongoid_helper"
+require "#{Rails.root}/lib/helpers/model_attributes"
 
 class ExpenseSettlement
   # TODO: Should not use helper in model
   include ApplicationHelper
   include Mongoid::Document
   include Mongoid::Timestamps
-  include MongoidHelper
+  include ModelAttributes
+
+  NOTIFIED_EMPLOYEE = 'Notified Employee'
+  COMPLETE = 'Complete'
+  CLOSED = 'Closed'
+  GENERATED_DRAFT = 'Generated Draft'
 
   field :expenses, type: Array
   field :forex_payments, type: Array
@@ -20,6 +25,9 @@ class ExpenseSettlement
 
   has_many :cash_handovers
   accepts_nested_attributes_for :cash_handovers
+
+  validates_presence_of :empl_id, :outbound_travel, :expenses, :forex_payments, :status
+  validates_inclusion_of :status, :in => [GENERATED_DRAFT, NOTIFIED_EMPLOYEE, COMPLETE, CLOSED]
 
   class << self
     def for_empl_id(empl_id)
@@ -46,30 +54,30 @@ class ExpenseSettlement
   def notify_employee
     populate_instance_data
     EmployeeMailer.expense_settlement(self).deliver
-    self.status = 'Notified Employee'
+    self.status = NOTIFIED_EMPLOYEE
     self.save
   end
 
   def complete
-    self.status = 'Complete'
+    self.status = COMPLETE
     self.save
   end
 
   def close
-    self.status = 'Closed'
+    self.status = CLOSED
     self.save
   end
 
   def is_generated_draft?
-    self.status == 'Generated Draft'
+    self.status == GENERATED_DRAFT
   end
 
   def is_complete?
-    self.status == 'Complete'
+    self.status == COMPLETE
   end
 
   def is_notified_employee?
-    self.status == 'Notified Employee'
+    self.status == NOTIFIED_EMPLOYEE
   end
 
   # TODO: Remove asap
@@ -153,7 +161,7 @@ class ExpenseSettlement
   end
 
   def self.get_reimbursable_expense_reports(mark_as_closed = false)
-    completed_settlements = ExpenseSettlement.with_status('Complete').to_a
+    completed_settlements = ExpenseSettlement.with_status(COMPLETE).to_a
     completed_settlements.collect { |settlement| settlement.create_bank_reimbursement(mark_as_closed) }.compact
   end
 

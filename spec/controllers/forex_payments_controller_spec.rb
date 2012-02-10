@@ -4,7 +4,7 @@ describe ForexPaymentsController do
   # TODO: Use factory_girl
   def valid_attributes
     {:emp_id => '123', :emp_name => 'test', :amount => 120.25, :currency => 'INR', :travel_date => Date.today,
-    :office => 'Chennai', :inr => 5001.50}
+    :office => 'Chennai', :inr => 5001.50, :issue_date => Date.today - 2, :vendor_name => 'VKC Forex'}
   end
 
   describe "GET index" do
@@ -133,7 +133,12 @@ describe ForexPaymentsController do
     it "searches for the given employee id" do
       forex_payments_1 = ForexPayment.create!(valid_attributes.merge!(emp_id: 10001))
       forex_payments_2 = ForexPayment.create!(valid_attributes.merge!(emp_id: 10001))
-      expense_settlement = ExpenseSettlement.create!(empl_id: 10001, forex_payments: [forex_payments_1[:_id]])
+      expense = Expense.create()
+      outbound_travel = OutboundTravel.create(:emp_id => '123', :emp_name => 'test', :place => 'US',:departure_date => Time.now)
+      expense_settlement = ExpenseSettlement.create!(:empl_id => 10001, :forex_payments => [forex_payments_1[:_id]],
+                                                    :expenses => [expense.id],
+                                                    :outbound_travel => outbound_travel.id,
+                                                    :status => ExpenseSettlement::GENERATED_DRAFT)
       get :search, :emp_id => 10001
       assigns(:forex_payments).should eq([forex_payments_1, forex_payments_2])
       assigns(:forex_ids_with_settlement).size.should == 1
@@ -162,7 +167,7 @@ describe ForexPaymentsController do
       outbound_travel_1 = ForexPayment.create!(valid_attributes.merge!({place: 'US', currency: 'GBP', office: 'Pune'}))
       outbound_travel_2 = ForexPayment.create!(valid_attributes.merge!({place: 'US', vendor_name: 'VFC', currency: 'USD', office: 'Chennai'}))
       get :data_to_suggest
-      assigns(:fields).should be_eql ({'place' => ["US"], 'vendor_name' => ['VFC'], 'currency' => ['GBP','USD'] , 'office' => ['Pune','Chennai']})
+      assigns(:fields).should be_eql ({'place' => ["US"], 'vendor_name' => ['VKC Forex', 'VFC'], 'currency' => ['GBP','USD'] , 'office' => ['Pune','Chennai']})
     end
   end
 

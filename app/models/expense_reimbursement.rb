@@ -4,13 +4,21 @@ class ExpenseReimbursement
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  FAULTY      = 'Faulty'
+  UNPROCESSED = 'Unprocessed'
+  CLOSED      = 'Closed'
+  PROCESSED   = 'Processed'
+
   field :expense_report_id, type: Integer
   field :empl_id, type: String
   field :expenses, type: Array
-  field :status, type: String
+  field :status, type: String, :default => UNPROCESSED
   field :submitted_on, type: Date
   field :total_amount, type: Float
   field :notes, type: String
+
+  validates_presence_of :expense_report_id, :empl_id, :submitted_on, :total_amount, :status
+  validates_inclusion_of :status, :in => [PROCESSED, FAULTY, UNPROCESSED, CLOSED]
 
   class << self
     def for_empl_id(empl_id)
@@ -35,7 +43,7 @@ class ExpenseReimbursement
   end
 
   def self.get_reimbursable_expense_reports(mark_as_closed = false)
-    completed_reimbursements = ExpenseReimbursement.with_status('Processed').to_a
+    completed_reimbursements = ExpenseReimbursement.with_status(PROCESSED).to_a
     completed_reimbursements.collect { |reimbursement| reimbursement.create_bank_reimbursement(mark_as_closed) }.compact
   end
 
@@ -52,17 +60,17 @@ class ExpenseReimbursement
   end
 
   def close
-    self.status = 'Closed'
+    self.status = CLOSED
     self.save
   end
 
   # TODO: Does this clash with some mongo status of processed?
   def is_processed?
-    self.status == 'Processed'
+    self.status == PROCESSED
   end
 
   def is_faulty?
-    self.status == 'Faulty'
+    self.status == FAULTY
   end
 
   private

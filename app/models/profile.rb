@@ -11,7 +11,7 @@ class Profile < ActiveRecord::Base
   end
 
   def get_full_name
-    name.camelize + ' ' + surname.camelize
+    surname.nil? ? name.camelize : name.camelize + ' ' + surname.camelize
   end
 
   def before_destroy

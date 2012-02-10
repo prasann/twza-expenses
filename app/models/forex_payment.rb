@@ -1,6 +1,9 @@
 class ForexPayment
   include Mongoid::Document
 
+  INVALID_CREDIT_CARD_MSG = "Not a valid 16-digit credit-card number"
+  MISSING_EXPIRY_DATE_MSG = "Card number should have an expiry date specified"
+
   field :issue_date, type: Date
   field :emp_id, type: Integer
   field :emp_name
@@ -11,11 +14,13 @@ class ForexPayment
   field :project
   field :vendor_name
   field :card_number
-  field :expiry_date
+  field :expiry_date, type: Date
   field :office
   field :inr, type: BigDecimal
 
-  validates_presence_of :emp_id, :emp_name, :amount, :currency, :travel_date, :inr
+  validate :verify_credit_card_details
+
+  validates_presence_of :emp_id, :emp_name, :amount, :currency, :travel_date, :inr, :issue_date, :vendor_name
 
   class << self
     def for_emp_id(emp_id)
@@ -30,5 +35,42 @@ class ForexPayment
   def convert_inr(conversion_factor)
     conversion_factor = conversion_factor || 1
     ((amount.to_f * conversion_factor) * 100).round.to_f/100
+  end
+
+  def expiry_date=(value)
+    begin
+      puts value
+      self[:expiry_date] = Time.strptime(value, '%m/%Y')
+      if (self[:expiry_date].year < Time.now.year)
+        self[:expiry_date] = self[:expiry_date].change(:year => self[:expiry_date].year + 2000)
+      end
+    rescue
+      self[:expiry_date] = nil
+    end
+  end
+
+  private
+  def verify_credit_card_details
+    if (!card_number.blank?)
+      is_credit_card_number_valid && is_expiry_date_specified
+    end
+  end
+
+  private
+  def is_credit_card_number_valid
+    if ((/^\d{16}[^\d]+$/ =~ card_number.gsub(/\s+/, '')).blank?)
+      self.errors.add(:card_number, INVALID_CREDIT_CARD_MSG)
+      return false
+    end
+    true
+  end
+
+  private
+  def is_expiry_date_specified
+    if (self.expiry_date.nil?)
+      self.errors.add(:expiry_date, MISSING_EXPIRY_DATE_MSG)
+      return false
+    end
+    true
   end
 end

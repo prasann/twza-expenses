@@ -1,14 +1,17 @@
 require 'mongoid'
 
-require "#{Rails.root}/lib/helpers/mongoid_helper"
+require "#{Rails.root}/lib/helpers/model_attributes"
 
 class CashHandover
   include ApplicationHelper
   include Mongoid::Document
-  include MongoidHelper
+  include ModelAttributes
 
-  field :amount, type: Float
-  field :currency
+  field :amount, type: BigDecimal
+  field :currency, type: String
+
+  validates_presence_of :amount, :currency
+
   belongs_to :expense_settlement
 
 end

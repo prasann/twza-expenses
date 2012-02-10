@@ -1,6 +1,6 @@
 <%= form_for(@outbound_travel) do |f| %>
   <% if @outbound_travel.errors.any? %>
-    <div id="error_explanation">
+    <div id="error_explanation" class="errors">
       <h2><%= pluralize(@outbound_travel.errors.count, "error") %> prohibited this Outbound Travel from being saved:</h2>
 
       <ul>
@@ -15,56 +15,56 @@
   <div class="fields">
     <table>
       <tr>
-        <td class="text"><%= f.label :emp_id, 'Employee Id' %>:</td>
-        <td><%= f.text_field :emp_id, :class => 'emp_id' %></td>
+        <td class="text"><%= f.label :emp_id, 'Employee Id: ' %></td>
+        <td><%= f.text_field :emp_id, :class => 'emp_id' %><span class="mandatory_mark">*</span></td>
       </tr>
       <tr>
-        <td class="text"><%= f.label :emp_name, 'Employee Name' %>:</td>
-        <td><%= f.text_field :emp_name, :class => 'emp_name' %></td>
+        <td class="text"><%= f.label :emp_name, 'Employee Name: ' %></td>
+        <td><%= f.text_field :emp_name, :class => 'emp_name' %><span class="mandatory_mark">*</span></td>
       </tr>
       <tr>
-        <td class="text"><%= f.label :place, 'Country of Visit' %>:</td>
-        <td><%= f.text_field :place %></td>
+        <td class="text"><%= f.label :place, 'Country of Visit: ' %></td>
+        <td><%= f.text_field :place %><span class="mandatory_mark">*</span></td>
       </tr>
       <tr>
-        <td class="text"><%= f.label :travel_duration, 'Duration of Stay (apprx)' %>:</td>
+        <td class="text"><%= f.label :travel_duration, 'Duration of Stay (apprx): ' %></td>
         <td><%= f.text_field :travel_duration %></td>
       </tr>
       <tr>
-        <td class="text"><%= f.label :payroll_effect, 'Payroll effect in India' %>:</td>
+        <td class="text"><%= f.label :payroll_effect, 'Payroll effect in India: ' %></td>
         <td><%= f.text_field :payroll_effect %></td>
       </tr>
       <tr>
-        <td class="text"><%= f.label :departure_date, 'Departure date from India' %>:</td>
-        <td><%= f.text_field :departure_date, :class => 'date_picker' %></td>
+        <td class="text"><%= f.label :departure_date, 'Departure date from India: ' %></td>
+        <td><%= f.text_field :departure_date, :class => 'date_picker' %><span class="mandatory_mark">*</span></td>
       </tr>
       <tr>
-        <td class="text"><%= f.label :foreign_payroll_transfer, 'Foreign country payroll transfer date' %>:</td>
+        <td class="text"><%= f.label :foreign_payroll_transfer, 'Foreign country payroll transfer date: ' %></td>
         <td><%= f.text_field :foreign_payroll_transfer %></td>
       </tr>
       <tr>
-        <td class="text"><%= f.label :return_date, 'Return date to India' %>:</td>
+        <td class="text"><%= f.label :return_date, 'Return date to India: ' %></td>
         <td><%= f.text_field :return_date, :class => 'date_picker' %></td>
       </tr>
       <tr></tr>
       <tr>
-        <td class="text"><%= f.label :return_payroll_transfer, 'Payroll transfer date to India' %>:</td>
+        <td class="text"><%= f.label :return_payroll_transfer, 'Payroll transfer date to India: ' %></td>
         <td><%= f.text_field :return_payroll_transfer %></td>
       </tr>
       <tr>
-        <td class="text"><%= f.label :expected_return_date, 'Expected return date' %>:</td>
+        <td class="text"><%= f.label :expected_return_date, 'Expected return date: ' %></td>
         <td><%= f.text_field :expected_return_date %></td>
       </tr>
       <tr>
-        <td class="text"><%= f.label :project, 'Project Code' %>:</td>
+        <td class="text"><%= f.label :project, 'Project Code: ' %></td>
         <td><%= f.text_field :project %></td>
       </tr>
       <tr>
-        <td class="text"><%= f.label :comments, 'Comment' %>:</td>
+        <td class="text"><%= f.label :comments, 'Comment: ' %></td>
         <td><%= f.text_field :comments %></td>
       </tr>
       <tr>
-        <td class="text"><%= f.label :actions, 'Actions' %>:</td>
+        <td class="text"><%= f.label :actions, 'Actions: ' %></td>
         <td><%= f.text_field :actions %></td>
       </tr>
     </table>
@@ -73,12 +73,13 @@
   <div class="actions">
     <%= f.submit %>
   </div>
+  <span class="mandatory_mark">*</span> <span class="red">Marked fields are mandatory</span> <br/>
 <% end %>
 
 <% content_for :page_js do %>
   <script>
     $(document).ready(function(){
-      populateForexFields();
+      populateTravelFields();
     });
   </script>
 <% end %>
