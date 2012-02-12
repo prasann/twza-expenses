@@ -7,14 +7,14 @@ class ExpenseReimbursementsController < ApplicationController
   def filter
     @expense_reimbursements = []
     if !params[:empl_id].blank?
-      empl_id = params[:empl_id]
+      empl_id = params[:empl_id].to_i
       @expense_reimbursements = ExpenseReimbursement.for_empl_id(empl_id).to_a
-      expenses_criteria = Expense.for_employee_id(empl_id)
+      expenses_criteria = Expense.for_empl_id(empl_id)
     elsif !params[:expense_rpt_id].blank?
       @expense_reimbursements = ExpenseReimbursement.for_expense_report_id(params[:expense_rpt_id]).to_a
-      expenses_criteria = Expense.for_expense_report_id(params[:expense_rpt_id])
+      expenses_criteria = Expense.for_expense_report_id(params[:expense_rpt_id].to_i)
       expense = expenses_criteria.first
-      empl_id = expense.nil? ? nil : expense.get_employee_id
+      empl_id = expense.nil? ? nil : expense.empl_id
     end
 
     if !empl_id.blank?
@@ -44,7 +44,7 @@ class ExpenseReimbursementsController < ApplicationController
   end
 
   def edit
-    expenses = Expense.for_expense_report_id(params[:id]).to_a
+    expenses = Expense.for_expense_report_id(params[:id].to_i).to_a
 
     @empl_name = expenses.first.try(:profile).try(:get_full_name) || ""
 

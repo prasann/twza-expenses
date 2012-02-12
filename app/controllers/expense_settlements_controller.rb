@@ -21,7 +21,7 @@ class ExpenseSettlementsController < ApplicationController
     travel = OutboundTravel.find(params[:id])
     padded_dates(travel)
     expense_settlement = (params[:expense_settlement_id]) ?
-        ExpenseSettlement.find(params[:expense_settlement_id]).includes(:cash_handovers) : nil;
+        ExpenseSettlement.find(params[:expense_settlement_id]).includes(:cash_handovers) : nil
     create_settlement_report_from_dates(travel,expense_settlement)
   end
 
@@ -56,6 +56,7 @@ class ExpenseSettlementsController < ApplicationController
   end
 
   def set_processed
+    # TODO: move into model
     expense_report = ExpenseSettlement.find(params[:id])
     expense_report.complete
     redirect_to outbound_travels_path
@@ -69,7 +70,7 @@ class ExpenseSettlementsController < ApplicationController
     redirect_to(:action => :index, :anchor => 'expense_settlements', :empl_id => expense_report.empl_id)
   end
 
-  def upload
+  def show_uploads
     @uploaded_files = UploadedExpense.desc(:created_at)
   end
 
@@ -81,7 +82,7 @@ class ExpenseSettlementsController < ApplicationController
     else
       flash[:error] = 'This file has already been uploaded'
     end
-    redirect_to :action => 'upload'
+    redirect_to :action => 'show_uploads'
   end
 
   private
@@ -89,7 +90,7 @@ class ExpenseSettlementsController < ApplicationController
     tmp = params[:file_upload][:my_file].tempfile
     file = File.join("public", @file_name)
     FileUtils.cp(tmp.path, file)
-    success = ExpenseReportImporter.load_expense(file)
+    success = ExpenseReportImporter.new.load_expense(file)
     FileUtils.rm(file)
     success
   end

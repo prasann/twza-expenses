@@ -90,7 +90,7 @@
                         <td><%= DateHelper.date_fmt(DateHelper.date_from_str(expense.expense_date)) %></td>
                         <td><%= expense.expense_type %></td>
                         <td><%= expense.description %></td>
-                        <td><%= number_with_precision(expense.original_cost, :precision => 2) %> <%= expense.original_currency %></td>
+                        <td><%= expense.original_cost %> <%= expense.original_currency %></td>
                         <td><%= expense.payment_type %></td>
                       </tr>
                   <% end %>

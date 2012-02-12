@@ -1,13 +1,8 @@
 require 'spec_helper'
 
 describe "expense_report" do
-  it "should convert header names to keys" do
-    arr = ["A b", "Test This", "SOMETHING"]
-    ExpenseReportImporter.convert_to_keys(arr)
-    arr.should be == ["a_b", "test_this", "something"]
-  end
-
   it "should convert a row to an expense" do
+    pending "should stub read from excel and test if expense is created"
     expense = Expense.new
 
     expected_row_obj = Hash.new

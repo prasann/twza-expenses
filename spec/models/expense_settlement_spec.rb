@@ -3,25 +3,20 @@ require 'spec_helper'
 describe 'expense_report' do
   it "should consolidate expenses by rpt and currency considering conversion rate" do
     persisted_expenses  = [
-                Expense.new(:expense_rpt_id =>'123', :original_currency => 'EUR', :original_cost => '200',
-                            :cost_in_home_currency => '200'),
-                Expense.new(:expense_rpt_id => '122', :original_currency => 'EUR', :original_cost=>'100',
-                            :cost_in_home_currency =>'100'),
-                Expense.new(:expense_rpt_id => '121',:original_currency => 'INR', :original_cost => '1000',
-                            :cost_in_home_currency => '4000'),
-                Expense.new(:expense_rpt_id => '121', :original_currency => 'EUR', :original_cost =>'100',
-                            :cost_in_home_currency => '100'),
-                Expense.new(:expense_rpt_id => '121', :original_currency => 'EUR', :original_cost => '200',
-                            :cost_in_home_currency => '200')
+                Expense.new(:expense_rpt_id => 123, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200')),
+                Expense.new(:expense_rpt_id => 122, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
+                Expense.new(:expense_rpt_id => 121, :original_currency => 'INR', :original_cost => BigDecimal.new('1000'),:cost_in_home_currency => BigDecimal.new('4000')),
+                Expense.new(:expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
+                Expense.new(:expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200'))
                ]
     forex_payments = [ForexPayment.new(:currency => 'EUR', :inr => 100, :amount => 100)]
     Expense.stub(:find).and_return(persisted_expenses)
     ForexPayment.stub(:find).and_return(forex_payments)
     exp_rpt = ExpenseSettlement.new(:expenses => ['somehashes'], :cash_handover => 0)
-    expected_hash_1 = {'report_id' => '123', 'currency' => 'EUR', 'amount' => 200, 'conversion_rate' => 1, 'local_currency_amount' => 200}
-    expected_hash_2 = {'report_id' => '122', 'currency' => 'EUR', 'amount' => 100, 'conversion_rate' => 1, 'local_currency_amount' => 100}
-    expected_hash_3 = {'report_id' => '121', 'currency' => 'EUR', 'amount' => 300, 'conversion_rate' => 1, 'local_currency_amount' => 300}
-    expected_hash_4 = {'report_id' => '121', 'currency' => 'INR', 'amount' => 1000, 'conversion_rate' => 4, 'local_currency_amount' => 4000}
+    expected_hash_1 = {'report_id' => 123, 'currency' => 'EUR', 'amount' => 200, 'conversion_rate' => 1, 'local_currency_amount' => 200}
+    expected_hash_2 = {'report_id' => 122, 'currency' => 'EUR', 'amount' => 100, 'conversion_rate' => 1, 'local_currency_amount' => 100}
+    expected_hash_3 = {'report_id' => 121, 'currency' => 'EUR', 'amount' => 300, 'conversion_rate' => 1, 'local_currency_amount' => 300}
+    expected_hash_4 = {'report_id' => 121, 'currency' => 'INR', 'amount' => 1000, 'conversion_rate' => 4, 'local_currency_amount' => 4000}
 
     exp_rpt.populate_instance_data
 
@@ -36,24 +31,19 @@ describe 'expense_report' do
 
   it "should consolidate expenses by rpt and currency considering conversion rate from sharon sheet if no forex is available" do
     persisted_expenses  = [
-                Expense.new(:expense_rpt_id =>'123', :original_currency => 'EUR', :original_cost => '200',
-                            :cost_in_home_currency => '200', :currency_conversion_rate => '1'),
-                Expense.new(:expense_rpt_id => '122', :original_currency => 'EUR', :original_cost=>'100',
-                            :cost_in_home_currency =>'100',:currency_conversion_rate =>'1'),
-                Expense.new(:expense_rpt_id => '121',:original_currency => 'INR', :original_cost => '1000',
-                            :cost_in_home_currency => '4000',:currency_conversion_rate => '4'),
-                Expense.new(:expense_rpt_id => '121', :original_currency => 'EUR', :original_cost =>'100',
-                            :cost_in_home_currency => '100',:currency_conversion_rate =>'1'),
-                Expense.new(:expense_rpt_id => '121', :original_currency => 'EUR', :original_cost => '200',
-                            :cost_in_home_currency => '200', :currency_conversion_rate => '1')
+                Expense.new(:expense_rpt_id => 123, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200'), :currency_conversion_rate => '1'),
+                Expense.new(:expense_rpt_id => 122, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100'),  :currency_conversion_rate => '1'),
+                Expense.new(:expense_rpt_id => 121, :original_currency => 'INR', :original_cost => BigDecimal.new('1000'),:cost_in_home_currency => BigDecimal.new('4000'),:currency_conversion_rate => '4'),
+                Expense.new(:expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100'), :currency_conversion_rate => '1'),
+                Expense.new(:expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200'), :currency_conversion_rate => '1')
                ]
 
     Expense.stub(:find).and_return(persisted_expenses)
     exp_rpt = ExpenseSettlement.new(:expenses => ['somehashes'], :cash_handover => 0)
-    expected_hash_1 = {'report_id' => '123', 'currency' => 'EUR', 'amount' => 200, 'conversion_rate' => 1, 'local_currency_amount' => 200}
-    expected_hash_2 = {'report_id' => '122', 'currency' => 'EUR', 'amount' => 100, 'conversion_rate' => 1, 'local_currency_amount' => 100}
-    expected_hash_3 = {'report_id' => '121', 'currency' => 'EUR', 'amount' => 300, 'conversion_rate' => 1, 'local_currency_amount' => 300}
-    expected_hash_4 = {'report_id' => '121', 'currency' => 'INR', 'amount' => 1000, 'conversion_rate' => 4, 'local_currency_amount' => 4000}
+    expected_hash_1 = {'report_id' => 123, 'currency' => 'EUR', 'amount' => 200, 'conversion_rate' => 1, 'local_currency_amount' => 200}
+    expected_hash_2 = {'report_id' => 122, 'currency' => 'EUR', 'amount' => 100, 'conversion_rate' => 1, 'local_currency_amount' => 100}
+    expected_hash_3 = {'report_id' => 121, 'currency' => 'EUR', 'amount' => 300, 'conversion_rate' => 1, 'local_currency_amount' => 300}
+    expected_hash_4 = {'report_id' => 121, 'currency' => 'INR', 'amount' => 1000, 'conversion_rate' => 4, 'local_currency_amount' => 4000}
 
     exp_rpt.populate_instance_data
 
@@ -103,8 +93,8 @@ describe 'expense_report' do
       travel_id = '1'
       employee_id = '12321'
       test_forex_currencies = ['EUR', 'GBP']
-      expense_amounts = [300, 750]
-      expense_amounts_inr = [23032.5, 47437.5]
+      expense_amounts = [BigDecimal.new('300'), BigDecimal.new('750')]
+      expense_amounts_inr = [BigDecimal.new('23032.5'), BigDecimal.new('47437.5')]
       forex_amounts = [500, 1000]
       forex_amounts_inr = [37309, 62728.5]
       outbound_travel = mock(OutboundTravel, :place => 'UK', :emp_id => employee_id,
