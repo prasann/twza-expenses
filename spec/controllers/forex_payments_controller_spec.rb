@@ -1,18 +1,15 @@
 require 'spec_helper'
 
 describe ForexPaymentsController do
-  # TODO: Use factory_girl
-  def valid_attributes
-    {:emp_id => '123', :emp_name => 'test', :amount => 120.25, :currency => 'INR', :travel_date => Date.today,
-    :office => 'Chennai', :inr => 5001.50, :issue_date => Date.today - 2, :vendor_name => 'VKC Forex'}
-  end
-
   describe "GET index" do
     it "assigns all forex_payments as @forex_payments" do
-      forex_payments_1 = ForexPayment.create! (valid_attributes.merge!({travel_date: Time.now + 3}))
-      forex_payments_2 = ForexPayment.create! (valid_attributes.merge!({travel_date: Time.now - 3}))
+      forex_payments_1 = Factory(:forex_payment, :travel_date => Time.now + 3)
+      forex_payments_2 = Factory(:forex_payment, :travel_date => Time.now - 3)
+
       get :index, :page => 1, :per_page => 1
+
       assigns(:forex_payments).should eq([forex_payments_1])
+
       get :index, :page => 2, :per_page => 1
       assigns(:forex_payments).should eq([forex_payments_2])
     end
@@ -20,8 +17,10 @@ describe ForexPaymentsController do
 
   describe "GET show" do
     it "assigns the requested forex_payment as @forex_payment" do
-      forex_payment = ForexPayment.create! valid_attributes
+      forex_payment = Factory(:forex_payment)
+
       get :show, :id => forex_payment.id
+
       assigns(:forex_payment).should eq(forex_payment)
     end
   end
@@ -29,14 +28,17 @@ describe ForexPaymentsController do
   describe "GET new" do
     it "assigns a new forex_payment as @forex_payment" do
       get :new
+
       assigns(:forex_payment).should be_a_new(ForexPayment)
     end
   end
 
   describe "GET edit" do
     it "assigns the requested forex_payment as @forex_payment" do
-      forex_payment = ForexPayment.create! valid_attributes
+      forex_payment = Factory(:forex_payment)
+
       get :edit, :id => forex_payment.id
+
       assigns(:forex_payment).should eq(forex_payment)
     end
   end
@@ -45,18 +47,20 @@ describe ForexPaymentsController do
     describe "with valid params" do
       it "creates a new ForexPayment" do
         expect {
-          post :create, :forex_payment => valid_attributes
+          post :create, :forex_payment => Factory.attributes_for(:forex_payment)
         }.to change(ForexPayment, :count).by(1)
       end
 
       it "assigns a newly created forex_payment as @forex_payment" do
-        post :create, :forex_payment => valid_attributes
+        post :create, :forex_payment => Factory.attributes_for(:forex_payment)
+
         assigns(:forex_payment).should be_a(ForexPayment)
         assigns(:forex_payment).should be_persisted
       end
 
       it "redirects to the created forex_payment" do
-        post :create, :forex_payment => valid_attributes
+        post :create, :forex_payment => Factory.attributes_for(:forex_payment)
+
         response.should redirect_to(ForexPayment.last)
       end
     end
@@ -64,13 +68,17 @@ describe ForexPaymentsController do
     describe "with invalid params" do
       it "assigns a newly created but unsaved forex_payment as @forex_payment" do
         ForexPayment.any_instance.stub(:save).and_return(false)
+
         post :create, :forex_payment => {}
+
         assigns(:forex_payment).should be_a_new(ForexPayment)
       end
 
-      it "re-renders the 'new' template" do
+      it "re-renders the 'new' template on error" do
         ForexPayment.any_instance.stub(:save).and_return(false)
+
         post :create, :forex_payment => {}
+
         response.should render_template("new")
       end
     end
@@ -79,36 +87,46 @@ describe ForexPaymentsController do
   describe "PUT update" do
     describe "with valid params" do
       it "updates the requested forex_payment" do
-        forex_payment = ForexPayment.create! valid_attributes
+        forex_payment = Factory(:forex_payment)
+
         ForexPayment.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
+
         put :update, :id => forex_payment.id, :forex_payment => {'these' => 'params'}
       end
 
       it "assigns the requested forex_payment as @forex_payment" do
-        forex_payment = ForexPayment.create! valid_attributes
-        put :update, :id => forex_payment.id, :forex_payment => valid_attributes
+        forex_payment = Factory(:forex_payment)
+
+        put :update, :id => forex_payment.id, :forex_payment => Factory.attributes_for(:forex_payment)
+
         assigns(:forex_payment).should eq(forex_payment)
       end
 
       it "redirects to the forex_payment" do
-        forex_payment = ForexPayment.create! valid_attributes
-        put :update, :id => forex_payment.id, :forex_payment => valid_attributes
+        forex_payment = Factory(:forex_payment)
+
+        put :update, :id => forex_payment.id, :forex_payment => Factory.attributes_for(:forex_payment)
+
         response.should redirect_to(forex_payment)
       end
     end
 
     describe "with invalid params" do
       it "assigns the forex_payment as @forex_payment" do
-        forex_payment = ForexPayment.create! valid_attributes
+        forex_payment = Factory(:forex_payment)
         ForexPayment.any_instance.stub(:save).and_return(false)
+
         put :update, :id => forex_payment.id, :forex_payment => {}
+
         assigns(:forex_payment).should eq(forex_payment)
       end
 
       it "re-renders the 'edit' template" do
-        forex_payment = ForexPayment.create! valid_attributes
+        forex_payment = Factory(:forex_payment)
         ForexPayment.any_instance.stub(:save).and_return(false)
+
         put :update, :id => forex_payment.id, :forex_payment => {}
+
         response.should render_template("edit")
       end
     end
@@ -116,30 +134,34 @@ describe ForexPaymentsController do
 
   describe "DELETE destroy" do
     it "destroys the requested forex_payment" do
-      forex_payment = ForexPayment.create! valid_attributes
+      forex_payment = Factory(:forex_payment)
       expect {
         delete :destroy, :id => forex_payment.id
       }.to change(ForexPayment, :count).by(-1)
     end
 
     it "redirects to the forex_payments list" do
-      forex_payment = ForexPayment.create! valid_attributes
+      forex_payment = Factory(:forex_payment)
+
       delete :destroy, :id => forex_payment.id
+
       response.should redirect_to(forex_payments_url)
     end
   end
 
   describe "GET Search" do
     it "searches for the given employee id" do
-      forex_payments_1 = ForexPayment.create!(valid_attributes.merge!(emp_id: 10001))
-      forex_payments_2 = ForexPayment.create!(valid_attributes.merge!(emp_id: 10001))
+      forex_payments_1 = Factory(:forex_payment, :emp_id => 10001)
+      forex_payments_2 = Factory(:forex_payment, :emp_id => 10001)
       expense = Expense.create()
       outbound_travel = OutboundTravel.create(:emp_id => '123', :emp_name => 'test', :place => 'US',:departure_date => Time.now)
       expense_settlement = ExpenseSettlement.create!(:empl_id => 10001, :forex_payments => [forex_payments_1[:_id]],
                                                     :expenses => [expense.id],
                                                     :outbound_travel => outbound_travel.id,
                                                     :status => ExpenseSettlement::GENERATED_DRAFT)
+
       get :search, :emp_id => 10001
+
       assigns(:forex_payments).should eq([forex_payments_1, forex_payments_2])
       assigns(:forex_ids_with_settlement).size.should == 1
       assigns(:forex_ids_with_settlement).should include(forex_payments_1[:_id])
@@ -164,9 +186,11 @@ describe ForexPaymentsController do
 
   describe "GET populate autosuggest data" do
     it "should populate unique and non nullable data for auto suggestion" do
-      outbound_travel_1 = ForexPayment.create!(valid_attributes.merge!({place: 'US', currency: 'GBP', office: 'Pune'}))
-      outbound_travel_2 = ForexPayment.create!(valid_attributes.merge!({place: 'US', vendor_name: 'VFC', currency: 'USD', office: 'Chennai'}))
+      outbound_travel_1 = Factory(:forex_payment, :place => 'US', :currency => 'GBP', :office => 'Pune')
+      outbound_travel_2 = Factory(:forex_payment, :place => 'US', :vendor_name => 'VFC', :currency => 'USD', :office => 'Chennai')
+
       get :data_to_suggest
+
       assigns(:fields).should be_eql ({'place' => ["US"], 'vendor_name' => ['VKC Forex', 'VFC'], 'currency' => ['GBP','USD'] , 'office' => ['Pune','Chennai']})
     end
   end
