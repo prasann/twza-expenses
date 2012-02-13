@@ -7,14 +7,14 @@ module ImportHelper
     (cell_value.instance_of?(Date)) ? cell_value.to_s : cell_value
   end
 
+  # TODO: This is built into Rails - look at String#pluralize(count)
   def self.pluralize(count, singular, plural=nil)
-      if count == 1
-          "1 #{singular}"
-      elsif plural
-          "#{count} #{plural}"
-      else
-          "#{count} #{singular}s"
-      end
+    if count == 1
+      "1 #{singular}"
+    elsif plural
+      "#{count} #{plural}"
+    else
+      "#{count} #{singular}s"
+    end
   end
-
 end

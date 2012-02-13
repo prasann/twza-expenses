@@ -13,6 +13,7 @@ class Expense
   field :expense_type, type: String
   field :description, type: String
 
+  # TODO: Should these be uncommented and tested?
   validates_presence_of :empl_id #, :payment_type, :original_cost, :original_currency, :cost_in_home_currency, :expense_date
   # TODO: validate payment_type is within a certain set of values
 
