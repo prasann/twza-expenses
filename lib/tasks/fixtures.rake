@@ -73,7 +73,8 @@ namespace :db do
           :travel_date => travel_start_date, :office => OFFICES[rand(OFFICES.length)],
           :issue_date => start_date,
           :place => place_of_visit,
-          :inr => currency_rate * amount
+          :inr => currency_rate * amount,
+          :vendor_name => 'VKC Forex'
         )
         start_date = generate_random_date_between(start_date, travel_end_date)
       end
