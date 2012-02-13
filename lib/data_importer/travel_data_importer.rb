@@ -21,6 +21,4 @@ class TravelDataImporter
       end
     end
   end
-
-
 end

@@ -52,8 +52,6 @@ describe TravelDataImporter do
         'some text'
       end
 
-      expected_error_sizes = [0, 1]
-      expected_error_msgs = [nil, ["can't be blank"]]
       1.upto(2) do |line|
         extractor = Proc.new { |column|
           file.cell(line, column)
