@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'data_importer/travel_data_importer'
 
-
 describe TravelDataImporter do
 
   before(:each) do
@@ -29,7 +28,7 @@ describe TravelDataImporter do
         }
 
         outbound_travel = block.call(extractor)
-        outbound_travel.save
+        outbound_travel.save!
       end
     end
 
@@ -53,15 +52,17 @@ describe TravelDataImporter do
         'some text'
       end
 
+      expected_error_sizes = [0, 1]
+      expected_error_msgs = [nil, ["can't be blank"]]
       1.upto(2) do |line|
         extractor = Proc.new { |column|
           file.cell(line, column)
         }
         outbound_travel = block.call(extractor)
-        outbound_travel.save
-        if (line == 2)
-          outbound_travel.errors.messages.size.should == 1
-          outbound_travel.errors.messages[:departure_date].should == ["can't be blank"]
+        begin
+          outbound_travel.save!
+        rescue
+          verify_error(outbound_travel.errors.messages)
         end
       end
     end
@@ -70,6 +71,11 @@ describe TravelDataImporter do
 
     OutboundTravel.find(:all).count.should == 1
     validate_saved_travel_details(OutboundTravel.find(:all).first, 12345, Date.today+100.days)
+  end
+
+  def verify_error(messages)
+    messages.size.should == 1
+    messages[:departure_date].should == ["can't be blank"]
   end
 
   def validate_saved_travel_details(travel, emp_id,return_date)

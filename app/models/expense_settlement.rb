@@ -26,7 +26,7 @@ class ExpenseSettlement
   has_many :cash_handovers
   accepts_nested_attributes_for :cash_handovers
 
-  validates_presence_of :empl_id, :outbound_travel, :expenses, :forex_payments, :status
+  validates_presence_of :empl_id, :outbound_travel_id, :status
   validates_inclusion_of :status, :in => [GENERATED_DRAFT, NOTIFIED_EMPLOYEE, COMPLETE, CLOSED]
 
   class << self

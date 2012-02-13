@@ -41,7 +41,7 @@ describe ForexDataImporter do
     validate_saved_forex_details(forex_payment, '1234 1234 1234 1234 Axis', Date.strptime('04/15','%m/%y'))
   end
 
-  xit "should not save the invalid forex payment record" do
+  it "should not save the invalid forex payment record" do
     ForexPayment.delete_all
     importer = ForexDataImporter.new
     importer.stub!(:read_from_excel).and_return do |filename, sheetno, block|
@@ -50,20 +50,21 @@ describe ForexDataImporter do
       def file.cell(line, column)
         return "wrong data" if line == 2
         return 1 if ['C', 'E', 'N'].include?(column)
-        return Date.today if ['B', 'G', 'L'].include?(column)
+        return Date.today if ['B', 'G'].include?(column)
+        return nil if ['K', 'L'].include?(column)
         'some text'
       end
 
       1.upto(2) do |line|
-          extractor = Proc.new { |column|
-            file.cell(line, column)
+        extractor = Proc.new { |column|
+          file.cell(line, column)
         }
 
         forex_payment = block.call(extractor)
-        forex_payment.save
-        if (line == 2)
-          forex_payment.errors.messages.size.should == 1
-          forex_payment.errors.messages[:departure_date].should == ["can't be blank"]
+        begin
+          forex_payment.save!
+        rescue
+          verify_error forex_payment.errors.messages
         end
       end
     end
@@ -71,7 +72,14 @@ describe ForexDataImporter do
     importer.import('somefile')
 
     ForexPayment.find(:all).count.should == 1
+    forex_payment = ForexPayment.find(:all).first
+    validate_saved_forex_details(forex_payment)
+  end
 
+  def verify_error(messages)
+    messages.size.should == 2
+    messages[:travel_date].should == ["can't be blank"]
+    messages[:issue_date].should == ["can't be blank"]
   end
 
   def validate_saved_forex_details(forex_payment, card_number=nil, card_expiry_date=nil)
