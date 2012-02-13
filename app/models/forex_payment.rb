@@ -18,8 +18,6 @@ class ForexPayment
   field :office
   field :inr, type: BigDecimal
 
-  validate :verify_credit_card_details
-
   validates_presence_of :emp_id, :emp_name, :amount, :currency, :travel_date, :inr, :issue_date, :vendor_name
 
   class << self
@@ -42,13 +40,6 @@ class ForexPayment
       self[:expiry_date] = Time.strptime(value, '%m/%y')
     rescue
       self[:expiry_date] = nil
-    end
-  end
-
-  private
-  def verify_credit_card_details
-    if (!card_number.blank? && (/^\d{16}[^\d]+/ =~ card_number.gsub(" ", "")).blank?)
-      self.errors.add(:card_number, INVALID_CREDIT_CARD_MSG)
     end
   end
 end

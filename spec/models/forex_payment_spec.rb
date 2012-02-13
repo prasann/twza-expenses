@@ -32,17 +32,4 @@ describe 'forex_payment' do
       error_msgs[k].should == ["can't be blank"]
     end
   end
-
-  it "should validate credit card number" do
-    forex_with_invalid_card = ForexPayment.create(valid_attributes.merge!({:card_number => '1234 3214 3212 323223 Axis'}))
-    forex_with_invalid_card.valid?.should be_false
-    error_msgs = forex_with_invalid_card.errors.messages
-    error_msgs.each do |k, v|
-      error_msgs[k].should include ForexPayment::INVALID_CREDIT_CARD_MSG
-    end
-
-    forex_with_valid_card = ForexPayment.create(valid_attributes.merge!({:card_number => '1234 3214 3212   3243 Axis   ',
-                                                                        :expiry_date => Time.strptime('03/13','%m/%y')}))
-    forex_with_valid_card.errors.messages.size.should be 0
-  end
 end
