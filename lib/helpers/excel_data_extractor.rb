@@ -13,7 +13,6 @@ module ExcelDataExtractor
   end
 
   def show_ignored_records_summary(record_count)
-    puts 'Came here'
     show_summary record_count, ' ignored due to validation errors'
   end
 
