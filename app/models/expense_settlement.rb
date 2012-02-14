@@ -44,7 +44,7 @@ class ExpenseSettlement
   end
 
   def email_id
-    @email_id ||= profile.email_id.blank? ? empl_id.to_s : profile.email_id
+    @email_id ||= (profile == nil ||  profile.email_id.blank?) ? empl_id.to_s : profile.email_id
   end
 
   def employee_email
