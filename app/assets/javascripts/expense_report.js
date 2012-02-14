@@ -35,6 +35,7 @@ $(document).ready(function() {
 
         $('.delete_row').live('click',function(){
            $(this).parents('.cash_handover').last().remove();
+          show_add_in_last_cash_handover();
         });
 
         $('.generate_settlement').click(function(event){
