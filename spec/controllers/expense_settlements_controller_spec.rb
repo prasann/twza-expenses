@@ -207,7 +207,7 @@ describe ExpenseSettlementsController do
   it "should create all applicable currencies for cash handover properly when forex of multiple currencies are involved" do
       travel_id = '1'
       employee_id = '12321'
-      test_forex_currencies = [currency, 'GBP']
+      test_forex_currencies = ['EUR', 'GBP']
       expenses = [mock(Expense, :id => 1)]
       forex_payments = []
       forex_ids = []
@@ -240,7 +240,7 @@ describe ExpenseSettlementsController do
     end
 
     it "should set required model objects properly for view when forex of multiple currencies are involved" do
-      currency = currency
+      currency = 'EUR'
       travel_id = '1'
       employee_id = '12321'
       test_forex_currencies = [currency, 'GBP']
