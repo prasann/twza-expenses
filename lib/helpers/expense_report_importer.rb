@@ -28,9 +28,13 @@ class ExpenseReportImporter
                             report_submitted_at: to_date(extractor.call("T")), 
                             payment_type: extractor.call("R"),
                             project: extractor.call("I"),
+                            vendor: extractor.call("L"),
+                            subproject: extractor.call("U"),
                             expense_type: extractor.call("K"),
+                            is_personal: extractor.call("S"),
+                            attendees: extractor.call("V"),
                             description: extractor.call("Q"))
-      if expense.save
+      if expense.save!
         uploaded_expenses_count += 1
       else
         puts "Error while processing the record:

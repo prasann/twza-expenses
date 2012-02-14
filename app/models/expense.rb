@@ -10,6 +10,10 @@ class Expense
   field :report_submitted_at, type: Date  #TODO: Convert to type: Date
   field :payment_type, type: String
   field :project, type: String
+  field :subproject, type: String
+  field :vendor, type: String
+  field :is_personal, type: String
+  field :attendees, type: String
   field :expense_type, type: String
   field :description, type: String
 

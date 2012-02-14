@@ -54,7 +54,7 @@ class ExpenseReimbursementsController < ApplicationController
     if existing_expense_reimbursements.present? && !existing_expense_reimbursements.empty?
       expenses = expenses - existing_expense_reimbursements.collect(&:get_expenses).flatten
     end
-    @all_expenses = expenses.group_by { |expense| expense.project + expense.subproject }
+    @all_expenses = expenses.group_by { |expense| expense.project + (expense.subproject.nil? ? '' : expense.subproject) }
 
     # TODO: Should this be an ExpenseReimbursement so that we can do method calls instead of hash-like access?
     @expense_reimbursement = {'expense_report_id' => params[:id],

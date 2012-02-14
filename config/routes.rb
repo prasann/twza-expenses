@@ -51,7 +51,7 @@ Mankatha::Application.routes.draw do
     member do
       get :load_by_travel
       post :notify
-      get :set_processed
+      post :set_processed
     end
   end
 
