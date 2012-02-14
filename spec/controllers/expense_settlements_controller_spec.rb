@@ -28,7 +28,7 @@ describe ExpenseSettlementsController do
       ForexPayment.should_receive(:fetch_for).with(1, outbound_travel.departure_date - ExpenseSettlementsController::FOREX_PAYMENT_DATES_PADDED_BY,
                                                    outbound_travel.return_date, [3]).and_return(forex_payments)
 
-      expected_expense_settlement = ExpenseSettlement.new(:empl_id=>1,:travel_id=>"123",
+      expected_expense_settlement = ExpenseSettlement.new(:empl_id=>1,:outbound_travel_id=>"123",
                                                           :expenses => expenses.collect(&:id),
                                                           :forex_payments => forex_payments.collect(&:id),
                                                           :cash_handovers=>[])
@@ -52,7 +52,7 @@ describe ExpenseSettlementsController do
       ForexPayment.should_receive(:fetch_for).with(1, outbound_travel.departure_date - ExpenseSettlementsController::FOREX_PAYMENT_DATES_PADDED_BY,
                                                    nil, []).and_return(forex_payments)
 
-      expected_expense_settlement = ExpenseSettlement.new(:empl_id=>1,:travel_id=>"123",
+      expected_expense_settlement = ExpenseSettlement.new(:empl_id=>1,:outbound_travel_id=>"123",
                                                           :expenses => expenses.collect(&:id),
                                                           :forex_payments => forex_payments.collect(&:id),
                                                           :cash_handovers=>[])
@@ -82,7 +82,7 @@ describe ExpenseSettlementsController do
       Expense.should_receive(:fetch_for_employee_between_dates).with(1, expense_from, expense_to, [2]).and_return(expenses)
       ForexPayment.should_receive(:fetch_for).with(1, forex_from, forex_to, [3]).and_return(forex_payments)
 
-      expected_expense_settlement = ExpenseSettlement.new(:empl_id=>1,:travel_id=>"123",:cash_handovers=>[],
+      expected_expense_settlement = ExpenseSettlement.new(:empl_id=>1,:outbound_travel_id=>"123",:cash_handovers=>[],
                                                           :expenses => expenses.collect(&:id),
                                                           :forex_payments => forex_payments.collect(&:id))
 
@@ -122,6 +122,56 @@ describe ExpenseSettlementsController do
     end
   end
 
+  describe "edit expense settlement" do
+    it "should allow to edit an already created expense settlement" do
+      currency = 'EUR'
+      empl_id = 1
+      expense_from = Date.today - 5.days
+      expense_to = Date.today - 3.days
+      forex_from = Date.today - 6.days
+      forex_to = Date.today - 4.days
+      outbound_travel = OutboundTravel.new(:emp_id => empl_id, :emp_name => 'John', :departure_date => Date.today,
+                                          :place => 'UK')
+      forex_payment = mock(ForexPayment, :id => 1, :empl_id => empl_id, :currency => currency, :inr => 7200,
+                                          :amount => 100)
+      expense = mock(Expense, :id => 1, :empl_id => empl_id, :expense_rpt_id => 1, :original_currency => currency,
+                                          :original_cost => 50)
+      expense_settlement = ExpenseSettlement.new(:empl_id => empl_id, :expenses => [1], :forex_payments => [1],
+                                                 :status => ExpenseSettlement::GENERATED_DRAFT,
+                                                  :expense_from => DateHelper::date_fmt(expense_from),
+                                                  :expense_to => DateHelper::date_fmt(expense_to),
+                                                  :forex_from => DateHelper::date_fmt(forex_from),
+                                                  :forex_to => DateHelper::date_fmt(forex_to),
+                                                  :cash_handovers => [CashHandover.new(:amount => 100, :currency => currency)])
+      outbound_travel.save!
+      expense_settlement.cash_handovers.map &:save!
+      expense_settlement.outbound_travel_id = outbound_travel.id
+      expense_settlement.save!
+      OutboundTravel.should_receive(:find).with(outbound_travel.id).and_return(outbound_travel)
+      ForexPayment.should_receive(:fetch_for).with(outbound_travel.emp_id, forex_from, forex_to, anything)
+                      .and_return([forex_payment])
+      ForexPayment.should_receive(:find).with([1]).and_return([forex_payment])
+      Expense.should_receive(:fetch_for_employee_between_dates)
+                      .with(outbound_travel.emp_id, expense_from, expense_to, anything)
+                      .and_return([expense])
+      Expense.should_receive(:find).with([1]).and_return([expense])
+      stub_expense_settlement = mock(Object)
+      ExpenseSettlement.should_receive(:includes).with(:cash_handovers, :outbound_travel).and_return(stub_expense_settlement)
+      stub_expense_settlement.should_receive(:find).with(expense_settlement.id.to_s).and_return(expense_settlement)
+
+      get :edit, :id => expense_settlement.id
+
+      assigns(:expense_report).should have_same_attributes_as expense_settlement
+      assigns(:applicable_currencies).should == [currency]
+      assigns(:expenses).should == [expense]
+      assigns(:forex_payments).should == [forex_payment]
+      assigns(:expenses_from_date).should == expense_from
+      assigns(:expenses_to_date).should == expense_to
+      assigns(:forex_from_date).should == forex_from
+      assigns(:forex_to_date).should == forex_to
+    end
+  end
+
   describe "generate report" do
     it "should create expense report for chosen expenses, forex and travel" do
       pending("find how to fix this as '_routes' => nil is added to the hash")
@@ -157,7 +207,7 @@ describe ExpenseSettlementsController do
   it "should create all applicable currencies for cash handover properly when forex of multiple currencies are involved" do
       travel_id = '1'
       employee_id = '12321'
-      test_forex_currencies = ['EUR', 'GBP']
+      test_forex_currencies = [currency, 'GBP']
       expenses = [mock(Expense, :id => 1)]
       forex_payments = []
       forex_ids = []
@@ -176,7 +226,7 @@ describe ExpenseSettlementsController do
       ForexPayment.should_receive(:fetch_for).with(employee_id, outbound_travel.departure_date - ExpenseSettlementsController::FOREX_PAYMENT_DATES_PADDED_BY,
                                                    outbound_travel.return_date, []).and_return(forex_payments)
 
-      expected_expense_settlement = ExpenseSettlement.new(:travel_id => travel_id, :empl_id => employee_id,
+      expected_expense_settlement = ExpenseSettlement.new(:outbound_travel_id => travel_id, :empl_id => employee_id,
                                                           :expenses => [1],
                                                           :forex_payments => forex_ids,
                                                           :cash_handovers => [CashHandover.new])
@@ -190,7 +240,7 @@ describe ExpenseSettlementsController do
     end
 
     it "should set required model objects properly for view when forex of multiple currencies are involved" do
-      currency = 'EUR'
+      currency = currency
       travel_id = '1'
       employee_id = '12321'
       test_forex_currencies = [currency, 'GBP']
@@ -208,7 +258,7 @@ describe ExpenseSettlementsController do
       Expense.stub!(:find).with(['1']).and_return(expenses)
 
       expense_settlement = ExpenseSettlement.new(:id => 1,:forex_payments => forex_payments.collect(&:id),
-                                :expenses => expenses.collect(&:id), :empl_id => employee_id, :travel_id => travel_id,
+                                :expenses => expenses.collect(&:id), :empl_id => employee_id, :outbound_travel_id => travel_id,
                                 :cash_handovers => cash_handovers)
       expense_settlement.stub!(:get_receivable_amount).and_return(13732.5)
 
@@ -219,7 +269,7 @@ describe ExpenseSettlementsController do
 
 
       post :generate_report, {:expense_settlement => {:id => expense_settlement.id, :empl_id => employee_id,
-                                                     :travel_id => travel_id, :emp_name => employee_name,
+                                                     :outbound_travel_id => travel_id, :emp_name => employee_name,
                                                      :cash_handovers_attributes => handovers},
                               :forex_payments => [1], :expenses=> [1]
       }
@@ -249,7 +299,7 @@ describe ExpenseSettlementsController do
     expense_ids = expenses.map{|expense| expense.id.to_s }
     Expense.stub!(:find).with(expense_ids).and_return(expenses)
 
-    ExpenseSettlement.new(:empl_id=>employee_id,:travel_id=>travel_id,:expenses => expense_ids,
+    ExpenseSettlement.new(:empl_id=>employee_id,:outbound_travel_id=>travel_id,:expenses => expense_ids,
                                                           :forex_payments=>forex_ids,
                                                           :cash_handovers=>cash_handovers)
   end

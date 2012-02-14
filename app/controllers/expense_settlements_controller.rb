@@ -20,19 +20,19 @@ class ExpenseSettlementsController < ApplicationController
   def load_by_travel
     travel = OutboundTravel.find(params[:id])
     padded_dates(travel)
-    expense_settlement = (params[:expense_settlement_id]) ?
-        ExpenseSettlement.find(params[:expense_settlement_id]).includes(:cash_handovers) : nil
-    create_settlement_report_from_dates(travel,expense_settlement)
+    create_settlement_report_from_dates(travel)
   end
 
   def edit
-    settlement_from_db = ExpenseSettlement.find(params[:id])
+    settlement_from_db = ExpenseSettlement.includes(:cash_handovers, :outbound_travel).find(params[:id])
     settlement_from_db.populate_instance_data
     @expenses_from_date = DateHelper.date_from_str(settlement_from_db.expense_from)
     @expenses_to_date = DateHelper.date_from_str(settlement_from_db.expense_to)
     @forex_from_date = DateHelper.date_from_str(settlement_from_db.forex_from)
     @forex_to_date = DateHelper.date_from_str(settlement_from_db.forex_to)
-    render 'load_by_travel', :expense_settlement_id => params[:id]
+    travel = OutboundTravel.find(settlement_from_db.outbound_travel_id)
+    create_settlement_report_from_dates(travel, settlement_from_db)
+    render 'load_by_travel'
   end
 
   def show
@@ -43,7 +43,7 @@ class ExpenseSettlementsController < ApplicationController
 
   def generate_report
     expense_settlement = params[:expense_settlement]
-    outbound_travel = OutboundTravel.find(expense_settlement[:travel_id])
+    outbound_travel = OutboundTravel.find(expense_settlement[:outbound_travel_id])
     @expense_report = outbound_travel.find_or_initialize_expense_settlement
     @expense_report.update_attributes({:cash_handovers => expense_settlement[:cash_handovers_attributes],
                                        :status => ExpenseSettlement::GENERATED_DRAFT,
@@ -52,6 +52,7 @@ class ExpenseSettlementsController < ApplicationController
                                       params.slice(:expenses, :forex_payments,:expense_from,
                                                    :expense_to, :forex_from, :forex_to).symbolize_keys)
                                      )
+    @expense_report.cash_handovers.map &:save!
     @expense_report.populate_instance_data
   end
 
@@ -102,7 +103,7 @@ class ExpenseSettlementsController < ApplicationController
     @forex_to_date = params[:forex_to] ? DateHelper.date_from_str(params[:forex_to]) : travel.return_date
   end
 
-  def create_settlement_report_from_dates(travel,expense_settlement)
+  def create_settlement_report_from_dates(travel,expense_settlement=nil)
     # TODO: Is this an ARel call?
     processed_expenses = ExpenseSettlement.where(processed: true).for_empl_id(travel.emp_id.to_s).only(:expenses, :forex_payments).to_a
     processed_expense_ids = processed_expenses.collect(&:expenses).flatten
@@ -112,7 +113,7 @@ class ExpenseSettlementsController < ApplicationController
     @forex_payments = ForexPayment.fetch_for travel.emp_id, @forex_from_date, @forex_to_date, processed_forex_ids
     @applicable_currencies = @forex_payments.collect(&:currency).uniq
     @expense_report = expense_settlement.nil? ? ExpenseSettlement.new(:empl_id=> travel.emp_id,
-                                                                    :travel_id => travel.id.to_s,
+                                                                    :outbound_travel_id => travel.id.to_s,
                                                                     :forex_payments => @forex_payments.collect(&:id),
                                                                     :expenses => @expenses.collect(&:id),
                                                                     :cash_handovers => [CashHandover.new]) :
