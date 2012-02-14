@@ -177,7 +177,6 @@ class ExpenseSettlement
     @consolidated_expenses.collect { |expense| expense['report_id'] }.uniq
   end
 
-  private
   def create_bank_reimbursement(mark_as_closed)
     self.populate_instance_data
     return if self.get_receivable_amount.negative?
