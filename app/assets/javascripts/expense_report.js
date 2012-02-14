@@ -30,7 +30,7 @@ $(document).ready(function() {
             handover_section.append(cloned_element);
             display_element.find('.delete_row').show();
             show_add_in_last_cash_handover();
-            $(this).remove();
+            $(this).hide();
         });
 
         $('.delete_row').live('click',function(){
