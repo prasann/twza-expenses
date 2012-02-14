@@ -1,5 +1,6 @@
 $(document).ready(function() {
     var _this = this;
+    show_add_in_last_cash_handover();
     $(function($) {
         $('#expense_report_accordion').accordion({
             active: false,
@@ -28,6 +29,7 @@ $(document).ready(function() {
             cloned_element.find(':input').val('');
             handover_section.append(cloned_element);
             display_element.find('.delete_row').show();
+            show_add_in_last_cash_handover();
             $(this).remove();
         });
 
@@ -75,5 +77,11 @@ $(document).ready(function() {
         var name_regex = '(.+)(_attributes|\\[)(\\d+)(.+)';
         target.attr('name', search_and_replace(target.attr('name'), name_regex, '$1$2' + index + '$4'));
 
+    }
+
+    function show_add_in_last_cash_handover() {
+      var cash_handover_items = $('.cash_handovers').find('.cash_handover');
+      if (cash_handover_items && cash_handover_items.size() > 0)
+        cash_handover_items.last().find('.add_row').show();
     }
 });
