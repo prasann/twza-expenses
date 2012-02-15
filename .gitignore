@@ -4,5 +4,6 @@
 .idea/
 config/database.yml
 coverage
+mangatha.sublime-*
 tags
 tmp/
