@@ -34,6 +34,7 @@ class ExpenseReportImporter
                             is_personal: extractor.call("S"),
                             attendees: extractor.call("V"),
                             description: extractor.call("Q"))
+      # TODO: Not sure if there is a bug: What if the first expense is invalid, but the second is valid - then the rest of the expenses after the second are not even validated/checked due to the way this if block is written
       if !has_valid_expenses && expense.valid?    #TODO See if this double validation can be done differently
         has_valid_expenses = true
       end
@@ -42,6 +43,7 @@ class ExpenseReportImporter
     UploadedExpense.create(file_name: file_name) if has_valid_expenses
   end
 
+  # TODO: This can be achieved using http://api.rubyonrails.org/classes/ActionView/Helpers/DateHelper.html#method-i-time_ago_in_words
   def duration(diff)
     secs  = diff.to_int
     mins  = secs / 60
@@ -61,19 +63,15 @@ class ExpenseReportImporter
 
 
   def file_exists?(file_name)
-    !UploadedExpense.where(file_name: file_name).blank?
+    UploadedExpense.exists?(conditions: {file_name: file_name})
   end
 
   def to_money(money_str)
-    if !money_str.nil?
-      BigDecimal.new(money_str.to_s).round(2)
-    end
+    BigDecimal.new(money_str.to_s).round(2) if !money_str.nil?
   end
 
   def to_date(date_str)
-    if !date_str.nil?
-      Date.parse(date_str.to_s)
-    end
+    Date.parse(date_str.to_s) if !date_str.nil?
   end
 
   def get_employee_id(id_str)
