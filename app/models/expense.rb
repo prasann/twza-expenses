@@ -6,8 +6,8 @@ class Expense
   field :original_cost, type: BigDecimal  
   field :original_currency, type: String 
   field :cost_in_home_currency, type: BigDecimal
-  field :expense_date, type: Date   #TODO: Convert to type: Date
-  field :report_submitted_at, type: Date  #TODO: Convert to type: Date
+  field :expense_date, type: Date
+  field :report_submitted_at, type: Date
   field :payment_type, type: String
   field :project, type: String
   field :subproject, type: String
