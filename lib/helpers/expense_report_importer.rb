@@ -15,11 +15,11 @@ class ExpenseReportImporter
 
   def load_expense(excelxfile)
     file_name = excelxfile.split("/")[1]
-
     return false if file_exists?(file_name)
-    uploaded_expenses_count = 0
+    puts "Processing expense file: #{file_name.to_s}"
+    has_valid_expenses = false
     read_from_excel(excelxfile, 0) do |extractor|
-      expense = Expense.new(empl_id: get_employee_id(extractor.call("C")), 
+      expense = Expense.new(empl_id: get_employee_id(extractor.call("C")),
                             expense_rpt_id: extractor.call("B").to_i,
                             original_cost: to_money(extractor.call("M")), 
                             original_currency: extractor.call("N"),
@@ -34,22 +34,31 @@ class ExpenseReportImporter
                             is_personal: extractor.call("S"),
                             attendees: extractor.call("V"),
                             description: extractor.call("Q"))
-      if expense.save!
-        uploaded_expenses_count += 1
-      else
-        puts "Error while processing the record:
-          Employee Name: #{extractor.call('D')}
-          Expense Date: #{extractor.call('J')} 
-          with errors: #{expense.errors} "
-      end 
+      if !has_valid_expenses && expense.valid?    #TODO See if this double validation can be done differently
+        has_valid_expenses = true
+      end
+      expense
     end
-
-    expenses_uploaded = uploaded_expenses_count > 0
-
-    UploadedExpense.create(file_name: file_name) if expenses_uploaded
-
-    return expenses_uploaded
+    UploadedExpense.create(file_name: file_name) if has_valid_expenses
   end
+
+  def duration(diff)
+    secs  = diff.to_int
+    mins  = secs / 60
+    hours = mins / 60
+    days  = hours / 24
+
+    if days > 0
+      "#{days} days and #{hours % 24} hours"
+    elsif hours > 0
+      "#{hours} hours and #{mins % 60} minutes"
+    elsif mins > 0
+      "#{mins} minutes and #{secs % 60} seconds"
+    elsif secs >= 0
+      "#{secs} seconds"
+    end
+  end
+
 
   def file_exists?(file_name)
     !UploadedExpense.where(file_name: file_name).blank?
@@ -68,6 +77,6 @@ class ExpenseReportImporter
   end
 
   def get_employee_id(id_str)
-    id_str.gsub('EMP', '').to_i
+    id_str.nil? ? nil : id_str.gsub('EMP', '').to_i
   end
 end
