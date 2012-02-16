@@ -11,6 +11,7 @@ set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
 set :user, "mankatha"
+set :password, "!abcd1234"
 set :deploy_to, '/home/mankatha/mangatha'
 set :use_sudo, false
 set :bundle_cmd, '~/.rvm/bin/rvm exec bundle'
@@ -45,6 +46,11 @@ namespace :bundler do
   end
 end
 
-after 'deploy:update_code', 'bundler:install'
+namespace :git do
+  task :create_revision_page do
+    run "cd #{release_path} && git log -n 1 > public/revision.txt"
+  end
+end     
 
+after 'deploy:update_code', 'bundler:install'
 
