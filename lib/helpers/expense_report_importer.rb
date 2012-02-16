@@ -43,25 +43,6 @@ class ExpenseReportImporter
     UploadedExpense.create(file_name: file_name) if has_valid_expenses
   end
 
-  # TODO: This can be achieved using http://api.rubyonrails.org/classes/ActionView/Helpers/DateHelper.html#method-i-time_ago_in_words
-  def duration(diff)
-    secs  = diff.to_int
-    mins  = secs / 60
-    hours = mins / 60
-    days  = hours / 24
-
-    if days > 0
-      "#{days} days and #{hours % 24} hours"
-    elsif hours > 0
-      "#{hours} hours and #{mins % 60} minutes"
-    elsif mins > 0
-      "#{mins} minutes and #{secs % 60} seconds"
-    elsif secs >= 0
-      "#{secs} seconds"
-    end
-  end
-
-
   def file_exists?(file_name)
     UploadedExpense.exists?(conditions: {file_name: file_name})
   end
