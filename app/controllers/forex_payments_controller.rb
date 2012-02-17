@@ -64,6 +64,6 @@ class ForexPaymentsController < ApplicationController
   end
 
   def data_to_suggest
-    render :text =>ForexPayment.get_json_to_populate('currency', 'vendor_name', 'place', 'office')
+    render :text =>ForexPayment.get_json_to_populate('currency', 'vendor_name', 'place', 'office').to_json
   end
 end
