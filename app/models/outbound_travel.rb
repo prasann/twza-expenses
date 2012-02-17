@@ -28,4 +28,14 @@ class OutboundTravel
     date = self.return_date || DateHelper.date_from_str(self.expected_return_date)
     return (date - self.departure_date).to_i if date.present?
   end
+
+  def self.get_json_to_populate(*args)
+    outbound_travels = OutboundTravel.all
+    fields = Hash.new
+    args.each do |field_name|
+      fields[field_name] = outbound_travels.collect{|x| x[field_name]}.uniq.delete_if{|x| x.nil?}
+    end
+    return fields
+  end
+
 end

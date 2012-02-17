@@ -183,16 +183,4 @@ describe ForexPaymentsController do
   #     response.headers["Cache-Control"].should == "no-cache, no-store, max-age=0, must-revalidate"
   #    end
   # end
-
-  describe "GET populate autosuggest data" do
-    it "should populate unique and non nullable data for auto suggestion" do
-      outbound_travel_1 = Factory(:forex_payment, :place => 'US', :currency => 'GBP', :office => 'Pune')
-      outbound_travel_2 = Factory(:forex_payment, :place => 'US', :vendor_name => 'VFC', :currency => 'USD', :office => 'Chennai')
-
-      get :data_to_suggest
-
-      assigns(:fields).should be_eql ({'place' => ["US"], 'vendor_name' => ['VKC Forex', 'VFC'], 'currency' => ['GBP','USD'] , 'office' => ['Pune','Chennai']})
-    end
-  end
-
 end

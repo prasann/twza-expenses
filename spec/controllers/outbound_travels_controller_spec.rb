@@ -178,13 +178,4 @@ describe OutboundTravelsController do
   #     response.headers["Cache-Control"].should == "no-cache, no-store, max-age=0, must-revalidate"
   #   end
   # end
-
-  describe "GET populate autosuggest data" do
-    it "should populate unique and non nullable data for auto suggestion" do
-      outbound_travel_1 = OutboundTravel.create!(valid_attributes.merge!({place: 'US', project: 'TWORKS'}))
-      outbound_travel_2 = OutboundTravel.create!(valid_attributes.merge!({place: 'US', payroll_effect: '100%', project: 'TWORKS'}))
-      get :data_to_suggest
-      assigns(:fields).should be_eql ({'place' => ["US"], 'payroll_effect' => ['100%'], 'project' => ['TWORKS']})
-    end
-  end
 end

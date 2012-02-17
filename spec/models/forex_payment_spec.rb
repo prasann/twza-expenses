@@ -32,4 +32,16 @@ describe 'forex_payment' do
       error_msgs[k].should == ["can't be blank"]
     end
   end
+
+  describe "Populate Autosuggest data" do
+    it "should populate unique and non nullable data for auto suggestion" do
+      outbound_travel_1 = Factory(:forex_payment, :place => 'US', :currency => 'GBP', :office => 'Pune')
+      outbound_travel_2 = Factory(:forex_payment, :place => 'US', :vendor_name => 'VFC', :currency => 'USD', :office => 'Chennai')
+
+      fields = ForexPayment.get_json_to_populate('place','vendor_name','currency')
+
+      fields.should be_eql ({'place' => ["US"], 'vendor_name' => ['VKC Forex', 'VFC'], 'currency' => ['GBP','USD']})
+    end
+  end
+
 end

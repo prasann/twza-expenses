@@ -42,4 +42,14 @@ class ForexPayment
       self[:expiry_date] = nil
     end
   end
+
+  def self.get_json_to_populate(*args)
+    forex_payments = ForexPayment.all
+    fields = Hash.new
+    args.each do |field_name|
+      fields[field_name] = forex_payments.collect{|x| x[field_name]}.uniq.delete_if{|x| x.nil?}
+    end
+    return fields
+  end
+
 end

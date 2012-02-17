@@ -64,17 +64,6 @@ class ForexPaymentsController < ApplicationController
   end
 
   def data_to_suggest
-    @forex_payments = ForexPayment.all
-    create_hash_field('currency', 'vendor_name', 'place', 'office');
-    render :text => @fields.to_json
-  end
-
-  private
-  # TODO: This seems to be a json representation of the objects in context - should be filtered from the model's attributes hash if so (rather than creating a new hash)
-  def create_hash_field(*args)
-    @fields = Hash.new
-    args.each do |field_name|
-      @fields[field_name] = @forex_payments.collect{|x| x[field_name]}.uniq.delete_if{|x| x.nil?}
-    end
+    render :text =>ForexPayment.get_json_to_populate('currency', 'vendor_name', 'place', 'office')
   end
 end

@@ -67,9 +67,7 @@ class OutboundTravelsController < ApplicationController
   end
 
   def data_to_suggest
-    @outbound_travels = OutboundTravel.all
-    create_hash_field('place', 'payroll_effect', 'project');
-    render :text => @fields.to_json
+    render :text => OutboundTravel.get_json_to_populate('place', 'payroll_effect', 'project').to_json
   end
 
   def update_field
@@ -89,14 +87,5 @@ class OutboundTravelsController < ApplicationController
   def travels_without_return_date
     @outbound_travels = OutboundTravel.where(:return_date => nil).page(params[:page])
     render :index, :layout => 'tabs'
-  end
-
-  private
-  # TODO: This seems to be a json representation of the objects in context - should be filtered from the model's attributes hash if so (rather than creating a new hash)
-  def create_hash_field(*args)
-    @fields = Hash.new
-    args.each do |field_name|
-      @fields[field_name] = @outbound_travels.collect{|x| x[field_name]}.uniq.delete_if{|x| x.nil?}
-    end
   end
 end
