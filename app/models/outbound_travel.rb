@@ -10,6 +10,7 @@ class OutboundTravel
   field :foreign_payroll_transfer
   field :return_date, type: Date
   field :return_payroll_transfer
+  # TODO: Can this record exist without an expected_return_date? If it cant, then fix the validations and the factories.rb file
   field :expected_return_date #TODO: Convert to type: Date
   field :project
   field :comments

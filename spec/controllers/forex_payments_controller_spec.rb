@@ -154,7 +154,7 @@ describe ForexPaymentsController do
       forex_payments_1 = Factory(:forex_payment, :emp_id => 10001)
       forex_payments_2 = Factory(:forex_payment, :emp_id => 10001)
       expense = Expense.create()
-      outbound_travel = OutboundTravel.create(:emp_id => '123', :emp_name => 'test', :place => 'US',:departure_date => Time.now)
+      outbound_travel = Factory(:outbound_travel)
       expense_settlement = ExpenseSettlement.create!(:empl_id => 10001, :forex_payments => [forex_payments_1[:_id]],
                                                     :expenses => [expense.id],
                                                     :outbound_travel => outbound_travel.id,

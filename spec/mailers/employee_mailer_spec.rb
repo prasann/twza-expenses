@@ -6,13 +6,7 @@ describe EmployeeMailer do
       @employee_id = 1
       @travel_id = 1
       @profile = mock(Profile,:employee_id => @employee_id, :email_id => 'johns', :common_name => 'John Smith', :get_full_name => 'John_Smith')
-      @forex = ForexPayment.create(
-      :attributes =>
-      {
-        :emp_id => '123', :emp_name => 'test', :amount => 120.25, :currency => 'INR',
-        :travel_date => Date.today, :office => 'Chennai', :inr => 5001.50
-      }
-      )
+      @forex = Factory(:forex_payment)
       @expense = Expense.create(
       :attributes =>
       {

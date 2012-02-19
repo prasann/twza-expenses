@@ -1,17 +1,14 @@
 require 'spec_helper'
 
 describe OutboundTravelsController do
-  # TODO: Use factory_girl
-  def valid_attributes
-    {:emp_id => '123', :emp_name => 'test', :place => 'US',:departure_date => Time.now, :expected_return_date => Time.now + 2.days}
-  end
-
   describe "GET index" do
     it "assigns all outbound_travels as @outbound_travels" do
-      outbound_travel_1 = OutboundTravel.create! (valid_attributes.merge!({departure_date: Time.now + 3}))
-      outbound_travel_2 = OutboundTravel.create! (valid_attributes.merge!({departure_date: Time.now - 3}))
+      outbound_travel_1 = Factory(:outbound_travel, :departure_date => Time.now + 3)
+      outbound_travel_2 = Factory(:outbound_travel, :departure_date => Time.now - 3)
+
       get :index, :page => 1, :per_page => 1
       assigns(:outbound_travels).should eq([outbound_travel_1])
+
       get :index, :page => 2, :per_page => 1
       assigns(:outbound_travels).should eq([outbound_travel_2])
     end
@@ -19,7 +16,7 @@ describe OutboundTravelsController do
 
   describe "GET show" do
     it "assigns the requested outbound_travel as @outbound_travel" do
-      outbound_travel = OutboundTravel.create! valid_attributes
+      outbound_travel = Factory(:outbound_travel)
       get :show, :id => outbound_travel.id
       assigns(:outbound_travel).should eq(outbound_travel)
     end
@@ -34,7 +31,7 @@ describe OutboundTravelsController do
 
   describe "GET edit" do
     it "assigns the requested outbound_travel as @outbound_travel" do
-      outbound_travel = OutboundTravel.create! valid_attributes
+      outbound_travel = Factory(:outbound_travel)
       get :edit, :id => outbound_travel.id
       assigns(:outbound_travel).should eq(outbound_travel)
     end
@@ -44,18 +41,20 @@ describe OutboundTravelsController do
     describe "with valid params" do
       it "creates a new OutboundTravel" do
         expect {
-          post :create, :outbound_travel => valid_attributes
+          post :create, :outbound_travel => Factory.attributes_for(:outbound_travel)
         }.to change(OutboundTravel, :count).by(1)
       end
 
       it "assigns a newly created outbound_travel as @outbound_travel" do
-        post :create, :outbound_travel => valid_attributes
+        post :create, :outbound_travel => Factory.attributes_for(:outbound_travel)
+
         assigns(:outbound_travel).should be_a(OutboundTravel)
         assigns(:outbound_travel).should be_persisted
       end
 
       it "redirects to the created outbound_travel" do
-        post :create, :outbound_travel => valid_attributes
+        post :create, :outbound_travel => Factory.attributes_for(:outbound_travel)
+
         response.should redirect_to(OutboundTravel.last)
       end
     end
@@ -63,13 +62,17 @@ describe OutboundTravelsController do
     describe "with invalid params" do
       it "assigns a newly created but unsaved outbound_travel as @outbound_travel" do
         OutboundTravel.any_instance.stub(:save).and_return(false)
+
         post :create, :outbound_travel => {}
+
         assigns(:outbound_travel).should be_a_new(OutboundTravel)
       end
 
       it "re-renders the 'new' template" do
         OutboundTravel.any_instance.stub(:save).and_return(false)
+
         post :create, :outbound_travel => {}
+
         response.should render_template("new")
       end
     end
@@ -78,36 +81,45 @@ describe OutboundTravelsController do
   describe "PUT update" do
     describe "with valid params" do
       it "updates the requested outbound_travel" do
-        outbound_travel = OutboundTravel.create! valid_attributes
+        outbound_travel = Factory(:outbound_travel)
         OutboundTravel.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
+
         put :update, :id => outbound_travel.id, :outbound_travel => {'these' => 'params'}
       end
 
       it "assigns the requested outbound_travel as @outbound_travel" do
-        outbound_travel = OutboundTravel.create! valid_attributes
-        put :update, :id => outbound_travel.id, :outbound_travel => valid_attributes
+        outbound_travel = Factory(:outbound_travel)
+
+        put :update, :id => outbound_travel.id, :outbound_travel => outbound_travel.attributes
+
         assigns(:outbound_travel).should eq(outbound_travel)
       end
 
       it "redirects to the outbound_travel" do
-        outbound_travel = OutboundTravel.create! valid_attributes
-        put :update, :id => outbound_travel.id, :outbound_travel => valid_attributes
+        outbound_travel = Factory(:outbound_travel)
+
+        put :update, :id => outbound_travel.id, :outbound_travel => outbound_travel.attributes
+
         response.should redirect_to(outbound_travel)
       end
     end
 
     describe "with invalid params" do
       it "assigns the outbound_travel as @outbound_travel" do
-        outbound_travel = OutboundTravel.create! valid_attributes
+        outbound_travel = Factory(:outbound_travel)
         OutboundTravel.any_instance.stub(:save).and_return(false)
+
         put :update, :id => outbound_travel.id, :outbound_travel => {}
+
         assigns(:outbound_travel).should eq(outbound_travel)
       end
 
       it "re-renders the 'edit' template" do
-        outbound_travel = OutboundTravel.create! valid_attributes
+        outbound_travel = Factory(:outbound_travel)
         OutboundTravel.any_instance.stub(:save).and_return(false)
+
         put :update, :id => outbound_travel.id, :outbound_travel => {}
+
         response.should render_template("edit")
       end
     end
@@ -115,14 +127,14 @@ describe OutboundTravelsController do
 
   describe "DELETE destroy" do
     it "destroys the requested outbound_travel" do
-      outbound_travel = OutboundTravel.create! valid_attributes
+      outbound_travel = Factory(:outbound_travel)
       expect {
         delete :destroy, :id => outbound_travel.id
       }.to change(OutboundTravel, :count).by(-1)
     end
 
     it "redirects to the outbound_travels list" do
-      outbound_travel = OutboundTravel.create! valid_attributes
+      outbound_travel = Factory(:outbound_travel)
       delete :destroy, :id => outbound_travel.id
       response.should redirect_to(outbound_travels_url)
     end
@@ -130,37 +142,39 @@ describe OutboundTravelsController do
 
   describe "GET Search" do
     it "searches for the given emp_id" do
-
       outbound_travel_1 = mock("outbound_travel", :emp_id => 1001)
       outbound_travel_2 = mock("outbound_travel", :emp_id => 1002)
       OutboundTravel.stub_chain(:page, :all_of).and_return([outbound_travel_1])
+
       get :search, :emp_id => 1001
+
       assigns(:outbound_travels).to_a.should == [outbound_travel_1]
     end
 
     it "searches all outbound travels greater than departure date" do
       now = Time.now
       tomorrow = Time.now + 1.day
-      outbound_travel_1 = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1001, departure_date: now}))
-      outbound_travel_2 = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1001, departure_date: tomorrow}))
+      outbound_travel_1 = Factory(:outbound_travel, :emp_id => 1001, :departure_date => now)
+      outbound_travel_2 = Factory(:outbound_travel, :emp_id => 1001, :departure_date => tomorrow)
       OutboundTravel.stub_chain(:page, :all_of).and_return([outbound_travel_2])
+
       get :search, :departure_date => Date.today + 1
+
       assigns(:outbound_travels).to_a.should == [outbound_travel_2]
     end
 
     it "should do an and search if departure date and emp id" do
       now = Time.now
       tomorrow = Time.now + 1.day
-      outbound_travel_1_now = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1001, departure_date: now}))
-      outbound_travel_1_tomorrow = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1001, departure_date: tomorrow}))
-      outbound_travel_2 = OutboundTravel.create!(valid_attributes.merge!({emp_id: 1002, departure_date: tomorrow}))
+      outbound_travel_1_now = Factory(:outbound_travel, :emp_id => 1001, :departure_date => now)
+      outbound_travel_1_tomorrow = Factory(:outbound_travel, :emp_id => 1001, :departure_date => tomorrow)
+      outbound_travel_2 = Factory(:outbound_travel, :emp_id => 1002, :departure_date => tomorrow)
 
       OutboundTravel.stub_chain(:page, :all_of).and_return([outbound_travel_1_tomorrow])
 
       get :search, :emp_id => 1001, :departure_date => Date.today + 1
       assigns(:outbound_travels).to_a.should == [outbound_travel_1_tomorrow]
     end
-
   end
 
   # describe "GET export" do
