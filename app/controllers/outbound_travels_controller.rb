@@ -1,5 +1,3 @@
-require 'csv'
-
 class OutboundTravelsController < ApplicationController
   include ExcelDataExporter
 
@@ -12,7 +10,6 @@ class OutboundTravelsController < ApplicationController
   ]
 
   def index
-    default_per_page = params[:per_page] || 20
     @outbound_travels = OutboundTravel.desc(:departure_date).page(params[:page]).per(default_per_page)
     render :layout => 'tabs'
   end
@@ -63,10 +60,11 @@ class OutboundTravelsController < ApplicationController
   end
 
   def export
-    export_xls(OutboundTravel, HEADERS, OutboundTravel.all)
+    export_xls(OutboundTravel.all, HEADERS, :model => OutboundTravel)
   end
 
   def data_to_suggest
+    # TODO: Why not send as json?
     render :text => OutboundTravel.get_json_to_populate('place', 'payroll_effect', 'project').to_json
   end
 

@@ -1,8 +1,6 @@
 require 'spec_helper'
-require 'data_importer/travel_data_importer'
 
 describe TravelDataImporter do
-
   before(:each) do
     @expected_date = Date.today
     @expected_text_value = "some text"

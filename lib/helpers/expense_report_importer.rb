@@ -1,7 +1,5 @@
+# TODO: Is this even used anywhere in this project?
 require 'roo'
-require 'csv'
-require 'mongoid'
-require 'helpers/excel_data_extractor'
 
 class ExpenseReportImporter
   include ExcelDataExtractor

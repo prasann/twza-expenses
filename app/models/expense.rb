@@ -48,6 +48,10 @@ class Expense
     @profile ||= Profile.find_by_employee_id(self.empl_id)
   end
 
+  def project_subproject
+    "#{project}#{subproject}"
+  end
+
   #TODO: keep this method till usages are removed
   def get_employee_id
     empl_id

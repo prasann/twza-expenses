@@ -1,9 +1,32 @@
+# TODO: Is this even used anywhere in this project?
 require 'roo'
-require "import_helper"
 
 module ExcelDataExtractor
   EXCEL_HANDLERS = {"xls" => Excel, "xlsx" => Excelx}
 
+  def read_from_excel(file_name, sheet_id, &callback)
+    @ignored_records_count = 0
+    @exception_records_count = 0
+    file = handler(file_name)
+    file.default_sheet = file.sheets[sheet_id]
+    2.upto(file.last_row) do |line|
+      extractor = Proc.new{ |column| file.cell(line, column) }
+      record = callback.call(extractor)
+      begin
+        record.save!
+        # TODO: If you call save!, then this line will not be hit if there really are errors!
+        @ignored_records_count += handle_validation_error(record)
+      rescue => e
+        @exception_records_count += 1
+        $stderr.puts e
+        $stderr.puts "Error while processing the record: #{record.inspect}"
+      end
+    end
+    show_ignored_records_summary(@ignored_records_count)
+    show_exception_records_summary(@exception_records_count)
+  end
+
+  private
   def handle_validation_error(record)
     unless record.errors.empty?
       $stderr.puts "\nRecord: #{record.inspect}, Error: #{record.errors.messages}"
@@ -25,27 +48,6 @@ module ExcelDataExtractor
       records_count_msg = ImportHelper::pluralize(records_count, 'record')
       $stderr.puts "\n#{records_count_msg} #{summary_msg}"
     end
-  end
-
-  def read_from_excel(file_name, sheet_id, &callback)
-    @ignored_records_count = 0
-    @exception_records_count = 0
-    file = handler(file_name)
-    file.default_sheet = file.sheets[sheet_id]
-    2.upto(file.last_row) do |line|
-      extractor = Proc.new{ |column| file.cell(line, column) }
-      record = callback.call(extractor)
-      begin
-        record.save!
-        @ignored_records_count += handle_validation_error(record)
-      rescue => e
-        @exception_records_count += 1
-        $stderr.puts e
-        $stderr.puts "Error while processing the record: #{record.inspect}"
-      end
-    end
-    show_ignored_records_summary(@ignored_records_count)
-    show_exception_records_summary @exception_records_count
   end
 
   def handler(file_name)

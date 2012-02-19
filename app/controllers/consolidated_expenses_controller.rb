@@ -1,17 +1,22 @@
 class ConsolidatedExpensesController < ApplicationController
+  include ExcelDataExporter
+
   HEADERS = ['Employee Id', 'Employee Name', 'Expense Report Id(s)', 'Account No', 'Amount']
+  COLUMNS = [:empl_id, :empl_name, :expense_report_ids, :bank_account_no, :reimbursable_amount]
 
   def index
     @reimbursable_expense_reports = get_reimbursable_expenses
     render :layout => 'tabs'
   end
 
+  # TODO: Merge into the index method - based on the request format (which is already 'xls)
   def export
-    render_excel get_reimbursable_expenses
+    render_excel(get_reimbursable_expenses)
   end
 
+  # TODO: Merge into the index method - based on the request format (which is already 'xls)
   def mark_processed_and_export
-    render_excel get_reimbursable_expenses(true)
+    render_excel(get_reimbursable_expenses(true))
   end
 
   private
@@ -21,11 +26,9 @@ class ConsolidatedExpensesController < ApplicationController
   end
 
   def render_excel(reimbursable_expenses)
-    respond_to do |format|
-      format.xls { send_data reimbursable_expenses.to_xls(:headers => HEADERS,
-                                                          :columns => [:empl_id, :empl_name, :expense_report_ids, :bank_account_no, :reimbursable_amount]),
-                   :filename => "BankInstruction_#{DateHelper.date_fmt(Date.today)}.xls"
-                 }
-    end
+    export_xls(reimbursable_expenses, HEADERS, {
+      :exportable_fields => COLUMNS,
+      :filename_prefix => "BankInstruction"
+    })
   end
 end

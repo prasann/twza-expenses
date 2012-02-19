@@ -22,7 +22,7 @@ module Mankatha
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
-    config.autoload_paths += %W(#{config.root}/lib/helpers)
+    config.autoload_paths += %W(#{config.root}/lib/helpers #{config.root}/lib/data_importer)
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
@@ -54,7 +54,5 @@ module Mankatha
     config.email_sender   = 'twindfinance@thoughtworks.com'
 
     config.email_domain   = '@thoughtworks.com'
-
   end
 end
-

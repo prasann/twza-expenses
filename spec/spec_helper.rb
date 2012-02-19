@@ -10,8 +10,6 @@ require 'rspec/autorun'
 require 'factory_girl'
 FactoryGirl.find_definitions
 
-require "#{Rails.root}/lib/helpers/model_attributes"
-
 RSpec.configure do |config|
   # == Mock Framework
   #

@@ -1,5 +1,3 @@
-require 'csv'
-
 class ForexPaymentsController < ApplicationController
   include ExcelDataExporter
 
@@ -9,8 +7,7 @@ class ForexPaymentsController < ApplicationController
   ]
 
   def index
-    default_per_page = params[:per_page] || 20
-    criteria = params[:empl_id] ? ExpenseSettlement.for_empl_id(params[:emp_id]) : ExpenseSettlement
+    criteria = !params[:empl_id].blank? ? ExpenseSettlement.for_empl_id(params[:emp_id]) : ExpenseSettlement
     @forex_ids_with_settlement = criteria.all.collect(&:forex_payments)
     @forex_payments = ForexPayment.desc(:travel_date).page(params[:page]).per(default_per_page)
     render :layout => 'tabs'
@@ -60,10 +57,11 @@ class ForexPaymentsController < ApplicationController
   end
 
   def export
-    export_xls(ForexPayment, HEADERS, ForexPayment.all)
+    export_xls(ForexPayment.all, HEADERS, :model => ForexPayment)
   end
 
   def data_to_suggest
-    render :text =>ForexPayment.get_json_to_populate('currency', 'vendor_name', 'place', 'office').to_json
+    # TODO: Why not send as json?
+    render :text => ForexPayment.get_json_to_populate('currency', 'vendor_name', 'place', 'office').to_json
   end
 end

@@ -1,3 +1,4 @@
+# TODO: See if this can be just: require 'application_helper'
 require "#{Rails.root}/app/helpers/application_helper"
 
 class EmployeeMailer < ActionMailer::Base

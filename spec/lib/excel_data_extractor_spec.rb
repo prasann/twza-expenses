@@ -1,17 +1,15 @@
 require 'spec_helper'
-require 'helpers/excel_data_extractor'
 
 describe "Excel data extractor" do
-
-include ExcelDataExtractor
+  include ExcelDataExtractor
 
   it "should extract details from excel" do
     file_name = "file_name"
     sheet_id = 0
     mockObject = mock(Object, :save => 'nothing', :errors => {})
     mockObjectWithValidationErrors = mock(Object, :save => 'nothing',
-                                          :errors => mock(Mongoid::Errors, :empty? => false,
-                                                          :messages => {:validation_error => 'Invalid data'}))
+                                                  :errors => mock(Mongoid::Errors, :empty? => false,
+                                                  :messages => {:validation_error => 'Invalid data'}))
     mockObjectWithDbErrors = mock(Object, :save => 'nothing',:errors => {})
     mockObjectWithDbErrors.should_receive(:save!).and_raise('Test DB Error message')
     callback = lambda{|extractor| extractor.call}

@@ -1,9 +1,7 @@
-require 'mongoid'
 require 'ostruct'
-require "#{Rails.root}/lib/helpers/model_attributes"
 
 class ExpenseSettlement
-  # TODO: Should not use helper in model
+  # TODO: Should not use helper in model - currently using ApplicationHelper#format_two_decimal_places
   include ApplicationHelper
   include Mongoid::Document
   include Mongoid::Timestamps

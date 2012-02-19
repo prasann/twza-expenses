@@ -14,7 +14,7 @@ class ExpenseReimbursementsController < ApplicationController
       @expense_reimbursements = ExpenseReimbursement.for_expense_report_id(params[:expense_rpt_id]).to_a
       expenses_criteria = Expense.for_expense_report_id(params[:expense_rpt_id].to_i)
       expense = expenses_criteria.first
-      empl_id = expense.nil? ? nil : expense.empl_id
+      empl_id = expense.try(:empl_id)
     end
 
     if !empl_id.blank?
@@ -27,6 +27,7 @@ class ExpenseReimbursementsController < ApplicationController
         reimbursement_expense_ids.push(expense_reimbursement.expenses.collect { |expense| expense['expense_id'] })
       end
 
+      # TODO: Performance: Move this into the db?
       processed_expense_ids = reimbursement_expense_ids.push(expense_ids_from_travel).flatten
 
       unprocessed_expenses_map = Expense.fetch_for(expenses_criteria, processed_expense_ids).group_by(&:expense_rpt_id)
@@ -54,7 +55,7 @@ class ExpenseReimbursementsController < ApplicationController
     if existing_expense_reimbursements.present? && !existing_expense_reimbursements.empty?
       expenses = expenses - existing_expense_reimbursements.collect(&:get_expenses).flatten
     end
-    @all_expenses = expenses.group_by { |expense| expense.project + (expense.subproject.nil? ? '' : expense.subproject) }
+    @all_expenses = expenses.group_by(&:project_subproject)
 
     # TODO: Should this be an ExpenseReimbursement so that we can do method calls instead of hash-like access?
     @expense_reimbursement = {'expense_report_id' => params[:id],
@@ -69,8 +70,10 @@ class ExpenseReimbursementsController < ApplicationController
     total_amount = 0
     expenses = []
 
+    # TODO: Is 'expense_map' even being used?
     expense_map = Hash.new
     Expense.for_expense_report_id(params[:expense_report_id]).to_a.map { |expense| expense_map[expense.id.to_s] = expense }
+
     expense_ids.each do |expense_id|
       modified_amount = expense_amount[expense_id].to_f
       expenses.push({'expense_id' => expense_id, 'modified_amount' => modified_amount})
@@ -85,6 +88,7 @@ class ExpenseReimbursementsController < ApplicationController
                                                          :status => status,
                                                          :total_amount => total_amount)
     # TODO: This be moved to the after_create hook on expense_reimbursement
+    # TODO: What if the creation failed?
     EmployeeMailer.non_travel_expense_reimbursement(@expense_reimbursement).deliver
     redirect_to :action => 'filter', :empl_id => params[:empl_id]
   end

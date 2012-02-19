@@ -1,5 +1,3 @@
-require 'mongoid'
-
 class ForexReportsController < ApplicationController
   include ExcelDataExporter
 
@@ -15,13 +13,13 @@ class ForexReportsController < ApplicationController
   end
 
   def export
-    export_xls(ForexPayment, HEADERS, get_results)
+    export_xls(get_results, HEADERS, :model => ForexPayment)
   end
 
   private
   def get_results
     ForexPayment.where(:currency => regex_if_nil(params[:forex_payment_currency]))
-    .and("issue_date" => {"$gte" => params[:reports_from], "$lte" => params[:reports_till]})
+    .and(:issue_date.gte => params[:reports_from]).and(:issue_date.lte => params[:reports_till])
     .and(vendor_name: regex_if_nil(params[:forex_payment_vendor_name]))
     .and(office: regex_if_nil(params[:forex_payment_office]))
   end

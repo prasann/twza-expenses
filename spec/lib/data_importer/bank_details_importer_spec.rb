@@ -1,9 +1,6 @@
 require 'spec_helper'
-require 'data_importer/bank_details_importer'
-
 
 describe BankDetailsImporter do
-
   before(:each) do
     @expected_date = Date.today
     @expected_text_value = "some text"
