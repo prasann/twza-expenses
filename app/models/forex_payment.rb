@@ -45,11 +45,9 @@ class ForexPayment
 
   def self.get_json_to_populate(*args)
     forex_payments = ForexPayment.all
-    fields = Hash.new
-    args.each do |field_name|
-      fields[field_name] = forex_payments.collect{|x| x[field_name]}.uniq.delete_if{|x| x.nil?}
+    args.inject({}) do |hash, field_name|
+      hash[field_name] = forex_payments.collect{|fp| fp[field_name].strip if fp[field_name].present?}.uniq.compact
+      hash
     end
-    return fields
   end
-
 end

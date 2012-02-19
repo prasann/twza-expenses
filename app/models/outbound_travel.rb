@@ -31,11 +31,9 @@ class OutboundTravel
 
   def self.get_json_to_populate(*args)
     outbound_travels = OutboundTravel.all
-    fields = Hash.new
-    args.each do |field_name|
-      fields[field_name] = outbound_travels.collect{|x| x[field_name]}.uniq.delete_if{|x| x.nil?}
+    args.inject({}) do |hash, field_name|
+      hash[field_name] = outbound_travels.collect{|ot| ot[field_name].strip if ot[field_name].present?}.uniq.compact
+      hash
     end
-    return fields
   end
-
 end
