@@ -42,6 +42,9 @@ describe 'forex_payment' do
 
       fields.should be_eql ({'place' => ["US"], 'vendor_name' => ['VKC Forex', 'VFC'], 'currency' => ['GBP','USD']})
     end
-  end
 
+    it "should strip the values and then keep uniques"
+
+    it "should remove nils from the result"
+  end
 end

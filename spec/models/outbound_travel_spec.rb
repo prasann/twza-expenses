@@ -38,6 +38,7 @@ describe OutboundTravel do
       outbound_travel.stay_duration.should == 6
     end
   end
+
   describe "Populate autosuggest data" do
     it "should populate unique and non nullable data for auto suggestion" do
       outbound_travel_1 = OutboundTravel.create!(valid_attributes.merge!({place: 'US', project: 'TWORKS'}))
@@ -45,5 +46,9 @@ describe OutboundTravel do
       fields = OutboundTravel.get_json_to_populate('place','payroll_effect')
       fields.should be_eql ({'place' => ["US"], 'payroll_effect' => ["100%"]})
     end
+
+    it "should strip the values and then keep uniques"
+
+    it "should remove nils from the result"
   end
 end
