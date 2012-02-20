@@ -50,7 +50,7 @@ namespace :git do
   task :create_revision_page do
     run "cd #{release_path} && git log -n 1 > public/revision.txt"
   end
-end     
+end
 
 after 'deploy:update_code', 'bundler:install'
 

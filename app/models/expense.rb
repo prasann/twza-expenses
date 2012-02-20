@@ -3,8 +3,8 @@ class Expense
 
   field :empl_id, type: Integer
   field :expense_rpt_id, type: Integer
-  field :original_cost, type: BigDecimal  
-  field :original_currency, type: String 
+  field :original_cost, type: BigDecimal
+  field :original_currency, type: String
   field :cost_in_home_currency, type: BigDecimal
   field :expense_date, type: Date
   field :report_submitted_at, type: Date
