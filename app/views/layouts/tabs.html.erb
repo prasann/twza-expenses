@@ -12,11 +12,11 @@
     <div class="content">
       <div id="menu">
         <ul class="tabs">
-          <li><a href="#outbound_travels" title="Outbound Travels">Outbound Travels</a></li>
-          <li><a href="#forex_payments" title="Forex Payments">Forex Payments</a></li>
-          <li><a href="#expense_settlements" title="Expense Settlement">Travel Settlement</a></li>
-          <li><a href="#expense_reimbursements" title="Expense Reimbursement">Non-travel Reimbursement</a></li>
-          <li><a href="#reports" title="Reports">Uploads & Reports</a></li>
+          <li><%= link_to("Outbound Travels", "#outbound_travels", :title => "Outbound Travels") %></li>
+          <li><%= link_to("Forex Payments", "#forex_payments", :title => "Forex Payments") %></li>
+          <li><%= link_to("Travel Settlement", "#expense_settlements", :title => "Expense Settlement") %></li>
+          <li><%= link_to("Non-travel Reimbursement", "#expense_reimbursements", :title => "Expense Reimbursement") %></li>
+          <li><%= link_to("Uploads & Reports", "#reports", :title => "Reports") %></li>
         </ul>
         <%= yield %>
       </div>

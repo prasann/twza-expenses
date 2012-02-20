@@ -10,8 +10,8 @@
   </div>
   <div class="thought_works"><b>Thought</b>Works</div>
   <div class="title">
-    <a href="/outbound_travels">
-      <img src="/assets/logo.png" alt="Expense Reimbursement System"/>
-    </a>
+    <%= link_to(outbound_travels_path, :style => "text-decoration: none;") do %>
+      <%= image_tag("/assets/logo.png", :alt => "Expense Reimbursement System") %>
+    <% end %>
   </div>
 </div>
