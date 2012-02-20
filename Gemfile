@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 # TODO: Group all these based on rails env usage
-gem 'rails', '~>3.1'
+gem 'rails', '~>3.2.0'
 gem 'mongoid'
 gem 'bson_ext'
 gem 'roo'
@@ -15,8 +15,8 @@ gem 'jquery-rails'
 
 # TODO: Uncomment after putting the required line(s) into the Capfile
 #group :assets do
-#  gem 'sass-rails',   '~> 3.1.5'
-#  gem 'coffee-rails', '~> 3.1.1'
+#  gem 'sass-rails',   '~> 3.2.3'
+#  gem 'coffee-rails', '~> 3.2.1'
 #  gem 'uglifier', '>= 1.0.3'
 #end
 
@@ -31,7 +31,7 @@ group :uat, :production do
 end
 
 group :development do
-  gem 'rails-dev-boost', :git => 'git://github.com/thedarkone/rails-dev-boost.git', :require => 'rails_development_boost'
+  # gem 'rails-dev-boost', :git => 'git://github.com/thedarkone/rails-dev-boost.git', :require => 'rails_development_boost'
   #gem 'mailcatcher'
 end
 
