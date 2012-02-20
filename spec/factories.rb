@@ -19,4 +19,16 @@ FactoryGirl.define do
     # TODO: Not sure about this field - if its mandatory, then we should mark it as such in the model class
     # expected_return_date { Time.now + 2.days }
   end
+
+  factory :expense do
+    sequence(:empl_id) { |n| "#{n}" }
+  end
+
+  factory :expense_reimbursement do
+    sequence(:expense_report_id) { |n| "#{n}" }
+    sequence(:empl_id) { |n| "#{n}" }
+    submitted_on { Time.now }
+    total_amount { Random.rand(125) }
+    status ExpenseReimbursement::UNPROCESSED
+  end
 end

@@ -153,7 +153,7 @@ describe ForexPaymentsController do
     it "searches for the given employee id" do
       forex_payments_1 = Factory(:forex_payment, :emp_id => 10001)
       forex_payments_2 = Factory(:forex_payment, :emp_id => 10001)
-      expense = Expense.create()
+      expense = Factory(:expense)
       outbound_travel = Factory(:outbound_travel)
       expense_settlement = ExpenseSettlement.create!(:empl_id => 10001, :forex_payments => [forex_payments_1[:_id]],
                                                     :expenses => [expense.id],
