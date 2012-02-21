@@ -26,4 +26,9 @@ namespace :data_import do
     BankDetail.delete_all
     BankDetailsImporter.new.import('data/SCB_nos.xlsx')
   end
+
+  desc "Imports Expense sheet into DB"
+  task :expense_sheet => :environment do
+    ExpenseReportImporter.new.load
+  end
 end
