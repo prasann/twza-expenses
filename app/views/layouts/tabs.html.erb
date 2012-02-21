@@ -3,9 +3,11 @@
 <html>
   <head>
     <title>Expense Reimbursement</title>
-    <%= stylesheet_link_tag "style" %>
-    <%= stylesheet_link_tag "jquery-ui-custom" %>
     <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag "jquery-ui-custom" %>
+    <%= stylesheet_link_tag "style" %>
+    <!-- TODO: Ideally, js should be loaded towards the bottom of the page -->
+    <%= javascript_include_tag "application" %>
   </head>
   <body>
     <%= render :partial => '/layouts/top_bar' %>
@@ -21,7 +23,6 @@
         <%= yield %>
       </div>
     </div>
-    <%= javascript_include_tag "application" %>
     <%= yield :page_js %>
   </body>
 </html>
