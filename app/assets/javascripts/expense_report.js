@@ -19,7 +19,7 @@ $(document).ready(function() {
 
         $(".refresh").change(function() {
             query_str = "forex_from=" + $('#forex_from').val() + "&forex_to=" + $('#forex_to').val() + "&expense_from=" + $('#expense_from').val() + "&expense_to=" + $('#expense_to').val();
-            window.location = "/expense_settlements/load_by_travel/" + $("#travel_id").val() + "?" + query_str;
+            window.location = "/expense_settlements/" + $("#expense_settlement_outbound_travel_id").val() + "/load_by_travel?" + query_str;
         });
 
         $('.add_row').live("click", function() {
@@ -33,8 +33,8 @@ $(document).ready(function() {
             $(this).hide();
         });
 
-        $('.delete_row').live('click',function(){
-           $(this).parents('.cash_handover').last().remove();
+        $('.delete_row').live('click', function(){
+          $(this).parents('.cash_handover').last().remove();
           show_add_in_last_cash_handover();
         });
 
