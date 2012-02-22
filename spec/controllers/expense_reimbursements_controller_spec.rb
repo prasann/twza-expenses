@@ -3,18 +3,19 @@ require 'spec_helper'
 describe ExpenseReimbursementsController do
   describe "Get show " do
     it "should show expense reimbursement details" do
-      expected_expense_reimbursement = mock("expense_reimbursement", :id => 123, :empl_id => 1234)
+      dummy_expense_reimbursement = Factory(:expense_reimbursement)
+      expected_expense_reimbursement = Factory(:expense_reimbursement)
       profile = mock('profile')
+      expected_expense_reimbursement.should_receive(:profile).and_return(profile)
+      profile.should_receive(:get_full_name).and_return('John Smith')
       expected_expenses = mock('expense')
       #expense_reimbursement_2 = mock("expense_reimbursement", :id => 231, :empl_id => 231)
 
-      ExpenseReimbursement.should_receive(:find).with("123").and_return(expected_expense_reimbursement)
+      ExpenseReimbursement.should_receive(:find).with(expected_expense_reimbursement.id.to_s).and_return(expected_expense_reimbursement)
 
-      expected_expense_reimbursement.should_receive(:profile).and_return(profile)
-      profile.should_receive(:get_full_name).and_return('John Smith')
       expected_expense_reimbursement.should_receive(:get_expenses_grouped_by_project_code).and_return(expected_expenses)
 
-      get :show, :id => "123"
+      get :show, :id => expected_expense_reimbursement.id.to_s
 
       assigns(:expense_reimbursement).should == expected_expense_reimbursement
       assigns(:all_expenses).should == expected_expenses
