@@ -60,6 +60,7 @@ class ExpenseSettlementsController < ApplicationController
     expense_report = ExpenseSettlement.find(params[:id])
     expense_report.notify_employee
     # TODO: What if the save failed?
+    # TODO: In the "Rails 3.1" way, flash should be part of the redirect (options hash) - so need to make sure that this actually works
     flash[:success] = "Expense settlement e-mail successfully sent to '#{expense_report.profile.common_name}'"
     redirect_to(:action => :index, :anchor => 'expense_settlements', :empl_id => expense_report.empl_id)
   end
@@ -72,8 +73,10 @@ class ExpenseSettlementsController < ApplicationController
     require 'fileutils'
     @file_name = params[:file_upload][:my_file].original_filename
     if load_to_db
+      # TODO: In the "Rails 3.1" way, flash should be part of the redirect (options hash) - so need to make sure that this actually works
       flash[:success] = "File: '#{@file_name}' has been uploaded successfully"
     else
+      # TODO: In the "Rails 3.1" way, flash should be part of the redirect (options hash) - so need to make sure that this actually works
       flash[:error] = 'This file has already been uploaded'
     end
     redirect_to :action => 'show_uploads'

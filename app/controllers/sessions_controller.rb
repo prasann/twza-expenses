@@ -8,6 +8,7 @@ class SessionsController < ApplicationController
       session[:user_id] = user.id
       redirect_to outbound_travels_url
     else
+      # TODO: In the "Rails 3.1" way, flash should be part of the redirect (options hash) - so need to make sure that this actually works
       flash[:error] = "Invalid email or password"
       render 'new'
     end
