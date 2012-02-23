@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
     user = User.authenticate(params[:user_name], params[:password])
     if user
       session[:user_id] = user.id
-      redirect_to outbound_travels_url
+      redirect_to outbound_travels_path
     else
       # TODO: In the "Rails 3.1" way, flash should be part of the redirect (options hash) - so need to make sure that this actually works
       flash[:error] = "Invalid email or password"
@@ -16,6 +16,6 @@ class SessionsController < ApplicationController
 
   def destroy
     session[:user_id] = nil
-    redirect_to root_url
+    redirect_to root_path
   end
 end

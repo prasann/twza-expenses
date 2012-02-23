@@ -47,7 +47,7 @@ class OutboundTravelsController < ApplicationController
   def destroy
     @outbound_travel = OutboundTravel.find(params[:id])
     @outbound_travel.destroy
-    redirect_to outbound_travels_url
+    redirect_to outbound_travels_path
   end
 
   # TODO: Shouldnt this be merged in 'index' - search/filter/index are synonymous in REST

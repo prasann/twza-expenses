@@ -136,7 +136,7 @@ describe OutboundTravelsController do
     it "redirects to the outbound_travels list" do
       outbound_travel = Factory(:outbound_travel)
       delete :destroy, :id => outbound_travel.id
-      response.should redirect_to(outbound_travels_url)
+      response.should redirect_to(outbound_travels_path)
     end
   end
 

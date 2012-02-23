@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   end
 
   def logged_in?
-    redirect_to log_in_url if current_user.nil?
+    redirect_to log_in_path if current_user.nil?
   end
 
   def current_user

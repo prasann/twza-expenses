@@ -1,15 +1,15 @@
 <div class='report_section'>
   <h2>Expense Reports</h2>
-  <%= link_to image_tag("upload.png") + "Upload expense report (from Sharon)", 'expense_settlements/show_uploads' %>
+  <%= link_to(image_tag("upload.png") + "Upload expense report (from Sharon)", 'expense_settlements/show_uploads') %>
 </div>
 <div class='report_section'>
   <h2>Forex Reports</h2>
-  <%= link_to image_tag("reports.png") + "Generate Forex reports within a given date range.", forex_reports_path %>
+  <%= link_to(image_tag("reports.png") + "Generate Forex reports within a given date range.", forex_reports_path) %>
 </div>
 <div class="report_section">
   <h2>Bank Reimbursement Statement</h2>
-  <%= link_to image_tag("excel.png") + "Mark as Sent to Bank and Generate Bank Reimbursement Statement", :controller => 'consolidated_expenses', :action => 'mark_processed_and_export', :format => 'xls' %>
+  <%= link_to(image_tag("excel.png") + "Mark as Sent to Bank and Generate Bank Reimbursement Statement", mark_processed_and_export_consolidated_expenses_path(:format => :xls)) %>
   &nbsp;
-  <%= link_to image_tag("excel.png") + "Generate Bank Reimbursement Statement", :controller => 'consolidated_expenses', :action => 'export', :format => 'xls' %>
+  <%= link_to(image_tag("excel.png") + "Generate Bank Reimbursement Statement", :controller => 'consolidated_expenses', :action => 'export', :format => :xls) %>
 </div>
 <br/>

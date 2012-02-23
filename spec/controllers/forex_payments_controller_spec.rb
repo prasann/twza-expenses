@@ -145,7 +145,7 @@ describe ForexPaymentsController do
 
       delete :destroy, :id => forex_payment.id
 
-      response.should redirect_to(forex_payments_url)
+      response.should redirect_to(forex_payments_path)
     end
   end
 

@@ -46,7 +46,7 @@ class ForexPaymentsController < ApplicationController
   def destroy
     @forex_payment = ForexPayment.find(params[:id])
     @forex_payment.destroy
-    redirect_to forex_payments_url
+    redirect_to forex_payments_path
   end
 
   # TODO: Shouldnt this be merged in 'index' - search/filter/index are synonymous in REST
