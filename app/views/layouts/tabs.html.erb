@@ -14,15 +14,30 @@
     <div class="content">
       <div id="menu">
         <ul class="tabs">
-          <li><%= link_to("Outbound Travels", "#outbound_travels", :title => "Outbound Travels") %></li>
-          <li><%= link_to("Forex Payments", "#forex_payments", :title => "Forex Payments") %></li>
-          <li><%= link_to("Travel Settlement", "#expense_settlements", :title => "Expense Settlement") %></li>
-          <li><%= link_to("Non-travel Reimbursement", "#expense_reimbursements", :title => "Expense Reimbursement") %></li>
-          <li><%= link_to("Uploads & Reports", "#reports", :title => "Reports") %></li>
+          <li><%= link_to("Outbound Travels", "#outbound_travels", :title => "Outbound Travels", :"data-url" => outbound_travels_path) %></li>
+          <li><%= link_to("Forex Payments", "#forex_payments", :title => "Forex Payments", :"data-url" => forex_payments_path) %></li>
+          <li><%= link_to("Travel Settlement", "#expense_settlements", :title => "Expense Settlement", :"data-url" => expense_settlements_path) %></li>
+          <li><%= link_to("Non-travel Reimbursement", "#expense_reimbursements", :title => "Expense Reimbursement", :"data-url" => expense_reimbursements_path) %></li>
+          <li><%= link_to("Uploads & Reports", "#reports", :title => "Reports", :"data-url" => reports_path) %></li>
         </ul>
         <%= yield %>
       </div>
     </div>
+    <script type="text/javascript">
+    $(document).ready(function() {
+      $('#menu').tabs({
+        ajaxOptions: {
+          error: function(xhr, status, index, anchor) {
+            $(anchor.hash).html("Couldn't load this tab. We'll try to fix this as soon as possible. If this wouldn't be a demo.");
+          }
+        },
+        select: function(event, ui) {
+          var tab = $(ui.tab);
+          window.location = tab.attr('data-url') + tab.attr('href');
+        }
+      });
+    });
+    </script>
     <%= yield :page_js %>
   </body>
 </html>
