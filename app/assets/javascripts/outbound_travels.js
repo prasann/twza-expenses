@@ -23,9 +23,7 @@ function populateTravelFields(){
 };
 
 $(document).ready(function(){
-  $(function($){
-    $('.no_travel_return_date').click(function(){
-      alert('Please submit return date for the selected travel and then process the expenses');
-    })
-  });
+  $('.no_travel_return_date').click(function(){
+    alert('Please submit return date for the selected travel and then process the expenses');
+  })
 });

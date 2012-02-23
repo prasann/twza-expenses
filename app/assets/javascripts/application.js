@@ -11,24 +11,22 @@
 
 // TODO: Move this to the specific pages that need these functions defined
 $(document).ready(function() {
-  $(function($) {
-    $('#menu').tabs({
-      ajaxOptions: {
-        error: function(xhr, status, index, anchor) {
-          $(anchor.hash).html("Couldn't load this tab. We'll try to fix this as soon as possible. If this wouldn't be a demo.");
-        }
-      },
-      select: function(event, ui) {
-        // TODO: This is somehow broken by Vijay - Need help to investigate and fix
-        // TODO: Use url helpers rather than hardcoding the url
-        if (ui.index == 0) { window.location = "/outbound_travels#outbound_travels";}
-        if (ui.index == 1) { window.location = "/forex_payments#forex_payments";}
-        if (ui.index == 2) { window.location = "/expense_settlements#expense_settlements";}
-        if (ui.index == 3) { window.location = "/expense_reimbursements#expense_reimbursements";}
-        if (ui.index == 4) { window.location = "/reports#reports";}
+  $('#menu').tabs({
+    ajaxOptions: {
+      error: function(xhr, status, index, anchor) {
+        $(anchor.hash).html("Couldn't load this tab. We'll try to fix this as soon as possible. If this wouldn't be a demo.");
       }
-    });
-
-    $('.date_picker').datepicker({dateFormat : 'dd-M-yy'});
+    },
+    select: function(event, ui) {
+      // TODO: This is somehow broken by Vijay - Need help to investigate and fix
+      // TODO: Use url helpers rather than hardcoding the url
+      if (ui.index == 0) { window.location = "/outbound_travels#outbound_travels";}
+      if (ui.index == 1) { window.location = "/forex_payments#forex_payments";}
+      if (ui.index == 2) { window.location = "/expense_settlements#expense_settlements";}
+      if (ui.index == 3) { window.location = "/expense_reimbursements#expense_reimbursements";}
+      if (ui.index == 4) { window.location = "/reports#reports";}
+    }
   });
+
+  $('.date_picker').datepicker({dateFormat : 'dd-M-yy'});
 });
