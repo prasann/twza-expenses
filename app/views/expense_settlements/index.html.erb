@@ -40,8 +40,8 @@
             <% end %>
           </td>
           <td><%= expense_settlement.emp_name %></td>
-          <td><%= DateHelper.date_fmt(travel.departure_date) %></td>
-          <td><%= DateHelper.date_fmt(travel.return_date) %></td>
+          <td><%= DateHelper.date_fmt(travel.try(:departure_date)) %></td>
+          <td><%= DateHelper.date_fmt(travel.try(:return_date)) %></td>
           <td><%= number_with_precision(expense_settlement.get_receivable_amount, :precision => 2) %></td>
           <td><%= expense_settlement.status %></td>
           <td><%= DateHelper.date_fmt(expense_settlement.updated_at) %></td>
