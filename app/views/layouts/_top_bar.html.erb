@@ -10,8 +10,7 @@
   </div>
   <div class="thought_works"><b>Thought</b>Works</div>
   <div class="title">
-    <%= link_to(outbound_travels_path, :style => "text-decoration: none;") do %>
-      <%= image_tag("/assets/logo.png", :alt => "Expense Reimbursement System") %>
-    <% end %>
+    <!-- TODO: Shouldnt this be the root url? -->
+    <%= link_to(image_tag("/assets/logo.png", :alt => "Expense Reimbursement System"), outbound_travels_path, :style => "text-decoration: none;") %>
   </div>
 </div>
