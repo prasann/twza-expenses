@@ -1,7 +1,8 @@
   <br/>
   <%= flash_message %>
   <div>
-    <%= form_tag(expense_settlements_path, :method => "get") do %>
+    <!-- TODO: This seems to be duplicated across all pages -->
+    <%= form_tag(expense_settlements_path(:anchor => "expense_settlements"), :method => "get") do %>
       <h1>Expense Settlement</h1>
       <span class="search_by">Search by:</span>
       <%= label_tag 'Employee Name' %>:
