@@ -14,8 +14,8 @@ class ExpenseSettlement
 
   field :expenses, type: Array
   field :forex_payments, type: Array
-  field :empl_id, type: String
-  field :emp_name, type: String
+  field :empl_id, type: String    #TODO: Why is this in a different type than in other models? Also, why the different names?
+  field :emp_name, type: String    #TODO: Why does this have a different name than in other models?
 
   field :status, type: String
 

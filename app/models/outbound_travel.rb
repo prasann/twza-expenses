@@ -1,8 +1,8 @@
 class OutboundTravel
   include Mongoid::Document
 
-  field :emp_id, type: Integer
-  field :emp_name
+  field :emp_id, type: Integer    #TODO: Why is this in a different type than in other models? Also, why the different names?
+  field :emp_name    #TODO: Why does this have a different name than in other models?
   field :place
   field :travel_duration
   field :payroll_effect

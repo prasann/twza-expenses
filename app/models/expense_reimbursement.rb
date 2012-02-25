@@ -10,7 +10,7 @@ class ExpenseReimbursement
   PROCESSED   = 'Processed'
 
   field :expense_report_id, type: Integer
-  field :empl_id, type: String
+  field :empl_id, type: String    #TODO: Why is this in a different type than in other models? Also, why the different names?
   field :expenses, type: Array
   field :status, type: String, :default => UNPROCESSED
   field :submitted_on, type: Date

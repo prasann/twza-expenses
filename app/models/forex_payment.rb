@@ -5,8 +5,8 @@ class ForexPayment
   MISSING_EXPIRY_DATE_MSG = "Card number should have an expiry date specified"
 
   field :issue_date, type: Date
-  field :emp_id, type: Integer
-  field :emp_name
+  field :emp_id, type: Integer    #TODO: Why is this in a different type than in other models? Also, why the different names?
+  field :emp_name    #TODO: Why does this have a different name than in other models?
   field :amount, type: BigDecimal
   field :currency
   field :travel_date, type: Date
