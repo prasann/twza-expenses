@@ -1,6 +1,8 @@
 require 'ostruct'
 
 class ExpenseSettlement
+  # TODO: Should not use helper in model - currently using ApplicationHelper#format_two_decimal_places
+  include ApplicationHelper
   include Mongoid::Document
   include Mongoid::Timestamps
   include ModelAttributes
@@ -154,7 +156,7 @@ class ExpenseSettlement
       end
     end
     value = forex_inr_amount - (expense_inr_amount + @cash_handover_total)
-    (value * 100).round.to_f / 100
+    # TODO: Should not need to round off to 2 decimal places here - only in views
     format_two_decimal_places(value)
   end
 
@@ -189,9 +191,5 @@ class ExpenseSettlement
                     :reimbursable_amount => self.get_receivable_amount.abs,
                     :bank_account_no => bank_detail.account_no
                    })
-  end
-
-  def format_two_decimal_places(number)
-    (number * 100).round.to_f / 100
   end
 end
