@@ -12,18 +12,24 @@
 </div>
 
 <div class="no_emp hide error">No employee found for given name.</div>
-<form action='/outbound_travels/search#outbound_travels' method="get">
-  <span class="search_by">Search by:</span>
-  <%= label_tag 'Departure From' %>
-  <%= text_field_tag :departure_date, params[:departure_date], :class => 'date_picker' %>
-  <%= label_tag 'Employee Name' %>:
-  <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
-  <span class="or_field">(or)</span>
-  <%= label_tag 'Employee Id' %>:
-  <%= text_field_tag :emp_id, params[:emp_id], :class => 'emp_id' %>
-  <%= submit_tag "Search", :name => nil %>
-</form>
+<!-- TODO: This seems to be duplicated across all pages -->
+<div>
+  <%= form_tag(search_outbound_travels_path(:anchor => "outbound_travels"), :method => "get") do %>
+    <span class="search_by">Search by:</span>
 
+    <!-- TODO: This is the extra stuff -->
+    <%= label_tag 'Departure From' %>
+    <%= text_field_tag :departure_date, params[:departure_date], :class => 'date_picker' %>
+    <span class="or_field">(or)</span>
+
+    <%= label_tag 'Employee Name' %>:
+    <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
+    <span class="or_field">(or)</span>
+    <%= label_tag 'Employee Id' %>:
+    <%= text_field_tag :emp_id, params[:emp_id], :class => 'emp_id' %>
+    <%= submit_tag "Search", :name => nil %>
+  <% end %>
+</div>
 <div class="right_align">
   <%= link_to(image_tag("excel.png") + "Export in Excel", export_outbound_travels_path(:format => :xls)) %>
 </div>

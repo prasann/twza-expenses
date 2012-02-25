@@ -4,15 +4,17 @@
 <h1>Forex Payments</h1>
 <div class="no_emp hide error">No employee found for given name.</div>
 <!-- TODO: Use form helper and url helper -->
-<form id="forex_search" action='/forex_payments#forex_payments' method = "get">
-<span class="search_by">Search by:</span>
-  <%= label_tag 'Employee Name' %>:
-  <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
-  <span class="or_field">(or)</span>
-  <%= label_tag 'Employee Id' %>:
-  <%= text_field_tag :emp_id, params[:emp_id], :class => 'emp_id' %>
-  <%= submit_tag "Search", :name => nil %>
-</form>
+<div>
+  <%= form_tag(forex_payments_path(:anchor => "forex_payments"), :method => "get") do %>
+    <span class="search_by">Search by:</span>
+    <%= label_tag 'Employee Name' %>:
+    <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
+    <span class="or_field">(or)</span>
+    <%= label_tag 'Employee Id' %>:
+    <%= text_field_tag :emp_id, params[:emp_id], :class => 'emp_id' %>
+    <%= submit_tag "Search", :name => nil %>
+  <% end %>
+</div>
 
 <div class="right_align">
   <%= link_to(image_tag("excel.png") + "Export in Excel" , export_forex_payments_path(:format => :xls)) %>

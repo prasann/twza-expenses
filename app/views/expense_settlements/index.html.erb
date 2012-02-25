@@ -1,59 +1,59 @@
-  <br/>
-  <%= flash_message %>
-  <div>
-    <!-- TODO: This seems to be duplicated across all pages -->
-    <%= form_tag(expense_settlements_path(:anchor => "expense_settlements"), :method => "get") do %>
-      <h1>Expense Settlement</h1>
-      <span class="search_by">Search by:</span>
-      <%= label_tag 'Employee Name' %>:
-      <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
-      <span class="or_field">(or)</span>
-      <%= label_tag 'Employee Id' %>:
-      <%= text_field_tag :empl_id, params[:empl_id], :class => 'emp_id' %>
-      <%= submit_tag "Search", :name => nil %>
-    <% end %>
-  </div>
-  <% if @expense_settlements %>
-    <div>
-      <%= paginate @expense_settlements %>
-    </div>
-    <table>
-      <tr>
-        <th>Employee Id</th>
-        <th>Employee Name</th>
-        <th>Travel Date</th>
-        <th>Return Date</th>
-        <th>Amount</th>
-        <th>Status</th>
-        <th>Last Updated</th>
-        <th>Action</th>
-      </tr>
-      <% @expense_settlements.each do |expense_settlement|
-        expense_settlement.populate_instance_data
-        travel = expense_settlement.outbound_travel
-      %>
-        <tr class="<%= cycle("even", "odd") %>">
-          <td>
-            <% if expense_settlement.is_complete? %>
-            <%= link_to expense_settlement.empl_id, :action => 'show', :id => expense_settlement.id.to_s %>
-            <% else %>
-            <%= link_to expense_settlement.empl_id, :action => 'edit', :id => expense_settlement.id.to_s %>
-            <% end %>
-          </td>
-          <td><%= expense_settlement.emp_name %></td>
-          <td><%= DateHelper.date_fmt(travel.try(:departure_date)) %></td>
-          <td><%= DateHelper.date_fmt(travel.try(:return_date)) %></td>
-          <td><%= number_with_precision(expense_settlement.get_receivable_amount, :precision => 2) %></td>
-          <td><%= expense_settlement.status %></td>
-          <td><%= DateHelper.date_fmt(expense_settlement.updated_at) %></td>
-          <td>
-            <% if expense_settlement.is_notified_employee? %>
-              <%= button_to 'Mark as Processed', :action => 'set_processed', :id => expense_settlement.id.to_s %>
-            <% else %>
-              <label>N/A</label>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </table>
+<br/>
+<%= flash_message %>
+<h1>Expense Settlement</h1>
+<!-- TODO: This seems to be duplicated across all pages -->
+<div>
+  <%= form_tag(expense_settlements_path(:anchor => "expense_settlements"), :method => "get") do %>
+    <span class="search_by">Search by:</span>
+    <%= label_tag 'Employee Name' %>:
+    <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
+    <span class="or_field">(or)</span>
+    <%= label_tag 'Employee Id' %>:
+    <%= text_field_tag :empl_id, params[:empl_id], :class => 'emp_id' %>
+    <%= submit_tag "Search", :name => nil %>
   <% end %>
+</div>
+<% if @expense_settlements %>
+  <div>
+    <%= paginate @expense_settlements %>
+  </div>
+  <table>
+    <tr>
+      <th>Employee Id</th>
+      <th>Employee Name</th>
+      <th>Travel Date</th>
+      <th>Return Date</th>
+      <th>Amount</th>
+      <th>Status</th>
+      <th>Last Updated</th>
+      <th>Action</th>
+    </tr>
+    <% @expense_settlements.each do |expense_settlement|
+      expense_settlement.populate_instance_data
+      travel = expense_settlement.outbound_travel
+    %>
+      <tr class="<%= cycle("even", "odd") %>">
+        <td>
+          <% if expense_settlement.is_complete? %>
+          <%= link_to expense_settlement.empl_id, :action => 'show', :id => expense_settlement.id.to_s %>
+          <% else %>
+          <%= link_to expense_settlement.empl_id, :action => 'edit', :id => expense_settlement.id.to_s %>
+          <% end %>
+        </td>
+        <td><%= expense_settlement.emp_name %></td>
+        <td><%= DateHelper.date_fmt(travel.try(:departure_date)) %></td>
+        <td><%= DateHelper.date_fmt(travel.try(:return_date)) %></td>
+        <td><%= number_with_precision(expense_settlement.get_receivable_amount, :precision => 2) %></td>
+        <td><%= expense_settlement.status %></td>
+        <td><%= DateHelper.date_fmt(expense_settlement.updated_at) %></td>
+        <td>
+          <% if expense_settlement.is_notified_employee? %>
+            <%= button_to 'Mark as Processed', :action => 'set_processed', :id => expense_settlement.id.to_s %>
+          <% else %>
+            <label>N/A</label>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

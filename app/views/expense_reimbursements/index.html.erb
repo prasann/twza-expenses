@@ -1,17 +1,25 @@
+<br/>
+<%= flash_message %>
 <h1>Expense Reimbursement</h1>
 
 <div class="no_emp hide error">No employee found for given name.</div>
-<form action='/expense_reimbursements/filter#expense_reimbursements' method = "get">
-  <span class="search_by">Search by:</span>
-  <%= label_tag 'Employee Name' %>:
-  <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
-  <span class="or_field">(or)</span>
-  <%= label_tag 'Employee Id' %>:
-  <%= text_field_tag :empl_id, params[:empl_id], :class => 'emp_id'%>
-  <%= label_tag 'Expense Report Id' %>:
-  <%= text_field_tag :expense_rpt_id, params[:expense_rpt_id], :class => 'expense_rpt_id'%>
-  <%= submit_tag "Search", :name => nil%>
-</form>
+
+<!-- TODO: This seems to be duplicated across all pages -->
+<div>
+  <%= form_tag(filter_expense_reimbursements_path(:anchor => "expense_reimbursements"), :method => "get") do %>
+    <span class="search_by">Search by:</span>
+    <%= label_tag 'Employee Name' %>:
+    <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
+    <span class="or_field">(or)</span>
+    <%= label_tag 'Employee Id' %>:
+    <%= text_field_tag :empl_id, params[:empl_id], :class => 'emp_id' %>
+    <!-- TODO: Extra stuff -->
+    <span class="or_field">(or)</span>
+    <%= label_tag 'Expense Report Id' %>:
+    <%= text_field_tag :expense_rpt_id, params[:expense_rpt_id], :class => 'expense_rpt_id'%>
+    <%= submit_tag "Search", :name => nil %>
+  <% end %>
+</div>
 
 <% if (@expense_reimbursements.present? && !@expense_reimbursements.empty?) %>
   <table>
