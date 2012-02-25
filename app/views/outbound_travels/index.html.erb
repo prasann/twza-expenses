@@ -12,7 +12,7 @@
 </div>
 
 <div class="no_emp hide error">No employee found for given name.</div>
-<form action='/outbound_travels/search' method="get">
+<form action='/outbound_travels/search#outbound_travels' method="get">
   <span class="search_by">Search by:</span>
   <%= label_tag 'Departure From' %>
   <%= text_field_tag :departure_date, params[:departure_date], :class => 'date_picker' %>
