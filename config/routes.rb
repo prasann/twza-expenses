@@ -16,7 +16,6 @@ Mankatha::Application.routes.draw do
   match 'forex_payments/index/:page' => 'forex_payments#index'
   resources :forex_payments do
     collection do
-      get :search
       get :export
       get :data_to_suggest
     end

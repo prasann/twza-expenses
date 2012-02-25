@@ -2,16 +2,33 @@ require 'spec_helper'
 
 describe ForexPaymentsController do
   describe "GET index" do
-    it "assigns all forex_payments as @forex_payments" do
-      forex_payments_1 = Factory(:forex_payment, :travel_date => Time.now + 3)
-      forex_payments_2 = Factory(:forex_payment, :travel_date => Time.now - 3)
+    before(:each) do
+      @forex_payments_1 = Factory(:forex_payment, :emp_id => 10001, :travel_date => Time.now + 3)
+      @forex_payments_2 = Factory(:forex_payment, :emp_id => 10001, :travel_date => Time.now - 3)
+    end
 
+    it "assigns all forex_payments as @forex_payments" do
       get :index, :page => 1, :per_page => 1
 
-      assigns(:forex_payments).should eq([forex_payments_1])
+      assigns(:forex_payments).should eq([@forex_payments_1])
 
       get :index, :page => 2, :per_page => 1
-      assigns(:forex_payments).should eq([forex_payments_2])
+      assigns(:forex_payments).should eq([@forex_payments_2])
+    end
+
+    it "searches for the given employee id" do
+      expense = Factory(:expense)
+      outbound_travel = Factory(:outbound_travel)
+      expense_settlement = ExpenseSettlement.create!(:empl_id => 10001, :forex_payments => [@forex_payments_1.id],
+                                                    :expenses => [expense.id],
+                                                    :outbound_travel => outbound_travel.id,
+                                                    :status => ExpenseSettlement::GENERATED_DRAFT)
+
+      get :index, :emp_id => 10001
+
+      assigns(:forex_payments).should eq([@forex_payments_1, @forex_payments_2])
+      assigns(:forex_ids_with_settlement).size.should == 1
+      assigns(:forex_ids_with_settlement).should include(@forex_payments_1.id)
     end
   end
 
@@ -146,25 +163,6 @@ describe ForexPaymentsController do
       delete :destroy, :id => forex_payment.id
 
       response.should redirect_to(forex_payments_path)
-    end
-  end
-
-  describe "GET Search" do
-    it "searches for the given employee id" do
-      forex_payments_1 = Factory(:forex_payment, :emp_id => 10001)
-      forex_payments_2 = Factory(:forex_payment, :emp_id => 10001)
-      expense = Factory(:expense)
-      outbound_travel = Factory(:outbound_travel)
-      expense_settlement = ExpenseSettlement.create!(:empl_id => 10001, :forex_payments => [forex_payments_1[:_id]],
-                                                    :expenses => [expense.id],
-                                                    :outbound_travel => outbound_travel.id,
-                                                    :status => ExpenseSettlement::GENERATED_DRAFT)
-
-      get :search, :emp_id => 10001
-
-      assigns(:forex_payments).should eq([forex_payments_1, forex_payments_2])
-      assigns(:forex_ids_with_settlement).size.should == 1
-      assigns(:forex_ids_with_settlement).should include(forex_payments_1[:_id])
     end
   end
 

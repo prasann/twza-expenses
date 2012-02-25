@@ -7,9 +7,12 @@ class ForexPaymentsController < ApplicationController
   ]
 
   def index
-    criteria = !params[:empl_id].blank? ? ExpenseSettlement.for_empl_id(params[:emp_id]) : ExpenseSettlement
-    @forex_ids_with_settlement = criteria.all.collect(&:forex_payments)
-    @forex_payments = ForexPayment.desc(:travel_date).page(params[:page]).per(default_per_page)
+    expense_settlement_criteria = !params[:emp_id].blank? ? ExpenseSettlement.for_empl_id(params[:emp_id]) : ExpenseSettlement
+    @forex_ids_with_settlement = expense_settlement_criteria.all.collect(&:forex_payments).flatten
+
+    forex_payments_criteria = !params[:emp_id].blank? ? ForexPayment.any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]}) : ForexPayment
+    @forex_payments = forex_payments_criteria.desc(:travel_date).page(params[:page]).per(default_per_page)
+
     render :layout => 'tabs'
   end
 
@@ -47,13 +50,6 @@ class ForexPaymentsController < ApplicationController
     @forex_payment = ForexPayment.find(params[:id])
     @forex_payment.destroy
     redirect_to forex_payments_path
-  end
-
-  # TODO: Shouldnt this be merged in 'index' - search/filter/index are synonymous in REST
-  def search
-    @forex_ids_with_settlement = ExpenseSettlement.for_empl_id(params[:emp_id]).collect(&:forex_payments).flatten
-    @forex_payments = ForexPayment.page(params[:page]).any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]})
-    render :index, :layout => 'tabs'
   end
 
   def export
