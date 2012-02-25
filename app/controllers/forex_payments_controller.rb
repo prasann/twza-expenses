@@ -57,7 +57,6 @@ class ForexPaymentsController < ApplicationController
   end
 
   def data_to_suggest
-    # TODO: Why not send as json?
-    render :text => ForexPayment.get_json_to_populate('currency', 'vendor_name', 'place', 'office').to_json
+    render :json => ForexPayment.get_json_to_populate('currency', 'vendor_name', 'place', 'office')
   end
 end

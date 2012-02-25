@@ -64,8 +64,7 @@ class OutboundTravelsController < ApplicationController
   end
 
   def data_to_suggest
-    # TODO: Why not send as json?
-    render :text => OutboundTravel.get_json_to_populate('place', 'payroll_effect', 'project').to_json
+    render :json => OutboundTravel.get_json_to_populate('place', 'payroll_effect', 'project')
   end
 
   def update_field
