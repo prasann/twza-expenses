@@ -30,7 +30,6 @@ Mankatha::Application.routes.draw do
 
   resources :outbound_travels do
     collection do
-      get :search
       get :export
       get :data_to_suggest
       get :get_recent

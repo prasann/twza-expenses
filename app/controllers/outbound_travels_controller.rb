@@ -11,6 +11,10 @@ class OutboundTravelsController < ApplicationController
 
   def index
     @outbound_travels = OutboundTravel.desc(:departure_date).page(params[:page]).per(default_per_page)
+    @outbound_travels = @outbound_travels.where({:departure_date.gte => params[:departure_date].try(:to_time)}) if !params[:departure_date].blank?
+    # TODO: Name search should use like?
+    @outbound_travels = @outbound_travels.any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]}) if !params[:emp_id].blank? || !params[:name].blank?
+
     render :layout => 'tabs'
   end
 
@@ -48,15 +52,6 @@ class OutboundTravelsController < ApplicationController
     @outbound_travel = OutboundTravel.find(params[:id])
     @outbound_travel.destroy
     redirect_to outbound_travels_path
-  end
-
-  # TODO: Shouldnt this be merged in 'index' - search/filter/index are synonymous in REST
-  def search
-    criteria = {}
-    criteria.merge!({:emp_id => params[:emp_id].to_i}) unless params[:emp_id].blank?
-    criteria.merge!({:departure_date.gte => params[:departure_date].try(:to_time)}) unless params[:departure_date].blank?
-    @outbound_travels = OutboundTravel.page(params[:page]).all_of(criteria)
-    render :index, :layout => 'tabs'
   end
 
   def export
