@@ -3,12 +3,8 @@
 Mankatha::Application.routes.draw do
   root :to => 'outbound_travels#index'
 
-  get 'log_out' => 'sessions#destroy'
-  get 'log_in' => 'sessions#new'
-  get 'sign_up' => 'users#new'
-
-  resources :users
-  resources :sessions
+  resources :users, :only => [:new, :create]
+  resources :sessions, :only => [:new, :create, :destroy]     # TODO: Usually, you dont expose the session directly - its just a mechanism to validate and carry current login state
 
   # TODO: These should be merged into the respective resource blocks if possible
   match 'outbound_travels/index/:page' => 'outbound_travels#index'

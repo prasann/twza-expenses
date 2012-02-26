@@ -3,10 +3,10 @@
     <div class='right_align'>
     <% if current_user %>
       Logged in as <%= current_user.user_name %>.
-      <%= link_to "Log out", log_out_path %>
+      <%= link_to("Log out", session_path(:id => 'dummy'), :method => :delete) %>
     <% else %>
-      <%= link_to "Sign up", sign_up_path %> or
-      <%= link_to "log in", log_in_path %>
+      <%= link_to "Sign up", new_user_path %> or
+      <%= link_to "log in", new_session_path %>
     <% end %>
     </div>
     <div class="thought_works"><b>Thought</b>Works</div>

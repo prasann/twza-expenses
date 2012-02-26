@@ -2,6 +2,9 @@
 class SessionsController < ApplicationController
   skip_filter :logged_in?
 
+  def new
+  end
+
   def create
     user = User.authenticate(params[:user_name], params[:password])
     if user
