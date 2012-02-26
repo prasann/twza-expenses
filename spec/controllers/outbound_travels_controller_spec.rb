@@ -12,6 +12,38 @@ describe OutboundTravelsController do
       get :index, :page => 2, :per_page => 1
       assigns(:outbound_travels).should eq([outbound_travel_2])
     end
+
+    it "searches for the given emp_id" do
+      outbound_travel_1 = Factory(:outbound_travel, :emp_id => 1001)
+      outbound_travel_2 = Factory(:outbound_travel, :emp_id => 1002)
+
+      get :index, :emp_id => 1001
+
+      assigns(:outbound_travels).to_a.should == [outbound_travel_1]
+    end
+
+    it "searches all outbound travels greater than departure date" do
+      now = Time.now
+      tomorrow = Time.now + 1.day
+      outbound_travel_1 = Factory(:outbound_travel, :emp_id => 1001, :departure_date => now)
+      outbound_travel_2 = Factory(:outbound_travel, :emp_id => 1001, :departure_date => tomorrow)
+
+      get :index, :departure_date => Date.today + 1
+
+      assigns(:outbound_travels).to_a.should == [outbound_travel_2]
+    end
+
+    it "should do an and search if departure date and emp id" do
+      now = Time.now
+      tomorrow = Time.now + 1.day
+      outbound_travel_1_now = Factory(:outbound_travel, :emp_id => 1001, :departure_date => now)
+      outbound_travel_1_tomorrow = Factory(:outbound_travel, :emp_id => 1001, :departure_date => tomorrow)
+      outbound_travel_2 = Factory(:outbound_travel, :emp_id => 1002, :departure_date => tomorrow)
+
+      get :index, :emp_id => 1001, :departure_date => Date.today + 1
+
+      assigns(:outbound_travels).to_a.should == [outbound_travel_1_tomorrow]
+    end
   end
 
   describe "GET show" do
@@ -137,43 +169,6 @@ describe OutboundTravelsController do
       outbound_travel = Factory(:outbound_travel)
       delete :destroy, :id => outbound_travel.id
       response.should redirect_to(outbound_travels_path)
-    end
-  end
-
-  describe "GET Search" do
-    it "searches for the given emp_id" do
-      outbound_travel_1 = mock("outbound_travel", :emp_id => 1001)
-      outbound_travel_2 = mock("outbound_travel", :emp_id => 1002)
-      OutboundTravel.stub_chain(:page, :all_of).and_return([outbound_travel_1])
-
-      get :search, :emp_id => 1001
-
-      assigns(:outbound_travels).to_a.should == [outbound_travel_1]
-    end
-
-    it "searches all outbound travels greater than departure date" do
-      now = Time.now
-      tomorrow = Time.now + 1.day
-      outbound_travel_1 = Factory(:outbound_travel, :emp_id => 1001, :departure_date => now)
-      outbound_travel_2 = Factory(:outbound_travel, :emp_id => 1001, :departure_date => tomorrow)
-      OutboundTravel.stub_chain(:page, :all_of).and_return([outbound_travel_2])
-
-      get :search, :departure_date => Date.today + 1
-
-      assigns(:outbound_travels).to_a.should == [outbound_travel_2]
-    end
-
-    it "should do an and search if departure date and emp id" do
-      now = Time.now
-      tomorrow = Time.now + 1.day
-      outbound_travel_1_now = Factory(:outbound_travel, :emp_id => 1001, :departure_date => now)
-      outbound_travel_1_tomorrow = Factory(:outbound_travel, :emp_id => 1001, :departure_date => tomorrow)
-      outbound_travel_2 = Factory(:outbound_travel, :emp_id => 1002, :departure_date => tomorrow)
-
-      OutboundTravel.stub_chain(:page, :all_of).and_return([outbound_travel_1_tomorrow])
-
-      get :search, :emp_id => 1001, :departure_date => Date.today + 1
-      assigns(:outbound_travels).to_a.should == [outbound_travel_1_tomorrow]
     end
   end
 

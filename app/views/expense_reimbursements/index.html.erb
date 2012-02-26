@@ -2,7 +2,7 @@
 <%= flash_message %>
 <h1>Expense Reimbursement</h1>
 
-<div class="no_emp hide error">No employee found for given name.</div>
+<div class="no_emp hide error">No employee found for given criteria.</div>
 
 <!-- TODO: This seems to be duplicated across all pages -->
 <div>
@@ -16,7 +16,7 @@
     <!-- TODO: Extra stuff -->
     <span class="or_field">(or)</span>
     <%= label_tag 'Expense Report Id' %>:
-    <%= text_field_tag :expense_rpt_id, params[:expense_rpt_id], :class => 'expense_rpt_id'%>
+    <%= text_field_tag :expense_rpt_id, params[:expense_rpt_id], :class => 'expense_rpt_id' %>
     <%= submit_tag "Search", :name => nil %>
   <% end %>
 </div>

@@ -22,6 +22,13 @@ FactoryGirl.define do
 
   factory :expense do
     sequence(:empl_id) { |n| "#{n}" }
+    expense_date { Date.today - 10.days }
+    expense_rpt_id { Random.rand(101010) }
+    payment_type 'Personal Cash or Check'
+    original_cost { BigDecimal.new('20.20') }
+    original_currency 'USD'
+    cost_in_home_currency {1000.90}
+    report_submitted_at { Date.today }
   end
 
   factory :expense_reimbursement do

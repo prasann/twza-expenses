@@ -1,7 +1,4 @@
 class ExpenseReimbursementsController < ApplicationController
-  def index
-    render :layout => 'tabs'
-  end
 
   # TODO: In the REST world, filter is equivalent to index - just adding some extra query strings that are used to filter by
   def filter
@@ -34,6 +31,8 @@ class ExpenseReimbursementsController < ApplicationController
       create_unprocessed_expense_reports(empl_id, unprocessed_expenses_map)
     end
 
+    # TODO: This is missing for all index/search/filter actions - ie scenario where no items are found
+    flash[:error] = "No expense reimbursements found for given criteria." if @expense_reimbursements.empty?
     render 'index', :layout => 'tabs'
   end
 

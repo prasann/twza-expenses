@@ -14,7 +14,7 @@
 <div class="no_emp hide error">No employee found for given name.</div>
 <!-- TODO: This seems to be duplicated across all pages -->
 <div>
-  <%= form_tag(search_outbound_travels_path(:anchor => "outbound_travels"), :method => "get") do %>
+  <%= form_tag(outbound_travels_path(:anchor => "outbound_travels"), :method => "get") do %>
     <span class="search_by">Search by:</span>
 
     <!-- TODO: This is the extra stuff -->

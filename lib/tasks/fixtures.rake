@@ -95,7 +95,7 @@ namespace :db do
         original_cost = rand(10..10000)
         expense_date = generate_random_date_between(start_date, travel_end_date)
         expense = Expense.create(
-          :empl_id => 'EMP' + employee_id, :name => user_name,
+          :empl_id => employee_id, 
           :expense_rpt_id => rand(100000..900000),
           :cost_in_home_currency => original_cost * currency_rate,
           :expense_date => expense_date.strftime(EXPENSE_SHEET_DATE_FORMAT),

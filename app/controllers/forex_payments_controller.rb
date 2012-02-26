@@ -10,10 +10,11 @@ class ForexPaymentsController < ApplicationController
     expense_settlement_criteria = !params[:emp_id].blank? ? ExpenseSettlement.for_empl_id(params[:emp_id]) : ExpenseSettlement
     @forex_ids_with_settlement = expense_settlement_criteria.all.collect(&:forex_payments).flatten
 
-    forex_payments_criteria = !params[:emp_id].blank? ? ForexPayment.any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]}) : ForexPayment
+    # TODO: Name search should use like?
+    forex_payments_criteria = !params[:emp_id].blank? || !params[:name].blank? ?
+                                  ForexPayment.any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]}) :
+                                  ForexPayment
     @forex_payments = forex_payments_criteria.desc(:travel_date).page(params[:page]).per(default_per_page)
-
-    render :layout => 'tabs'
   end
 
   def show
@@ -48,6 +49,7 @@ class ForexPaymentsController < ApplicationController
 
   def destroy
     @forex_payment = ForexPayment.find(params[:id])
+    # TODO: What happens if the destroy fails?
     @forex_payment.destroy
     redirect_to forex_payments_path
   end
