@@ -34,6 +34,8 @@ class ExpenseReimbursementsController < ApplicationController
       create_unprocessed_expense_reports(empl_id, unprocessed_expenses_map)
     end
 
+    # TODO: This is missing for all index/search/filter actions - ie scenario where no items are found
+    flash[:error] = "No expense reimbursements found for given criteria." if @expense_reimbursements.empty?
     render 'index', :layout => 'tabs'
   end
 
