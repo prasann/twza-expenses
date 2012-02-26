@@ -17,8 +17,9 @@ class Expense
   field :expense_type, type: String
   field :description, type: String
 
-  # TODO: Should these be uncommented and tested?
-  validates_presence_of :empl_id #, :payment_type, :original_cost, :original_currency, :cost_in_home_currency, :expense_date
+  # TODO: report submitted need not be marked as mandatory as it has no functional significance but submitted on in expense reimbursement is derived from this
+  #       if submitted on is removed from mandatory list there report submitted at can be removed from here anycase it is harmless as T&E has that date auto anycase
+  validates_presence_of :empl_id, :expense_rpt_id, :payment_type, :original_cost, :original_currency, :cost_in_home_currency, :expense_date, :report_submitted_at
   # TODO: validate payment_type is within a certain set of values
 
   class << self
