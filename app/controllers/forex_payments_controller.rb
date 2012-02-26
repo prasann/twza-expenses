@@ -51,6 +51,7 @@ class ForexPaymentsController < ApplicationController
 
   def destroy
     @forex_payment = ForexPayment.find(params[:id])
+    # TODO: What happens if the destroy fails?
     @forex_payment.destroy
     redirect_to forex_payments_path
   end

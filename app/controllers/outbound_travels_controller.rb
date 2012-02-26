@@ -50,8 +50,9 @@ class OutboundTravelsController < ApplicationController
 
   def destroy
     @outbound_travel = OutboundTravel.find(params[:id])
+    # TODO: What happens if the destroy fails?
     @outbound_travel.destroy
-    redirect_to outbound_travels_path
+    redirect_to outbound_travels_path, notice: 'Outbound travel was successfully deleted.'
   end
 
   def export
