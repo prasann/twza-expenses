@@ -15,8 +15,6 @@ class ForexPaymentsController < ApplicationController
                                   ForexPayment.any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]}) :
                                   ForexPayment
     @forex_payments = forex_payments_criteria.desc(:travel_date).page(params[:page]).per(default_per_page)
-
-    render :layout => 'tabs'
   end
 
   def show

@@ -14,8 +14,6 @@ class OutboundTravelsController < ApplicationController
     @outbound_travels = @outbound_travels.where({:departure_date.gte => params[:departure_date].try(:to_time)}) if !params[:departure_date].blank?
     # TODO: Name search should use like?
     @outbound_travels = @outbound_travels.any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]}) if !params[:emp_id].blank? || !params[:name].blank?
-
-    render :layout => 'tabs'
   end
 
   def show

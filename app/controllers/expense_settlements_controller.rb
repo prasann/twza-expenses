@@ -6,8 +6,6 @@ class ExpenseSettlementsController < ApplicationController
     criteria = !params[:empl_id].blank? ? ExpenseSettlement.for_empl_id(params[:empl_id]) : ExpenseSettlement
     # TODO: These are not being evaluated - but are used in the view as is?
     @expense_settlements = criteria.page(params[:page]).per(default_per_page)
-
-    render :layout => 'tabs'
   end
 
   def load_by_travel
