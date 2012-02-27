@@ -1,7 +1,7 @@
 <!-- TODO: Is this even being used - where does this show up in the UI? -->
 <h1> Forex Reports </h1>
 <div class='required'> * - Mandatory fields </div>
-<form id="forex_report" action="/forex_reports/search" method="get">
+<form id="forex_report" action="/forex_reports" method="get">
   <%= label_tag 'Reports from *', nil, :class => 'required' %>:
   <%= text_field_tag :reports_from, params[:reports_from], :class => 'date_picker' %>
   <%= label_tag 'till *', nil, :class => 'required' %>:
@@ -15,7 +15,7 @@
   <%= submit_tag "Search", :name => nil %>
 </form>
 
-<% unless @forex_payments.nil? %>
+<% unless @forex_payments.empty? %>
   <div>
     <%= paginate @forex_payments %>
   </div>
