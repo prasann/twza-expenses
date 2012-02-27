@@ -1,3 +1,4 @@
+# TODO: Shouldn't this be merged with the sessions_controller?
 class UsersController < ApplicationController
   skip_filter :logged_in?
 

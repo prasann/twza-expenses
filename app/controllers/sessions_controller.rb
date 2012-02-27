@@ -1,4 +1,4 @@
-# TODO: Should this be merged into the users controller? How is it different?
+# TODO: Should this be merged into the users controller? How is it different? Usually - we don't expose the mechanism of how the authenticated user is kept alive within the app.
 class SessionsController < ApplicationController
   skip_filter :logged_in?
 

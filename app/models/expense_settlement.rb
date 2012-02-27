@@ -1,7 +1,6 @@
 require 'ostruct'
 
 class ExpenseSettlement
-  # TODO: Should not use helper in model - currently using ApplicationHelper#format_two_decimal_places
   include NumberHelper
   include Mongoid::Document
   include Mongoid::Timestamps
