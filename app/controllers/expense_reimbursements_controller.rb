@@ -90,7 +90,7 @@ class ExpenseReimbursementsController < ApplicationController
     # TODO: This be moved to the after_create hook on expense_reimbursement
     # TODO: What if the creation failed?
     EmployeeMailer.non_travel_expense_reimbursement(@expense_reimbursement).deliver
-    redirect_to :action => 'filter', :empl_id => params[:empl_id]
+    redirect_to :action => 'index', :empl_id => params[:empl_id]
   end
 
   private

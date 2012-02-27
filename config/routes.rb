@@ -15,7 +15,6 @@ Mankatha::Application.routes.draw do
 
   resources :forex_reports, :only => [:index] do
     collection do
-      get :search
       get :export
     end
   end
@@ -54,7 +53,6 @@ Mankatha::Application.routes.draw do
 
   resources :expense_reimbursements, :only => [:index, :show, :edit] do
     collection do
-      get :filter
       post :process_reimbursement
     end
   end

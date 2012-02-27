@@ -8,7 +8,6 @@ class ForexReportsController < ApplicationController
 
   def index
     @forex_payments = get_results.page(params[:page])
-    render action: 'index'
   end
 
   def export
