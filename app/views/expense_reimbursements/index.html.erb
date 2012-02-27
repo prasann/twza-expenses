@@ -6,7 +6,7 @@
 
 <!-- TODO: This seems to be duplicated across all pages -->
 <div>
-  <%= form_tag(filter_expense_reimbursements_path(:anchor => "expense_reimbursements"), :method => "get") do %>
+  <%= form_tag(expense_reimbursements_path(:anchor => "expense_reimbursements"), :method => "get") do %>
     <span class="search_by">Search by:</span>
     <%= label_tag 'Employee Name' %>:
     <%= text_field_tag :name, params[:name], :class => 'emp_name' %>

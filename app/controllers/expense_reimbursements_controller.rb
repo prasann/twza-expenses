@@ -1,7 +1,7 @@
 class ExpenseReimbursementsController < ApplicationController
 
   # TODO: In the REST world, filter is equivalent to index - just adding some extra query strings that are used to filter by
-  def filter
+  def index
     @expense_reimbursements = []
     if !params[:empl_id].blank?
       empl_id = params[:empl_id].to_i
@@ -32,7 +32,8 @@ class ExpenseReimbursementsController < ApplicationController
     end
 
     # TODO: This is missing for all index/search/filter actions - ie scenario where no items are found
-    flash[:error] = "No expense reimbursements found for given criteria." if @expense_reimbursements.empty?
+
+    flash[:error] = "No expense reimbursements found for given criteria." if @expense_reimbursements.empty? && has_param_keys?(params)
     render 'index', :layout => 'tabs'
   end
 
@@ -58,9 +59,9 @@ class ExpenseReimbursementsController < ApplicationController
 
     # TODO: Should this be an ExpenseReimbursement so that we can do method calls instead of hash-like access?
     @expense_reimbursement = {'expense_report_id' => params[:id],
-                              'empl_id' => expenses.first.try(:get_employee_id),
-                              'submitted_on' => expenses.first.try(:report_submitted_at),
-                              'total_amount' => expenses.sum { |expense| expense.cost_in_home_currency.to_f }}
+      'empl_id' => expenses.first.try(:get_employee_id),
+      'submitted_on' => expenses.first.try(:report_submitted_at),
+    'total_amount' => expenses.sum { |expense| expense.cost_in_home_currency.to_f }}
   end
 
   def process_reimbursement
@@ -80,12 +81,12 @@ class ExpenseReimbursementsController < ApplicationController
     end
     status = params[:process_reimbursement] ? ExpenseReimbursement::UNPROCESSED : ExpenseReimbursement::FAULTY
     @expense_reimbursement = ExpenseReimbursement.create(:expense_report_id => params[:expense_report_id],
-                                                         :empl_id => params[:empl_id],
-                                                         :submitted_on => params[:submitted_on],
-                                                         :notes => params[:notes],
-                                                         :expenses => expenses,
-                                                         :status => status,
-                                                         :total_amount => total_amount)
+    :empl_id => params[:empl_id],
+    :submitted_on => params[:submitted_on],
+    :notes => params[:notes],
+    :expenses => expenses,
+    :status => status,
+    :total_amount => total_amount)
     # TODO: This be moved to the after_create hook on expense_reimbursement
     # TODO: What if the creation failed?
     EmployeeMailer.non_travel_expense_reimbursement(@expense_reimbursement).deliver
@@ -96,9 +97,14 @@ class ExpenseReimbursementsController < ApplicationController
   def create_unprocessed_expense_reports(empl_id, unprocessed_expenses)
     unprocessed_expenses.each do |expense_report_id, expenses|
       @expense_reimbursements.push(ExpenseReimbursement.new(:expense_report_id => expense_report_id,
-                                                            :empl_id => empl_id,
-                                                            :submitted_on => expenses.first.report_submitted_at,
-                                                            :total_amount => expenses.sum { |expense| expense.cost_in_home_currency.to_f })) if !expenses.empty?
+      :empl_id => empl_id,
+      :submitted_on => expenses.first.report_submitted_at,
+      :total_amount => expenses.sum { |expense| expense.cost_in_home_currency.to_f })) if !expenses.empty?
     end
   end
+
+  def has_param_keys?(params)
+    return params.has_key?(:empl_id) || params.has_key?(:expense_rpt_id) || params.has_key?(:name)
+  end
+
 end
