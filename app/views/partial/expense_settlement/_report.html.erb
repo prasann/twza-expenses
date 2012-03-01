@@ -67,6 +67,7 @@
         <% @expense_report.cash_handovers.each do |cash_handover| %>
             <td><%= cash_handover.amount %>&nbsp;<%= cash_handover.currency %> </td>
             <td><%= number_with_precision(cash_handover.conversion_rate, :precision => 2) %></td>
+            <!-- TODO: Do the math inside the cash_handover object -->
             <td class='right_align'><%= number_with_precision(cash_handover.amount * cash_handover.conversion_rate, :precision => 2) %></td>
         <% end %>
       </tr>
