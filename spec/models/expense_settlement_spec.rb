@@ -101,7 +101,9 @@ describe 'expense_report' do
                              :departure_date => Date.today - 10, :return_date => Date.today + 5, :id => travel_id)
       expenses = []
       forex_payments = []
-      cash_handovers = [CashHandover.new(:amount => 100, :currency=>'EUR'), CashHandover.new(:amount => 150, :currency=>'GBP')]
+      cash_handovers = [CashHandover.new(:amount => 100, :currency=>'EUR',
+                        :conversion_rate => 74.62), CashHandover.new(:amount => 150, :currency=>'GBP',
+                                                                :conversion_rate => 62.73)]
       expense_settlement = setup_test_data(expenses, forex_payments, employee_id, travel_id, 'UK',
                                            outbound_travel, test_forex_currencies,
                                            expense_amounts, expense_amounts_inr, forex_amounts, forex_amounts_inr,

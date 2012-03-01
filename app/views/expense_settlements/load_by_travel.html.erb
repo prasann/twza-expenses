@@ -107,16 +107,17 @@
     <% end %>
 
     <div>
+      <%= hidden_field_tag :applicable_currencies, @applicable_currencies %>
       <label for="amount"><h4>Cash handed over by Employee: </h4></label>
-      <% options = @applicable_currencies.size() > 1 ? {:prompt => 'Select currency'} : {:selected =>@applicable_currencies[0]} %>
       <table class="cash_handovers">
         <%= settlement_form.fields_for :cash_handovers do |handover_form| %>
           <tr class="cash_handover">
             <td>
               <%= handover_form.text_field :amount, class: 'amount' %>
-              <%= handover_form.select :currency, @applicable_currencies, options, {:class => 'currency'} %>
+              <%= handover_form.text_field :currency, class: 'handover_currency' %>
+              <%= handover_form.text_field :conversion_rate, class: 'conversion_rate' %>
               <%= link_to 'Add Row', 'javaScript:void(0)', class: 'add_row clear_right hide' %>
-              <%= link_to 'Delete Row', 'javaScript:void(0)', class: 'delete_row' %>
+              <%= link_to 'Delete Row', 'javaScript:void(0)', class: 'delete_row clear_right hide' %>
             </td>
           </tr>
         <% end %>

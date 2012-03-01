@@ -28,7 +28,7 @@ $(document).ready(function() {
             var cloned_element = display_element.clone();
             cloned_element.find(':input').val('');
             handover_section.append(cloned_element);
-            display_element.find('.delete_row').show();
+            cloned_element.find('.delete_row').show();
             show_add_in_last_cash_handover();
             $(this).hide();
         });
@@ -82,7 +82,21 @@ $(document).ready(function() {
 
     function show_add_in_last_cash_handover() {
       var cash_handover_items = $('.cash_handovers').find('.cash_handover');
-      if (cash_handover_items && cash_handover_items.size() > 0)
-        cash_handover_items.last().find('.add_row').show();
+      if (cash_handover_items && cash_handover_items.size() > 0) {
+        var last_cash_handover = cash_handover_items.last();
+        register_currencies_autocomplete(last_cash_handover);
+        last_cash_handover.find('.add_row').show();
+      }
+    }
+
+  function register_currencies_autocomplete(element) {
+    var down_arrow_event = jQuery.Event("keydown");
+    var applicable_currencies = $('#applicable_currencies').val();
+    element.find($('.handover_currency')).autocomplete({
+      source: applicable_currencies,
+      minLength: 0
+    }).focus(function(){
+      $(this).trigger(down_arrow_event);
+    });
     }
 });

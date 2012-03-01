@@ -66,8 +66,8 @@
         <% conversion_rates = @expense_report.instance_variable_get('@conversion_rates') %>
         <% @expense_report.cash_handovers.each do |cash_handover| %>
             <td><%= cash_handover.amount %>&nbsp;<%= cash_handover.currency %> </td>
-            <td><%= number_with_precision(conversion_rates[cash_handover.currency], :precision => 2) %></td>
-            <td class='right_align'><%= number_with_precision(cash_handover.amount * conversion_rates[cash_handover.currency], :precision => 2) %></td>
+            <td><%= number_with_precision(cash_handover.conversion_rate, :precision => 2) %></td>
+            <td class='right_align'><%= number_with_precision(cash_handover.amount * cash_handover.conversion_rate, :precision => 2) %></td>
         <% end %>
       </tr>
   <% end %>
