@@ -132,8 +132,7 @@ describe ExpenseSettlementsController do
       forex_to = Date.today - 4.days
       outbound_travel = OutboundTravel.new(:emp_id => empl_id, :emp_name => 'John', :departure_date => Date.today,
                                           :place => 'UK')
-      forex_payment = mock(ForexPayment, :id => 1, :empl_id => empl_id, :currency => currency, :inr => 7200,
-                                          :amount => 100)
+      (forex_payment = Factory(:forex_payment, :currency => currency)).save!
       expense = mock(Expense, :id => 1, :empl_id => empl_id, :expense_rpt_id => 1, :original_currency => currency,
                                           :original_cost => 50)
       expense_settlement = ExpenseSettlement.new(:empl_id => empl_id, :expenses => [1], :forex_payments => [1],
@@ -142,7 +141,9 @@ describe ExpenseSettlementsController do
                                                   :expense_to => DateHelper::date_fmt(expense_to),
                                                   :forex_from => DateHelper::date_fmt(forex_from),
                                                   :forex_to => DateHelper::date_fmt(forex_to),
-                                                  :cash_handovers => [CashHandover.new(:amount => 100, :currency => currency)])
+                                                  :cash_handovers =>
+                                                    [CashHandover.new(:amount => 100, :currency => currency,
+                                                                      :conversion_rate => 72.50)])
       outbound_travel.save!
       expense_settlement.cash_handovers.map &:save!
       expense_settlement.outbound_travel_id = outbound_travel.id
@@ -151,6 +152,7 @@ describe ExpenseSettlementsController do
       ForexPayment.should_receive(:fetch_for).with(outbound_travel.emp_id, forex_from, forex_to, anything)
                       .and_return([forex_payment])
       ForexPayment.should_receive(:find).with([1]).and_return([forex_payment])
+      ForexPayment.should_receive(:all).and_return([forex_payment])
       Expense.should_receive(:fetch_for_employee_between_dates)
                       .with(outbound_travel.emp_id, expense_from, expense_to, anything)
                       .and_return([expense])
@@ -212,8 +214,10 @@ describe ExpenseSettlementsController do
       forex_payments = []
       forex_ids = []
       test_forex_currencies.each_with_index do |forex_currency, index|
-        forex_ids << index+1
-        forex_payments << mock(ForexPayment, :id => index+1, :currency => forex_currency)
+        forex_payment = Factory(:forex_payment, :currency => test_forex_currencies[index])
+        forex_payment.save!
+        forex_ids << forex_payment.id
+        forex_payments << forex_payment
       end
 
       outbound_travel = mock(OutboundTravel, :place => 'UK', :emp_id => employee_id,
@@ -245,7 +249,8 @@ describe ExpenseSettlementsController do
       employee_id = '12321'
       test_forex_currencies = [currency, 'GBP']
 
-      cash_handovers = [CashHandover.new(:amount => 100, :currency=>currency), CashHandover.new(:amount => 150, :currency=>'GBP')]
+      cash_handovers = [CashHandover.new(:amount => 100, :currency=>currency, :conversion_rate => 72.30),
+                        CashHandover.new(:amount => 150, :currency=>'GBP', :conversion_rate => 52.31)]
       handovers = {}
       values_hash = {}
 
