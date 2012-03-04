@@ -16,12 +16,9 @@ class ExpenseReimbursementsController < ApplicationController
     if !empl_id.blank?
       # Find all travel and non-travel expenses processed or under process for empl id
       processed_expense_ids_from_travel = ExpenseSettlement.find_expense_ids_for_empl_id(empl_id)
-      reimbursement_expense_ids = @expense_reimbursements.inject([]) do |result, expense_reimbursement| 
-                                                                        result.push(expense_reimbursement.expenses)
-                                                                     end
+      reimbursement_expense_ids = @expense_reimbursements.collect(&:expenses)
 
       processed_expense_ids = reimbursement_expense_ids.push(processed_expense_ids_from_travel).flatten
-      
 
       unprocessed_expenses_map = Expense.fetch_for_grouped_by_report_id(expenses_criteria, processed_expense_ids)
       create_unprocessed_expense_reports(empl_id, unprocessed_expenses_map)

@@ -132,7 +132,7 @@ describe ExpenseSettlementsController do
       forex_to = Date.today - 4.days
       outbound_travel = OutboundTravel.new(:emp_id => empl_id, :emp_name => 'John', :departure_date => Date.today,
                                           :place => 'UK')
-      (forex_payment = Factory(:forex_payment, :currency => currency)).save!
+      forex_payment = Factory(:forex_payment, :currency => currency)
       expense = mock(Expense, :id => 1, :empl_id => empl_id, :expense_rpt_id => 1, :original_currency => currency,
                                           :original_cost => 50)
       expense_settlement = ExpenseSettlement.new(:empl_id => empl_id, :expenses => [1], :forex_payments => [1],
@@ -215,7 +215,6 @@ describe ExpenseSettlementsController do
       forex_ids = []
       test_forex_currencies.each_with_index do |forex_currency, index|
         forex_payment = Factory(:forex_payment, :currency => test_forex_currencies[index])
-        forex_payment.save!
         forex_ids << forex_payment.id
         forex_payments << forex_payment
       end
