@@ -82,4 +82,35 @@ describe ExpenseReimbursementsController do
       assigns(:empl_name).should == 'John Smith'
     end
   end
+
+  describe " index " do
+
+    it "should load all expenses with filter for processed expenses of travel for the fetched reimbursements" do
+      #No exisitng expense reimbursements
+      ExpenseReimbursement.stub_chain(:where, :to_a).and_return([])
+      
+      expense_1 = Factory(:expense, :cost_in_home_currency => 1000, :empl_id => 1234,
+                          :expense_rpt_id => 123)
+      expense_2 = Factory(:expense, :cost_in_home_currency => 200, :empl_id => 1234,
+                          :expense_rpt_id => 123)
+      expense_3 = Factory(:expense, :cost_in_home_currency => 100, :empl_id => 1234,
+                          :expense_rpt_id => 123)
+
+      ExpenseSettlement.stub_chain(:find_expense_ids_for_empl_id).and_return([expense_3.id.to_s])
+      
+      expected_reimbursement = ExpenseReimbursement.new(:expense_report_id => 123,
+                                                       :empl_id => 1234,
+                                                       :submitted_on => expense_1.report_submitted_at,
+                                                       :total_amount => 1200)
+
+      get :index, :expense_rpt_id => 123      
+
+      assigns(:expense_reimbursements).should have(1).items
+      assigns(:expense_reimbursements).first.total_amount.should == 1200
+      assigns(:expense_reimbursements).first.empl_id.should == "1234"
+      assigns(:expense_reimbursements).first.expense_report_id.should == 123
+      assigns(:expense_reimbursements).first.submitted_on.should == expense_1.report_submitted_at
+
+    end
+  end
 end

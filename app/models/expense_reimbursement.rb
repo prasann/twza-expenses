@@ -21,12 +21,12 @@ class ExpenseReimbursement
   validates_inclusion_of :status, :in => [PROCESSED, FAULTY, UNPROCESSED, CLOSED]
 
   class << self
-    def for_empl_id(empl_id)
-      where(:empl_id => empl_id)
+    def find_for_empl_id(empl_id)
+      where(:empl_id => empl_id).to_a
     end
 
-    def for_expense_report_id(id)
-      where(:expense_report_id => id)
+    def find_for_expense_report_id(id)
+      where(:expense_report_id => id).to_a
     end
 
     def with_status(status)

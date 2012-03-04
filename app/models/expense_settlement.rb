@@ -34,6 +34,10 @@ class ExpenseSettlement
     def with_status(status)
       where(:status => status)
     end
+
+    def find_expense_ids_for_empl_id(empl_id)
+      where(:empl_id => empl_id).only(:expenses).to_a.collect(&:expenses).flatten
+    end
   end
 
   def profile
