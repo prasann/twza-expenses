@@ -8,16 +8,20 @@ module ExcelDataExtractor
     ignored_records_count = 0
     file = handler(file_name)
     file.default_sheet = file.sheets[sheet_id]
+    at_least_one_successful_record = false
     2.upto(file.last_row) do |line|
       extractor = Proc.new{ |column| file.cell(line, column) }
       record = callback.call(extractor)
-      unless record.save
+      if record.save
+        at_least_one_successful_record = true
+      else
         $stderr.puts "Record: #{record.inspect}, Errors: #{record.errors.full_messages.join(',')}"
         ignored_records_count += 1
       end
     end
     $stderr.puts "\n"
     show_summary(ignored_records_count, "(out of a total count of #{file.last_row - 1}) ignored due to the above errors")
+    at_least_one_successful_record
   end
 
   private

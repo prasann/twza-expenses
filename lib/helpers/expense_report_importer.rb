@@ -15,29 +15,24 @@ class ExpenseReportImporter
     file_name = excelxfile.split("/")[1]
     return false if file_exists?(file_name)
     puts "Processing expense file: #{file_name.to_s}"
-    has_valid_expenses = false
-    read_from_excel(excelxfile, 0) do |extractor|
-      expense = Expense.new(empl_id: get_employee_id(extractor.call("C")),
-                            expense_rpt_id: extractor.call("B").to_i,
-                            original_cost: to_money(extractor.call("M")),
-                            original_currency: extractor.call("N"),
-                            cost_in_home_currency: to_money(extractor.call("E")),
-                            expense_date: to_date(extractor.call("J")),
-                            report_submitted_at: to_date(extractor.call("T")),
-                            payment_type: extractor.call("R"),
-                            project: extractor.call("I"),
-                            vendor: extractor.call("L"),
-                            subproject: extractor.call("U"),
-                            expense_type: extractor.call("K"),
-                            is_personal: extractor.call("S"),
-                            attendees: extractor.call("V"),
-                            description: extractor.call("Q"))
-      if !has_valid_expenses && expense.valid?    #TODO See if this double validation can be done differently
-        has_valid_expenses = true
-      end
-      expense
+    at_least_one_successful_record = read_from_excel(excelxfile, 0) do |extractor|
+      Expense.new(empl_id: get_employee_id(extractor.call("C")),
+                  expense_rpt_id: extractor.call("B").to_i,
+                  original_cost: to_money(extractor.call("M")),
+                  original_currency: extractor.call("N"),
+                  cost_in_home_currency: to_money(extractor.call("E")),
+                  expense_date: to_date(extractor.call("J")),
+                  report_submitted_at: to_date(extractor.call("T")),
+                  payment_type: extractor.call("R"),
+                  project: extractor.call("I"),
+                  vendor: extractor.call("L"),
+                  subproject: extractor.call("U"),
+                  expense_type: extractor.call("K"),
+                  is_personal: extractor.call("S"),
+                  attendees: extractor.call("V"),
+                  description: extractor.call("Q"))
     end
-    UploadedExpense.create(file_name: file_name) if has_valid_expenses
+    UploadedExpense.create(file_name: file_name) if at_least_one_successful_record
   end
 
   def file_exists?(file_name)
