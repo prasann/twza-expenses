@@ -32,7 +32,6 @@ class ExpenseReportImporter
                             is_personal: extractor.call("S"),
                             attendees: extractor.call("V"),
                             description: extractor.call("Q"))
-      # TODO: Not sure if there is a bug: What if the first expense is invalid, but the second is valid - then the rest of the expenses after the second are not even validated/checked due to the way this if block is written
       if !has_valid_expenses && expense.valid?    #TODO See if this double validation can be done differently
         has_valid_expenses = true
       end
