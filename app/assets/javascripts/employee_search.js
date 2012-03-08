@@ -1,24 +1,29 @@
 $(document).ready(function(){
-  $('.emp_name').autocomplete({
-    source: '/profiles/search_by_name',
+  $('.emp_name, .emp_id').autocomplete({
+    source: function(request, response) {
+      var autocompleteUrl = this.element.attr('data-href');
+      $.ajax({
+        url: autocompleteUrl,
+        data: {
+          term: request.term
+        },
+        success: function(data) {
+          response($.map(data, function(item) {
+            return {
+              label: item.common_name + " - " + item.employee_id,
+              common_name: item.common_name,
+              employee_id: item.employee_id
+            }
+          }));
+        }
+      });
+    },
     minLength: 2,
     select: function(event, ui) {
       $('.no_emp').hide();
-      name_id = ui.item.value.split('-');
-      $('.emp_name').val(name_id[0]);
-      $('.emp_id').val(name_id[1]);
+      $('.emp_name').val(ui.item.common_name);
+      $('.emp_id').val(ui.item.employee_id);
       return false;
-    },
-  })
-  $('.emp_id').autocomplete({
-    source: '/profiles/search_by_id',
-    minLength: 2,
-    select: function(event, ui) {
-      $('.no_emp').hide();
-      name_id = ui.item.value.split('-');
-      $('.emp_id').val(name_id[1]);
-      $('.emp_name').val(name_id[0]);
-      return false;
-    },
+    }
   })
 });

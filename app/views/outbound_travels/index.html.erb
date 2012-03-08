@@ -23,10 +23,10 @@
     <span class="or_field">(or)</span>
 
     <%= label_tag 'Employee Name' %>:
-    <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
+    <%= text_field_tag :name, params[:name], :class => 'emp_name', :"data-href" => search_by_name_profiles_path %>
     <span class="or_field">(or)</span>
     <%= label_tag 'Employee Id' %>:
-    <%= text_field_tag :emp_id, params[:emp_id], :class => 'emp_id' %>
+    <%= text_field_tag :emp_id, params[:emp_id], :class => 'emp_id', :"data-href" => search_by_id_profiles_path %>
     <%= submit_tag "Search", :name => nil %>
   <% end %>
 </div>

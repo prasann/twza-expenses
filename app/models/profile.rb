@@ -3,10 +3,6 @@ class Profile < ActiveRecord::Base
 
   validates_presence_of :name, :employee_id, :email_id, :common_name, :allow_blank => false
 
-  def to_special_s
-    "#{common_name}-#{employee_id}"
-  end
-
   def readonly?
     true
   end

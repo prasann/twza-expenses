@@ -9,10 +9,10 @@
   <%= form_tag(expense_reimbursements_path(:anchor => "expense_reimbursements"), :method => "get") do %>
     <span class="search_by">Search by:</span>
     <%= label_tag 'Employee Name' %>:
-    <%= text_field_tag :name, params[:name], :class => 'emp_name' %>
+    <%= text_field_tag :name, params[:name], :class => 'emp_name', :"data-href" => search_by_name_profiles_path %>
     <span class="or_field">(or)</span>
     <%= label_tag 'Employee Id' %>:
-    <%= text_field_tag :empl_id, params[:empl_id], :class => 'emp_id' %>
+    <%= text_field_tag :empl_id, params[:empl_id], :class => 'emp_id', :"data-href" => search_by_id_profiles_path %>
     <!-- TODO: Extra stuff -->
     <span class="or_field">(or)</span>
     <%= label_tag 'Expense Report Id' %>:

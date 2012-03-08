@@ -14,13 +14,13 @@
     <table>
       <tr>
         <td class="text"><%= f.label :emp_id, 'Employee Id: ' %></td>
-        <td><%= f.text_field :emp_id, :class => 'emp_id' %>
+        <td><%= f.text_field :emp_id, :class => 'emp_id', :"data-href" => search_by_id_profiles_path %>
           <span class="mandatory_mark">*</span>
           </td>
       </tr>
       <tr>
         <td class="text"><%= f.label :emp_name, 'Employee Name: ' %></td>
-        <td><%= f.text_field :emp_name, :class => 'emp_name' %>
+        <td><%= f.text_field :emp_name, :class => 'emp_name', :"data-href" => search_by_name_profiles_path %>
           <span class="mandatory_mark">*</span></td>
       </tr>
       <tr>
