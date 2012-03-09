@@ -15,8 +15,7 @@ class ExpenseSettlementsController < ApplicationController
   end
 
   def edit
-    settlement_from_db = ExpenseSettlement.includes(:cash_handovers, :outbound_travel).find(params[:id])
-    settlement_from_db.populate_instance_data
+    settlement_from_db = ExpenseSettlement.load_with_deps(params[:id])
     @expenses_from_date = DateHelper.date_from_str(settlement_from_db.expense_from)
     @expenses_to_date = DateHelper.date_from_str(settlement_from_db.expense_to)
     @forex_from_date = DateHelper.date_from_str(settlement_from_db.forex_from)
@@ -99,8 +98,8 @@ class ExpenseSettlementsController < ApplicationController
 
   def create_settlement_report_from_dates(travel,expense_settlement=nil)
     # TODO: Is this an ARel call?
-    processed_expenses = ExpenseSettlement.where(processed: true).for_empl_id(travel.emp_id.to_s).only(:expenses, :forex_payments).to_a
-    processed_expense_ids = processed_expenses.collect(&:expenses).flatten
+    processed_expenses = ExpenseSettlement.load_processed_for(travel.emp_id)
+   processed_expense_ids = processed_expenses.collect(&:expenses).flatten
     processed_forex_ids = processed_expenses.collect(&:forex_payments).flatten
 
     @expenses = Expense.fetch_for_employee_between_dates travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids

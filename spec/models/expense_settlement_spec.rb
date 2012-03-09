@@ -111,7 +111,21 @@ describe 'expense_report' do
 
       expense_settlement.populate_instance_data
       expense_settlement.instance_variable_get('@net_payable').should eq 13732.5
-    end
+  end
+
+  it "should load cash handovers and expenses eagerly on call of load with deps" do
+      settlement = mock('expense_settlement')
+      mock_criteria = mock('criteria')
+      ExpenseSettlement.stub_chain(:includes, :find).and_return(settlement)
+      ExpenseSettlement.should_receive(:includes).with(:cash_handovers,
+                                                       :outbound_travel).and_return(mock_criteria)
+      mock_criteria.should_receive(:find).with(123).and_return(settlement)
+      settlement.should_receive(:populate_instance_data)
+
+     
+      ExpenseSettlement.load_with_deps(123)
+
+  end
 
   private
   def setup_test_data(expenses,forex_payments,employee_id, travel_id, place_of_visit, outbound_travel, currencies,

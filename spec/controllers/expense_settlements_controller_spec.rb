@@ -19,7 +19,7 @@ describe ExpenseSettlementsController do
       OutboundTravel.should_receive(:find).with("123").and_return(outbound_travel)
 
       ExpenseSettlement.should_receive(:where).with({:processed => true}).and_return(mockExpenseReportCriteria)
-      mockExpenseReportCriteria.should_receive(:for_empl_id).with("1").and_return(mockExpenseReportCriteria)
+      mockExpenseReportCriteria.should_receive(:and).with(:empl_id => "1").and_return(mockExpenseReportCriteria)
       mockExpenseReportCriteria.should_receive(:only).with(:expenses, :forex_payments).and_return(mockProcessedExpenses)
 
       Expense.should_receive(:fetch_for_employee_between_dates).with(1, outbound_travel.departure_date - ExpenseSettlementsController::EXPENSE_DATES_PADDED_BY,
@@ -77,7 +77,7 @@ describe ExpenseSettlementsController do
       forex_from, forex_to, expense_to, expense_from = Date.today, Date.today + 1, Date.today + 2, Date.today + 3
       OutboundTravel.should_receive(:find).with("123").and_return(outbound_travel)
       ExpenseSettlement.should_receive(:where).with({:processed => true}).and_return(mockExpenseReportCriteria)
-      mockExpenseReportCriteria.should_receive(:for_empl_id).with("1").and_return(mockExpenseReportCriteria)
+      mockExpenseReportCriteria.should_receive(:and).with(:empl_id => "1").and_return(mockExpenseReportCriteria)
       mockExpenseReportCriteria.should_receive(:only).with(:expenses, :forex_payments).and_return(mockProcessedExpenses)
       Expense.should_receive(:fetch_for_employee_between_dates).with(1, expense_from, expense_to, [2]).and_return(expenses)
       ForexPayment.should_receive(:fetch_for).with(1, forex_from, forex_to, [3]).and_return(forex_payments)

@@ -38,6 +38,17 @@ class ExpenseSettlement
     def find_expense_ids_for_empl_id(empl_id)
       where(:empl_id => empl_id).only(:expenses).to_a.collect(&:expenses).flatten
     end
+
+    def load_with_deps(settlement_id)
+      settlement = includes(:cash_handovers, :outbound_travel).find(settlement_id)
+      settlement.populate_instance_data
+      settlement
+    end
+    
+    def load_processed_for(empl_id)
+      where(:processed => true).and(:empl_id => empl_id.to_s).only(:expenses, :forex_payments).to_a
+    end
+
   end
 
   def profile
