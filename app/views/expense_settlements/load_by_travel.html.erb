@@ -106,20 +106,30 @@
         </table>
     <% end %>
 
-    <div>
+    <script id="conversion_rates" type="text/json"><%= @conversion_rates %></script>
+
+    <div class="handover_wrapper">
       <%= hidden_field_tag :applicable_currencies, @applicable_currencies %>
-      <label for="amount"><h4>Cash handed over by Employee: </h4></label>
+      <h4>Cash handed over by Employee: </h4>
+
       <table class="cash_handovers">
+        <th>Amount</th>
+        <th>Currency</th>
+        <th>Conversion rate</th>
         <%= settlement_form.fields_for :cash_handovers do |handover_form| %>
-          <tr class="cash_handover">
-            <td>
-              <%= handover_form.text_field :amount, class: 'amount' %>
-              <%= handover_form.text_field :currency, class: 'handover_currency' %>
-              <%= handover_form.text_field :conversion_rate, class: 'conversion_rate' %>
-              <%= link_to 'Add Row', 'javaScript:void(0)', class: 'add_row clear_right hide' %>
-              <%= link_to 'Delete Row', 'javaScript:void(0)', class: 'delete_row clear_right hide' %>
-            </td>
-          </tr>
+            <tr class="cash_handover <%= cycle('even', 'odd') %>">
+              <td>
+                <%= handover_form.text_field :amount, class: 'amount ' %>
+              </td>
+              <td>
+                <%= handover_form.text_field :currency, class: 'handover_currency' %>
+              </td>
+              <td>
+                <%= handover_form.text_field :conversion_rate, class: 'conversion_rate' %>
+                <%= link_to 'Add Row', 'javaScript:void(0)', class: 'add_row clear_right hide' %>
+                <%= link_to 'Delete Row', 'javaScript:void(0)', class: 'delete_row clear_right'%>
+              </td>
+            </tr>
         <% end %>
       </table>
     </div>

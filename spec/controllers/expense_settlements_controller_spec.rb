@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'factory_girl'
 
 describe ExpenseSettlementsController do
   before(:each) do
@@ -13,7 +14,7 @@ describe ExpenseSettlementsController do
       outbound_travel = mock("outbound_travel", :id => 123, :emp_id => 1, :departure_date => Date.today - 10, :return_date => Date.today + 5)
       mockProcessedExpenses = [mock("expense", :expenses => [[2]], :forex_payments => [[3]])]
       mockExpenseReportCriteria = mock("Criteria", :to_a => mockProcessedExpenses)
-      expenses = [mock(Expense, :id => 1)]
+      expenses = [Factory(:expense, :original_currency => currency, :original_cost => 100, :cost_in_home_currency => 8900)]
       mockForex = mock(ForexPayment, :currency => currency, :id => 1)
       forex_payments = [mockForex]
       OutboundTravel.should_receive(:find).with("123").and_return(outbound_travel)
@@ -43,7 +44,7 @@ describe ExpenseSettlementsController do
     it "should show forex and travel properly for the given expense id even if return travel date is nil" do
       currency = 'GBP'
       outbound_travel = mock("outbound_travel", :id => 123, :emp_id => 1, :departure_date => Date.today - 10, :return_date => nil)
-      expenses = [mock(Expense, :id => 1)]
+      expenses = [Factory(:expense, :original_currency => currency, :original_cost => 100, :cost_in_home_currency => 8900)]
       mockForex = mock(ForexPayment, :currency => currency, :id => 1)
       forex_payments = [mockForex]
       OutboundTravel.should_receive(:find).with("123").and_return(outbound_travel)
@@ -71,7 +72,7 @@ describe ExpenseSettlementsController do
       outbound_travel = mock("outbound_travel", :id => 123, :emp_id => 1, :departure_date => Date.today - 10, :return_date => Date.today + 5)
       mockProcessedExpenses = [mock("expense", :expenses => [[2]], :forex_payments => [[3]])]
       mockExpenseReportCriteria = mock("Crietria", :to_a => mockProcessedExpenses)
-      expenses = [mock(Expense, :id => 1)]
+      expenses = [Factory(:expense, :original_currency => currency, :original_cost => 100, :cost_in_home_currency => 8900)]
       mockForex = mock(ForexPayment, :currency => currency, :id => 1)
       forex_payments = [mockForex]
       forex_from, forex_to, expense_to, expense_from = Date.today, Date.today + 1, Date.today + 2, Date.today + 3
@@ -133,8 +134,8 @@ describe ExpenseSettlementsController do
       outbound_travel = OutboundTravel.new(:emp_id => empl_id, :emp_name => 'John', :departure_date => Date.today,
                                           :place => 'UK')
       forex_payment = Factory(:forex_payment, :currency => currency)
-      expense = mock(Expense, :id => 1, :empl_id => empl_id, :expense_rpt_id => 1, :original_currency => currency,
-                                          :original_cost => 50)
+      expense = Factory(:expense, :empl_id => empl_id,  :original_currency => currency,
+                                          :original_cost => 50, :cost_in_home_currency => 7200)
       expense_settlement = ExpenseSettlement.new(:empl_id => empl_id, :expenses => [1], :forex_payments => [1],
                                                  :status => ExpenseSettlement::GENERATED_DRAFT,
                                                   :expense_from => DateHelper::date_fmt(expense_from),
@@ -210,7 +211,7 @@ describe ExpenseSettlementsController do
       travel_id = '1'
       employee_id = '12321'
       test_forex_currencies = ['EUR', 'GBP']
-      expenses = [mock(Expense, :id => 1)]
+      expenses = [Factory(:expense, :original_currency => 'EUR', :original_cost => 100, :cost_in_home_currency => 7200)]
       forex_payments = []
       forex_ids = []
       test_forex_currencies.each_with_index do |forex_currency, index|
@@ -230,14 +231,17 @@ describe ExpenseSettlementsController do
                                                    outbound_travel.return_date, []).and_return(forex_payments)
 
       expected_expense_settlement = ExpenseSettlement.new(:outbound_travel_id => travel_id, :empl_id => employee_id,
-                                                          :expenses => [1],
+                                                          :expenses => [expenses[0].id],
                                                           :forex_payments => forex_ids,
                                                           :cash_handovers => [CashHandover.new])
+
+      ForexPayment.should_receive(:get_json_to_populate).with('currency').and_return({'currency' => test_forex_currencies})
 
       get :load_by_travel, :id => travel_id
 
       assigns(:expense_report).should have_same_attributes_as expected_expense_settlement
       assigns(:applicable_currencies).should == test_forex_currencies
+      assigns(:conversion_rates).should == {'EUR' => '72.0' }.to_json.html_safe
       assigns(:expenses).should == expenses
       assigns(:forex_payments).should == forex_payments
     end

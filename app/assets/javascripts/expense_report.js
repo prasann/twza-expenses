@@ -1,6 +1,6 @@
 $(document).ready(function() {
     var _this = this;
-    show_add_in_last_cash_handover();
+    validate_row_manipulations();
     $(function($) {
         $('#expense_report_accordion').accordion({
             active: false,
@@ -24,26 +24,31 @@ $(document).ready(function() {
 
         $('.add_row').live("click", function() {
             var handover_section = $(this).parents('.cash_handovers');
-            var display_element = handover_section.find('.cash_handover').last();
+            var cash_handovers = handover_section.find('.cash_handover');
+            var display_element = cash_handovers.last();
             var cloned_element = display_element.clone();
             cloned_element.find(':input').val('');
+            var rowColorClasses = ['even','odd'];
+            for (var index in rowColorClasses)
+                cloned_element.removeClass(rowColorClasses[index]);
+            if (cash_handovers.size() % 2 == 0)
+                cloned_element.addClass('tr.odd');
             handover_section.append(cloned_element);
             cloned_element.find('.delete_row').show();
-            show_add_in_last_cash_handover();
+            validate_row_manipulations();
             $(this).hide();
         });
 
         $('.delete_row').live('click', function(){
           $(this).parents('.cash_handover').last().remove();
-          show_add_in_last_cash_handover();
+          validate_row_manipulations();
         });
 
         $('.generate_settlement').click(function(event){
             var cash_handovers_section = $('.cash_handovers');
-            var handover_item_index = 0;
             cash_handovers_section.find('.cash_handover').each(function(index,item){
                 var amount = $(item).find('.amount');
-                var currency = $(item).find('.currency');
+                var currency = $(item).find('.handover_currency');
                 if (amount.val() == '') {
                     $(item).remove();
                     return true;
@@ -58,9 +63,9 @@ $(document).ready(function() {
                   event.preventDefault();
                   return false;
                 }
-                set_index_nested_form_attribute(amount, handover_item_index);
-                set_index_nested_form_attribute(currency, handover_item_index);
-                handover_item_index = handover_item_index + 1;
+                set_index_nested_form_attribute(amount, index);
+                set_index_nested_form_attribute(currency, index);
+                set_index_nested_form_attribute($(item).find('.conversion_rate'), index);
             })
         });
     })
@@ -80,23 +85,33 @@ $(document).ready(function() {
 
     }
 
-    function show_add_in_last_cash_handover() {
-      var cash_handover_items = $('.cash_handovers').find('.cash_handover');
-      if (cash_handover_items && cash_handover_items.size() > 0) {
-        var last_cash_handover = cash_handover_items.last();
-        register_currencies_autocomplete(last_cash_handover);
-        last_cash_handover.find('.add_row').show();
-      }
+    function validate_row_manipulations() {
+        var cash_handover_items = $('.cash_handovers').find('.cash_handover');
+        if (cash_handover_items && cash_handover_items.size() > 0) {
+            var last_cash_handover = cash_handover_items.last();
+
+            register_currencies_autocomplete(last_cash_handover);
+
+            last_cash_handover.find('.add_row').show();
+
+            cash_handover_items.first().find('.delete_row').hide();
+        }
     }
 
   function register_currencies_autocomplete(element) {
+    var conversion_rates = jQuery.parseJSON($('#conversion_rates').html());
     var down_arrow_event = jQuery.Event("keydown");
     var applicable_currencies = ($('#applicable_currencies').val()).split(' ');
     element.find($('.handover_currency')).autocomplete({
-      source: applicable_currencies,
-      minLength: 0
-    }).focus(function(){
-      $(this).trigger(down_arrow_event);
-    });
+            source: applicable_currencies,
+            minLength: 0,
+            select: function(event, ui) {
+                var conversion_rate = conversion_rates[ui.item.value];
+                if (conversion_rate !== undefined)
+                    element.find('.conversion_rate').val(conversion_rate);
+            }
+        }).focus(function(){
+          $(this).trigger(down_arrow_event);
+        });
     }
 });

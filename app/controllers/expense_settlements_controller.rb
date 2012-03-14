@@ -105,6 +105,9 @@ class ExpenseSettlementsController < ApplicationController
     @expenses = Expense.fetch_for_employee_between_dates travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids
     @forex_payments = ForexPayment.fetch_for travel.emp_id, @forex_from_date, @forex_to_date, processed_forex_ids
     @applicable_currencies = ForexPayment.get_json_to_populate('currency')['currency']
+    @conversion_rates = Hash.new
+    @expenses.map{ |expense| @conversion_rates[expense.original_currency] = expense.cost_in_home_currency / expense.original_cost }
+    @conversion_rates = @conversion_rates.to_json.html_safe
     @expense_report = expense_settlement || ExpenseSettlement.new(:empl_id => travel.emp_id,
                                                                   :outbound_travel_id => travel.id.to_s,
                                                                   :forex_payments => @forex_payments.collect(&:id),
