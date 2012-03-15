@@ -23,7 +23,7 @@ $(document).ready(function() {
         });
 
         $('.add_row').live("click", function() {
-            var handover_section = $(this).parents('.cash_handovers');
+            var handover_section = $(this).parents().find('.cash_handovers');
             var cash_handovers = handover_section.find('.cash_handover');
             var display_element = cash_handovers.last();
             var cloned_element = display_element.clone();
@@ -36,7 +36,6 @@ $(document).ready(function() {
             handover_section.append(cloned_element);
             cloned_element.find('.delete_row').show();
             validate_row_manipulations();
-            $(this).hide();
         });
 
         $('.delete_row').live('click', function(){

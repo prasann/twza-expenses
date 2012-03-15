@@ -68,7 +68,7 @@
            expense_map = @expenses.group_by { |x| x[:expense_rpt_id].to_s } %>
         <div id="expense_report_accordion">
           <% expense_map.each do |report_id, expenses| %>
-              <h2><a href="#"><input type='checkbox' name='<%= report_id %>'><%= report_id %></a></h2>
+              <h2><a href="javascript:void(0);"><input type='checkbox' name='<%= report_id %>'><%= report_id %></a></h2>
 
               <div>
                 <table id="<%= report_id %>_table">
@@ -126,13 +126,16 @@
               </td>
               <td>
                 <%= handover_form.text_field :conversion_rate, class: 'conversion_rate' %>
-                <%= link_to 'Add Row', 'javaScript:void(0)', class: 'add_row clear_right hide' %>
-                <%= link_to 'Delete Row', 'javaScript:void(0)', class: 'delete_row clear_right'%>
+              </td>
+              <td class="add_row_td">
+                <%= link_to image_tag("delete.png") + 'Delete', 'javaScript:void(0)', class: 'delete_row'%>
               </td>
             </tr>
         <% end %>
       </table>
+      <%= link_to image_tag("new_link.png") + 'Add New Row', 'javaScript:void(0)', class: 'add_row' %>
     </div>
+
     <br/><br/>
     <table id='report_buttons'>
       <tr>

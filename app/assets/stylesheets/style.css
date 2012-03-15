@@ -322,13 +322,31 @@ tr.even{
 }
 
 .handover_wrapper {
-    width: 50%;
-    text-align: left;
+    width:75%;
 }
 
 .cash_handovers {
     width: auto;
 }
+
+.add_row{
+    float:right;
+    font-size: 125%;
+    text-decoration:none;
+}
+
+.delete_row img{
+  padding:0 2px;
+}
+
+.delete_row{
+  font-size: 125%;
+}
+
+.add_row_td{
+  border:none;
+}
+
 
 
 
