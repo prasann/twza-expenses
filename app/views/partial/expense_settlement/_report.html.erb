@@ -12,8 +12,10 @@
   <%
     # TODO: Move into model
     forex_inr_total = 0
+    forex_amount_total = 0
     @expense_report.get_forex_payments.each do |payment|
       forex_inr_total += payment.inr
+      forex_amount_total += payment.amount
     %>
     <tr class="<%= cycle("even", "odd") %>">
       <td><%= payment.emp_id %></td>
@@ -26,7 +28,8 @@
     </tr>
   <% end %>
   <tr class="heading_no_align">
-    <td colspan="6">Total </td>
+    <td colspan="3">Total </td>
+    <td colspan="3"><%= number_with_precision(forex_amount_total, :precision => 2) %></td>
     <td class='right_align'><%= number_with_precision(forex_inr_total, :precision => 2) %></td>
   </tr>
 </table>
