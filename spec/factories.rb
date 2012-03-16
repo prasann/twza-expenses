@@ -38,4 +38,11 @@ FactoryGirl.define do
     total_amount { Random.rand(125) }
     status ExpenseReimbursement::UNPROCESSED
   end
+
+  factory :cash_handover do
+    amount {100}
+    currency {'EUR'}
+    conversion_rate {72.00}
+    payment_mode {'CASH'}
+  end
 end

@@ -164,6 +164,7 @@ describe ExpenseSettlementsController do
       get :edit, :id => expense_settlement.id
 
       assigns(:expense_report).should have_same_attributes_as expense_settlement
+      assigns(:has_cash_handovers).should be true
       assigns(:applicable_currencies).should == [currency]
       assigns(:expenses).should == [expense]
       assigns(:forex_payments).should == [forex_payment]
@@ -242,6 +243,8 @@ describe ExpenseSettlementsController do
       assigns(:applicable_currencies).should == test_forex_currencies
       assigns(:conversion_rates).should == {'EUR' => '72.0' }.to_json.html_safe
       assigns(:expenses).should == expenses
+      assigns(:payment_modes).should == [CashHandover::CASH, CashHandover::CREDIT_CARD]
+      assigns(:has_cash_handovers).should be false
       assigns(:forex_payments).should == forex_payments
     end
 

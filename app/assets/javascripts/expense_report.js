@@ -1,7 +1,13 @@
 $(document).ready(function() {
     var _this = this;
+    display_cash_handover_section();
     validate_row_manipulations();
     $(function($) {
+        $('.handover_selector').click(function(){
+            $('.cash_handover_selector').hide();
+            $('.cash_handover_section').show();
+        });
+
         $('#expense_report_accordion').accordion({
             active: false,
             autoHeight: false,
@@ -31,8 +37,8 @@ $(document).ready(function() {
             var rowColorClasses = ['even','odd'];
             for (var index in rowColorClasses)
                 cloned_element.removeClass(rowColorClasses[index]);
-            if (cash_handovers.size() % 2 == 0)
-                cloned_element.addClass('tr.odd');
+            if (cash_handovers.size() % 2 == 1)
+                cloned_element.addClass('odd');
             handover_section.append(cloned_element);
             cloned_element.find('.delete_row').show();
             validate_row_manipulations();
@@ -97,11 +103,19 @@ $(document).ready(function() {
         }
     }
 
-  function register_currencies_autocomplete(element) {
-    var conversion_rates = jQuery.parseJSON($('#conversion_rates').html());
-    var down_arrow_event = jQuery.Event("keydown");
-    var applicable_currencies = ($('#applicable_currencies').val()).split(' ');
-    element.find($('.handover_currency')).autocomplete({
+    function display_cash_handover_section() {
+       var cash_handover_items = $('.cash_handovers').find('.cash_handover');
+       if (cash_handover_items.size() == 0) {
+           $('.cash_handover_section').hide();
+           $('.cash_handover_selector').show();
+       }
+    }
+
+    function register_currencies_autocomplete(element) {
+        var conversion_rates = jQuery.parseJSON($('#conversion_rates').html());
+        var down_arrow_event = jQuery.Event("keydown");
+        var applicable_currencies = ($('#applicable_currencies').val()).split(' ');
+        element.find($('.handover_currency')).autocomplete({
             source: applicable_currencies,
             minLength: 0,
             select: function(event, ui) {
@@ -109,8 +123,8 @@ $(document).ready(function() {
                 if (conversion_rate !== undefined)
                     element.find('.conversion_rate').val(conversion_rate);
             }
-        }).focus(function(){
-          $(this).trigger(down_arrow_event);
-        });
+        }).focus(function() {
+                $(this).trigger(down_arrow_event);
+            });
     }
 });

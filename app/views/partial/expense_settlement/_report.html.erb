@@ -28,7 +28,7 @@
     </tr>
   <% end %>
   <tr class="heading_no_align">
-    <td colspan="3">Total </td>
+    <td colspan="3">Total (A) </td>
     <td colspan="3"><%= number_with_precision(forex_amount_total, :precision => 2) %></td>
     <td class='right_align'><%= number_with_precision(forex_inr_total, :precision => 2) %></td>
   </tr>
@@ -43,43 +43,53 @@
     <th>Amount in INR</th>
   </tr>
   <%
-    # TODO: Move into model
-    expense_inr_total = 0
-    @expense_report.get_consolidated_expenses.each do |expense|
-      expense_inr_total += expense["local_currency_amount"]
-    %>
-    <tr class="<%= cycle("even", "odd") %>">
-      <td><%= expense["report_id"] %></td>
-      <td><%= expense["currency"] %></td>
-      <td><%= expense["amount"] %></td>
-      <td><%= number_with_precision(expense["conversion_rate"], :precision => 2) %></td>
-      <td class='right_align'><%= number_with_precision(expense["local_currency_amount"], :precision => 2) %></td>
-    </tr>
+     # TODO: Move into model
+     expense_inr_total = 0
+     @expense_report.get_consolidated_expenses.each do |expense|
+         expense_inr_total += expense["local_currency_amount"]
+  %>
+      <tr class="<%= cycle("even", "odd") %>">
+        <td><%= expense["report_id"] %></td>
+        <td><%= expense["currency"] %></td>
+        <td><%= expense["amount"] %></td>
+        <td><%= number_with_precision(expense["conversion_rate"], :precision => 2) %></td>
+        <td class='right_align'><%= number_with_precision(expense["local_currency_amount"], :precision => 2) %></td>
+      </tr>
   <% end %>
   <tr class="heading_no_align">
-    <td colspan="4">Total</td>
+    <td colspan="4">Total (B)</td>
     <td class='right_align'><%= number_with_precision(expense_inr_total, :precision => 2) %></td>
   </tr>
 </table>
 
-<table class="settlement_report">
-  <% if !@expense_report.cash_handovers.blank? %>
-      <tr class="<%= cycle("even", "odd") %>">
-        <td>Cash Handed over:</td>
-        <% conversion_rates = @expense_report.instance_variable_get('@conversion_rates') %>
-        <% @expense_report.cash_handovers.each do |cash_handover| %>
+<% if !@expense_report.cash_handovers.blank? %>
+    <div class='heading'>Currency handovers</div>
+    <table class="settlement_report">
+      <% @expense_report.cash_handovers.each do |cash_handover| %>
+          <tr class="<%= cycle("even", "odd") %>">
+            <td><%= cash_handover.payment_mode %></td>
             <td><%= cash_handover.amount %>&nbsp;<%= cash_handover.currency %> </td>
             <td><%= number_with_precision(cash_handover.conversion_rate, :precision => 2) %></td>
             <!-- TODO: Do the math inside the cash_handover object -->
             <td class='right_align'><%= number_with_precision(cash_handover.amount * cash_handover.conversion_rate, :precision => 2) %></td>
-        <% end %>
+          </tr>
+      <% end %>
+      <tr class="heading_no_align">
+        <td colspan=3>
+        Total (C)
+        </td>
+        <td class="right_align">
+          <%= @total_cash_handovers %>
+        </td>
       </tr>
-  <% end %>
+    </table>
+<% end %>
+<table class="settlement_report">
   <tr>
     <% if @expense_report.get_receivable_amount.positive? %>
-      <td colspan="3">Receivable from employee :</td>
+        <td colspan="3"><b>Receivable from employee : A- (B + C)</b></td>
     <% else %>
-      <td colspan="3">Payable to employee :</td>
+        <td colspan="3"><b>Payable to employee : (B + C) - A</b></td>
     <% end %>
     <td class='right_align heading_no_align'><%= number_with_precision(@expense_report.get_receivable_amount.abs, :precision => 2) %></td>
   </tr>

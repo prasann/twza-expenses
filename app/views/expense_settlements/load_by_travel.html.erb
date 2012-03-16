@@ -108,32 +108,41 @@
 
     <script id="conversion_rates" type="text/json"><%= @conversion_rates %></script>
 
-    <div class="handover_wrapper">
+    <div>
       <%= hidden_field_tag :applicable_currencies, @applicable_currencies %>
-      <h4>Cash handed over by Employee: </h4>
+      <div class="cash_handover_selector <% if @has_cash_handovers %>hide <% end %>">
+        <input type="button" value="Currency handovers" class="handover_selector"/>
+      </div>
+      <div class="cash_handover_section <% if !@has_cash_handovers %>hide <% end %>">
+        <h4>Cash handed over by Employee: </h4>
 
-      <table class="cash_handovers">
-        <th>Amount</th>
-        <th>Currency</th>
-        <th>Conversion rate</th>
-        <%= settlement_form.fields_for :cash_handovers do |handover_form| %>
-            <tr class="cash_handover <%= cycle('even', 'odd') %>">
-              <td>
-                <%= handover_form.text_field :amount, class: 'amount ' %>
-              </td>
-              <td>
-                <%= handover_form.text_field :currency, class: 'handover_currency' %>
-              </td>
-              <td>
-                <%= handover_form.text_field :conversion_rate, class: 'conversion_rate' %>
-              </td>
-              <td class="add_row_td">
-                <%= link_to image_tag("delete.png") + 'Delete', 'javaScript:void(0)', class: 'delete_row'%>
-              </td>
-            </tr>
-        <% end %>
-      </table>
-      <%= link_to image_tag("new_link.png") + 'Add New Row', 'javaScript:void(0)', class: 'add_row' %>
+        <table class="cash_handovers">
+          <th>Amount</th>
+          <th>Currency</th>
+          <th>Conversion rate</th>
+          <th>Payment mode</th>
+          <%= settlement_form.fields_for :cash_handovers do |handover_form| %>
+              <tr class="cash_handover <%= cycle('even', 'odd') %>">
+                <td>
+                  <%= handover_form.text_field :amount, class: 'amount ' %>
+                </td>
+                <td>
+                  <%= handover_form.text_field :currency, class: 'handover_currency' %>
+                </td>
+                <td>
+                  <%= handover_form.text_field :conversion_rate, class: 'conversion_rate' %>
+                </td>
+                <td>
+                  <%= handover_form.select :payment_mode, @payment_modes, class: 'conversion_rate' %>
+                </td>
+                <td class="add_row_td">
+                  <%= link_to image_tag("delete.png") + 'Delete', 'javaScript:void(0)', class: 'delete_row' %>
+                </td>
+              </tr>
+          <% end %>
+        </table>
+        <%= link_to image_tag("new_link.png") + 'Add New Row', 'javaScript:void(0)', class: 'add_row' %>
+      </div>
     </div>
 
     <br/><br/>
