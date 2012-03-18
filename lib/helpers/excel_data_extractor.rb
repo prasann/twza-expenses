@@ -1,5 +1,6 @@
 # TODO: Is this even used anywhere in this project?
 require 'roo'
+require 'iconv'
 
 module ExcelDataExtractor
   EXCEL_HANDLERS = {"xls" => Excel, "xlsx" => Excelx}
