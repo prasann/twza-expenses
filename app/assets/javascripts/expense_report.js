@@ -112,7 +112,6 @@ $(document).ready(function() {
     }
 
     function register_currencies_autocomplete(element) {
-        var conversion_rates = jQuery.parseJSON($('#conversion_rates').html());
         var down_arrow_event = jQuery.Event("keydown");
         var applicable_currencies = ($('#applicable_currencies').val()).split(' ');
         element.find($('.handover_currency')).autocomplete({source: applicable_currencies, minLength: 0})
