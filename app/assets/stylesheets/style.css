@@ -321,12 +321,8 @@ tr.even{
     margin: 20px 5px;
 }
 
-.handover_wrapper {
-    width:75%;
-}
-
 .cash_handovers {
-    width: auto;
+    width: auto;,
 }
 
 .add_row{
