@@ -44,6 +44,7 @@ class ExpenseSettlementsController < ApplicationController
                                        )
     @expense_report.cash_handovers.map(&:save!)
     @total_cash_handovers = 0
+    # TODO: Move into model: cash_handover.converted_amount - and then do a sum of the values here
     @expense_report.cash_handovers.map{
         |cash_handover| @total_cash_handovers += cash_handover.amount * cash_handover.conversion_rate
     }
