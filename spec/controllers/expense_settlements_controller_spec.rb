@@ -241,7 +241,6 @@ describe ExpenseSettlementsController do
 
       assigns(:expense_report).should have_same_attributes_as expected_expense_settlement
       assigns(:applicable_currencies).should == test_forex_currencies
-      assigns(:conversion_rates).should == {'EUR' => '72.0' }.to_json.html_safe
       assigns(:expenses).should == expenses
       assigns(:payment_modes).should == [CashHandover::CASH, CashHandover::CREDIT_CARD]
       assigns(:has_cash_handovers).should be false

@@ -115,15 +115,8 @@ $(document).ready(function() {
         var conversion_rates = jQuery.parseJSON($('#conversion_rates').html());
         var down_arrow_event = jQuery.Event("keydown");
         var applicable_currencies = ($('#applicable_currencies').val()).split(' ');
-        element.find($('.handover_currency')).autocomplete({
-            source: applicable_currencies,
-            minLength: 0,
-            select: function(event, ui) {
-                var conversion_rate = conversion_rates[ui.item.value];
-                if (conversion_rate !== undefined)
-                    element.find('.conversion_rate').val(conversion_rate);
-            }
-        }).focus(function() {
+        element.find($('.handover_currency')).autocomplete({source: applicable_currencies, minLength: 0})
+            .focus(function(){
                 $(this).trigger(down_arrow_event);
             });
     }
