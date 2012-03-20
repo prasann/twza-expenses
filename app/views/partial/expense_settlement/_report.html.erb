@@ -6,6 +6,7 @@
     <th>Issue Date</th>
     <th>Amount</th>
     <th>Currency</th>
+    <th>Conversion Rate</th>
     <th>Place</th>
     <th>Amount INR</th>
   </tr>
@@ -23,13 +24,14 @@
       <td><%= payment.issue_date %></td>
       <td><%= number_with_precision(payment.amount, :precision => 2) %></td>
       <td><%= payment.currency %></td>
+      <td><%= number_with_precision(payment.inr/payment.amount, :precision => 2) %></td>
       <td><%= payment.place %></td>
       <td class='right_align'><%= number_with_precision(payment.inr, :precision => 2) %></td>
     </tr>
   <% end %>
   <tr class="heading_no_align">
     <td colspan="3">Total (A) </td>
-    <td colspan="3"><%= number_with_precision(forex_amount_total, :precision => 2) %></td>
+    <td colspan="4"><%= number_with_precision(forex_amount_total, :precision => 2) %></td>
     <td class='right_align'><%= number_with_precision(forex_inr_total, :precision => 2) %></td>
   </tr>
 </table>
