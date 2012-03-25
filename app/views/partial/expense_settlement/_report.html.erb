@@ -80,7 +80,7 @@
         Total (C)
         </td>
         <td class="right_align">
-          <%= @total_cash_handovers %>
+          <%= number_with_precision(@total_cash_handovers, :precision => 2) %>
         </td>
       </tr>
     </table>

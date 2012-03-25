@@ -120,6 +120,7 @@
           <th>Currency</th>
           <th>Conversion rate</th>
           <th>Payment mode</th>
+          <th></th>
           <%= settlement_form.fields_for :cash_handovers do |handover_form| %>
               <tr class="cash_handover <%= cycle('even', 'odd') %>">
                 <td>
@@ -145,14 +146,12 @@
     </div>
 
     <br/><br/>
-    <table id='report_buttons'>
-      <tr>
-        <td>
-          <div><input type="button" value="<< Back" onclick="javascript:history.go(-1);"/></div>
-        </td>
-        <td>
-          <div><%= (forexes_avlbl || expenses_avlbl) ? submit_tag('Generate Report >>', class: 'generate_settlement') : '' %></div>
-        </td>
-      </tr>
-    </table>
+  
+<div class="right_button">
+  <%= (forexes_avlbl || expenses_avlbl) ? submit_tag('Generate Report >>', class: 'generate_settlement') : '' %>
+</div>
+    
 <% end %>
+<div class="left_button">
+  <%= button_to '<< Back', { :controller => 'outbound_travels', :action => 'index'}, :method => :get %>
+</div>

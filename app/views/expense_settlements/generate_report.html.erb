@@ -2,9 +2,12 @@
 
 <table id="report_buttons">
   <tr>
-    <td><div style="float:left;padding-top:5px"><input type="button" value="<< Back" onclick="javascript:history.back(-1)"/></div></td>
     <td>
-      <div style="float:right;padding-right:10px;">
+      <div class="left_button">
+        <%= button_to '<< Back', { :action => 'edit', :id => @expense_settlement[:id]}, :method => :get %>
+      </div>
+    <td>
+      <div class="right_button">
         <% if @expense_report.is_generated_draft? %>
           <%= button_to 'Notify employee', :action => 'notify', :id => @expense_report.id.to_s %>
         <% end %>

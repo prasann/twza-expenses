@@ -339,10 +339,21 @@ tr.even{
   font-size: 125%;
 }
 
-.add_row_td{
-  border:none;
+.add_row{
+  margin-right: 40px;
 }
 
+.right_button{
+  float:right;
+  margin-right: 20px;
+  margin-bottom:10px;
+}
+
+.left_button{
+  float:left;
+  margin-left: 20px;
+  margin-bottom:10px;
+}
 
 
 

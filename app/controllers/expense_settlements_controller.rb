@@ -32,13 +32,13 @@ class ExpenseSettlementsController < ApplicationController
   end
 
   def generate_report
-    expense_settlement = params[:expense_settlement]
-    outbound_travel = OutboundTravel.find(expense_settlement[:outbound_travel_id])
+    @expense_settlement = params[:expense_settlement]
+    outbound_travel = OutboundTravel.find(@expense_settlement[:outbound_travel_id])
     @expense_report = outbound_travel.find_or_initialize_expense_settlement
-    @expense_report.update_attributes({:cash_handovers => expense_settlement[:cash_handovers_attributes],
+    @expense_report.update_attributes({:cash_handovers => @expense_settlement[:cash_handovers_attributes],
                                        :status => ExpenseSettlement::GENERATED_DRAFT,
-                                       :empl_id => expense_settlement[:empl_id],
-                                       :emp_name => expense_settlement[:emp_name]}.merge(
+                                       :empl_id => @expense_settlement[:empl_id],
+                                       :emp_name => @expense_settlement[:emp_name]}.merge(
                                           params.slice(:expenses, :forex_payments,:expense_from,
                                                        :expense_to, :forex_from, :forex_to).symbolize_keys)
                                        )
