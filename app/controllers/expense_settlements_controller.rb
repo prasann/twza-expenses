@@ -59,7 +59,7 @@ class ExpenseSettlementsController < ApplicationController
     expense_report.notify_employee
     # TODO: What if the save failed?
     # TODO: In the "Rails 3.1" way, flash should be part of the redirect (options hash) - so need to make sure that this actually works
-    flash[:success] = "Expense settlement e-mail successfully sent to '#{expense_report.profile.common_name}'"
+    flash[:success] = "Expense settlement e-mail successfully sent to '#{expense_report.profile.try(:common_name)}'"
     redirect_to(:action => :index, :anchor => 'expense_settlements', :empl_id => expense_report.empl_id)
   end
 
