@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'date'
 
 describe ApplicationHelper do
-  
+
   describe "prepare flash message HTML for UI" do
     it "should create escaped HTML for flash message for display in UI" do
       flash[:error] = 'Could not save expense report'

@@ -1,5 +1,5 @@
 module ApplicationHelper
-  
+
   def flash_message
     messages = ""
 

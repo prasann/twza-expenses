@@ -44,7 +44,7 @@ class ExpenseSettlement
       settlement.populate_instance_data
       settlement
     end
-    
+
     def load_processed_for(empl_id)
       where(:processed => true).and(:empl_id => empl_id.to_s).only(:expenses, :forex_payments).to_a
     end

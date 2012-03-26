@@ -122,7 +122,7 @@ describe 'expense_report' do
       mock_criteria.should_receive(:find).with(123).and_return(settlement)
       settlement.should_receive(:populate_instance_data)
 
-     
+
       ExpenseSettlement.load_with_deps(123)
 
   end

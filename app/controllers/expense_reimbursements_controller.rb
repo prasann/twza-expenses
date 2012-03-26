@@ -81,7 +81,7 @@ class ExpenseReimbursementsController < ApplicationController
                                                         :total_amount => total_amount)
     # TODO: This be moved to the point when reimbursements are sent to the bank and closed
     #EmployeeMailer.non_travel_expense_reimbursement(@expense_reimbursement).deliver
-    
+
     # TODO: What if the creation failed?
     redirect_to :action => 'index', :empl_id => params[:empl_id]
   end
