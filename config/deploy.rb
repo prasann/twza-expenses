@@ -42,7 +42,7 @@ role :app, "10.10.5.34"                          # This may be the same as your 
 namespace :bundler do
   desc "Install for production"
   task :install, :roles => :app do
-    run "cd #{release_path} && bundle install --binstubs"
+    run "cd #{release_path} && bundle install --binstubs --without=development test"
   end
 end
 
@@ -53,4 +53,3 @@ namespace :git do
 end
 
 after 'deploy:update_code', 'bundler:install'
-
