@@ -15,6 +15,10 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
+def should_load_non_rake_gems
+  File.basename($0) == "rails"
+end
+
 module Mankatha
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.

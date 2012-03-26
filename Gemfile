@@ -1,6 +1,5 @@
 source 'http://rubygems.org'
 
-# TODO: Group all these based on rails env usage
 gem 'rails', '~>3.2.0'
 gem 'mongoid'
 gem 'bson_ext'
@@ -20,9 +19,6 @@ gem 'jquery-rails'
 #  gem 'uglifier', '>= 1.0.3'
 #end
 
-# Use unicorn as the web server
-# gem 'unicorn'
-
 # Deploy with Capistrano
 gem 'capistrano'
 
@@ -31,7 +27,8 @@ group :uat, :production do
 end
 
 group :development do
-  #gem 'mailcatcher'
+  gem 'mailcatcher'
+  gem 'bullet'#, '~>2.1.0'
 end
 
 group :test do

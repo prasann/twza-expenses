@@ -29,12 +29,7 @@ Mankatha::Application.configure do
   config.assets.debug = true
 
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    :address => "10.10.1.5",
-    :port => 25,
-    :domain => "thoughtworks.com",
-    :enable_starttls_auto => true
-  }
+  config.action_mailer.smtp_settings = { :host => "localhost", :port => 1025 }
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
 
@@ -44,4 +39,35 @@ Mankatha::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   config.active_record.auto_explain_threshold_in_seconds = 0.5
+
+  config.after_initialize do
+    # config.action_controller.asset_host =  Proc.new { |source, request|
+    #   "#{request.protocol}#{request.host}:#{request.port}"
+    # }
+    # config.action_mailer.asset_host = "http://#{AppConstants.ASSET_HOST}:#{AppConstants.HTTP_PORT}"
+
+    # TODO: Even though we set the 'config.action_controller.asset_host' above, it doesnt seem to have an effect
+    # This might be specific to this version of rails 3.1 - since all online help blogs say that this works for 3.2
+    # ActionController::Base.asset_host = Proc.new { |source, request|
+    #   "#{request.protocol}#{request.host}:#{request.port}"
+    # }
+
+    if defined?(::Bullet)
+      Bullet.enable = true
+      # Bullet.alert = true
+      Bullet.bullet_logger = true
+      Bullet.console = true
+      # Bullet.growl = true
+      Bullet.rails_logger = false
+      Bullet.disable_browser_cache = true
+    end
+
+    if should_load_non_rake_gems
+      stdin, stdout, stderr = Open3.popen3('mailcatcher')
+      output = stdout.readlines.join
+      error = stderr.readlines.join
+      Rails.logger.info(output) unless output.blank? if Rails.logger
+      Rails.logger.info(error) unless error.blank? if Rails.logger
+    end
+  end
 end
