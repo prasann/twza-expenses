@@ -32,18 +32,17 @@
       <%
          forexes_avlbl = @forex_payments.present? && !@forex_payments.empty?
          if forexes_avlbl
-             @forex_payments.each do |payment| %>
-              <tr class="<%= cycle("even", "odd") %>">
-
-                <td><%= check_box_tag 'forex_payments[]', payment.id.to_s, :checked => true %></td>
-                <td><%= payment.emp_id %></td>
-                <td><%= payment.emp_name %></td>
-                <td><%= payment.issue_date %></td>
-                <td><%= payment.amount %></td>
-		<td><%= payment.currency %></td>
-                <td><%= number_with_precision(payment.inr/payment.amount, :precision => 2) %></td>
-                <td><%= payment.place %></td>
-              </tr>
+          @forex_payments.each do |payment| %>
+            <tr class="<%= cycle("even", "odd") %>">
+              <td><%= check_box_tag 'forex_payments[]', payment.id.to_s, :checked => true %></td>
+              <td><%= payment.emp_id %></td>
+              <td><%= payment.emp_name %></td>
+              <td><%= payment.issue_date %></td>
+              <td><%= payment.amount %></td>
+		          <td><%= payment.currency %></td>
+              <td><%= number_with_precision(payment.conversion_rate, :precision => 2) %></td>
+              <td><%= payment.place %></td>
+            </tr>
           <% end
              else %>
           <tr>

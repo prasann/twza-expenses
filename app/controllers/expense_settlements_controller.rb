@@ -43,11 +43,7 @@ class ExpenseSettlementsController < ApplicationController
                                                        :expense_to, :forex_from, :forex_to).symbolize_keys)
                                        )
     @expense_report.cash_handovers.map(&:save!)
-    @total_cash_handovers = 0
-    # TODO: Move into model: cash_handover.converted_amount - and then do a sum of the values here
-    @expense_report.cash_handovers.map{
-        |cash_handover| @total_cash_handovers += cash_handover.amount * cash_handover.conversion_rate
-    }
+    @total_cash_handovers = @expense_report.cash_handovers.collect(&:total_converted_amount).sum
     @expense_report.populate_instance_data
   end
 

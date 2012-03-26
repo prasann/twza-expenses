@@ -24,13 +24,13 @@
       <td><%= payment.issue_date %></td>
       <td><%= number_with_precision(payment.amount, :precision => 2) %></td>
       <td><%= payment.currency %></td>
-      <td><%= number_with_precision(payment.inr/payment.amount, :precision => 2) %></td>
+      <td><%= number_with_precision(payment.conversion_rate, :precision => 2) %></td>
       <td><%= payment.place %></td>
       <td class='right_align'><%= number_with_precision(payment.inr, :precision => 2) %></td>
     </tr>
   <% end %>
   <tr class="heading_no_align">
-    <td colspan="3">Total (A) </td>
+    <td colspan="3">Total (A)</td>
     <td colspan="4"><%= number_with_precision(forex_amount_total, :precision => 2) %></td>
     <td class='right_align'><%= number_with_precision(forex_inr_total, :precision => 2) %></td>
   </tr>
@@ -68,13 +68,12 @@
     <div class='heading'>Currency handovers</div>
     <table class="settlement_report">
       <% @expense_report.cash_handovers.each do |cash_handover| %>
-          <tr class="<%= cycle("even", "odd") %>">
-            <td><%= cash_handover.payment_mode %></td>
-            <td><%= cash_handover.amount %>&nbsp;<%= cash_handover.currency %> </td>
-            <td><%= number_with_precision(cash_handover.conversion_rate, :precision => 2) %></td>
-            <!-- TODO: Do the math inside the cash_handover object -->
-            <td class='right_align'><%= number_with_precision(cash_handover.amount * cash_handover.conversion_rate, :precision => 2) %></td>
-          </tr>
+        <tr class="<%= cycle("even", "odd") %>">
+          <td><%= cash_handover.payment_mode %></td>
+          <td><%= cash_handover.amount %>&nbsp;<%= cash_handover.currency %> </td>
+          <td><%= number_with_precision(cash_handover.conversion_rate, :precision => 2) %></td>
+          <td class='right_align'><%= number_with_precision(cash_handover.total_converted_amount, :precision => 2) %></td>
+        </tr>
       <% end %>
       <tr class="heading_no_align">
         <td colspan=3>

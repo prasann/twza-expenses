@@ -14,4 +14,7 @@ class CashHandover
   # TODO: validates_inclusion of payment_mode in CASH, CREDIT_CARD
   belongs_to :expense_settlement
 
+  def total_converted_amount
+    self.amount * self.conversion_rate
+  end
 end

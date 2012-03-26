@@ -165,10 +165,7 @@ class ExpenseSettlement
     expense_inr_amount = 0
     @consolidated_expenses.each { |expense| expense_inr_amount += expense["local_currency_amount"] }
     forex_inr_amount = get_forex_payments.sum(&:inr)
-    @cash_handover_total = 0
-    self.cash_handovers.each do |cash_handover|
-        @cash_handover_total += cash_handover.amount * cash_handover.conversion_rate
-    end
+    @cash_handover_total = self.cash_handovers.collect(&:total_converted_amount).sum
     value = forex_inr_amount - (expense_inr_amount + @cash_handover_total)
     # TODO: Should not need to round off to 2 decimal places here - only in views
     format_two_decimal_places(value)

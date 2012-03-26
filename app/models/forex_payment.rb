@@ -35,6 +35,10 @@ class ForexPayment
     ((amount.to_f * conversion_factor) * 100).round.to_f/100
   end
 
+  def conversion_rate
+    self.inr/self.amount
+  end
+
   def expiry_date=(value)
     begin
       self[:expiry_date] = Time.strptime(value, '%m/%y')
