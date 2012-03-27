@@ -58,5 +58,9 @@ module Mankatha
     config.email_sender   = 'twindfinance@thoughtworks.com'
 
     config.email_domain   = '@thoughtworks.com'
+
+    config.after_initialize do
+      ActionMailer::Base.smtp_settings = AppConstants.SMTP_SETTINGS.constants_hash
+    end
   end
 end

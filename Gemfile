@@ -11,6 +11,7 @@ gem 'to_xls'
 gem 'bcrypt-ruby'
 gem 'cancan'
 gem 'jquery-rails'
+gem 'app_constants'
 
 # TODO: Uncomment after putting the required line(s) into the Capfile
 #group :assets do
@@ -28,7 +29,7 @@ end
 
 group :development do
   gem 'mailcatcher'
-  gem 'bullet'#, '~>2.1.0'
+  gem 'bullet'
 end
 
 group :test do
