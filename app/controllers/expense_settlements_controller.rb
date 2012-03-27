@@ -45,6 +45,7 @@ class ExpenseSettlementsController < ApplicationController
     @expense_report.cash_handovers.map(&:save!)
     @total_cash_handovers = @expense_report.cash_handovers.collect(&:total_converted_amount).sum
     @expense_report.populate_instance_data
+    redirect_to expense_settlement_path(:id => @expense_report.id)
   end
 
   def set_processed
