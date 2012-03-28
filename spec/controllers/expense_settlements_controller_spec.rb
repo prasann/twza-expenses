@@ -115,17 +115,14 @@ describe ExpenseSettlementsController do
 
   describe "edit expense settlement" do
     it "should allow to edit an already created expense settlement" do
-      currency = 'EUR'
       empl_id = 1
       expense_from = Date.today - 5.days
       expense_to = Date.today - 3.days
       forex_from = Date.today - 6.days
       forex_to = Date.today - 4.days
-      outbound_travel = Factory(:outbound_travel, :emp_id => empl_id, :emp_name => 'John', :departure_date => Date.today,
-                                          :place => 'UK')
-      forex_payment = Factory(:forex_payment, :currency => currency)
-      expense = Factory(:expense, :empl_id => empl_id,  :original_currency => currency,
-                                          :original_cost => 50, :cost_in_home_currency => 7200)
+      outbound_travel = Factory(:outbound_travel, :emp_id => empl_id)
+      forex_payment = Factory(:forex_payment)
+      expense = Factory(:expense)
       expense_settlement = ExpenseSettlement.new(:empl_id => empl_id, :expenses => [expense.id], :forex_payments => [forex_payment.id],
                                                  :status => ExpenseSettlement::GENERATED_DRAFT,
                                                  :outbound_travel_id => outbound_travel.id,
@@ -134,7 +131,7 @@ describe ExpenseSettlementsController do
                                                  :forex_from => DateHelper::date_fmt(forex_from),
                                                  :forex_to => DateHelper::date_fmt(forex_to),
                                                  :cash_handovers =>
-                                                    [CashHandover.new(:amount => 100, :currency => currency,
+                                                    [CashHandover.new(:amount => 100, :currency => forex_payment.currency,
                                                                       :conversion_rate => 72.50)])
       expense_settlement.cash_handovers.map(&:save!)
       expense_settlement.save!
@@ -154,7 +151,7 @@ describe ExpenseSettlementsController do
 
       assigns(:expense_report).should have_same_attributes_as(expense_settlement)
       assigns(:has_cash_handovers).should be true
-      assigns(:applicable_currencies).should == [currency]
+      assigns(:applicable_currencies).should == [forex_payment.currency]
       assigns(:expenses).should == [expense]
       assigns(:forex_payments).should == [forex_payment]
       assigns(:expenses_from_date).should == expense_from
@@ -197,11 +194,10 @@ describe ExpenseSettlementsController do
   end
 
   it "should create all applicable currencies for cash handover properly when forex of multiple currencies are involved" do
-    outbound_travel = Factory(:outbound_travel, :place => 'UK',
-                              :departure_date => Date.today - 10.days, :return_date => Date.today + 5.days)
+    outbound_travel = Factory(:outbound_travel, :departure_date => Date.today - 10.days, :return_date => Date.today + 5.days)
     travel_id = outbound_travel.id
     test_forex_currencies = ['EUR', 'GBP']
-    expenses = [Factory(:expense, :original_currency => 'EUR', :original_cost => 100, :cost_in_home_currency => 7200)]
+    expenses = [Factory(:expense)]
     forex_payments = []
     forex_ids = []
     test_forex_currencies.each_with_index do |forex_currency, index|
@@ -235,8 +231,7 @@ describe ExpenseSettlementsController do
 
   it "should set required model objects properly for view when forex of multiple currencies are involved" do
     currency = 'EUR'
-    outbound_travel = Factory(:outbound_travel, :place => 'UK',
-                           :departure_date => Date.today - 10.days, :return_date => Date.today + 5.days)
+    outbound_travel = Factory(:outbound_travel)
     test_forex_currencies = [currency, 'GBP']
 
     cash_handovers = [CashHandover.new(:amount => 100, :currency => currency, :conversion_rate => 72.30),
@@ -246,9 +241,9 @@ describe ExpenseSettlementsController do
 
     cash_handovers.each_with_index { |item, index| handovers[index.to_s] = item.declared_attributes}
 
-    forex_payments = [Factory(:forex_payment, :currency => currency, :inr => 7200, :amount => 200)]
+    forex_payments = [Factory(:forex_payment, :currency => currency)]
 
-    expenses = [Factory(:expense, :expense_rpt_id => 1, :original_currency => currency, :original_cost => 100)]
+    expenses = [Factory(:expense)]
 
     expense_settlement = Factory(:expense_settlement, :forex_payments => forex_payments.collect(&:id),
                               :expenses => expenses.collect(&:id), :empl_id => outbound_travel.emp_id, :outbound_travel_id => outbound_travel.id.to_s,

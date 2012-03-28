@@ -3,8 +3,8 @@ require 'spec_helper'
 describe OutboundTravelsController do
   describe "GET index" do
     it "assigns all outbound_travels as @outbound_travels" do
-      outbound_travel_1 = Factory(:outbound_travel, :departure_date => Time.now + 3)
-      outbound_travel_2 = Factory(:outbound_travel, :departure_date => Time.now - 3)
+      outbound_travel_1 = Factory(:outbound_travel)
+      outbound_travel_2 = Factory(:outbound_travel)
 
       get :index, :page => 1, :per_page => 1
       assigns(:outbound_travels).should eq([outbound_travel_1])
@@ -25,8 +25,8 @@ describe OutboundTravelsController do
     it "searches all outbound travels greater than departure date" do
       now = Time.now
       tomorrow = Time.now + 1.day
-      outbound_travel_1 = Factory(:outbound_travel, :emp_id => 1001, :departure_date => now)
-      outbound_travel_2 = Factory(:outbound_travel, :emp_id => 1001, :departure_date => tomorrow)
+      outbound_travel_1 = Factory(:outbound_travel, :departure_date => now)
+      outbound_travel_2 = Factory(:outbound_travel, :departure_date => tomorrow)
 
       get :index, :departure_date => Date.today + 1
 
