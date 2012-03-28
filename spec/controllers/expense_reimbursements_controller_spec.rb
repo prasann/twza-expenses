@@ -25,7 +25,7 @@ describe ExpenseReimbursementsController do
   describe "Get edit " do
     it "should load only expenses which are not processed as part of another expense reimbursement" do
       expense_1 = Factory(:expense, :project => 'project', :subproject => 'subproject',
-                       :cost_in_home_currency => 1000, :empl_id => 1234)
+                       :cost_in_home_currency => 1000)
       expense_2 = Factory(:expense)
 
       existing_expense_reimbursement = Factory(:expense_reimbursement, :expenses => [{'expense_id' => expense_2.id}])
@@ -53,7 +53,7 @@ describe ExpenseReimbursementsController do
 
     it "should load all expenses for new expense reimbursement" do
       expense_1 = Factory(:expense, :project => 'project', :subproject => 'subproject',
-                       :cost_in_home_currency => 1000, :empl_id => 1234)
+                       :cost_in_home_currency => 1000)
       expense_2 = Factory(:expense, :project => 'project', :subproject => 'subproject',
                        :cost_in_home_currency => 200)
 

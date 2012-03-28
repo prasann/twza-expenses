@@ -3,8 +3,8 @@ require 'spec_helper'
 describe ForexPaymentsController do
   describe "GET index" do
     before(:each) do
-      @forex_payments_1 = Factory(:forex_payment, :emp_id => 10001, :travel_date => Time.now + 3)
-      @forex_payments_2 = Factory(:forex_payment, :emp_id => 10001, :travel_date => Time.now - 3)
+      @forex_payments_1 = Factory(:forex_payment, :emp_id => 10001)
+      @forex_payments_2 = Factory(:forex_payment, :emp_id => 10001)
     end
 
     it "assigns all forex_payments as @forex_payments" do
