@@ -34,8 +34,8 @@ describe OutboundTravel do
 
   describe "Populate autosuggest data" do
     it "should populate unique and non nullable data for auto suggestion" do
-      outbound_travel_1 = Factory(:outbound_travel, :place => 'US', :project => 'TWORKS')
-      outbound_travel_2 = Factory(:outbound_travel, :place => 'US', :payroll_effect => '100%', :project => 'TWORKS')
+      outbound_travel_1 = Factory(:outbound_travel, :place => 'US')
+      outbound_travel_2 = Factory(:outbound_travel, :place => 'US', :payroll_effect => '100%')
       fields = OutboundTravel.get_json_to_populate('place','payroll_effect')
       fields.should be_eql ({'place' => ["US"], 'payroll_effect' => ["100%"]})
     end
