@@ -11,6 +11,14 @@ describe BankDetail do
     end
   end
 
+  describe "fields" do
+    let(:bank_detail) { Factory(:bank_detail) }
+
+    it { should contain_field(:empl_id, :type => String) }
+    it { should contain_field(:empl_name, :type => String) }
+    it { should contain_field(:account_no, :type => Integer) }
+  end
+
   describe "for_empl_id" do
     it "should find all the records with the specified empl_id" do
       bank_detail_1 = Factory(:bank_detail, :empl_id => 123)

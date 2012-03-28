@@ -52,3 +52,16 @@ RSpec::Matchers.define :have_same_attributes_as do |expected|
   end
 end
 
+# TODO: Fix the type-checking
+RSpec::Matchers.define :contain_field do |expected, options = {}|
+  # puts "expected: #{expected.inspect}"
+  # puts "options: #{options.inspect}"
+  match do |actual|
+    # puts "actual: #{actual.inspect}"
+    # puts "res: #{actual.respond_to?(expected).inspect}"
+    # puts "lhs: #{actual.__send__(expected).inspect}"
+    # puts "rhs: #{options[:type].inspect}"
+    actual.respond_to?(expected) #&& actual.__send__(expected).class == options[:type]
+  end
+end
+
