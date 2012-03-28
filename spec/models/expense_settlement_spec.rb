@@ -2,17 +2,15 @@ require 'spec_helper'
 
 describe 'expense_report' do
   it "should consolidate expenses by rpt and currency considering conversion rate" do
-    persisted_expenses  = [
-                Expense.new(:expense_rpt_id => 123, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200')),
-                Expense.new(:expense_rpt_id => 122, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
-                Expense.new(:expense_rpt_id => 121, :original_currency => 'INR', :original_cost => BigDecimal.new('1000'),:cost_in_home_currency => BigDecimal.new('4000')),
-                Expense.new(:expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
-                Expense.new(:expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200'))
-               ]
-    forex_payments = [ForexPayment.new(:currency => 'EUR', :inr => 100, :amount => 100)]
-    Expense.stub(:find).and_return(persisted_expenses)
-    ForexPayment.stub(:find).and_return(forex_payments)
-    exp_rpt = ExpenseSettlement.new(:expenses => ['somehashes'], :cash_handover => 0)
+    persisted_expenses = [
+                Factory(:expense, :expense_rpt_id => 123, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200')),
+                Factory(:expense, :expense_rpt_id => 122, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
+                Factory(:expense, :expense_rpt_id => 121, :original_currency => 'INR', :original_cost => BigDecimal.new('1000'),:cost_in_home_currency => BigDecimal.new('4000')),
+                Factory(:expense, :expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
+                Factory(:expense, :expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200'))
+              ]
+    forex_payments = [Factory(:forex_payment, :currency => 'EUR', :inr => 100, :amount => 100)]
+    exp_rpt = Factory(:expense_settlement, :expenses => persisted_expenses.collect(&:id))
     expected_hash_1 = {'report_id' => 123, 'currency' => 'EUR', 'amount' => 200, 'conversion_rate' => 1, 'local_currency_amount' => 200}
     expected_hash_2 = {'report_id' => 122, 'currency' => 'EUR', 'amount' => 100, 'conversion_rate' => 1, 'local_currency_amount' => 100}
     expected_hash_3 = {'report_id' => 121, 'currency' => 'EUR', 'amount' => 300, 'conversion_rate' => 1, 'local_currency_amount' => 300}
@@ -21,7 +19,7 @@ describe 'expense_report' do
     exp_rpt.populate_instance_data
 
     actual_consolidated = exp_rpt.get_consolidated_expenses
-    actual_consolidated.count.should ==4
+    actual_consolidated.count.should == 4
     actual_consolidated.should include(expected_hash_1)
     actual_consolidated.should include(expected_hash_2)
     actual_consolidated.should include(expected_hash_3)
@@ -29,16 +27,15 @@ describe 'expense_report' do
   end
 
   it "should consolidate expenses by rpt and currency considering conversion rate from sharon sheet if no forex is available" do
-    persisted_expenses  = [
-                Expense.new(:expense_rpt_id => 123, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200'), :currency_conversion_rate => '1'),
-                Expense.new(:expense_rpt_id => 122, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100'),  :currency_conversion_rate => '1'),
-                Expense.new(:expense_rpt_id => 121, :original_currency => 'INR', :original_cost => BigDecimal.new('1000'),:cost_in_home_currency => BigDecimal.new('4000'),:currency_conversion_rate => '4'),
-                Expense.new(:expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100'), :currency_conversion_rate => '1'),
-                Expense.new(:expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200'), :currency_conversion_rate => '1')
-               ]
+    persisted_expenses = [
+                Factory(:expense, :expense_rpt_id => 123, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200')),
+                Factory(:expense, :expense_rpt_id => 122, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
+                Factory(:expense, :expense_rpt_id => 121, :original_currency => 'INR', :original_cost => BigDecimal.new('1000'),:cost_in_home_currency => BigDecimal.new('4000')),
+                Factory(:expense, :expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
+                Factory(:expense, :expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200'))
+              ]
 
-    Expense.stub(:find).and_return(persisted_expenses)
-    exp_rpt = ExpenseSettlement.new(:expenses => ['somehashes'], :cash_handover => 0)
+    exp_rpt = Factory(:expense_settlement, :expenses => persisted_expenses.collect(&:id))
     expected_hash_1 = {'report_id' => 123, 'currency' => 'EUR', 'amount' => 200, 'conversion_rate' => 1, 'local_currency_amount' => 200}
     expected_hash_2 = {'report_id' => 122, 'currency' => 'EUR', 'amount' => 100, 'conversion_rate' => 1, 'local_currency_amount' => 100}
     expected_hash_3 = {'report_id' => 121, 'currency' => 'EUR', 'amount' => 300, 'conversion_rate' => 1, 'local_currency_amount' => 300}
@@ -48,7 +45,7 @@ describe 'expense_report' do
 
     actual_consolidated = exp_rpt.get_consolidated_expenses
 
-    actual_consolidated.count.should ==4
+    actual_consolidated.count.should == 4
     actual_consolidated.should include(expected_hash_1)
     actual_consolidated.should include(expected_hash_2)
     actual_consolidated.should include(expected_hash_3)
@@ -56,14 +53,14 @@ describe 'expense_report' do
   end
 
   it "should provide average forex rate for each currency" do
-    forex_payments = [ForexPayment.new(:currency => 'EUR', :inr => 2000, :amount => 100),
-            ForexPayment.new(:currency => 'EUR', :inr => 1800, :amount => 100),
-            ForexPayment.new(:currency => 'EUR', :inr => 950, :amount => 50),
-            ForexPayment.new(:currency => 'USD', :inr => 1000, :amount => 100),
-            ForexPayment.new(:currency => 'USD', :inr => 810, :amount => 90)]
+    forex_payments = [Factory(:forex_payment, :currency => 'EUR', :inr => 2000, :amount => 100),
+            Factory(:forex_payment, :currency => 'EUR', :inr => 1800, :amount => 100),
+            Factory(:forex_payment, :currency => 'EUR', :inr => 950, :amount => 50),
+            Factory(:forex_payment, :currency => 'USD', :inr => 1000, :amount => 100),
+            Factory(:forex_payment, :currency => 'USD', :inr => 810, :amount => 90)]
 
-    ForexPayment.stub!(:find).and_return(forex_payments)
-    exp_rpt = ExpenseSettlement.new(:forex_payments => ['id1', 'id2'])
+    # ForexPayment.stub!(:find).and_return(forex_payments)
+    exp_rpt = Factory(:expense_settlement, :forex_payments => forex_payments.collect(&:id))
     exp_rpt.populate_forex_payments
     actual_conv_rates = exp_rpt.get_conversion_rates_for_currency
     actual_conv_rates.values.count == 2
@@ -100,13 +97,23 @@ describe 'expense_report' do
     travel_id = outbound_travel.id
     expenses = []
     forex_payments = []
-    cash_handovers = [CashHandover.new(:amount => 100, :currency=>'EUR',
-                      :conversion_rate => 74.62), CashHandover.new(:amount => 150, :currency=>'GBP',
+    cash_handovers = [CashHandover.new(:amount => 100, :currency => 'EUR',
+                      :conversion_rate => 74.62), CashHandover.new(:amount => 150, :currency => 'GBP',
                                                               :conversion_rate => 62.73)]
-    expense_settlement = setup_test_data(expenses, forex_payments, employee_id, travel_id, 'UK',
-                                         outbound_travel, test_forex_currencies,
-                                         expense_amounts, expense_amounts_inr, forex_amounts, forex_amounts_inr,
-                                         cash_handovers)
+
+    test_forex_currencies.each_with_index do |currency, index|
+      expenses << Factory(:expense, :empl_id => employee_id, :original_currency => currency,
+                          :cost_in_home_currency => expense_amounts_inr[index], :expense_rpt_id => index,
+                          :original_cost => expense_amounts[index])
+
+      forex_payments << Factory(:forex_payment, :emp_id => employee_id, :currency => currency,
+                                :place => 'UK', :amount => forex_amounts[index], :inr => forex_amounts_inr[index])
+    end
+
+    expense_settlement = Factory(:expense_settlement, :empl_id => employee_id,
+                                 :expenses => expenses.collect(&:id),
+                                 :forex_payments => forex_payments.collect(&:id),
+                                 :cash_handovers => cash_handovers)
 
     expense_settlement.populate_instance_data
     expense_settlement.instance_variable_get('@net_payable').should eq 13732.5
@@ -121,28 +128,5 @@ describe 'expense_report' do
     settlement.should_receive(:populate_instance_data)
 
     ExpenseSettlement.load_with_deps(settlement.id)
-  end
-
-  private
-  def setup_test_data(expenses, forex_payments,employee_id, travel_id, place_of_visit, outbound_travel, currencies,
-      expense_amounts, expense_amounts_inr, forex_amounts, forex_amounts_inr, cash_handovers)
-    currencies.each_with_index do |currency, index|
-      expenses << Factory(:expense, :empl_id => employee_id, :original_currency => currency,
-                       :cost_in_home_currency => expense_amounts_inr[index], :expense_rpt_id => index,
-                       :original_cost => expense_amounts[index])
-
-      forex_payments << Factory(:forex_payment,:emp_id => employee_id, :currency => currency,
-                             :place => place_of_visit, :amount => forex_amounts[index], :inr => forex_amounts_inr[index])
-    end
-
-    forex_ids = forex_payments.collect(&:id)
-    ForexPayment.stub!(:find).with(forex_ids).and_return(forex_payments)
-
-    expense_ids = expenses.collect(&:id)
-    Expense.stub!(:find).with(expense_ids).and_return(expenses)
-
-    ExpenseSettlement.new(:empl_id => employee_id, :travel_id => travel_id, :expenses => expense_ids,
-                                                          :forex_payments => forex_ids,
-                                                          :cash_handovers => cash_handovers)
   end
 end
