@@ -50,4 +50,9 @@ FactoryGirl.define do
     association :outbound_travel
     status { ExpenseSettlement::GENERATED_DRAFT }
   end
+
+  factory :bank_detail do
+    sequence(:empl_id) { |n| "#{n}" }
+    sequence(:account_no) { |n| "#{n}" }
+  end
 end
