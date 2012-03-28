@@ -121,25 +121,23 @@ describe ExpenseSettlementsController do
       expense_to = Date.today - 3.days
       forex_from = Date.today - 6.days
       forex_to = Date.today - 4.days
-      outbound_travel = OutboundTravel.new(:emp_id => empl_id, :emp_name => 'John', :departure_date => Date.today,
+      outbound_travel = Factory(:outbound_travel, :emp_id => empl_id, :emp_name => 'John', :departure_date => Date.today,
                                           :place => 'UK')
       forex_payment = Factory(:forex_payment, :currency => currency)
       expense = Factory(:expense, :empl_id => empl_id,  :original_currency => currency,
                                           :original_cost => 50, :cost_in_home_currency => 7200)
       expense_settlement = ExpenseSettlement.new(:empl_id => empl_id, :expenses => [expense.id], :forex_payments => [forex_payment.id],
                                                  :status => ExpenseSettlement::GENERATED_DRAFT,
-                                                  :expense_from => DateHelper::date_fmt(expense_from),
-                                                  :expense_to => DateHelper::date_fmt(expense_to),
-                                                  :forex_from => DateHelper::date_fmt(forex_from),
-                                                  :forex_to => DateHelper::date_fmt(forex_to),
-                                                  :cash_handovers =>
+                                                 :outbound_travel_id => outbound_travel.id,
+                                                 :expense_from => DateHelper::date_fmt(expense_from),
+                                                 :expense_to => DateHelper::date_fmt(expense_to),
+                                                 :forex_from => DateHelper::date_fmt(forex_from),
+                                                 :forex_to => DateHelper::date_fmt(forex_to),
+                                                 :cash_handovers =>
                                                     [CashHandover.new(:amount => 100, :currency => currency,
                                                                       :conversion_rate => 72.50)])
-      outbound_travel.save!
       expense_settlement.cash_handovers.map(&:save!)
-      expense_settlement.outbound_travel_id = outbound_travel.id
       expense_settlement.save!
-      OutboundTravel.should_receive(:find).with(outbound_travel.id).and_return(outbound_travel)
       ForexPayment.should_receive(:fetch_for).with(outbound_travel.emp_id, forex_from, forex_to, anything)
                       .and_return([forex_payment])
       ForexPayment.should_receive(:find).with([forex_payment.id]).and_return([forex_payment])
@@ -169,30 +167,30 @@ describe ExpenseSettlementsController do
   describe "generate report" do
     it "should create expense report for chosen expenses, forex and travel" do
       pending("find how to fix this as '_routes' => nil is added to the hash")
-      expense_settlement = ExpenseSettlement.new
-      outbound_travel = OutboundTravel.new
+      expense_settlement = Factory(:expense_settlement)
+      outbound_travel = Factory(:outbound_travel)
       outbound_travel.should_receive(:find_or_initialize_expense_settlement).and_return(expense_settlement)
-      OutboundTravel.stub!(:find).with("1").and_return(outbound_travel)
+      OutboundTravel.stub!(:find).with(outbound_travel.id).and_return(outbound_travel)
       outbound_travel.should_receive(:create_expense_settlement)
       expense_settlement.should_receive(:update_attributes)
       expense_settlement.should_receive(:populate_instance_data)
 
-      post :generate_report, :travel_id => 1
+      post :generate_report, :travel_id => outbound_travel.id
 
       assigns(@expense_report).should == expense_settlement
     end
 
     it "should update expense report if it already exists in the travel" do
       pending("find how to fix this as '_routes' => nil is added to the hash")
-      expense_settlement = ExpenseSettlement.new
-      outbound_travel = OutboundTravel.new(:expense_settlement => expense_settlement)
+      expense_settlement = Factory(:expense_settlement)
+      outbound_travel = Factory(:outbound_travel, :expense_settlement => expense_settlement)
 
-      OutboundTravel.stub!(:find).with("1").and_return(outbound_travel)
+      OutboundTravel.stub!(:find).with(outbound_travel.id).and_return(outbound_travel)
       outbound_travel.should_receive(:create_expense_settlement).never
       expense_settlement.should_receive(:update_attributes)
       expense_settlement.should_receive(:populate_instance_data)
 
-      post :generate_report, :travel_id => 1
+      post :generate_report, :travel_id => outbound_travel.id
 
       assigns(@expense_report).should == expense_settlement
     end
@@ -219,7 +217,7 @@ describe ExpenseSettlementsController do
                                                  outbound_travel.return_date, []).and_return(forex_payments)
 
     expected_expense_settlement = ExpenseSettlement.new(:outbound_travel_id => outbound_travel.id, :empl_id => outbound_travel.emp_id,
-                                                        :expenses => [expenses[0].id],
+                                                        :expenses => expenses.collect(&:id),
                                                         :forex_payments => forex_ids,
                                                         :cash_handovers => [CashHandover.new])
 
@@ -231,7 +229,7 @@ describe ExpenseSettlementsController do
     assigns(:applicable_currencies).should == test_forex_currencies
     assigns(:expenses).should == expenses
     assigns(:payment_modes).should == [CashHandover::CASH, CashHandover::CREDIT_CARD]
-    assigns(:has_cash_handovers).should be false
+    assigns(:has_cash_handovers).should be_false
     assigns(:forex_payments).should == forex_payments
   end
 
@@ -252,7 +250,7 @@ describe ExpenseSettlementsController do
 
     expenses = [Factory(:expense, :expense_rpt_id => 1, :original_currency => currency, :original_cost => 100)]
 
-    expense_settlement = ExpenseSettlement.new(:id => 1, :forex_payments => forex_payments.collect(&:id),
+    expense_settlement = Factory(:expense_settlement, :forex_payments => forex_payments.collect(&:id),
                               :expenses => expenses.collect(&:id), :empl_id => outbound_travel.emp_id, :outbound_travel_id => outbound_travel.id.to_s,
                               :cash_handovers => cash_handovers)
     expense_settlement.stub!(:get_receivable_amount).and_return(13732.5)
@@ -268,28 +266,5 @@ describe ExpenseSettlementsController do
 
     assigns(:expense_report).should have_same_attributes_as(expense_settlement)
     assigns(:expense_report).instance_variable_get('@net_payable').should == 13732.5
-  end
-
-  private
-  def setup_test_data(expenses, forex_payments, employee_id, travel_id, place_of_visit, outbound_travel, currencies,
-      expense_amounts, expense_amounts_inr, forex_amounts, forex_amounts_inr, cash_handovers)
-    currencies.each_with_index do |currency, index|
-      expenses << Factory(:expense, :empl_id => employee_id, :original_currency => currency, :place => place_of_visit,
-                       :cost_in_home_currency => expense_amounts_inr[index], :expense_rpt_id => index,
-                       :original_cost => expense_amounts[index])
-
-      forex_payments << Factory(:forex_payment, :emp_id => employee_id, :currency => currency,
-                             :place => place_of_visit, :amount => forex_amounts[index], :inr => forex_amounts_inr[index])
-    end
-
-    forex_ids = forex_payments.collect(&:id)
-    ForexPayment.stub!(:find).with(forex_ids).and_return(forex_payments)
-
-    expense_ids = expenses.collect(&:id)
-    Expense.stub!(:find).with(expense_ids).and_return(expenses)
-
-    ExpenseSettlement.new(:empl_id => employee_id, :outbound_travel_id => travel_id, :expenses => expense_ids,
-                                                          :forex_payments => forex_ids,
-                                                          :cash_handovers => cash_handovers)
   end
 end
