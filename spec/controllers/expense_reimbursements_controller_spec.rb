@@ -94,11 +94,6 @@ describe ExpenseReimbursementsController do
 
       ExpenseSettlement.stub_chain(:find_expense_ids_for_empl_id).and_return([expense_3.id.to_s])
 
-      expected_reimbursement = ExpenseReimbursement.new(:expense_report_id => 123,
-                                                       :empl_id => 1234,
-                                                       :submitted_on => expense_1.report_submitted_at,
-                                                       :total_amount => 1200)
-
       get :index, :expense_rpt_id => 123
 
       assigns(:expense_reimbursements).should have(1).items
