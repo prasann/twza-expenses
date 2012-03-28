@@ -70,8 +70,7 @@ describe 'expense_report' do
 
   it "should return employee id appended with e-mail domain as employee e-mail ID if email_id is not available" do
     profile = mock('Profile', :email_id => '')
-    expense_report = ExpenseSettlement.new
-    expense_report.empl_id = 13552
+    expense_report = Factory.build(:expense_settlement, :empl_id => 13552)
     expense_report.stub!(:profile).and_return(profile)
     email = expense_report.employee_email
     email.should == '13552' + ::Rails.application.config.email_domain
@@ -79,7 +78,7 @@ describe 'expense_report' do
 
   it "should return e-mail ID as employee email if it is available" do
     profile = mock('Profile', :email_id => 'johns')
-    expense_report = ExpenseSettlement.new
+    expense_report = Factory.build(:expense_settlement)
     expense_report.stub!(:profile).and_return(profile)
     email = expense_report.employee_email
     email.should == 'johns' + ::Rails.application.config.email_domain
@@ -97,9 +96,8 @@ describe 'expense_report' do
     travel_id = outbound_travel.id
     expenses = []
     forex_payments = []
-    cash_handovers = [CashHandover.new(:amount => 100, :currency => 'EUR',
-                      :conversion_rate => 74.62), CashHandover.new(:amount => 150, :currency => 'GBP',
-                                                              :conversion_rate => 62.73)]
+    cash_handovers = [Factory(:cash_handover, :amount => 100, :currency => 'EUR', :conversion_rate => 74.62),
+                      Factory(:cash_handover, :amount => 150, :currency => 'GBP', :conversion_rate => 62.73)]
 
     test_forex_currencies.each_with_index do |currency, index|
       expenses << Factory(:expense, :empl_id => employee_id, :original_currency => currency,

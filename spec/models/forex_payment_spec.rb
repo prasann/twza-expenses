@@ -19,15 +19,6 @@ describe 'forex_payment' do
     valid_forex_payments.should include(forex_3)
   end
 
-  it "should not save without the presence of mandatory attributes" do
-    forex_payment = ForexPayment.new
-    forex_payment.valid?.should be_false
-    error_msgs = forex_payment.errors.messages
-     error_msgs.each do |k, v|
-      error_msgs[k].should == ["can't be blank"]
-    end
-  end
-
   describe "Populate Autosuggest data" do
     it "should populate unique and non nullable data for auto suggestion" do
       outbound_travel_1 = Factory(:forex_payment, :place => 'US', :currency => 'GBP')
