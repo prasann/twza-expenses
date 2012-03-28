@@ -39,10 +39,10 @@ FactoryGirl.define do
   end
 
   factory :cash_handover do
-    amount {100}
-    currency {'EUR'}
-    conversion_rate {72.00}
-    payment_mode {'CASH'}
+    amount { 100.0 }
+    currency { 'EUR' }
+    conversion_rate { 72.00 }
+    payment_mode { CashHandover::CASH }
   end
 
   factory :expense_settlement do
