@@ -2,13 +2,13 @@ require 'spec_helper'
 
 describe ExpenseReimbursement do
   it "should get expenses by project code" do
-    expense_1 = Factory(:expense, empl_id: 123, project: 'Project', subproject: 'Sub Project 1')
-    expense_2 = Factory(:expense, empl_id: 123, project: 'Project', subproject: 'Sub Project 1')
-    expense_3 = Factory(:expense, empl_id: 123, project: 'Project', subproject: 'Sub Project 2')
+    expense_1 = Factory(:expense, project: 'Project', subproject: 'Sub Project 1')
+    expense_2 = Factory(:expense, project: 'Project', subproject: 'Sub Project 1')
+    expense_3 = Factory(:expense, project: 'Project', subproject: 'Sub Project 2')
     expenses = [
-      {'expense_id' => expense_1.id, 'modified_amount' => 1234},
-      {'expense_id' => expense_2.id, 'modified_amount' => 2345},
-      {'expense_id' => expense_3.id, 'modified_amount' => 3456}
+      {'expense_id' => expense_1.id},
+      {'expense_id' => expense_2.id},
+      {'expense_id' => expense_3.id}
     ]
     expense_reimbursement = Factory(:expense_reimbursement, :expenses => expenses)
 
@@ -23,13 +23,13 @@ describe ExpenseReimbursement do
   end
 
   it "should get expenses" do
-    expense_1 = Factory(:expense, empl_id: 123)
-    expense_2 = Factory(:expense, empl_id: 123)
-    expense_3 = Factory(:expense, empl_id: 123)
+    expense_1 = Factory(:expense)
+    expense_2 = Factory(:expense)
+    expense_3 = Factory(:expense)
     expenses = [
-      {'expense_id' => expense_1.id, 'modified_amount' => 1234},
-      {'expense_id' => expense_2.id, 'modified_amount' => 2345},
-      {'expense_id' => expense_3.id, 'modified_amount' => 3456}
+      {'expense_id' => expense_1.id},
+      {'expense_id' => expense_2.id},
+      {'expense_id' => expense_3.id}
     ]
     expense_reimbursement = Factory(:expense_reimbursement, :expenses => expenses)
 

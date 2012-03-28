@@ -30,8 +30,8 @@ describe 'forex_payment' do
 
   describe "Populate Autosuggest data" do
     it "should populate unique and non nullable data for auto suggestion" do
-      outbound_travel_1 = Factory(:forex_payment, :place => 'US', :currency => 'GBP', :office => 'Pune')
-      outbound_travel_2 = Factory(:forex_payment, :place => 'US', :vendor_name => 'VFC', :currency => 'USD', :office => 'Chennai')
+      outbound_travel_1 = Factory(:forex_payment, :place => 'US', :currency => 'GBP')
+      outbound_travel_2 = Factory(:forex_payment, :place => 'US', :vendor_name => 'VFC', :currency => 'USD')
 
       fields = ForexPayment.get_json_to_populate('place','vendor_name','currency')
 
