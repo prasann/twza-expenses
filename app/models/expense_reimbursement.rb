@@ -35,7 +35,7 @@ class ExpenseReimbursement
   end
 
   def get_expenses_grouped_by_project_code
-    get_expenses.group_by { |expense| expense.project + expense.subproject }
+    get_expenses.group_by { |expense| expense.project_subproject }
   end
 
   def get_expenses

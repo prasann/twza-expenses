@@ -5,11 +5,10 @@ describe ExpenseReimbursementsController do
     it "should show expense reimbursement details" do
       dummy_expense_reimbursement = Factory(:expense_reimbursement)
       expected_expense_reimbursement = Factory(:expense_reimbursement)
-      profile = mock('profile')
+      profile = mock('Profile')
       expected_expense_reimbursement.should_receive(:profile).and_return(profile)
       profile.should_receive(:get_full_name).and_return('John Smith')
-      expected_expenses = mock('expense')
-      #expense_reimbursement_2 = mock("expense_reimbursement", :id => 231, :empl_id => 231)
+      expected_expenses = Factory(:expense)
 
       ExpenseReimbursement.should_receive(:find).with(expected_expense_reimbursement.id.to_s).and_return(expected_expense_reimbursement)
 
@@ -25,19 +24,17 @@ describe ExpenseReimbursementsController do
 
   describe "Get edit " do
     it "should load only expenses which are not processed as part of another expense reimbursement" do
-      expense_1 = mock('expense_1', :project => 'project', :subproject => 'subproject', :project_subproject => 'projectsubproject',
-                       :cost_in_home_currency => 1000, :get_employee_id => 1234, :report_submitted_at => 'date')
-      expense_2 = mock('expense_2', :project => 'project', :subproject => 'subproject', :project_subproject => 'projectsubproject',
-                       :cost_in_home_currency => 200, :get_employee_id => 1234, :report_submitted_at => 'date')
+      expense_1 = Factory(:expense, :project => 'project', :subproject => 'subproject',
+                       :cost_in_home_currency => 1000, :empl_id => 1234)
+      expense_2 = Factory(:expense)
 
-      existing_expense_reimbursement = mock("expense_reimbursement", :id => 123,
-                                            :empl_id => 1234, :expense_report_id => 12345, :get_expenses => [expense_2])
-      profile = mock('profile')
+      existing_expense_reimbursement = Factory(:expense_reimbursement, :expenses => [{'expense_id' => expense_2.id}])
+      profile = mock('Profile')
       expected_expenses = {"projectsubproject" => [expense_1]}
 
       expected_expense_reimbursement = {'expense_report_id' => '123',
-                                        'empl_id' => 1234,
-                                        'submitted_on' => 'date',
+                                        'empl_id' => expense_1.empl_id,
+                                        'submitted_on' => expense_1.report_submitted_at,
                                         'total_amount' => 1000.0}
 
       ExpenseReimbursement.stub_chain(:where, :to_a).and_return([existing_expense_reimbursement])
@@ -55,17 +52,17 @@ describe ExpenseReimbursementsController do
     end
 
     it "should load all expenses for new expense reimbursement" do
-      expense_1 = mock('expense_1', :project => 'project', :subproject => 'subproject', :project_subproject => 'projectsubproject',
-                       :cost_in_home_currency => 1000, :get_employee_id => 1234, :report_submitted_at => 'date')
-      expense_2 = mock('expense_2', :project => 'project', :subproject => 'subproject', :project_subproject => 'projectsubproject',
-                       :cost_in_home_currency => 200, :get_employee_id => 1234, :report_submitted_at => 'date')
+      expense_1 = Factory(:expense, :project => 'project', :subproject => 'subproject',
+                       :cost_in_home_currency => 1000, :empl_id => 1234)
+      expense_2 = Factory(:expense, :project => 'project', :subproject => 'subproject',
+                       :cost_in_home_currency => 200)
 
-      profile = mock('profile')
+      profile = mock('Profile')
       expected_expenses = {"projectsubproject" => [expense_1, expense_2]}
 
       expected_expense_reimbursement = {'expense_report_id' => '123',
-                                        'empl_id' => 1234,
-                                        'submitted_on' => 'date',
+                                        'empl_id' => expense_1.empl_id,
+                                        'submitted_on' => expense_1.report_submitted_at,
                                         'total_amount' => 1200.0}
 
       ExpenseReimbursement.stub_chain(:where, :to_a).and_return([])
@@ -84,9 +81,8 @@ describe ExpenseReimbursementsController do
   end
 
   describe " index " do
-
     it "should load all expenses with filter for processed expenses of travel for the fetched reimbursements" do
-      #No exisitng expense reimbursements
+      #No existing expense reimbursements
       ExpenseReimbursement.stub_chain(:where, :to_a).and_return([])
 
       expense_1 = Factory(:expense, :cost_in_home_currency => 1000, :empl_id => 1234,
@@ -110,7 +106,6 @@ describe ExpenseReimbursementsController do
       assigns(:expense_reimbursements).first.empl_id.should == "1234"
       assigns(:expense_reimbursements).first.expense_report_id.should == 123
       assigns(:expense_reimbursements).first.submitted_on.should == expense_1.report_submitted_at
-
     end
   end
 end

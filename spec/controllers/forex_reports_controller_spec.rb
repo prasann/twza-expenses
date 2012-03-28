@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ForexReportsController do
-  describe 'GET  search' do
+  describe 'GET search' do
     it 'should search forex payments for given params' do
       forex_payments_1 = Factory(:forex_payment, :vendor_name => 'A', :currency => 'USD', :issue_date => Date.parse('31-12-2011'))
       forex_payments_2 = Factory(:forex_payment, :vendor_name => 'B', :currency => 'USD', :issue_date => Date.parse('31-12-2011'))

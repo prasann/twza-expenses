@@ -4,11 +4,11 @@ describe EmployeeMailer do
   describe 'travel expense settlement' do
     before(:each) do
       @employee_id = 1
-      @travel_id = 1
-      @profile = mock(Profile, :employee_id => @employee_id, :email_id => 'johns', :common_name => 'John Smith', :get_full_name => 'John_Smith')
+      @profile = mock('Profile', :employee_id => @employee_id, :email_id => 'johns', :common_name => 'John Smith', :get_full_name => 'John_Smith')
       @forex = Factory(:forex_payment)
-      travel = mock(OutboundTravel, :__id__ => @travel_id, :place => 'UK', :departure_date => Time.parse('2011-10-01'))
-      @expense_report = mock(ExpenseSettlement, :empl_id => @employee_id, :cash_handovers => [], :outbound_travel => travel)
+      travel = Factory(:outbound_travel, :place => 'UK', :departure_date => Time.parse('2011-10-01'))
+      @travel_id = travel.id
+      @expense_report = Factory(:expense_settlement, :empl_id => @employee_id, :cash_handovers => [], :outbound_travel => travel)
       @expense_report.should_receive(:populate_instance_data)
       expense = {"report_id" => 123, "currency" => 'USD', "amount" => 1000, "conversion_rate" => 52.30, "local_currency_amount" => 52300}
       @expense_report.populate_instance_data

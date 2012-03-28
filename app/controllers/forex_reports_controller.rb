@@ -16,13 +16,10 @@ class ForexReportsController < ApplicationController
 
   private
   def get_results
-    ForexPayment.where(:currency => regex_if_nil(params[:forex_payment_currency]))
-    .and(:issue_date.gte => params[:reports_from]).and(:issue_date.lte => params[:reports_till])
-    .and(vendor_name: regex_if_nil(params[:forex_payment_vendor_name]))
-    .and(office: regex_if_nil(params[:forex_payment_office]))
-  end
-
-  def regex_if_nil(val)
-    return val.blank? ? /(\S)*/ : val
+    res = ForexPayment.where(:issue_date.gte => params[:reports_from]).and(:issue_date.lte => params[:reports_till])
+    res = res.and(:currency => params[:forex_payment_currency]) unless params[:forex_payment_currency].blank?
+    res = res.and(:vendor_name => params[:forex_payment_vendor_name]) unless params[:forex_payment_vendor_name].blank?
+    res = res.and(:office => params[:forex_payment_office]) unless params[:forex_payment_office].blank?
+    res
   end
 end

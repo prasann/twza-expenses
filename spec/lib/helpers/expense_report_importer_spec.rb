@@ -9,7 +9,7 @@ describe "expense_report" do
     importer = ExpenseReportImporter.new
     Expense.delete_all
     importer.stub!(:read_from_excel).with(file_with_valid_expenses, 0).and_return do |filename, sheetno, block|
-      file = mock(Excel)
+      file = mock('Excel')
 
       def file.cell(line, column)
         return BigDecimal.new('100') if ['N', 'E'].include?(column)
@@ -28,7 +28,7 @@ describe "expense_report" do
     end
 
     importer.stub!(:read_from_excel).with(file_with_invalid_expense, 0).and_return do |filename, sheetno, block|
-      file = mock(Excel)
+      file = mock('Excel')
 
       def file.cell(line, column)
         return DateHelper::date_fmt(Date.today) if ['J', 'T'].include?(column)

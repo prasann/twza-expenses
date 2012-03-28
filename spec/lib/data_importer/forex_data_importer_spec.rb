@@ -11,7 +11,7 @@ describe ForexDataImporter do
     importer = ForexDataImporter.new
 
     importer.stub!(:read_from_excel).and_return do |filename, sheetno, block|
-      file = mock(Excel)
+      file = mock('Excel')
 
       def file.cell(line, column)
         return 1 if ['C', 'E', 'N'].include?(column)
@@ -42,7 +42,7 @@ describe ForexDataImporter do
     ForexPayment.delete_all
     importer = ForexDataImporter.new
     importer.stub!(:read_from_excel).and_return do |filename, sheetno, block|
-      file = mock(Excel)
+      file = mock('Excel')
 
       def file.cell(line, column)
         return "wrong data" if line == 2

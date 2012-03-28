@@ -6,8 +6,8 @@ describe "Excel data extractor" do
   it "should extract details from excel" do
     file_name = "file_name"
     sheet_id = 0
-    mockObject = mock(Object, :save => 'nothing', :errors => {})
-    mockObjectWithValidationErrors = mock(Object, :errors => mock(Mongoid::Errors, :full_messages => ['something is really bad']))
+    mockObject = mock('Object', :save => 'nothing', :errors => {})
+    mockObjectWithValidationErrors = mock('Object', :errors => mock('Mongoid::Errors', :full_messages => ['something is really bad']))
     callback = lambda{|extractor| extractor.call}
     file_mock = mock("excel_file", :sheets => [mock("sheet")], :last_row => 3, :default_sheet= => "nothing")
     file_mock.should_receive(:cell).with(2, anything).and_return(mockObject)

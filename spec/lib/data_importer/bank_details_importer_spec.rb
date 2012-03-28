@@ -11,7 +11,7 @@ describe BankDetailsImporter do
     importer = BankDetailsImporter.new
 
     importer.stub!(:read_from_excel).and_return do |filename, sheetno, block|
-      file = mock(Excel)
+      file = mock('Excel')
 
       def file.cell(line, column)
         return '12345' if ['B'].include?(column)
@@ -35,7 +35,7 @@ describe BankDetailsImporter do
     BankDetail.delete_all
     importer = BankDetailsImporter.new
     importer.stub!(:read_from_excel).and_return do |filename, sheetno, block|
-      file = mock(Excel)
+      file = mock('Excel')
 
       def file.cell(line, column)
         return '12345' if ['B'].include?(column)
@@ -66,5 +66,4 @@ describe BankDetailsImporter do
     bank_detail.empl_name.should == emp_name
     bank_detail.account_no.should == bank_account
   end
-
 end

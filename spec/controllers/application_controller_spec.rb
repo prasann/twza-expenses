@@ -10,6 +10,7 @@ describe ApplicationController do
 
     it "invalidates cache before every request" do
       get :index
+
       response.headers["Cache-Control"].should == "no-cache, no-store, max-age=0, must-revalidate"
       response.headers["Pragma"].should == "no-cache"
       response.headers["Expires"].should == "Fri, 01 Jan 1990 00:00:00 GMT"
@@ -22,5 +23,4 @@ describe ApplicationController do
       pending " to be done "
     end
   end
-
 end

@@ -5,7 +5,6 @@ FactoryGirl.define do
     amount { Random.rand(125) }
     currency 'INR'
     travel_date { Date.today }
-    office 'Chennai'
     inr { Random.rand(5000) }
     issue_date { Date.today - 2.days }
     vendor_name 'VKC Forex'
@@ -44,5 +43,11 @@ FactoryGirl.define do
     currency {'EUR'}
     conversion_rate {72.00}
     payment_mode {'CASH'}
+  end
+
+  factory :expense_settlement do
+    sequence(:empl_id) { |n| "#{n}" }
+    association :outbound_travel
+    status { ExpenseSettlement::GENERATED_DRAFT }
   end
 end

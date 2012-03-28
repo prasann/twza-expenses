@@ -11,7 +11,7 @@ describe TravelDataImporter do
     importer = TravelDataImporter.new
 
     importer.stub!(:read_from_excel).and_return do |filename, sheetno, block|
-      file = mock(Excel)
+      file = mock('Excel')
 
       def file.cell(line, column)
         return 12345 if ['B'].include?(column)
@@ -40,7 +40,7 @@ describe TravelDataImporter do
     OutboundTravel.delete_all
     importer = TravelDataImporter.new
     importer.stub!(:read_from_excel).and_return do |filename, sheetno, block|
-      file = mock(Excel)
+      file = mock('Excel')
 
       def file.cell(line, column)
         return "wrong data" if line == 2

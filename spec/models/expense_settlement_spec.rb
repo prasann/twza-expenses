@@ -26,7 +26,6 @@ describe 'expense_report' do
     actual_consolidated.should include(expected_hash_2)
     actual_consolidated.should include(expected_hash_3)
     actual_consolidated.should include(expected_hash_4)
-
   end
 
   it "should consolidate expenses by rpt and currency considering conversion rate from sharon sheet if no forex is available" do
@@ -72,84 +71,78 @@ describe 'expense_report' do
     ((actual_conv_rates["EUR"]*100).round.to_f/100).should == (((2000+1800+950).to_f/(100+100+50))*100).round.to_f/100
   end
 
-    it "should return employee id appended with e-mail domain as employee e-mail ID if email_id is not available" do
-      profile = mock(Profile, :email_id => '')
-      expense_report = ExpenseSettlement.new
-      expense_report.empl_id = 13552
-      expense_report.stub!(:profile).and_return(profile)
-      email = expense_report.employee_email
-      email.should == '13552' + ::Rails.application.config.email_domain
-    end
+  it "should return employee id appended with e-mail domain as employee e-mail ID if email_id is not available" do
+    profile = mock('Profile', :email_id => '')
+    expense_report = ExpenseSettlement.new
+    expense_report.empl_id = 13552
+    expense_report.stub!(:profile).and_return(profile)
+    email = expense_report.employee_email
+    email.should == '13552' + ::Rails.application.config.email_domain
+  end
 
-    it "should return e-mail ID as employee email if it is available" do
-      profile = mock(Profile, :email_id => 'johns')
-      expense_report = ExpenseSettlement.new
-      expense_report.stub!(:profile).and_return(profile)
-      email = expense_report.employee_email
-      email.should == 'johns' + ::Rails.application.config.email_domain
-    end
+  it "should return e-mail ID as employee email if it is available" do
+    profile = mock('Profile', :email_id => 'johns')
+    expense_report = ExpenseSettlement.new
+    expense_report.stub!(:profile).and_return(profile)
+    email = expense_report.employee_email
+    email.should == 'johns' + ::Rails.application.config.email_domain
+  end
 
   it "should compute settlement properly when forex of multiple currencies are involved" do
-      travel_id = '1'
-      employee_id = '12321'
-      test_forex_currencies = ['EUR', 'GBP']
-      expense_amounts = [BigDecimal.new('300'), BigDecimal.new('750')]
-      expense_amounts_inr = [BigDecimal.new('23032.5'), BigDecimal.new('47437.5')]
-      forex_amounts = [500, 1000]
-      forex_amounts_inr = [37309, 62728.5]
-      outbound_travel = mock(OutboundTravel, :place => 'UK', :emp_id => employee_id,
-                             :departure_date => Date.today - 10, :return_date => Date.today + 5, :id => travel_id)
-      expenses = []
-      forex_payments = []
-      cash_handovers = [CashHandover.new(:amount => 100, :currency=>'EUR',
-                        :conversion_rate => 74.62), CashHandover.new(:amount => 150, :currency=>'GBP',
-                                                                :conversion_rate => 62.73)]
-      expense_settlement = setup_test_data(expenses, forex_payments, employee_id, travel_id, 'UK',
-                                           outbound_travel, test_forex_currencies,
-                                           expense_amounts, expense_amounts_inr, forex_amounts, forex_amounts_inr,
-                                           cash_handovers)
+    employee_id = '12321'
+    test_forex_currencies = ['EUR', 'GBP']
+    expense_amounts = [BigDecimal.new('300'), BigDecimal.new('750')]
+    expense_amounts_inr = [BigDecimal.new('23032.5'), BigDecimal.new('47437.5')]
+    forex_amounts = [500, 1000]
+    forex_amounts_inr = [37309, 62728.5]
+    outbound_travel = Factory(:outbound_travel, :place => 'UK', :emp_id => employee_id,
+                              :departure_date => Date.today - 10, :return_date => Date.today + 5)
+    travel_id = outbound_travel.id
+    expenses = []
+    forex_payments = []
+    cash_handovers = [CashHandover.new(:amount => 100, :currency=>'EUR',
+                      :conversion_rate => 74.62), CashHandover.new(:amount => 150, :currency=>'GBP',
+                                                              :conversion_rate => 62.73)]
+    expense_settlement = setup_test_data(expenses, forex_payments, employee_id, travel_id, 'UK',
+                                         outbound_travel, test_forex_currencies,
+                                         expense_amounts, expense_amounts_inr, forex_amounts, forex_amounts_inr,
+                                         cash_handovers)
 
-      expense_settlement.populate_instance_data
-      expense_settlement.instance_variable_get('@net_payable').should eq 13732.5
+    expense_settlement.populate_instance_data
+    expense_settlement.instance_variable_get('@net_payable').should eq 13732.5
   end
 
   it "should load cash handovers and expenses eagerly on call of load with deps" do
-      settlement = mock('expense_settlement')
-      mock_criteria = mock('criteria')
-      ExpenseSettlement.stub_chain(:includes, :find).and_return(settlement)
-      ExpenseSettlement.should_receive(:includes).with(:cash_handovers,
-                                                       :outbound_travel).and_return(mock_criteria)
-      mock_criteria.should_receive(:find).with(123).and_return(settlement)
-      settlement.should_receive(:populate_instance_data)
+    settlement = Factory(:expense_settlement)
+    mock_criteria = mock('Object')
+    ExpenseSettlement.should_receive(:includes).with(:cash_handovers,
+                                                     :outbound_travel).and_return(mock_criteria)
+    mock_criteria.should_receive(:find).with(settlement.id).and_return(settlement)
+    settlement.should_receive(:populate_instance_data)
 
-
-      ExpenseSettlement.load_with_deps(123)
-
+    ExpenseSettlement.load_with_deps(settlement.id)
   end
 
   private
-  def setup_test_data(expenses,forex_payments,employee_id, travel_id, place_of_visit, outbound_travel, currencies,
+  def setup_test_data(expenses, forex_payments,employee_id, travel_id, place_of_visit, outbound_travel, currencies,
       expense_amounts, expense_amounts_inr, forex_amounts, forex_amounts_inr, cash_handovers)
-    index = 0
-    currencies.length.times do
-      expenses << mock(Expense, :id => index, :empl_id => employee_id, :original_currency => currencies[index], :place => place_of_visit,
-                       :cost_in_home_currency => expense_amounts_inr[index],  :expense_rpt_id => index,
+    currencies.each_with_index do |currency, index|
+      expenses << Factory(:expense, :empl_id => employee_id, :original_currency => currency,
+                       :cost_in_home_currency => expense_amounts_inr[index], :expense_rpt_id => index,
                        :original_cost => expense_amounts[index])
 
-      forex_payments << mock(ForexPayment, :id => index,:emp_id => employee_id, :currency => currencies[index],
+      forex_payments << Factory(:forex_payment,:emp_id => employee_id, :currency => currency,
                              :place => place_of_visit, :amount => forex_amounts[index], :inr => forex_amounts_inr[index])
-      index = index + 1
     end
 
-
-    forex_ids = forex_payments.map{|forex| forex.id.to_s }
+    forex_ids = forex_payments.collect(&:id)
     ForexPayment.stub!(:find).with(forex_ids).and_return(forex_payments)
 
-    expense_ids = expenses.map{|expense| expense.id.to_s }
+    expense_ids = expenses.collect(&:id)
     Expense.stub!(:find).with(expense_ids).and_return(expenses)
 
-    ExpenseSettlement.new(:empl_id=>employee_id,:travel_id=>travel_id,:expenses => expense_ids,
-                                                          :forex_payments=>forex_ids,
-                                                          :cash_handovers=>cash_handovers)
+    ExpenseSettlement.new(:empl_id => employee_id, :travel_id => travel_id, :expenses => expense_ids,
+                                                          :forex_payments => forex_ids,
+                                                          :cash_handovers => cash_handovers)
   end
 end
