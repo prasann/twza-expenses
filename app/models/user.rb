@@ -21,6 +21,15 @@ class User
     user if user.present? && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
   end
 
+  def admin?
+    self.role == 'admin'
+  end
+
+  def superadmin?
+    self.role == 'superadmin'
+  end
+
+  private
   def encrypt_password
     if password.present?
       self.password_salt = BCrypt::Engine.generate_salt
@@ -30,13 +39,5 @@ class User
 
   def define_role
     self.role = nil
-  end
-
-  def admin?
-    self.role == 'admin'
-  end
-
-  def superadmin?
-    self.role == 'superadmin'
   end
 end

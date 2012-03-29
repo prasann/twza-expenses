@@ -58,4 +58,9 @@ FactoryGirl.define do
   factory :uploaded_expense do
     sequence(:file_name) { |n| "/tmp/uploaded_expense_#{$$}_#{n}" }
   end
+
+  factory :user do
+    sequence(:user_name) { |n| "user-#{n}" }
+    sequence(:password) { |n| "#{Random.rand(123241)}-#{n}" }
+  end
 end
