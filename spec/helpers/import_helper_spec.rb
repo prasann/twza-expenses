@@ -19,12 +19,4 @@ describe ImportHelper do
       ImportHelper::to_str('AG').should == 'AG'
     end
   end
-
-  describe "pluralize words" do
-    it "should pluralize words properly based on count" do
-      ImportHelper.pluralize(1, 'record').should eq '1 record'
-      ImportHelper.pluralize(10, 'record').should eq '10 records'
-      ImportHelper.pluralize(10, 'match', 'matches').should eq '10 matches'
-    end
-  end
 end

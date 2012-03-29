@@ -15,7 +15,6 @@ describe "Excel data extractor" do
     self.should_receive(:handler).with(file_name).and_return(file_mock)
     mockObject.should_receive(:save).and_return(true)
     mockObjectWithValidationErrors.should_receive(:save).and_return(false)
-    self.should_receive(:show_summary)
 
     read_from_excel(file_name, sheet_id, &callback)
   end
