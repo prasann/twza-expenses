@@ -15,7 +15,6 @@ class ExpenseSettlement
   field :forex_payments, type: Array
   field :empl_id, type: String    #TODO: Why is this in a different type than in other models? Also, why the different names?
   field :emp_name, type: String    #TODO: Why does this have a different name than in other models?
-
   field :status, type: String
 
   belongs_to :outbound_travel
@@ -48,7 +47,6 @@ class ExpenseSettlement
     def load_processed_for(empl_id)
       where(:processed => true).and(:empl_id => empl_id.to_s).only(:expenses, :forex_payments).to_a
     end
-
   end
 
   def profile
@@ -56,7 +54,7 @@ class ExpenseSettlement
   end
 
   def email_id
-    @email_id ||= (profile == nil ||  profile.email_id.blank?) ? empl_id.to_s : profile.email_id
+    @email_id ||= (profile.nil? || profile.email_id.blank?) ? empl_id.to_s : profile.email_id
   end
 
   def employee_email
