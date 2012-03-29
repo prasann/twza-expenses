@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe EmployeeMailer do
-  describe 'travel expense settlement' do
+  describe 'expense_settlement' do
     before(:each) do
       @employee_id = 1
       @profile = mock('Profile', :employee_id => @employee_id, :email_id => 'johns', :common_name => 'John Smith', :get_full_name => 'John_Smith')
@@ -42,5 +42,9 @@ describe EmployeeMailer do
         @email.body.should include(@expense_report.get_receivable_amount)
       end
     end
+  end
+
+  describe "non_travel_expense_reimbursement" do
+    it "should be tested"
   end
 end
