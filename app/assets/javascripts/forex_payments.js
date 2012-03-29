@@ -41,7 +41,7 @@ function populateForexFields(){
   });
 };
 function isValidCreditCardNumber(credit_card_number) {
-  if (!/^\d{16}[^\d]+$/.test(credit_card_number.replace(/\s+/g, ''))) {
+  if (!/^\d{16}$/.test(credit_card_number.trim())) {
     alert('Please enter a valid 16-digit credit-card number');
     return false;
   }
