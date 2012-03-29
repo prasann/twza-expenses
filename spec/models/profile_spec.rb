@@ -15,16 +15,20 @@ describe Profile do
       expect{profile.save!}.should raise_error(ActiveRecord::ReadOnlyRecord)
     end
 
-    xit "should not be destroyable" do
+    it "should not be destroyable" do
       expect{profile.destroy}.should raise_error(ActiveRecord::ReadOnlyRecord)
     end
   end
 
   describe "get_full_name" do
-    it "should be tested"
-  end
+    it "should strip the empty space if there is no surname" do
+      profile = Profile.new(:name => "vijay")
+      profile.get_full_name.should == "Vijay"
+    end
 
-  describe "before_destroy" do
-    it "should be tested"
+    it "should titleize the words" do
+      profile = Profile.new(:name => "vijay", :surname => "aravamudhan")
+      profile.get_full_name.should == "Vijay Aravamudhan"
+    end
   end
 end
