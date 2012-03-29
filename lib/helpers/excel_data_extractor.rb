@@ -1,4 +1,3 @@
-# TODO: Is this even used anywhere in this project?
 require 'roo'
 require 'iconv'
 
