@@ -35,7 +35,6 @@ FactoryGirl.define do
     sequence(:empl_id) { |n| "#{n}" }
     submitted_on { Time.now }
     total_amount { Random.rand(125) }
-    status ExpenseReimbursement::UNPROCESSED
   end
 
   factory :cash_handover do
