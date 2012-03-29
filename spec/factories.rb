@@ -54,4 +54,8 @@ FactoryGirl.define do
     sequence(:empl_id) { |n| "#{n}" }
     sequence(:account_no) { |n| "#{n}" }
   end
+
+  factory :uploaded_expense do
+    sequence(:file_name) { |n| "/tmp/uploaded_expense_#{$$}_#{n}" }
+  end
 end
