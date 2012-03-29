@@ -150,7 +150,7 @@ describe ExpenseSettlementsController do
       get :edit, :id => expense_settlement.id.to_s
 
       assigns(:expense_report).should have_same_attributes_as(expense_settlement)
-      assigns(:has_cash_handovers).should be true
+      assigns(:has_cash_handovers).should be_true
       assigns(:applicable_currencies).should == [forex_payment.currency]
       assigns(:expenses).should == [expense]
       assigns(:forex_payments).should == [forex_payment]

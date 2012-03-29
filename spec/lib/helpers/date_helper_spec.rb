@@ -18,7 +18,7 @@ describe DateHelper do
     it "should return nil for an invalid date" do
       invalid_date = '25/22/2012'
       Date.should_receive(:parse).with(invalid_date).and_raise(RuntimeError)
-      DateHelper.date_from_str(invalid_date).should be nil
+      DateHelper.date_from_str(invalid_date).should be_nil
     end
   end
 end
