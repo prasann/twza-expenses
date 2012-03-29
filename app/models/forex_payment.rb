@@ -24,10 +24,19 @@ class ForexPayment
     def for_emp_id(emp_id)
       where(:emp_id => emp_id)
     end
-  end
 
-  def self.fetch_for(empl_id, date_from, date_to, forex_ids_to_be_excluded)
-    ForexPayment.for_emp_id(empl_id).and(:travel_date.gte => date_from).and(:travel_date.lte => date_to).not_in(_id: forex_ids_to_be_excluded).to_a
+    def fetch_for(empl_id, date_from, date_to, forex_ids_to_be_excluded)
+      for_emp_id(empl_id).and(:travel_date.gte => date_from).and(:travel_date.lte => date_to).not_in(_id: forex_ids_to_be_excluded).to_a
+    end
+
+    def get_json_to_populate(*args)
+      # TODO: Can this be done with a 'group_by' and selecting only certain fields?
+      forex_payments = ForexPayment.all
+      args.inject({}) do |hash, field_name|
+        hash[field_name] = forex_payments.collect{|fp| fp[field_name].strip if fp[field_name].present?}.uniq.compact
+        hash
+      end
+    end
   end
 
   def convert_inr(conversion_factor)
@@ -44,14 +53,6 @@ class ForexPayment
       self[:expiry_date] = Time.strptime(value, '%m/%y')
     rescue
       self[:expiry_date] = nil
-    end
-  end
-
-  def self.get_json_to_populate(*args)
-    forex_payments = ForexPayment.all
-    args.inject({}) do |hash, field_name|
-      hash[field_name] = forex_payments.collect{|fp| fp[field_name].strip if fp[field_name].present?}.uniq.compact
-      hash
     end
   end
 end

@@ -16,9 +16,11 @@ class User
   validates_presence_of :user_name
   validates_uniqueness_of :user_name
 
-  def self.authenticate(user_name, password)
-    user = User.where(:user_name => user_name).first
-    user if user.present? && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
+  class << self
+    def authenticate(user_name, password)
+      user = User.where(:user_name => user_name).first
+      user if user.present? && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
+    end
   end
 
   def admin?

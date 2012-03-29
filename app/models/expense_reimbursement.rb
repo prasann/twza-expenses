@@ -32,6 +32,11 @@ class ExpenseReimbursement
     def with_status(status)
       where(:status => status)
     end
+
+    def get_reimbursable_expense_reports(mark_as_closed = false)
+      completed_reimbursements = with_status(PROCESSED).to_a
+      completed_reimbursements.collect { |reimbursement| reimbursement.create_bank_reimbursement(mark_as_closed) }.compact
+    end
   end
 
   def get_expenses_grouped_by_project_code
@@ -40,11 +45,6 @@ class ExpenseReimbursement
 
   def get_expenses
     Expense.find(expenses.collect { |expense| expense['expense_id'] })
-  end
-
-  def self.get_reimbursable_expense_reports(mark_as_closed = false)
-    completed_reimbursements = ExpenseReimbursement.with_status(PROCESSED).to_a
-    completed_reimbursements.collect { |reimbursement| reimbursement.create_bank_reimbursement(mark_as_closed) }.compact
   end
 
   def profile

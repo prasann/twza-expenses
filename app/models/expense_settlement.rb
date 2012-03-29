@@ -47,6 +47,11 @@ class ExpenseSettlement
     def load_processed_for(empl_id)
       where(:processed => true).and(:empl_id => empl_id.to_s).only(:expenses, :forex_payments).to_a
     end
+
+    def get_reimbursable_expense_reports(mark_as_closed = false)
+      completed_settlements = with_status(COMPLETE).to_a
+      completed_settlements.collect { |settlement| settlement.create_bank_reimbursement(mark_as_closed) }.compact
+    end
   end
 
   def profile
@@ -167,11 +172,6 @@ class ExpenseSettlement
     value = forex_inr_amount - (expense_inr_amount + @cash_handover_total)
     # TODO: Should not need to round off to 2 decimal places here - only in views
     format_two_decimal_places(value)
-  end
-
-  def self.get_reimbursable_expense_reports(mark_as_closed = false)
-    completed_settlements = ExpenseSettlement.with_status(COMPLETE).to_a
-    completed_settlements.collect { |settlement| settlement.create_bank_reimbursement(mark_as_closed) }.compact
   end
 
   def get_forex_payments
