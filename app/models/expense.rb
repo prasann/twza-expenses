@@ -20,14 +20,10 @@ class Expense
   # TODO: report submitted need not be marked as mandatory as it has no functional significance but submitted on in expense reimbursement is derived from this
   #       if submitted on is removed from mandatory list there report submitted at can be removed from here anycase it is harmless as T&E has that date auto anycase
   validates_presence_of :empl_id, :expense_rpt_id, :payment_type, :original_cost, :original_currency, :cost_in_home_currency, :expense_date, :report_submitted_at
-  # TODO: validate payment_type is within a certain set of values - will not do this as
+  # payment_type is not being validated to be within a certain set of values - as
   # this data is coming from T&E we accept all values but use certain types for filtering
 
   class << self
-    def reimbursable_expenses_criteria(criteria, ids_to_be_excluded)
-      criteria.not_in(_id: ids_to_be_excluded).excludes(payment_type: 'TW Billed by Vendor')
-    end
-
     def for_empl_id(empl_id)
       where(:empl_id => empl_id)
     end
@@ -49,6 +45,11 @@ class Expense
     # in clause. Maybe adding a flag to expense (but will make creation costlier)
     def fetch_for_grouped_by_report_id(criteria, ids_to_be_excluded)
       fetch_for(criteria, ids_to_be_excluded).group_by(&:expense_rpt_id)
+    end
+
+    private
+    def reimbursable_expenses_criteria(criteria, ids_to_be_excluded)
+      criteria.not_in(_id: ids_to_be_excluded).excludes(payment_type: 'TW Billed by Vendor')
     end
   end
 
