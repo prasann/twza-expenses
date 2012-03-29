@@ -53,11 +53,13 @@
       </tr>
       <tr>
         <td class="text"><%= f.label :vendor_name, 'Vendor Name: ' %></td>
-        <td><%= f.text_field :vendor_name %></td>
+        <td><%= f.text_field :vendor_name %>
+        <span class="mandatory_mark">*</span></td>
       </tr>
       <tr>
-        <td class="text"><%= f.label :card_number, 'Card Number: ' %></td>
-        <td><%= f.text_field :card_number, :class => 'credit_card_number' %></td>
+        <td class="text"><%= f.label :card_number, 'Card Number: ' %><br/>
+        <span>Example: "42111111111111"</span></td></td>
+        <td><%= f.text_field :card_number, :class => 'credit_card_number' %>
       </tr>
       <tr>
         <td class="text"><%= f.label :expiry_date, 'Expiry Date: ' %></td>
