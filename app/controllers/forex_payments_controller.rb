@@ -32,7 +32,8 @@ class ForexPaymentsController < ApplicationController
   def create
     @forex_payment = ForexPayment.new(params[:forex_payment])
     if @forex_payment.save
-      redirect_to @forex_payment, notice: 'Forex payment options are successfully created.'
+      flash[:success] = 'Forex payment options are successfully created.'
+      redirect_to @forex_payment
     else
       render action: "new"
     end
@@ -41,7 +42,8 @@ class ForexPaymentsController < ApplicationController
   def update
     @forex_payment = ForexPayment.find(params[:id])
     if @forex_payment.update_attributes(params[:forex_payment])
-      redirect_to @forex_payment, notice: 'Forex payment options are successfully updated.'
+      flash[:success] =  'Forex payment options are successfully updated.'
+      redirect_to @forex_payment
     else
       render action: "edit"
     end
