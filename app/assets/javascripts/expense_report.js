@@ -1,3 +1,4 @@
+// TODO: Not sure whether this is even being used
 $(document).ready(function() {
     var _this = this;
     display_cash_handover_section();

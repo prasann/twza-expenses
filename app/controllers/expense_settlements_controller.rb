@@ -26,42 +26,42 @@ class ExpenseSettlementsController < ApplicationController
   end
 
   def show
-    @expense_report = ExpenseSettlement.find(params[:id])
-    @expense_report.populate_instance_data
+    @expense_settlement = ExpenseSettlement.find(params[:id])
+    @expense_settlement.populate_instance_data
     render 'generate_report'
   end
 
   def generate_report
     @expense_settlement = params[:expense_settlement]
     outbound_travel = OutboundTravel.find(@expense_settlement[:outbound_travel_id])
-    @expense_report = outbound_travel.find_or_initialize_expense_settlement
-    @expense_report.update_attributes({:cash_handovers => @expense_settlement[:cash_handovers_attributes],
+    @expense_settlement = outbound_travel.find_or_initialize_expense_settlement
+    @expense_settlement.update_attributes({:cash_handovers => @expense_settlement[:cash_handovers_attributes],
                                        :status => ExpenseSettlement::GENERATED_DRAFT,
                                        :empl_id => @expense_settlement[:empl_id],
                                        :emp_name => @expense_settlement[:emp_name]}.merge(
                                           params.slice(:expenses, :forex_payments,:expense_from,
                                                        :expense_to, :forex_from, :forex_to).symbolize_keys)
                                        )
-    @expense_report.cash_handovers.map(&:save!)
-    @total_cash_handovers = @expense_report.cash_handovers.collect(&:total_converted_amount).sum
-    @expense_report.populate_instance_data
-    redirect_to expense_settlement_path(:id => @expense_report.id)
+    @expense_settlement.cash_handovers.map(&:save!)
+    @total_cash_handovers = @expense_settlement.cash_handovers.collect(&:total_converted_amount).sum
+    @expense_settlement.populate_instance_data
+    redirect_to expense_settlement_path(:id => @expense_settlement.id)
   end
 
   def set_processed
-    expense_report = ExpenseSettlement.find(params[:id])
+    expense_settlement = ExpenseSettlement.find(params[:id])
     # TODO: What if the save failed?
-    expense_report.complete
+    expense_settlement.complete
     redirect_to outbound_travels_path
   end
 
   def notify
-    expense_report = ExpenseSettlement.find(params[:id])
-    expense_report.notify_employee
+    expense_settlement = ExpenseSettlement.find(params[:id])
+    expense_settlement.notify_employee
     # TODO: What if the save failed?
     # TODO: In the "Rails 3.1" way, flash should be part of the redirect (options hash) - so need to make sure that this actually works
-    flash[:success] = "Expense settlement e-mail successfully sent to '#{expense_report.profile.try(:common_name)}'"
-    redirect_to(:action => :index, :anchor => 'expense_settlements', :empl_id => expense_report.empl_id)
+    flash[:success] = "Expense settlement e-mail successfully sent to '#{expense_settlement.profile.try(:common_name)}'"
+    redirect_to(:action => :index, :anchor => 'expense_settlements', :empl_id => expense_settlement.empl_id)
   end
 
   def show_uploads
@@ -86,7 +86,7 @@ class ExpenseSettlementsController < ApplicationController
     tmp = params[:file_upload][:my_file].tempfile
     file = File.join("public", @file_name)
     FileUtils.cp(tmp.path, file)
-    success = ExpenseReportImporter.new.load_expense(file)
+    success = ExpenseImporter.new.load_expense(file)
     FileUtils.rm(file)
     success
   end
@@ -98,7 +98,7 @@ class ExpenseSettlementsController < ApplicationController
     @forex_to_date = !params[:forex_to].blank? ? DateHelper.date_from_str(params[:forex_to]) : travel.return_date
   end
 
-  def create_settlement_report_from_dates(travel,expense_settlement=nil)
+  def create_settlement_report_from_dates(travel, expense_settlement = nil)
     # TODO: Is this an ARel call?
     processed_expenses = ExpenseSettlement.load_processed_for(travel.emp_id)
     processed_expense_ids = processed_expenses.collect(&:expenses).flatten
@@ -109,7 +109,7 @@ class ExpenseSettlementsController < ApplicationController
     @applicable_currencies = ForexPayment.get_json_to_populate('currency')['currency']
     @payment_modes = [CashHandover::CASH, CashHandover::CREDIT_CARD]
     @has_cash_handovers = !expense_settlement.nil? && expense_settlement.cash_handovers.size() > 0
-    @expense_report = expense_settlement || ExpenseSettlement.new(:empl_id => travel.emp_id,
+    @expense_settlement = expense_settlement || ExpenseSettlement.new(:empl_id => travel.emp_id,
                                                                   :outbound_travel_id => travel.id.to_s,
                                                                   :forex_payments => @forex_payments.collect(&:id),
                                                                   :expenses => @expenses.collect(&:id),

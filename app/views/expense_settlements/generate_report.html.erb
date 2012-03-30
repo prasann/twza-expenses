@@ -4,12 +4,12 @@
   <tr>
     <td>
       <div class="left_button">
-        <%= button_to '<< Back', { :action => 'edit', :id => @expense_report.id}, :method => :get %>
+        <%= button_to '<< Back', { :action => 'edit', :id => @expense_settlement.id}, :method => :get %>
       </div>
     <td>
       <div class="right_button">
-        <% if @expense_report.is_generated_draft? %>
-          <%= button_to 'Notify employee', :action => 'notify', :id => @expense_report.id.to_s %>
+        <% if @expense_settlement.is_generated_draft? %>
+          <%= button_to 'Notify employee', :action => 'notify', :id => @expense_settlement.id.to_s %>
         <% end %>
       </div>
     </td>

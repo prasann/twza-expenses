@@ -1,7 +1,7 @@
 # TODO: Is this even used anywhere in this project?
 require 'roo'
 
-class ExpenseReportImporter
+class ExpenseImporter
   include ExcelDataExtractor
 
   def load

@@ -1,4 +1,4 @@
-<%= form_for @expense_report, :url => expense_settlement_url('generate_report'), :method => 'post' do |settlement_form| %>
+<%= form_for @expense_settlement, :url => expense_settlement_url('generate_report'), :method => 'post' do |settlement_form| %>
 
     <%= settlement_form.hidden_field :id %>
     <%= settlement_form.hidden_field :empl_id %>

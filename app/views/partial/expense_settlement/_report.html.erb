@@ -14,7 +14,7 @@
     # TODO: Move into model
     forex_inr_total = 0
     forex_amount_total = 0
-    @expense_report.get_forex_payments.each do |payment|
+    @expense_settlement.get_forex_payments.each do |payment|
       forex_inr_total += payment.inr
       forex_amount_total += payment.amount
     %>
@@ -47,7 +47,7 @@
   <%
      # TODO: Move into model
      expense_inr_total = 0
-     @expense_report.get_consolidated_expenses.each do |expense|
+     @expense_settlement.get_consolidated_expenses.each do |expense|
          expense_inr_total += expense["local_currency_amount"]
   %>
       <tr class="<%= cycle("even", "odd") %>">
@@ -64,10 +64,10 @@
   </tr>
 </table>
 
-<% if !@expense_report.cash_handovers.blank? %>
+<% if !@expense_settlement.cash_handovers.blank? %>
     <div class='heading'>Currency handovers</div>
     <table class="settlement_report">
-      <% @expense_report.cash_handovers.each do |cash_handover| %>
+      <% @expense_settlement.cash_handovers.each do |cash_handover| %>
         <tr class="<%= cycle("even", "odd") %>">
           <td><%= cash_handover.payment_mode %></td>
           <td><%= cash_handover.amount %>&nbsp;<%= cash_handover.currency %> </td>
@@ -87,11 +87,11 @@
 <% end %>
 <table class="settlement_report">
   <tr>
-    <% if @expense_report.get_receivable_amount.positive? %>
+    <% if @expense_settlement.get_receivable_amount.positive? %>
         <td colspan="3"><b>Receivable from employee : A- (B + C)</b></td>
     <% else %>
         <td colspan="3"><b>Payable to employee : (B + C) - A</b></td>
     <% end %>
-    <td class='right_align heading_no_align'><%= number_with_precision(@expense_report.get_receivable_amount.abs, :precision => 2) %></td>
+    <td class='right_align heading_no_align'><%= number_with_precision(@expense_settlement.get_receivable_amount.abs, :precision => 2) %></td>
   </tr>
 </table>

@@ -9,14 +9,14 @@ class EmployeeMailer < ActionMailer::Base
 
   default :from => ::Rails.application.config.email_sender
 
-  def expense_settlement(expense_report)
-    @expense_report = expense_report
-    @profile = @expense_report.profile
-    travel = @expense_report.outbound_travel
+  def expense_settlement(expense_settlement)
+    @expense_settlement = expense_settlement
+    @profile = @expense_settlement.profile
+    travel = @expense_settlement.outbound_travel
     subject = EXPENSE_SETTLEMENT_SUBJECT.sub("$place", travel.place).sub('$start_date', DateHelper.date_fmt(travel.departure_date))
     subject.insert(0, "#{Rails.env} - ") unless Rails.env.production?
 
-    mail(:to => @expense_report.employee_email, :subject => subject, :content_type => "text/html") do |format|
+    mail(:to => @expense_settlement.employee_email, :subject => subject, :content_type => "text/html") do |format|
       format.html { render :action => 'expense_settlement' }
     end
   end

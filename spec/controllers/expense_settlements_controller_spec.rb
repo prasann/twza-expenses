@@ -20,11 +20,11 @@ describe ExpenseSettlementsController do
 
       get :load_by_travel, :id => outbound_travel.id.to_s
 
-      assigned_expense_report = assigns(:expense_report)
-      assigned_expense_report.should_not be_nil
-      assigned_expense_report.outbound_travel_id.should_not be_nil
-      assigned_expense_report.expenses.should == expenses.collect(&:id)
-      assigned_expense_report.forex_payments.should == forex_payments.collect(&:id)
+      assigned_expense_settlement = assigns(:expense_settlement)
+      assigned_expense_settlement.should_not be_nil
+      assigned_expense_settlement.outbound_travel_id.should_not be_nil
+      assigned_expense_settlement.expenses.should == expenses.collect(&:id)
+      assigned_expense_settlement.forex_payments.should == forex_payments.collect(&:id)
 
       assigns(:expenses).should == expenses
       assigns(:forex_payments).should == forex_payments
@@ -47,7 +47,7 @@ describe ExpenseSettlementsController do
 
       get :load_by_travel, :id => outbound_travel.id.to_s
 
-      assigns(:expense_report).should have_same_attributes_as(expected_expense_settlement)
+      assigns(:expense_settlement).should have_same_attributes_as(expected_expense_settlement)
       assigns(:expenses).should == expenses
       assigns(:forex_payments).should == forex_payments
       assigns(:expenses_to_date).should be_nil
@@ -73,7 +73,7 @@ describe ExpenseSettlementsController do
 
       get :load_by_travel, :id => outbound_travel.id.to_s, :forex_from => forex_from, :forex_to => forex_to, :expense_from => expense_from, :expense_to => expense_to
 
-      assigns(:expense_report).should have_same_attributes_as(expected_expense_settlement)
+      assigns(:expense_settlement).should have_same_attributes_as(expected_expense_settlement)
       assigns(:expenses).should == expenses
       assigns(:forex_payments).should == forex_payments
     end
@@ -101,10 +101,10 @@ describe ExpenseSettlementsController do
       expense_report_id = '1'
       employee_id = 1
       profile = Profile.new(:common_name => employee_name)
-      expense_report = Factory(:expense_settlement, :empl_id => employee_id)
-      ExpenseSettlement.should_receive(:find).with(expense_report_id).and_return(expense_report)
-      expense_report.should_receive(:notify_employee)
-      expense_report.should_receive(:profile).and_return(profile)
+      expense_settlement = Factory(:expense_settlement, :empl_id => employee_id)
+      ExpenseSettlement.should_receive(:find).with(expense_report_id).and_return(expense_settlement)
+      expense_settlement.should_receive(:notify_employee)
+      expense_settlement.should_receive(:profile).and_return(profile)
 
       post :notify, :id => expense_report_id
 
@@ -149,7 +149,7 @@ describe ExpenseSettlementsController do
 
       get :edit, :id => expense_settlement.id.to_s
 
-      assigns(:expense_report).should have_same_attributes_as(expense_settlement)
+      assigns(:expense_settlement).should have_same_attributes_as(expense_settlement)
       assigns(:has_cash_handovers).should be_true
       assigns(:applicable_currencies).should == [forex_payment.currency]
       assigns(:expenses).should == [expense]
@@ -174,7 +174,7 @@ describe ExpenseSettlementsController do
 
       post :generate_report, :travel_id => outbound_travel.id
 
-      assigns(@expense_report).should == expense_settlement
+      assigns(@expense_settlement).should == expense_settlement
     end
 
     it "should update expense report if it already exists in the travel" do
@@ -189,7 +189,7 @@ describe ExpenseSettlementsController do
 
       post :generate_report, :travel_id => outbound_travel.id
 
-      assigns(@expense_report).should == expense_settlement
+      assigns(@expense_settlement).should == expense_settlement
     end
   end
 
@@ -221,7 +221,7 @@ describe ExpenseSettlementsController do
 
     get :load_by_travel, :id => outbound_travel.id.to_s
 
-    assigns(:expense_report).should have_same_attributes_as(expected_expense_settlement)
+    assigns(:expense_settlement).should have_same_attributes_as(expected_expense_settlement)
     assigns(:applicable_currencies).should == test_forex_currencies
     assigns(:expenses).should == expenses
     assigns(:payment_modes).should == [CashHandover::CASH, CashHandover::CREDIT_CARD]
@@ -259,7 +259,7 @@ describe ExpenseSettlementsController do
                             :forex_payments => forex_payments.collect(&:id), :expenses => expenses.collect(&:id)
     }
 
-    assigns(:expense_report).should have_same_attributes_as(expense_settlement)
-    assigns(:expense_report).instance_variable_get('@net_payable').should == 13732.5
+    assigns(:expense_settlement).should have_same_attributes_as(expense_settlement)
+    assigns(:expense_settlement).instance_variable_get('@net_payable').should == 13732.5
   end
 end
