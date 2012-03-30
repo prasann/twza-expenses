@@ -10,7 +10,7 @@ describe BankDetailsImporter do
     BankDetail.delete_all
     importer = BankDetailsImporter.new
 
-    importer.stub!(:read_from_excel).and_return do |filename, sheetno, block|
+    importer.stub!(:read_from_excel).and_return do |filename, sheetno, &block|
       file = mock('Excel')
 
       def file.cell(line, column)
@@ -34,7 +34,7 @@ describe BankDetailsImporter do
   it "should not raise validation error if account number is repeated" do
     BankDetail.delete_all
     importer = BankDetailsImporter.new
-    importer.stub!(:read_from_excel).and_return do |filename, sheetno, block|
+    importer.stub!(:read_from_excel).and_return do |filename, sheetno, &block|
       file = mock('Excel')
 
       def file.cell(line, column)

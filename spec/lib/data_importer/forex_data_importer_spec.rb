@@ -10,7 +10,7 @@ describe ForexDataImporter do
     ForexPayment.delete_all
     importer = ForexDataImporter.new
 
-    importer.stub!(:read_from_excel).and_return do |filename, sheetno, block|
+    importer.stub!(:read_from_excel).and_return do |filename, sheetno, &block|
       file = mock('Excel')
 
       def file.cell(line, column)
@@ -41,7 +41,7 @@ describe ForexDataImporter do
   it "should not save the invalid forex payment record" do
     ForexPayment.delete_all
     importer = ForexDataImporter.new
-    importer.stub!(:read_from_excel).and_return do |filename, sheetno, block|
+    importer.stub!(:read_from_excel).and_return do |filename, sheetno, &block|
       file = mock('Excel')
 
       def file.cell(line, column)

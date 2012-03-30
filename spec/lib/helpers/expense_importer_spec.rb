@@ -8,7 +8,7 @@ describe ExpenseImporter do
     Dir.should_receive(:glob).and_return([file_with_valid_expenses, file_with_invalid_expense])
     importer = ExpenseImporter.new
     Expense.delete_all
-    importer.stub!(:read_from_excel).with(file_with_valid_expenses, 0).and_return do |filename, sheetno, block|
+    importer.stub!(:read_from_excel).with(file_with_valid_expenses, 0).and_return do |filename, sheetno, &block|
       file = mock('Excel')
 
       def file.cell(line, column)
@@ -27,7 +27,7 @@ describe ExpenseImporter do
       end
     end
 
-    importer.stub!(:read_from_excel).with(file_with_invalid_expense, 0).and_return do |filename, sheetno, block|
+    importer.stub!(:read_from_excel).with(file_with_invalid_expense, 0).and_return do |filename, sheetno, &block|
       file = mock('Excel')
 
       def file.cell(line, column)
