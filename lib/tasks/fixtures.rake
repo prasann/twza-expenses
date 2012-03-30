@@ -13,6 +13,13 @@ namespace :db do
       Rails.env = 'development'
     end
 
+    task :clean => :environment do
+      # Dont delete system or user collections
+      Mongoid.master.collections.each do |collection|
+        collection.drop if collection.name !~ /system|user/
+      end
+    end
+
     desc 'Create sample test data for the development environment for profile, expenses, forex and travel'
     task :create, [:user_name, :emp_id, :email_id] => [:setup_env, :environment] do |t, args|
       user_name = args[:user_name]
