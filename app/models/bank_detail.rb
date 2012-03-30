@@ -5,7 +5,7 @@ class BankDetail
   field :empl_name, type: String    #TODO: Why does this have a different name than in other models?
   field :account_no, type: Integer
 
-  validates_presence_of :empl_id, :account_no
+  validates_presence_of :empl_id, :account_no, :allow_blank => false
   validates_uniqueness_of :account_no
 
   class << self

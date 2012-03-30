@@ -25,7 +25,7 @@ class EmployeeMailer < ActionMailer::Base
     @expense_reimbursement = expense_reimbursement
     @profile = @expense_reimbursement.profile
     @all_expenses = @expense_reimbursement.get_expenses_grouped_by_project_code
-    @empl_name = @profile.get_full_name
+    @empl_name = profile.try(:get_full_name) || ""
 
     subject = EXPENSE_REIMBURSEMENT_SUBJECT.sub('$expense_report_id', @expense_reimbursement.expense_report_id.to_s)
     subject.insert(0, "#{Rails.env} - ") unless Rails.env.production?

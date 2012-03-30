@@ -17,7 +17,7 @@ class ExpenseReimbursement
   field :total_amount, type: Float
   field :notes, type: String
 
-  validates_presence_of :expense_report_id, :empl_id, :submitted_on, :total_amount, :status
+  validates_presence_of :expense_report_id, :empl_id, :submitted_on, :total_amount, :status, :allow_blank => false
   validates_inclusion_of :status, :in => [PROCESSED, FAULTY, UNPROCESSED, CLOSED]
 
   class << self

@@ -11,9 +11,9 @@ class User
   field :password_salt
   field :role
 
-  validates_presence_of :password, :on => :create
+  validates_presence_of :password, :on => :create, :allow_blank => false
   validates_confirmation_of :password
-  validates_presence_of :user_name
+  validates_presence_of :user_name, :allow_blank => false
   validates_uniqueness_of :user_name
 
   class << self

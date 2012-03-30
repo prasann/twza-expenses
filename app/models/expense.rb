@@ -19,7 +19,7 @@ class Expense
 
   # TODO: report submitted need not be marked as mandatory as it has no functional significance but submitted on in expense reimbursement is derived from this
   #       if submitted on is removed from mandatory list there report submitted at can be removed from here anycase it is harmless as T&E has that date auto anycase
-  validates_presence_of :empl_id, :expense_rpt_id, :payment_type, :original_cost, :original_currency, :cost_in_home_currency, :expense_date, :report_submitted_at
+  validates_presence_of :empl_id, :expense_rpt_id, :payment_type, :original_cost, :original_currency, :cost_in_home_currency, :expense_date, :report_submitted_at, :allow_blank => false
   # payment_type is not being validated to be within a certain set of values - as
   # this data is coming from T&E we accept all values but use certain types for filtering
 

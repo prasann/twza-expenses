@@ -18,7 +18,7 @@ class ForexPayment
   field :office
   field :inr, type: BigDecimal
 
-  validates_presence_of :emp_id, :emp_name, :amount, :currency, :travel_date, :inr, :issue_date, :vendor_name
+  validates_presence_of :emp_id, :emp_name, :amount, :currency, :travel_date, :inr, :issue_date, :vendor_name, :allow_blank => false
 
   class << self
     def for_emp_id(emp_id)

@@ -10,7 +10,7 @@ class CashHandover
   field :conversion_rate, type: BigDecimal
   field :payment_mode, type: String, :default => CASH
 
-  validates_presence_of :amount, :currency, :conversion_rate, :payment_mode
+  validates_presence_of :amount, :currency, :conversion_rate, :payment_mode, :allow_blank => false
   validates_inclusion_of :payment_mode, :in => [CASH, CREDIT_CARD]
   belongs_to :expense_settlement
 

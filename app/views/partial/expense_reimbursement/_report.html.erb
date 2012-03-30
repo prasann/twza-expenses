@@ -1,12 +1,12 @@
-<%= label_tag 'Employee Name: ',nil,:class=>'reimb_heading' %>
-<%= label_tag 'employee_name: ',@empl_name,:class=>'reimb_value' %>
+<%= label_tag 'Employee Name: ', nil, :class => 'reimb_heading' %>
+<%= label_tag 'employee_name: ', @empl_name, :class => 'reimb_value' %>
 
-<%= label_tag 'Employee Id : ',nil,:class=>'reimb_heading' %>
-<%= label_tag 'employee_id', @expense_reimbursement.empl_id, :class=>'reimb_value' %>
+<%= label_tag 'Employee Id : ', nil, :class => 'reimb_heading' %>
+<%= label_tag 'employee_id', @expense_reimbursement.empl_id, :class => 'reimb_value' %>
 <br/><br/>
 
 <%= label_tag 'Expense Report Id : ', nil, :class => 'reimb_heading' %>
-<%= label_tag 'employee_rpt_id', @expense_reimbursement.expense_report_id, :class=>'reimb_value' %>
+<%= label_tag 'employee_rpt_id', @expense_reimbursement.expense_report_id, :class => 'reimb_value' %>
 
 <%= label_tag 'Created Date : ', nil, :class => 'reimb_heading' %>
 <%= label_tag @expense_reimbursement.submitted_on, nil, :class => 'reimb_value' %>

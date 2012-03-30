@@ -18,7 +18,7 @@ class OutboundTravel
 
   has_one :expense_settlement
 
-  validates_presence_of :emp_id, :emp_name, :departure_date, :place
+  validates_presence_of :emp_id, :emp_name, :departure_date, :place, :allow_blank => false
 
   class << self
     def get_json_to_populate(*args)
