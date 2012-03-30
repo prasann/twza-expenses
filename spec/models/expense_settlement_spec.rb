@@ -124,17 +124,17 @@ describe ExpenseSettlement do
 
   describe "employee_email" do
     it "should return employee id appended with e-mail domain as employee e-mail ID if email_id is not available" do
-      profile = mock('Profile', :email_id => '')
+      profile = Profile.new(:email_id => '')
       expense_report = Factory.build(:expense_settlement, :empl_id => 13552)
-      expense_report.stub!(:profile).and_return(profile)
+      expense_report.should_receive(:profile).exactly(2).times.and_return(profile)
       email = expense_report.employee_email
       email.should == '13552' + ::Rails.application.config.email_domain
     end
 
     it "should return e-mail ID as employee email if it is available" do
-      profile = mock('Profile', :email_id => 'johns')
+      profile = Profile.new(:email_id => 'johns')
       expense_report = Factory.build(:expense_settlement)
-      expense_report.stub!(:profile).and_return(profile)
+      expense_report.should_receive(:profile).exactly(3).times.and_return(profile)
       email = expense_report.employee_email
       email.should == 'johns' + ::Rails.application.config.email_domain
     end

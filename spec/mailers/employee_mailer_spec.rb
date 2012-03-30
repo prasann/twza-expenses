@@ -4,7 +4,7 @@ describe EmployeeMailer do
   describe 'expense_settlement' do
     before(:each) do
       @employee_id = 1
-      @profile = mock('Profile', :employee_id => @employee_id, :email_id => 'johns', :common_name => 'John Smith', :get_full_name => 'John_Smith')
+      @profile = Profile.new(:employee_id => @employee_id, :email_id => 'johns', :common_name => 'John Smith', :name => 'John', :surname => 'Smith')
       @forex = Factory(:forex_payment)
       travel = Factory(:outbound_travel, :place => 'UK', :departure_date => Time.parse('2011-10-01'))
       @travel_id = travel.id

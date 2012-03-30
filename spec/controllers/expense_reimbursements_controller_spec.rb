@@ -5,9 +5,8 @@ describe ExpenseReimbursementsController do
     it "should show expense reimbursement details" do
       dummy_expense_reimbursement = Factory(:expense_reimbursement)
       expected_expense_reimbursement = Factory(:expense_reimbursement)
-      profile = mock('Profile')
+      profile = Profile.new(:name => 'John', :surname => "smith")
       expected_expense_reimbursement.should_receive(:profile).and_return(profile)
-      profile.should_receive(:get_full_name).and_return('John Smith')
       expected_expenses = Factory(:expense)
 
       ExpenseReimbursement.should_receive(:find).with(expected_expense_reimbursement.id.to_s).and_return(expected_expense_reimbursement)
@@ -29,7 +28,7 @@ describe ExpenseReimbursementsController do
       expense_2 = Factory(:expense)
 
       existing_expense_reimbursement = Factory(:expense_reimbursement, :expenses => [{'expense_id' => expense_2.id}])
-      profile = mock('Profile')
+      profile = Profile.new(:name => 'John', :surname => "smith")
       expected_expenses = {"projectsubproject" => [expense_1]}
 
       expected_expense_reimbursement = {'expense_report_id' => '123',
@@ -41,7 +40,6 @@ describe ExpenseReimbursementsController do
       Expense.stub_chain(:where, :to_a).and_return([expense_1, expense_2])
 
       expense_1.should_receive(:profile).and_return(profile)
-      profile.should_receive(:get_full_name).and_return('John Smith')
 
       get :edit, :id => 123
 
@@ -57,7 +55,7 @@ describe ExpenseReimbursementsController do
       expense_2 = Factory(:expense, :project => 'project', :subproject => 'subproject',
                        :cost_in_home_currency => 200)
 
-      profile = mock('Profile')
+      profile = Profile.new(:name => 'John', :surname => "smith")
       expected_expenses = {"projectsubproject" => [expense_1, expense_2]}
 
       expected_expense_reimbursement = {'expense_report_id' => '123',
@@ -69,7 +67,6 @@ describe ExpenseReimbursementsController do
       Expense.stub_chain(:where, :to_a).and_return([expense_1, expense_2])
 
       expense_1.should_receive(:profile).and_return(profile)
-      profile.should_receive(:get_full_name).and_return('John Smith')
 
       get :edit, :id => 123
 

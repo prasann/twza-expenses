@@ -100,11 +100,11 @@ describe ExpenseSettlementsController do
     it "should send notification to employee upon expense settlement computation" do
       expense_report_id = '1'
       employee_id = 1
-      mock_profile = mock('Profile', :common_name => employee_name)
+      profile = Profile.new(:common_name => employee_name)
       expense_report = Factory(:expense_settlement, :empl_id => employee_id)
       ExpenseSettlement.should_receive(:find).with(expense_report_id).and_return(expense_report)
       expense_report.should_receive(:notify_employee)
-      expense_report.should_receive(:profile).and_return(mock_profile)
+      expense_report.should_receive(:profile).and_return(profile)
 
       post :notify, :id => expense_report_id
 
