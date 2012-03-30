@@ -3,6 +3,7 @@ require 'spec_helper'
 describe ProfilesController do
   before(:each) do
     Profile.any_instance.stub(:readonly?).and_return(false)
+    Profile.delete_all
   end
 
   it "should fetch the profile for the given name using like" do
