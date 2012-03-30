@@ -5,19 +5,17 @@ describe EmployeeMailer do
     before(:each) do
       @employee_id = 1
       @profile = Profile.new(:employee_id => @employee_id, :email_id => 'johns', :common_name => 'John Smith', :name => 'John', :surname => 'Smith')
-      @forex = Factory(:forex_payment)
+      forex = Factory(:forex_payment)
       travel = Factory(:outbound_travel, :place => 'UK', :departure_date => Time.parse('2011-10-01'))
       @travel_id = travel.id
       @expense_report = Factory(:expense_settlement, :empl_id => @employee_id, :cash_handovers => [], :outbound_travel => travel)
-      @expense_report.should_receive(:populate_instance_data)
       expense = {"report_id" => 123, "currency" => 'USD', "amount" => 1000, "conversion_rate" => 52.30, "local_currency_amount" => 52300}
-      @expense_report.populate_instance_data
-      @expense_report.stub(:profile).and_return(@profile)
-      @expense_report.stub(:employee_email).and_return('johns' + ::Rails.application.config.email_domain)
-      @expense_report.stub(:get_consolidated_expenses).and_return([expense])
-      @expense_report.stub(:get_forex_payments).and_return([@forex])
-      @expense_report.stub(:get_conversion_rate).and_return(expense["conversion_rate"])
-      @expense_report.stub(:get_receivable_amount).and_return(52300)
+      @expense_report.should_receive(:profile).and_return(@profile)
+      @expense_report.should_receive(:employee_email).and_return('johns' + ::Rails.application.config.email_domain)
+      @expense_report.should_receive(:get_consolidated_expenses).and_return([expense])
+      @expense_report.should_receive(:get_forex_payments).and_return([forex])
+      # @expense_report.should_receive(:get_conversion_rate).and_return(expense["conversion_rate"])
+      @expense_report.should_receive(:get_receivable_amount).at_least(2).times.and_return(52300)
     end
 
     it "should render successfully" do
