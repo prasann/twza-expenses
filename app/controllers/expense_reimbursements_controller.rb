@@ -16,9 +16,10 @@ class ExpenseReimbursementsController < ApplicationController
     if !empl_id.blank?
       # Find all travel and non-travel expenses processed or under process for empl id
       processed_expense_ids_from_travel = ExpenseSettlement.find_expense_ids_for_empl_id(empl_id)
-      reimbursement_expense_ids = @expense_reimbursements.collect(&:expenses)
+      reimbursement_expense_ids = @expense_reimbursements.collect(&:expenses).compact
 
-      processed_expense_ids = reimbursement_expense_ids.push(processed_expense_ids_from_travel).flatten
+      processed_expense_hashes = reimbursement_expense_ids.push(processed_expense_ids_from_travel).flatten.compact
+      processed_expense_ids = processed_expense_hashes.collect{|expense_hash| expense_hash['expense_id']}
 
       unprocessed_expenses_map = Expense.fetch_for_grouped_by_report_id(expenses_criteria, processed_expense_ids)
       create_unprocessed_expense_reports(empl_id, unprocessed_expenses_map)
@@ -71,7 +72,7 @@ class ExpenseReimbursementsController < ApplicationController
       expenses.push({'expense_id' => expense_id, 'modified_amount' => modified_amount})
       total_amount += modified_amount
     end
-    status = params[:process_reimbursement] ? ExpenseReimbursement::UNPROCESSED : ExpenseReimbursement::FAULTY
+    status = !params[:process_reimbursement].blank? ? ExpenseReimbursement::PROCESSED : ExpenseReimbursement::FAULTY
     @expense_reimbursement = ExpenseReimbursement.create(:expense_report_id => params[:expense_report_id],
                                                         :empl_id => params[:empl_id],
                                                         :submitted_on => params[:submitted_on],

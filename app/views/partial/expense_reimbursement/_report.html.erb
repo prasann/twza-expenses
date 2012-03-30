@@ -38,6 +38,7 @@
           <tr class="<%= cycle("even", "odd") %>">
             <td><%= expense.expense_type %></td>
             <td><%= DateHelper.date_fmt(DateHelper.date_from_str(expense.expense_date)) %></td>
+            <!-- TODO: Use detect -->
             <td><%= modified_expense = @expense_reimbursement.expenses.select{|e| e['expense_id'] == expense.id.to_s}
                     modified_expense.first["modified_amount"] %></td>
             <td>INR</td>

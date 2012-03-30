@@ -89,7 +89,7 @@ describe ExpenseReimbursementsController do
       expense_3 = FactoryGirl.create(:expense, :cost_in_home_currency => 100, :empl_id => 1234,
                           :expense_rpt_id => 123)
 
-      ExpenseSettlement.stub_chain(:find_expense_ids_for_empl_id).and_return([expense_3.id.to_s])
+      ExpenseSettlement.stub_chain(:find_expense_ids_for_empl_id).and_return([{'expense_id' => expense_3.id.to_s}])
 
       get :index, :expense_rpt_id => 123
 

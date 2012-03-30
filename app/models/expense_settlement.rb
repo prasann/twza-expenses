@@ -35,7 +35,7 @@ class ExpenseSettlement
     end
 
     def find_expense_ids_for_empl_id(empl_id)
-      where(:empl_id => empl_id).only(:expenses).to_a.collect(&:expenses).flatten
+      where(:empl_id => empl_id).only(:expenses).to_a.collect(&:expenses).flatten.compact
     end
 
     def load_with_deps(settlement_id)

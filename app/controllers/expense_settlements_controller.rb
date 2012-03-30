@@ -98,10 +98,12 @@ class ExpenseSettlementsController < ApplicationController
   def create_settlement_report_from_dates(travel, expense_settlement = nil)
     # TODO: Is this an ARel call?
     processed_expenses = ExpenseSettlement.load_processed_for(travel.emp_id)
-    processed_expense_ids = processed_expenses.collect(&:expenses).flatten
-    processed_forex_ids = processed_expenses.collect(&:forex_payments).flatten
+    processed_expense_hashes = processed_expenses.collect(&:expenses).flatten.compact
+    processed_expense_ids = processed_expense_hashes.collect{|expense_hash| expense_hash['expense_id']}
 
-    @expenses = Expense.fetch_for_employee_between_dates travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids
+    processed_forex_ids = processed_expenses.collect(&:forex_payments).flatten.compact
+
+    @expenses = Expense.fetch_for_employee_between_dates(travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids)
     @forex_payments = ForexPayment.fetch_for travel.emp_id, @forex_from_date, @forex_to_date, processed_forex_ids
     @applicable_currencies = ForexPayment.get_json_to_populate('currency')['currency']
     @payment_modes = [CashHandover::CASH, CashHandover::CREDIT_CARD]

@@ -6,13 +6,13 @@ describe ExpenseSettlementsController do
       outbound_travel = FactoryGirl.create(:outbound_travel, :departure_date => Date.today - 10.days, :return_date => Date.today + 5.days)
       expenses = [FactoryGirl.create(:expense)]
       forex_payments = [FactoryGirl.create(:forex_payment)]
-      processed_expenses = [FactoryGirl.create(:expense_settlement, :expenses => expenses.collect(&:id), :forex_payments => forex_payments.collect(&:id))]
+      processed_expenses = [FactoryGirl.create(:expense_settlement, :expenses => expenses.collect{|expense| {'expense_id' => expense.id.to_s}}, :forex_payments => forex_payments.collect(&:id))]
 
       ExpenseSettlement.should_receive(:load_processed_for).with(outbound_travel.emp_id).and_return(processed_expenses)
       Expense.should_receive(:fetch_for_employee_between_dates).with(outbound_travel.emp_id,
                                                               outbound_travel.departure_date - ExpenseSettlementsController::EXPENSE_DATES_PADDED_BY,
                                                               outbound_travel.return_date + ExpenseSettlementsController::EXPENSE_DATES_PADDED_BY,
-                                                              expenses.collect(&:id)).and_return(expenses)
+                                                              expenses.collect{|expense| expense.id.to_s}).and_return(expenses)
       ForexPayment.should_receive(:fetch_for).with(outbound_travel.emp_id,
                                             outbound_travel.departure_date - ExpenseSettlementsController::FOREX_PAYMENT_DATES_PADDED_BY,
                                             outbound_travel.return_date,
@@ -58,11 +58,11 @@ describe ExpenseSettlementsController do
       outbound_travel = FactoryGirl.create(:outbound_travel, :departure_date => Date.today - 10.days, :return_date => Date.today + 5.days)
       expenses = [FactoryGirl.create(:expense)]
       forex_payments = [FactoryGirl.create(:forex_payment)]
-      processed_expenses = [FactoryGirl.create(:expense_settlement, :expenses => expenses.collect(&:id), :forex_payments => forex_payments.collect(&:id))]
+      processed_expenses = [FactoryGirl.create(:expense_settlement, :expenses => expenses.collect{|expense| {'expense_id' => expense.id.to_s}}, :forex_payments => forex_payments.collect(&:id))]
       forex_from, forex_to, expense_to, expense_from = Date.today, Date.today + 1.days, Date.today + 2.days, Date.today + 3.days
 
       ExpenseSettlement.should_receive(:load_processed_for).with(outbound_travel.emp_id).and_return(processed_expenses)
-      Expense.should_receive(:fetch_for_employee_between_dates).with(outbound_travel.emp_id, expense_from, expense_to, expenses.collect(&:id)).and_return(expenses)
+      Expense.should_receive(:fetch_for_employee_between_dates).with(outbound_travel.emp_id, expense_from, expense_to, expenses.collect{|expense| expense.id.to_s}).and_return(expenses)
       ForexPayment.should_receive(:fetch_for).with(outbound_travel.emp_id, forex_from, forex_to, forex_payments.collect(&:id)).and_return(forex_payments)
 
       expected_expense_settlement = ExpenseSettlement.new(:empl_id => outbound_travel.emp_id,
