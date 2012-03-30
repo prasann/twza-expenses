@@ -232,6 +232,10 @@ describe ExpenseSettlement do
     it "should be tested"
   end
 
+  describe "total_cash_handover_amount" do
+    it "should be tested"
+  end
+
   describe "get_receivable_amount" do
     it "should be tested"
   end

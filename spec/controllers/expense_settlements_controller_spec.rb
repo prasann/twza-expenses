@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ExpenseSettlementsController do
-  describe "load by travel" do
+  describe "load_by_travel" do
     it "should load the forex and expenses for the given expense id" do
       outbound_travel = FactoryGirl.create(:outbound_travel, :departure_date => Date.today - 10.days, :return_date => Date.today + 5.days)
       expenses = [FactoryGirl.create(:expense)]
@@ -79,7 +79,7 @@ describe ExpenseSettlementsController do
     end
   end
 
-  describe "GET 'index'" do
+  describe "index" do
     it "index expenses from db for emplid" do
       empl_id = 123
       expense_settlements = [FactoryGirl.create(:expense_settlement, :empl_id => empl_id),
@@ -96,7 +96,7 @@ describe ExpenseSettlementsController do
   end
 
   employee_name = 'John Smith'
-  describe "POST 'notify'" do
+  describe "notify" do
     it "should send notification to employee upon expense settlement computation" do
       expense_report_id = '1'
       employee_id = 1
@@ -163,33 +163,24 @@ describe ExpenseSettlementsController do
 
   describe "generate report" do
     it "should create expense report for chosen expenses, forex and travel" do
-      pending("find how to fix this as '_routes' => nil is added to the hash")
-      expense_settlement = FactoryGirl.create(:expense_settlement)
-      outbound_travel = FactoryGirl.create(:outbound_travel)
-      outbound_travel.should_receive(:find_or_initialize_expense_settlement).and_return(expense_settlement)
-      OutboundTravel.stub!(:find).with(outbound_travel.id).and_return(outbound_travel)
-      outbound_travel.should_receive(:create_expense_settlement)
-      expense_settlement.should_receive(:update_attributes)
-      expense_settlement.should_receive(:populate_instance_data)
+      empl_id = "123"
+      outbound_travel = FactoryGirl.create(:outbound_travel, :expense_settlement => nil)
 
-      post :generate_report, :travel_id => outbound_travel.id
+      post :generate_report, :expense_settlement => { :outbound_travel_id => outbound_travel.id, :empl_id => empl_id }
 
-      assigns(@expense_settlement).should == expense_settlement
+      expected_expense_settlement = FactoryGirl.build(:expense_settlement, :outbound_travel => outbound_travel, :empl_id => empl_id)
+      assigns(:expense_settlement).should have_same_attributes_as(expected_expense_settlement)
+      expected_expense_settlement.should have_same_attributes_as(outbound_travel.expense_settlement)
     end
 
     it "should update expense report if it already exists in the travel" do
-      pending("find how to fix this as '_routes' => nil is added to the hash")
-      expense_settlement = FactoryGirl.create(:expense_settlement)
+      empl_id = "123"
+      expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => empl_id)
       outbound_travel = FactoryGirl.create(:outbound_travel, :expense_settlement => expense_settlement)
 
-      OutboundTravel.stub!(:find).with(outbound_travel.id).and_return(outbound_travel)
-      outbound_travel.should_receive(:create_expense_settlement).never
-      expense_settlement.should_receive(:update_attributes)
-      expense_settlement.should_receive(:populate_instance_data)
+      post :generate_report, :expense_settlement => { :outbound_travel_id => outbound_travel.id, :empl_id => empl_id }
 
-      post :generate_report, :travel_id => outbound_travel.id
-
-      assigns(@expense_settlement).should == expense_settlement
+      assigns(:expense_settlement).should have_same_attributes_as(expense_settlement)
     end
   end
 
