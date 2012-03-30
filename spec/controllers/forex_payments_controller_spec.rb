@@ -84,16 +84,12 @@ describe ForexPaymentsController do
 
     describe "with invalid params" do
       it "assigns a newly created but unsaved forex_payment as @forex_payment" do
-        ForexPayment.any_instance.stub(:save).and_return(false)
-
         post :create, :forex_payment => {}
 
         assigns(:forex_payment).should be_a_new(ForexPayment)
       end
 
       it "re-renders the 'new' template on error" do
-        ForexPayment.any_instance.stub(:save).and_return(false)
-
         post :create, :forex_payment => {}
 
         response.should render_template("new")
@@ -131,18 +127,16 @@ describe ForexPaymentsController do
     describe "with invalid params" do
       it "assigns the forex_payment as @forex_payment" do
         forex_payment = FactoryGirl.create(:forex_payment)
-        ForexPayment.any_instance.stub(:save).and_return(false)
 
-        put :update, :id => forex_payment.id, :forex_payment => {}
+        put :update, :id => forex_payment.id, :forex_payment => {:emp_id => nil}
 
         assigns(:forex_payment).should eq(forex_payment)
       end
 
       it "re-renders the 'edit' template" do
         forex_payment = FactoryGirl.create(:forex_payment)
-        ForexPayment.any_instance.stub(:save).and_return(false)
 
-        put :update, :id => forex_payment.id, :forex_payment => {}
+        put :update, :id => forex_payment.id, :forex_payment => {:emp_id => nil}
 
         response.should render_template("edit")
       end

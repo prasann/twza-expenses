@@ -112,7 +112,6 @@ describe ExpenseSettlement do
               FactoryGirl.create(:forex_payment, :currency => 'USD', :inr => 1000, :amount => 100),
               FactoryGirl.create(:forex_payment, :currency => 'USD', :inr => 810, :amount => 90)]
 
-      # ForexPayment.stub!(:find).and_return(forex_payments)
       exp_rpt = FactoryGirl.create(:expense_settlement, :forex_payments => forex_payments.collect(&:id))
       exp_rpt.populate_forex_payments
       actual_conv_rates = exp_rpt.get_conversion_rates_for_currency

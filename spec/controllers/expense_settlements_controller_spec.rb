@@ -239,9 +239,9 @@ describe ExpenseSettlementsController do
     expense_settlement = FactoryGirl.create(:expense_settlement, :forex_payments => forex_payments.collect(&:id),
                               :expenses => expenses.collect(&:id), :empl_id => outbound_travel.emp_id, :outbound_travel_id => outbound_travel.id.to_s,
                               :cash_handovers => cash_handovers)
-    expense_settlement.stub!(:get_receivable_amount).and_return(13732.5)
+    expense_settlement.should_receive(:get_receivable_amount).and_return(13732.5)
 
-    OutboundTravel.stub!(:find).with(outbound_travel.id.to_s).and_return(outbound_travel)
+    OutboundTravel.should_receive(:find).with(outbound_travel.id.to_s).and_return(outbound_travel)
     outbound_travel.should_receive(:find_or_initialize_expense_settlement).and_return(expense_settlement)
 
     post :generate_report, {:expense_settlement => {:id => expense_settlement.id.to_s, :empl_id => outbound_travel.emp_id.to_s,

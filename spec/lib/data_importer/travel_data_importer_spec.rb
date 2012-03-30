@@ -10,7 +10,7 @@ describe TravelDataImporter do
     OutboundTravel.delete_all
     importer = TravelDataImporter.new
 
-    importer.stub!(:read_from_excel).and_return do |filename, sheetno, &block|
+    importer.should_receive(:read_from_excel).and_return do |filename, sheetno, &block|
       file = mock('Excel')
 
       def file.cell(line, column)
@@ -39,7 +39,7 @@ describe TravelDataImporter do
   it "should not save the invalid forex payment record" do
     OutboundTravel.delete_all
     importer = TravelDataImporter.new
-    importer.stub!(:read_from_excel).and_return do |filename, sheetno, &block|
+    importer.should_receive(:read_from_excel).and_return do |filename, sheetno, &block|
       file = mock('Excel')
 
       def file.cell(line, column)

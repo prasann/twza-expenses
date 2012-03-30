@@ -93,17 +93,13 @@ describe OutboundTravelsController do
 
     describe "with invalid params" do
       it "assigns a newly created but unsaved outbound_travel as @outbound_travel" do
-        OutboundTravel.any_instance.stub(:save).and_return(false)
-
-        post :create, :outbound_travel => {}
+        post :create, :outbound_travel => {:emp_id => nil}
 
         assigns(:outbound_travel).should be_a_new(OutboundTravel)
       end
 
       it "re-renders the 'new' template" do
-        OutboundTravel.any_instance.stub(:save).and_return(false)
-
-        post :create, :outbound_travel => {}
+        post :create, :outbound_travel => {:emp_id => nil}
 
         response.should render_template("new")
       end
@@ -139,18 +135,16 @@ describe OutboundTravelsController do
     describe "with invalid params" do
       it "assigns the outbound_travel as @outbound_travel" do
         outbound_travel = FactoryGirl.create(:outbound_travel)
-        OutboundTravel.any_instance.stub(:save).and_return(false)
 
-        put :update, :id => outbound_travel.id, :outbound_travel => {}
+        put :update, :id => outbound_travel.id, :outbound_travel => {:emp_id => nil}
 
         assigns(:outbound_travel).should eq(outbound_travel)
       end
 
       it "re-renders the 'edit' template" do
         outbound_travel = FactoryGirl.create(:outbound_travel)
-        OutboundTravel.any_instance.stub(:save).and_return(false)
 
-        put :update, :id => outbound_travel.id, :outbound_travel => {}
+        put :update, :id => outbound_travel.id, :outbound_travel => {:emp_id => nil}
 
         response.should render_template("edit")
       end
