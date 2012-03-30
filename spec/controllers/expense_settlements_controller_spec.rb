@@ -3,10 +3,10 @@ require 'spec_helper'
 describe ExpenseSettlementsController do
   describe "load by travel" do
     it "should load the forex and expenses for the given expense id" do
-      outbound_travel = Factory(:outbound_travel, :departure_date => Date.today - 10.days, :return_date => Date.today + 5.days)
-      expenses = [Factory(:expense)]
-      forex_payments = [Factory(:forex_payment)]
-      processed_expenses = [Factory(:expense_settlement, :expenses => expenses.collect(&:id), :forex_payments => forex_payments.collect(&:id))]
+      outbound_travel = FactoryGirl.create(:outbound_travel, :departure_date => Date.today - 10.days, :return_date => Date.today + 5.days)
+      expenses = [FactoryGirl.create(:expense)]
+      forex_payments = [FactoryGirl.create(:forex_payment)]
+      processed_expenses = [FactoryGirl.create(:expense_settlement, :expenses => expenses.collect(&:id), :forex_payments => forex_payments.collect(&:id))]
 
       ExpenseSettlement.should_receive(:load_processed_for).with(outbound_travel.emp_id).and_return(processed_expenses)
       Expense.should_receive(:fetch_for_employee_between_dates).with(outbound_travel.emp_id,
@@ -31,9 +31,9 @@ describe ExpenseSettlementsController do
     end
 
     it "should show forex and travel properly for the given expense id even if return travel date is nil" do
-      outbound_travel = Factory(:outbound_travel, :departure_date => Date.today - 10.days, :return_date => nil)
-      expenses = [Factory(:expense)]
-      forex_payments = [Factory(:forex_payment)]
+      outbound_travel = FactoryGirl.create(:outbound_travel, :departure_date => Date.today - 10.days, :return_date => nil)
+      expenses = [FactoryGirl.create(:expense)]
+      forex_payments = [FactoryGirl.create(:forex_payment)]
       Expense.should_receive(:fetch_for_employee_between_dates).with(outbound_travel.emp_id, outbound_travel.departure_date - ExpenseSettlementsController::EXPENSE_DATES_PADDED_BY,
                                                                      nil, []).and_return(expenses)
       ForexPayment.should_receive(:fetch_for).with(outbound_travel.emp_id, outbound_travel.departure_date - ExpenseSettlementsController::FOREX_PAYMENT_DATES_PADDED_BY,
@@ -55,10 +55,10 @@ describe ExpenseSettlementsController do
     end
 
     it "should use the date for forex and expenses if they are passed as params" do
-      outbound_travel = Factory(:outbound_travel, :departure_date => Date.today - 10.days, :return_date => Date.today + 5.days)
-      expenses = [Factory(:expense)]
-      forex_payments = [Factory(:forex_payment)]
-      processed_expenses = [Factory(:expense_settlement, :expenses => expenses.collect(&:id), :forex_payments => forex_payments.collect(&:id))]
+      outbound_travel = FactoryGirl.create(:outbound_travel, :departure_date => Date.today - 10.days, :return_date => Date.today + 5.days)
+      expenses = [FactoryGirl.create(:expense)]
+      forex_payments = [FactoryGirl.create(:forex_payment)]
+      processed_expenses = [FactoryGirl.create(:expense_settlement, :expenses => expenses.collect(&:id), :forex_payments => forex_payments.collect(&:id))]
       forex_from, forex_to, expense_to, expense_from = Date.today, Date.today + 1.days, Date.today + 2.days, Date.today + 3.days
 
       ExpenseSettlement.should_receive(:load_processed_for).with(outbound_travel.emp_id).and_return(processed_expenses)
@@ -82,9 +82,9 @@ describe ExpenseSettlementsController do
   describe "GET 'index'" do
     it "index expenses from db for emplid" do
       empl_id = 123
-      expense_settlements = [Factory(:expense_settlement, :empl_id => empl_id),
-                             Factory(:expense_settlement, :empl_id => empl_id),
-                             Factory(:expense_settlement, :empl_id => empl_id)]
+      expense_settlements = [FactoryGirl.create(:expense_settlement, :empl_id => empl_id),
+                             FactoryGirl.create(:expense_settlement, :empl_id => empl_id),
+                             FactoryGirl.create(:expense_settlement, :empl_id => empl_id)]
 
       ExpenseSettlement.stub_chain(:where, :page, :per).and_return(expense_settlements)
 
@@ -101,7 +101,7 @@ describe ExpenseSettlementsController do
       expense_report_id = '1'
       employee_id = 1
       profile = Profile.new(:common_name => employee_name)
-      expense_settlement = Factory(:expense_settlement, :empl_id => employee_id)
+      expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => employee_id)
       ExpenseSettlement.should_receive(:find).with(expense_report_id).and_return(expense_settlement)
       expense_settlement.should_receive(:notify_employee)
       expense_settlement.should_receive(:profile).and_return(profile)
@@ -120,9 +120,9 @@ describe ExpenseSettlementsController do
       expense_to = Date.today - 3.days
       forex_from = Date.today - 6.days
       forex_to = Date.today - 4.days
-      outbound_travel = Factory(:outbound_travel, :emp_id => empl_id)
-      forex_payment = Factory(:forex_payment)
-      expense = Factory(:expense)
+      outbound_travel = FactoryGirl.create(:outbound_travel, :emp_id => empl_id)
+      forex_payment = FactoryGirl.create(:forex_payment)
+      expense = FactoryGirl.create(:expense)
       expense_settlement = ExpenseSettlement.new(:empl_id => empl_id, :expenses => [expense.id], :forex_payments => [forex_payment.id],
                                                  :status => ExpenseSettlement::GENERATED_DRAFT,
                                                  :outbound_travel_id => outbound_travel.id,
@@ -164,8 +164,8 @@ describe ExpenseSettlementsController do
   describe "generate report" do
     it "should create expense report for chosen expenses, forex and travel" do
       pending("find how to fix this as '_routes' => nil is added to the hash")
-      expense_settlement = Factory(:expense_settlement)
-      outbound_travel = Factory(:outbound_travel)
+      expense_settlement = FactoryGirl.create(:expense_settlement)
+      outbound_travel = FactoryGirl.create(:outbound_travel)
       outbound_travel.should_receive(:find_or_initialize_expense_settlement).and_return(expense_settlement)
       OutboundTravel.stub!(:find).with(outbound_travel.id).and_return(outbound_travel)
       outbound_travel.should_receive(:create_expense_settlement)
@@ -179,8 +179,8 @@ describe ExpenseSettlementsController do
 
     it "should update expense report if it already exists in the travel" do
       pending("find how to fix this as '_routes' => nil is added to the hash")
-      expense_settlement = Factory(:expense_settlement)
-      outbound_travel = Factory(:outbound_travel, :expense_settlement => expense_settlement)
+      expense_settlement = FactoryGirl.create(:expense_settlement)
+      outbound_travel = FactoryGirl.create(:outbound_travel, :expense_settlement => expense_settlement)
 
       OutboundTravel.stub!(:find).with(outbound_travel.id).and_return(outbound_travel)
       outbound_travel.should_receive(:create_expense_settlement).never
@@ -194,14 +194,14 @@ describe ExpenseSettlementsController do
   end
 
   it "should create all applicable currencies for cash handover properly when forex of multiple currencies are involved" do
-    outbound_travel = Factory(:outbound_travel, :departure_date => Date.today - 10.days, :return_date => Date.today + 5.days)
+    outbound_travel = FactoryGirl.create(:outbound_travel, :departure_date => Date.today - 10.days, :return_date => Date.today + 5.days)
     travel_id = outbound_travel.id
     test_forex_currencies = ['EUR', 'GBP']
-    expenses = [Factory(:expense)]
+    expenses = [FactoryGirl.create(:expense)]
     forex_payments = []
     forex_ids = []
     test_forex_currencies.each_with_index do |forex_currency, index|
-      forex_payment = Factory(:forex_payment, :currency => test_forex_currencies[index])
+      forex_payment = FactoryGirl.create(:forex_payment, :currency => test_forex_currencies[index])
       forex_ids << forex_payment.id
       forex_payments << forex_payment
     end
@@ -231,7 +231,7 @@ describe ExpenseSettlementsController do
 
   it "should set required model objects properly for view when forex of multiple currencies are involved" do
     currency = 'EUR'
-    outbound_travel = Factory(:outbound_travel)
+    outbound_travel = FactoryGirl.create(:outbound_travel)
     test_forex_currencies = [currency, 'GBP']
 
     cash_handovers = [CashHandover.new(:amount => 100, :currency => currency, :conversion_rate => 72.30),
@@ -241,11 +241,11 @@ describe ExpenseSettlementsController do
 
     cash_handovers.each_with_index { |item, index| handovers[index.to_s] = item.declared_attributes}
 
-    forex_payments = [Factory(:forex_payment, :currency => currency)]
+    forex_payments = [FactoryGirl.create(:forex_payment, :currency => currency)]
 
-    expenses = [Factory(:expense)]
+    expenses = [FactoryGirl.create(:expense)]
 
-    expense_settlement = Factory(:expense_settlement, :forex_payments => forex_payments.collect(&:id),
+    expense_settlement = FactoryGirl.create(:expense_settlement, :forex_payments => forex_payments.collect(&:id),
                               :expenses => expenses.collect(&:id), :empl_id => outbound_travel.emp_id, :outbound_travel_id => outbound_travel.id.to_s,
                               :cash_handovers => cash_handovers)
     expense_settlement.stub!(:get_receivable_amount).and_return(13732.5)

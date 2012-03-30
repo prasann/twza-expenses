@@ -3,8 +3,8 @@ require 'spec_helper'
 describe ForexPaymentsController do
   describe "GET index" do
     before(:each) do
-      @forex_payments_1 = Factory(:forex_payment, :emp_id => 10001)
-      @forex_payments_2 = Factory(:forex_payment, :emp_id => 10001)
+      @forex_payments_1 = FactoryGirl.create(:forex_payment, :emp_id => 10001)
+      @forex_payments_2 = FactoryGirl.create(:forex_payment, :emp_id => 10001)
     end
 
     it "assigns all forex_payments as @forex_payments" do
@@ -17,8 +17,8 @@ describe ForexPaymentsController do
     end
 
     it "searches for the given employee id" do
-      expense = Factory(:expense)
-      outbound_travel = Factory(:outbound_travel)
+      expense = FactoryGirl.create(:expense)
+      outbound_travel = FactoryGirl.create(:outbound_travel)
       expense_settlement = ExpenseSettlement.create!(:empl_id => 10001, :forex_payments => [@forex_payments_1.id],
                                                     :expenses => [expense.id],
                                                     :outbound_travel => outbound_travel.id,
@@ -34,7 +34,7 @@ describe ForexPaymentsController do
 
   describe "GET show" do
     it "assigns the requested forex_payment as @forex_payment" do
-      forex_payment = Factory(:forex_payment)
+      forex_payment = FactoryGirl.create(:forex_payment)
 
       get :show, :id => forex_payment.id
 
@@ -52,7 +52,7 @@ describe ForexPaymentsController do
 
   describe "GET edit" do
     it "assigns the requested forex_payment as @forex_payment" do
-      forex_payment = Factory(:forex_payment)
+      forex_payment = FactoryGirl.create(:forex_payment)
 
       get :edit, :id => forex_payment.id
 
@@ -64,19 +64,19 @@ describe ForexPaymentsController do
     describe "with valid params" do
       it "creates a new ForexPayment" do
         expect {
-          post :create, :forex_payment => Factory.attributes_for(:forex_payment)
+          post :create, :forex_payment => FactoryGirl.attributes_for(:forex_payment)
         }.to change(ForexPayment, :count).by(1)
       end
 
       it "assigns a newly created forex_payment as @forex_payment" do
-        post :create, :forex_payment => Factory.attributes_for(:forex_payment)
+        post :create, :forex_payment => FactoryGirl.attributes_for(:forex_payment)
 
         assigns(:forex_payment).should be_a(ForexPayment)
         assigns(:forex_payment).should be_persisted
       end
 
       it "redirects to the created forex_payment" do
-        post :create, :forex_payment => Factory.attributes_for(:forex_payment)
+        post :create, :forex_payment => FactoryGirl.attributes_for(:forex_payment)
 
         response.should redirect_to(ForexPayment.last)
       end
@@ -104,7 +104,7 @@ describe ForexPaymentsController do
   describe "PUT update" do
     describe "with valid params" do
       it "updates the requested forex_payment" do
-        forex_payment = Factory(:forex_payment)
+        forex_payment = FactoryGirl.create(:forex_payment)
 
         ForexPayment.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
 
@@ -112,17 +112,17 @@ describe ForexPaymentsController do
       end
 
       it "assigns the requested forex_payment as @forex_payment" do
-        forex_payment = Factory(:forex_payment)
+        forex_payment = FactoryGirl.create(:forex_payment)
 
-        put :update, :id => forex_payment.id, :forex_payment => Factory.attributes_for(:forex_payment)
+        put :update, :id => forex_payment.id, :forex_payment => FactoryGirl.attributes_for(:forex_payment)
 
         assigns(:forex_payment).should eq(forex_payment)
       end
 
       it "redirects to the forex_payment" do
-        forex_payment = Factory(:forex_payment)
+        forex_payment = FactoryGirl.create(:forex_payment)
 
-        put :update, :id => forex_payment.id, :forex_payment => Factory.attributes_for(:forex_payment)
+        put :update, :id => forex_payment.id, :forex_payment => FactoryGirl.attributes_for(:forex_payment)
 
         response.should redirect_to(forex_payment)
       end
@@ -130,7 +130,7 @@ describe ForexPaymentsController do
 
     describe "with invalid params" do
       it "assigns the forex_payment as @forex_payment" do
-        forex_payment = Factory(:forex_payment)
+        forex_payment = FactoryGirl.create(:forex_payment)
         ForexPayment.any_instance.stub(:save).and_return(false)
 
         put :update, :id => forex_payment.id, :forex_payment => {}
@@ -139,7 +139,7 @@ describe ForexPaymentsController do
       end
 
       it "re-renders the 'edit' template" do
-        forex_payment = Factory(:forex_payment)
+        forex_payment = FactoryGirl.create(:forex_payment)
         ForexPayment.any_instance.stub(:save).and_return(false)
 
         put :update, :id => forex_payment.id, :forex_payment => {}
@@ -151,14 +151,14 @@ describe ForexPaymentsController do
 
   describe "DELETE destroy" do
     it "destroys the requested forex_payment" do
-      forex_payment = Factory(:forex_payment)
+      forex_payment = FactoryGirl.create(:forex_payment)
       expect {
         delete :destroy, :id => forex_payment.id
       }.to change(ForexPayment, :count).by(-1)
     end
 
     it "redirects to the forex_payments list" do
-      forex_payment = Factory(:forex_payment)
+      forex_payment = FactoryGirl.create(:forex_payment)
 
       delete :destroy, :id => forex_payment.id
 

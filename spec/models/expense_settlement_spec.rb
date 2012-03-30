@@ -18,7 +18,7 @@ describe ExpenseSettlement do
   end
 
   describe "fields" do
-    let(:expense_settlement) { Factory(:expense_settlement) }
+    let(:expense_settlement) { FactoryGirl.create(:expense_settlement) }
 
     it { should contain_field(:expenses, :type => Array) }
     it { should contain_field(:forex_payments, :type => Array) }
@@ -54,14 +54,14 @@ describe ExpenseSettlement do
   describe "get_consolidated_expenses" do
     it "should consolidate expenses by rpt and currency considering conversion rate" do
       persisted_expenses = [
-                  Factory(:expense, :expense_rpt_id => 123, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200')),
-                  Factory(:expense, :expense_rpt_id => 122, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
-                  Factory(:expense, :expense_rpt_id => 121, :original_currency => 'INR', :original_cost => BigDecimal.new('1000'),:cost_in_home_currency => BigDecimal.new('4000')),
-                  Factory(:expense, :expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
-                  Factory(:expense, :expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200'))
+                  FactoryGirl.create(:expense, :expense_rpt_id => 123, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200')),
+                  FactoryGirl.create(:expense, :expense_rpt_id => 122, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
+                  FactoryGirl.create(:expense, :expense_rpt_id => 121, :original_currency => 'INR', :original_cost => BigDecimal.new('1000'),:cost_in_home_currency => BigDecimal.new('4000')),
+                  FactoryGirl.create(:expense, :expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
+                  FactoryGirl.create(:expense, :expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200'))
                 ]
-      forex_payments = [Factory(:forex_payment, :currency => 'EUR', :inr => 100, :amount => 100)]
-      exp_rpt = Factory(:expense_settlement, :expenses => persisted_expenses.collect(&:id))
+      forex_payments = [FactoryGirl.create(:forex_payment, :currency => 'EUR', :inr => 100, :amount => 100)]
+      exp_rpt = FactoryGirl.create(:expense_settlement, :expenses => persisted_expenses.collect(&:id))
       expected_hash_1 = {'report_id' => 123, 'currency' => 'EUR', 'amount' => 200, 'conversion_rate' => 1, 'local_currency_amount' => 200}
       expected_hash_2 = {'report_id' => 122, 'currency' => 'EUR', 'amount' => 100, 'conversion_rate' => 1, 'local_currency_amount' => 100}
       expected_hash_3 = {'report_id' => 121, 'currency' => 'EUR', 'amount' => 300, 'conversion_rate' => 1, 'local_currency_amount' => 300}
@@ -79,14 +79,14 @@ describe ExpenseSettlement do
 
     it "should consolidate expenses by rpt and currency considering conversion rate from sharon sheet if no forex is available" do
       persisted_expenses = [
-                  Factory(:expense, :expense_rpt_id => 123, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200')),
-                  Factory(:expense, :expense_rpt_id => 122, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
-                  Factory(:expense, :expense_rpt_id => 121, :original_currency => 'INR', :original_cost => BigDecimal.new('1000'),:cost_in_home_currency => BigDecimal.new('4000')),
-                  Factory(:expense, :expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
-                  Factory(:expense, :expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200'))
+                  FactoryGirl.create(:expense, :expense_rpt_id => 123, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200')),
+                  FactoryGirl.create(:expense, :expense_rpt_id => 122, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
+                  FactoryGirl.create(:expense, :expense_rpt_id => 121, :original_currency => 'INR', :original_cost => BigDecimal.new('1000'),:cost_in_home_currency => BigDecimal.new('4000')),
+                  FactoryGirl.create(:expense, :expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
+                  FactoryGirl.create(:expense, :expense_rpt_id => 121, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200'))
                 ]
 
-      exp_rpt = Factory(:expense_settlement, :expenses => persisted_expenses.collect(&:id))
+      exp_rpt = FactoryGirl.create(:expense_settlement, :expenses => persisted_expenses.collect(&:id))
       expected_hash_1 = {'report_id' => 123, 'currency' => 'EUR', 'amount' => 200, 'conversion_rate' => 1, 'local_currency_amount' => 200}
       expected_hash_2 = {'report_id' => 122, 'currency' => 'EUR', 'amount' => 100, 'conversion_rate' => 1, 'local_currency_amount' => 100}
       expected_hash_3 = {'report_id' => 121, 'currency' => 'EUR', 'amount' => 300, 'conversion_rate' => 1, 'local_currency_amount' => 300}
@@ -106,14 +106,14 @@ describe ExpenseSettlement do
 
   describe "get_conversion_rates_for_currency" do
     it "should provide average forex rate for each currency" do
-      forex_payments = [Factory(:forex_payment, :currency => 'EUR', :inr => 2000, :amount => 100),
-              Factory(:forex_payment, :currency => 'EUR', :inr => 1800, :amount => 100),
-              Factory(:forex_payment, :currency => 'EUR', :inr => 950, :amount => 50),
-              Factory(:forex_payment, :currency => 'USD', :inr => 1000, :amount => 100),
-              Factory(:forex_payment, :currency => 'USD', :inr => 810, :amount => 90)]
+      forex_payments = [FactoryGirl.create(:forex_payment, :currency => 'EUR', :inr => 2000, :amount => 100),
+              FactoryGirl.create(:forex_payment, :currency => 'EUR', :inr => 1800, :amount => 100),
+              FactoryGirl.create(:forex_payment, :currency => 'EUR', :inr => 950, :amount => 50),
+              FactoryGirl.create(:forex_payment, :currency => 'USD', :inr => 1000, :amount => 100),
+              FactoryGirl.create(:forex_payment, :currency => 'USD', :inr => 810, :amount => 90)]
 
       # ForexPayment.stub!(:find).and_return(forex_payments)
-      exp_rpt = Factory(:expense_settlement, :forex_payments => forex_payments.collect(&:id))
+      exp_rpt = FactoryGirl.create(:expense_settlement, :forex_payments => forex_payments.collect(&:id))
       exp_rpt.populate_forex_payments
       actual_conv_rates = exp_rpt.get_conversion_rates_for_currency
       actual_conv_rates.values.count == 2
@@ -125,7 +125,7 @@ describe ExpenseSettlement do
   describe "employee_email" do
     it "should return employee id appended with e-mail domain as employee e-mail ID if email_id is not available" do
       profile = Profile.new(:email_id => '')
-      expense_settlement = Factory.build(:expense_settlement, :empl_id => 13552)
+      expense_settlement = FactoryGirl.build(:expense_settlement, :empl_id => 13552)
       expense_settlement.should_receive(:profile).exactly(2).times.and_return(profile)
       email = expense_settlement.employee_email
       email.should == '13552' + ::Rails.application.config.email_domain
@@ -133,7 +133,7 @@ describe ExpenseSettlement do
 
     it "should return e-mail ID as employee email if it is available" do
       profile = Profile.new(:email_id => 'johns')
-      expense_settlement = Factory.build(:expense_settlement)
+      expense_settlement = FactoryGirl.build(:expense_settlement)
       expense_settlement.should_receive(:profile).exactly(3).times.and_return(profile)
       email = expense_settlement.employee_email
       email.should == 'johns' + ::Rails.application.config.email_domain
@@ -148,24 +148,24 @@ describe ExpenseSettlement do
       expense_amounts_inr = [BigDecimal.new('23032.5'), BigDecimal.new('47437.5')]
       forex_amounts = [500, 1000]
       forex_amounts_inr = [37309, 62728.5]
-      outbound_travel = Factory(:outbound_travel, :place => 'UK', :emp_id => employee_id,
+      outbound_travel = FactoryGirl.create(:outbound_travel, :place => 'UK', :emp_id => employee_id,
                                 :departure_date => Date.today - 10, :return_date => Date.today + 5)
       travel_id = outbound_travel.id
       expenses = []
       forex_payments = []
-      cash_handovers = [Factory(:cash_handover, :amount => 100, :currency => 'EUR', :conversion_rate => 74.62),
-                        Factory(:cash_handover, :amount => 150, :currency => 'GBP', :conversion_rate => 62.73)]
+      cash_handovers = [FactoryGirl.create(:cash_handover, :amount => 100, :currency => 'EUR', :conversion_rate => 74.62),
+                        FactoryGirl.create(:cash_handover, :amount => 150, :currency => 'GBP', :conversion_rate => 62.73)]
 
       test_forex_currencies.each_with_index do |currency, index|
-        expenses << Factory(:expense, :empl_id => employee_id, :original_currency => currency,
+        expenses << FactoryGirl.create(:expense, :empl_id => employee_id, :original_currency => currency,
                             :cost_in_home_currency => expense_amounts_inr[index], :expense_rpt_id => index,
                             :original_cost => expense_amounts[index])
 
-        forex_payments << Factory(:forex_payment, :emp_id => employee_id, :currency => currency,
+        forex_payments << FactoryGirl.create(:forex_payment, :emp_id => employee_id, :currency => currency,
                                   :place => 'UK', :amount => forex_amounts[index], :inr => forex_amounts_inr[index])
       end
 
-      expense_settlement = Factory(:expense_settlement, :empl_id => employee_id,
+      expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => employee_id,
                                    :expenses => expenses.collect(&:id),
                                    :forex_payments => forex_payments.collect(&:id),
                                    :cash_handovers => cash_handovers)
@@ -177,7 +177,7 @@ describe ExpenseSettlement do
 
   describe "load_with_deps" do
     it "should load cash handovers and expenses eagerly on call of load with deps" do
-      settlement = Factory(:expense_settlement)
+      settlement = FactoryGirl.create(:expense_settlement)
       mock_criteria = mock('Object')
       ExpenseSettlement.should_receive(:includes).with(:cash_handovers,
                                                        :outbound_travel).and_return(mock_criteria)

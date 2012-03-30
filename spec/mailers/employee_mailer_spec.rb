@@ -5,10 +5,10 @@ describe EmployeeMailer do
     before(:each) do
       @employee_id = 1
       @profile = Profile.new(:employee_id => @employee_id, :email_id => 'johns', :common_name => 'John Smith', :name => 'John', :surname => 'Smith')
-      forex = Factory(:forex_payment)
-      travel = Factory(:outbound_travel, :place => 'UK', :departure_date => Time.parse('2011-10-01'))
+      forex = FactoryGirl.create(:forex_payment)
+      travel = FactoryGirl.create(:outbound_travel, :place => 'UK', :departure_date => Time.parse('2011-10-01'))
       @travel_id = travel.id
-      @expense_settlement = Factory(:expense_settlement, :empl_id => @employee_id, :cash_handovers => [], :outbound_travel => travel)
+      @expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => @employee_id, :cash_handovers => [], :outbound_travel => travel)
       expense = {"report_id" => 123, "currency" => 'USD', "amount" => 1000, "conversion_rate" => 52.30, "local_currency_amount" => 52300}
       @expense_settlement.should_receive(:profile).and_return(@profile)
       @expense_settlement.should_receive(:employee_email).and_return('johns' + ::Rails.application.config.email_domain)

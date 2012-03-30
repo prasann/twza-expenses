@@ -6,7 +6,7 @@ describe User do
     it { should validate_presence_of(:user_name) }
 
     it "should validate uniqueness of user_name" do
-      Factory(:user)
+      FactoryGirl.create(:user)
       should validate_uniqueness_of(:user_name).with_message('is already taken')
     end
 
@@ -19,7 +19,7 @@ describe User do
   end
 
   describe "fields" do
-    let(:user) { Factory(:user) }
+    let(:user) { FactoryGirl.create(:user) }
 
     it { should contain_field(:user_name, :type => String) }
     it { should contain_field(:password_hash, :type => String) }

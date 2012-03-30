@@ -17,7 +17,7 @@ describe ForexPayment do
   end
 
   describe "fields" do
-    let(:forex_payment) { Factory(:forex_payment) }
+    let(:forex_payment) { FactoryGirl.create(:forex_payment) }
 
     it { should contain_field(:issue_date, :type => Date) }
     it { should contain_field(:emp_id, :type => Integer) }
@@ -36,11 +36,11 @@ describe ForexPayment do
 
   describe "fetch_for" do
     it 'should be able to fetch forex paid to an employee between dates' do
-      forex_1 = Factory(:forex_payment, :emp_id => '123', :travel_date => Date.new(y=2011, m=12, d=12))
-      forex_2 = Factory(:forex_payment, :emp_id => '123', :travel_date => Date.new(y=2011, m=12, d=14))
-      forex_3 = Factory(:forex_payment, :emp_id => '123', :travel_date => Date.new(y=2011, m=12, d=17))
-      forex_4 = Factory(:forex_payment, :emp_id => '122', :travel_date => Date.new(y=2011, m=12, d=14))
-      forex_5 = Factory(:forex_payment, :emp_id => '121', :travel_date => Date.new(y=2011, m=12, d=14))
+      forex_1 = FactoryGirl.create(:forex_payment, :emp_id => '123', :travel_date => Date.new(y=2011, m=12, d=12))
+      forex_2 = FactoryGirl.create(:forex_payment, :emp_id => '123', :travel_date => Date.new(y=2011, m=12, d=14))
+      forex_3 = FactoryGirl.create(:forex_payment, :emp_id => '123', :travel_date => Date.new(y=2011, m=12, d=17))
+      forex_4 = FactoryGirl.create(:forex_payment, :emp_id => '122', :travel_date => Date.new(y=2011, m=12, d=14))
+      forex_5 = FactoryGirl.create(:forex_payment, :emp_id => '121', :travel_date => Date.new(y=2011, m=12, d=14))
 
       valid_forex_payments = ForexPayment.fetch_for('123', Date.new(y=2011, m=12, d=13), Date.new(y=2011, m=12, d=17), [])
 
@@ -64,8 +64,8 @@ describe ForexPayment do
 
   describe "get_json_to_populate" do
     it "should populate unique and non nullable data for auto suggestion" do
-      outbound_travel_1 = Factory(:forex_payment, :place => 'US', :currency => 'GBP')
-      outbound_travel_2 = Factory(:forex_payment, :place => 'US', :vendor_name => 'VFC', :currency => 'USD')
+      outbound_travel_1 = FactoryGirl.create(:forex_payment, :place => 'US', :currency => 'GBP')
+      outbound_travel_2 = FactoryGirl.create(:forex_payment, :place => 'US', :vendor_name => 'VFC', :currency => 'USD')
 
       fields = ForexPayment.get_json_to_populate('place','vendor_name','currency')
 

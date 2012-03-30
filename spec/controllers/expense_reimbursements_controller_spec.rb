@@ -3,11 +3,11 @@ require 'spec_helper'
 describe ExpenseReimbursementsController do
   describe "Get show " do
     it "should show expense reimbursement details" do
-      dummy_expense_reimbursement = Factory(:expense_reimbursement)
-      expected_expense_reimbursement = Factory(:expense_reimbursement)
+      dummy_expense_reimbursement = FactoryGirl.create(:expense_reimbursement)
+      expected_expense_reimbursement = FactoryGirl.create(:expense_reimbursement)
       profile = Profile.new(:name => 'John', :surname => "smith")
       expected_expense_reimbursement.should_receive(:profile).and_return(profile)
-      expected_expenses = Factory(:expense)
+      expected_expenses = FactoryGirl.create(:expense)
 
       ExpenseReimbursement.should_receive(:find).with(expected_expense_reimbursement.id.to_s).and_return(expected_expense_reimbursement)
 
@@ -23,11 +23,11 @@ describe ExpenseReimbursementsController do
 
   describe "Get edit " do
     it "should load only expenses which are not processed as part of another expense reimbursement" do
-      expense_1 = Factory(:expense, :project => 'project', :subproject => 'subproject',
+      expense_1 = FactoryGirl.create(:expense, :project => 'project', :subproject => 'subproject',
                        :cost_in_home_currency => 1000)
-      expense_2 = Factory(:expense)
+      expense_2 = FactoryGirl.create(:expense)
 
-      existing_expense_reimbursement = Factory(:expense_reimbursement, :expenses => [{'expense_id' => expense_2.id}])
+      existing_expense_reimbursement = FactoryGirl.create(:expense_reimbursement, :expenses => [{'expense_id' => expense_2.id}])
       profile = Profile.new(:name => 'John', :surname => "smith")
       expected_expenses = {"projectsubproject" => [expense_1]}
 
@@ -50,9 +50,9 @@ describe ExpenseReimbursementsController do
     end
 
     it "should load all expenses for new expense reimbursement" do
-      expense_1 = Factory(:expense, :project => 'project', :subproject => 'subproject',
+      expense_1 = FactoryGirl.create(:expense, :project => 'project', :subproject => 'subproject',
                        :cost_in_home_currency => 1000)
-      expense_2 = Factory(:expense, :project => 'project', :subproject => 'subproject',
+      expense_2 = FactoryGirl.create(:expense, :project => 'project', :subproject => 'subproject',
                        :cost_in_home_currency => 200)
 
       profile = Profile.new(:name => 'John', :surname => "smith")
@@ -82,11 +82,11 @@ describe ExpenseReimbursementsController do
       #No existing expense reimbursements
       ExpenseReimbursement.stub_chain(:where, :to_a).and_return([])
 
-      expense_1 = Factory(:expense, :cost_in_home_currency => 1000, :empl_id => 1234,
+      expense_1 = FactoryGirl.create(:expense, :cost_in_home_currency => 1000, :empl_id => 1234,
                           :expense_rpt_id => 123)
-      expense_2 = Factory(:expense, :cost_in_home_currency => 200, :empl_id => 1234,
+      expense_2 = FactoryGirl.create(:expense, :cost_in_home_currency => 200, :empl_id => 1234,
                           :expense_rpt_id => 123)
-      expense_3 = Factory(:expense, :cost_in_home_currency => 100, :empl_id => 1234,
+      expense_3 = FactoryGirl.create(:expense, :cost_in_home_currency => 100, :empl_id => 1234,
                           :expense_rpt_id => 123)
 
       ExpenseSettlement.stub_chain(:find_expense_ids_for_empl_id).and_return([expense_3.id.to_s])

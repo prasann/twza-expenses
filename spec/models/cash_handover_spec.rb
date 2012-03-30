@@ -16,7 +16,7 @@ describe CashHandover do
   end
 
   describe "fields" do
-    let(:cash_handover) { Factory(:cash_handover) }
+    let(:cash_handover) { FactoryGirl.create(:cash_handover) }
 
     it { should contain_field(:amount, :type => BigDecimal) }
     it { should contain_field(:currency, :type => String) }
@@ -26,7 +26,7 @@ describe CashHandover do
 
   describe "total_converted_amount" do
     it "should calculate the total converted amount" do
-      cash_handover = Factory(:cash_handover, :amount => 123.0, :conversion_rate => 20.0)
+      cash_handover = FactoryGirl.create(:cash_handover, :amount => 123.0, :conversion_rate => 20.0)
       cash_handover.total_converted_amount.to_f.should == 2460.0
     end
   end

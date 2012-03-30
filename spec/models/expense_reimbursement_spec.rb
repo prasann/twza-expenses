@@ -4,15 +4,15 @@ describe ExpenseReimbursement do
   
   describe "get_expenses_grouped_by_project_code" do
     it "should get expenses by project code" do
-      expense_1 = Factory(:expense, project: 'Project', subproject: 'Sub Project 1')
-      expense_2 = Factory(:expense, project: 'Project', subproject: 'Sub Project 1')
-      expense_3 = Factory(:expense, project: 'Project', subproject: 'Sub Project 2')
+      expense_1 = FactoryGirl.create(:expense, project: 'Project', subproject: 'Sub Project 1')
+      expense_2 = FactoryGirl.create(:expense, project: 'Project', subproject: 'Sub Project 1')
+      expense_3 = FactoryGirl.create(:expense, project: 'Project', subproject: 'Sub Project 2')
       expenses = [
         {'expense_id' => expense_1.id},
         {'expense_id' => expense_2.id},
         {'expense_id' => expense_3.id}
       ]
-      expense_reimbursement = Factory(:expense_reimbursement, :expenses => expenses)
+      expense_reimbursement = FactoryGirl.create(:expense_reimbursement, :expenses => expenses)
 
       actual = expense_reimbursement.get_expenses_grouped_by_project_code
 
@@ -27,15 +27,15 @@ describe ExpenseReimbursement do
 
   describe "get_expenses" do
     it "should get expenses" do
-      expense_1 = Factory(:expense)
-      expense_2 = Factory(:expense)
-      expense_3 = Factory(:expense)
+      expense_1 = FactoryGirl.create(:expense)
+      expense_2 = FactoryGirl.create(:expense)
+      expense_3 = FactoryGirl.create(:expense)
       expenses = [
         {'expense_id' => expense_1.id},
         {'expense_id' => expense_2.id},
         {'expense_id' => expense_3.id}
       ]
-      expense_reimbursement = Factory(:expense_reimbursement, :expenses => expenses)
+      expense_reimbursement = FactoryGirl.create(:expense_reimbursement, :expenses => expenses)
 
       actual = expense_reimbursement.get_expenses
 
@@ -59,7 +59,7 @@ describe ExpenseReimbursement do
   end
   
   describe "fields" do
-    let(:expense_reimbursement) { Factory(:expense_reimbursement) }
+    let(:expense_reimbursement) { FactoryGirl.create(:expense_reimbursement) }
 
     it { should contain_field(:empl_id, :type => String) }
     it { should contain_field(:expense_report_id, :type => Integer) }

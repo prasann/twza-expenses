@@ -6,7 +6,7 @@ describe UploadedExpense do
   end
 
   describe "fields" do
-    let(:uploaded_expense) { Factory(:uploaded_expense) }
+    let(:uploaded_expense) { FactoryGirl.create(:uploaded_expense) }
 
     it { should contain_field(:file_name, :type => String) }
   end
