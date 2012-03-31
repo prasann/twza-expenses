@@ -71,35 +71,32 @@ describe ExpenseReimbursement do
   end
 
   describe "profile" do
-    xit "should fetch employee profile" do
-    end
+    it "should fetch employee profile"
   end
 
   describe "email_id" do
-    xit "should fetch profile email id" do
-    end
-    xit "should fetch employee id as email id" do
-    end
+    it "should fetch profile email id"
+
+    it "should fetch employee id as email id"
   end
 
   describe "employee_email" do
-    xit "should fetch email with domain" do
-    end
+    it "should fetch email with domain"
   end
 
   describe "is_processed?" do
-    xit "should return true if status is PROCESSED" do
-    end
+    it "should return true if status is PROCESSED"
   end
 
   describe "close" do
-    xit "should return true if status is CLOSED" do
-    end
+    it "should return true if status is CLOSED"
   end
 
   describe "is_faulty?" do
-    xit "should return true if status is FAULTY" do
-    end
+    it "should return true if status is FAULTY"
   end
 
+  describe "is_closed?" do
+    it "should return true if status is CLOSED"
+  end
 end

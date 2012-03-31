@@ -65,13 +65,16 @@ class ExpenseReimbursement
     self.save
   end
 
-  # TODO: Does this clash with some mongo status of processed?
   def is_processed?
     self.status == PROCESSED
   end
 
   def is_faulty?
     self.status == FAULTY
+  end
+
+  def is_closed?
+    self.status == CLOSED
   end
 
   private

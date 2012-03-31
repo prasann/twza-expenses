@@ -211,6 +211,10 @@ describe ExpenseSettlement do
     it "should be tested"
   end
 
+  describe "is_closed?" do
+    it "should be tested"
+  end
+
   describe "populate_consolidated_expenses" do
     it "should be tested"
   end

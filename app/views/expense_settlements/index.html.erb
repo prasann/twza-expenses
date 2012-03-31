@@ -34,7 +34,8 @@
     %>
       <tr class="<%= cycle("even", "odd") %>">
         <td>
-          <% if expense_settlement.is_complete? %>
+          <!-- TODO: Move logic for editable? into model -->
+          <% if expense_settlement.is_complete? || expense_settlement.is_closed? %>
           <%= link_to expense_settlement.empl_id, :action => 'show', :id => expense_settlement.id.to_s %>
           <% else %>
           <%= link_to expense_settlement.empl_id, :action => 'edit', :id => expense_settlement.id.to_s %>

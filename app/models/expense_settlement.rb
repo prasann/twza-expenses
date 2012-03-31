@@ -98,6 +98,10 @@ class ExpenseSettlement
     self.status == NOTIFIED_EMPLOYEE
   end
 
+  def is_closed?
+    self.status == CLOSED
+  end
+
   # TODO: Remove asap
   def populate_instance_data
     populate_forex_payments
