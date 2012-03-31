@@ -124,7 +124,6 @@
           <%= settlement_form.fields_for :cash_handovers do |handover_form| %>
               <tr class="cash_handover <%= cycle('even', 'odd') %>">
                 <td>
-                  <%= handover_form.hidden_field :id, class: 'id' %>
                   <%= handover_form.text_field :amount, class: 'amount' %>
                 </td>
                 <td>

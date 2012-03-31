@@ -48,13 +48,14 @@ $(document).ready(function() {
 
         $('.delete_row').live("click",function(event){ 
             var _this = this;
-            cash_handover = $(this).parents('.cash_handover');
-            if(cash_handover.find('.id').length > 0){
+            var cash_handover = $(this).parents('.cash_handover');
+            var input = cash_handover.next();
+            if (input != null && input.is('input')){
                 $.ajax({
                       type: 'POST',
                       url: '/expense_settlements/delete_cash_handover',
                       data: {
-                        id: cash_handover.find('.id').val()
+                        id: input.val()
                       },
                       success: function(data){
                         cash_handover.last().remove(); 
