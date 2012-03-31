@@ -7,14 +7,15 @@ module ExcelDataExtractor
   EXCEL_HANDLERS = {"xls" => Excel, "xlsx" => Excelx}
 
   def read_from_excel(file_name, sheet_id, &callback)
+    puts "in upload file " + file_name
     ignored_records_count = 0
     file = handler(file_name)
     file.default_sheet = file.sheets[sheet_id]
     2.upto(file.last_row) do |line|
       extractor = Proc.new{ |column| file.cell(line, column) }
       record = callback.call(extractor)
-      unless record.save
-        $stderr.puts "Record: #{record.inspect}, Errors: #{record.errors.full_messages.join(',')}"
+      unless !record.nil? && record.save
+        $stderr.puts "Record: #{record.try(:inspect)}, Errors: #{record.try{|rec| rec.errors.full_messages.join(',')} }"
         ignored_records_count += 1
       end
     end

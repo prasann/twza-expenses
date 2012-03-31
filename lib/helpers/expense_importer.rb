@@ -16,7 +16,9 @@ class ExpenseImporter
     return false if file_exists?(file_name)
     puts "Processing expense file: #{file_name.to_s}"
     at_least_one_successful_record = read_from_excel(excelxfile, 0) do |extractor|
-      Expense.new(empl_id: get_employee_id(extractor.call("C")),
+      expense = nil
+      begin
+        expense = Expense.new(empl_id: get_employee_id(extractor.call("C")),
                   expense_rpt_id: extractor.call("B").to_i,
                   original_cost: to_money(extractor.call("M")),
                   original_currency: extractor.call("N"),
@@ -31,6 +33,12 @@ class ExpenseImporter
                   is_personal: extractor.call("S"),
                   attendees: extractor.call("V"),
                   description: extractor.call("Q"))
+      rescue Exception => e
+        puts "exception during expense create: " + e.message
+        puts "could not create expense for employee: " + extractor.call("C").to_s + " report
+        id: " + extractor.call("B").to_s + " expense_date: " + extractor.call("J").to_s
+      end
+      expense
     end
     UploadedExpense.create(file_name: file_name) if at_least_one_successful_record
   end

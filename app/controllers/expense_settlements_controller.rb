@@ -77,7 +77,7 @@ class ExpenseSettlementsController < ApplicationController
       flash[:success] = "File: '#{@file_name}' has been uploaded successfully"
     else
       # TODO: In the "Rails 3.1" way, flash should be part of the redirect (options hash) - so need to make sure that this actually works
-      flash[:error] = 'This file has already been uploaded'
+      flash[:error] = 'No records uploaded. Either this file has already been uploaded or all rows have errors'
     end
     redirect_to :action => 'show_uploads'
   end
