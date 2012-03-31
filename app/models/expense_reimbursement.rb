@@ -35,7 +35,7 @@ class ExpenseReimbursement
 
     def get_reimbursable_expense_reports(mark_as_closed = false)
       completed_reimbursements = with_status(PROCESSED).to_a
-      completed_reimbursements.collect { |reimbursement| reimbursement.create_bank_reimbursement(mark_as_closed) }.compact
+      completed_reimbursements.collect { |reimbursement| reimbursement.__send__(:create_bank_reimbursement, mark_as_closed) }.compact
     end
   end
 
@@ -80,6 +80,7 @@ class ExpenseReimbursement
 
     bank_detail = BankDetail.for_empl_id(self.empl_id).first
     # TODO: What if bank_detail is nil?
+    # TODO: Why are we returning a non-object?
     OpenStruct.new({:empl_id => self.empl_id,
                     :empl_name => bank_detail.empl_name,
                     :expense_report_ids => self.expense_report_id,
