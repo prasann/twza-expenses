@@ -65,7 +65,7 @@ class ExpenseSettlementsController < ApplicationController
   end
 
   def delete_cash_handover
-    CashHandover.find(params[:id]).delete
+    CashHandover.delete_all(conditions: {_id: BSON::ObjectId(params[:id])})
     render :nothing => true, :status => :ok
   end
 
