@@ -12,9 +12,12 @@
 // TODO: The above require tree is bad - it will send the all js files for all views
 // TODO: Move this to the specific pages that need these functions defined
 $(document).ready(function() {
+  $.datepicker.setDefaults({
+    changeMonth: true,
+    changeYear: true
+  });
+
   $('.date_picker').datepicker({
-  		dateFormat : 'dd-M-yy',
-  		changeMonth: true,
-		changeYear: true
-  	});
+    dateFormat : 'dd-M-yy'
+  });
 });
