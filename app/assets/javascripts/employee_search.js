@@ -2,7 +2,7 @@ $(document).ready(function(){
   $('.emp_name, .emp_id').autocomplete({
     source: function(request, response) {
       var autocompleteUrl = this.element.attr('data-href');
-      var isEmpId = (this.element.attr('id') == "emp_id");
+      var isEmpId = (this.element.attr('class').indexOf('emp_id') != -1);
       $.ajax({
         url: autocompleteUrl,
         data: {
