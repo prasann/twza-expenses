@@ -64,6 +64,11 @@ class ExpenseSettlementsController < ApplicationController
     @uploaded_files = UploadedExpense.desc(:created_at)
   end
 
+  def delete_cash_handover
+    CashHandover.find(params[:id]).delete
+    render :nothing => true, :status => :ok
+  end
+
   def file_upload
     require 'fileutils'
     @file_name = params[:file_upload][:my_file].original_filename

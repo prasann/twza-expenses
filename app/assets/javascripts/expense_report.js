@@ -42,12 +42,28 @@ $(document).ready(function() {
                 cloned_element.addClass('odd');
             handover_section.append(cloned_element);
             cloned_element.find('.delete_row').show();
+            cloned_element.find('.id').remove();
             validate_row_manipulations();
         });
 
-        $('.delete_row').live('click', function(){
-          $(this).parents('.cash_handover').last().remove();
-          validate_row_manipulations();
+        $('.delete_row').live("click",function(event){ 
+            var _this = this;
+            cash_handover = $(this).parents('.cash_handover');
+            if(cash_handover.find('.id').length > 0){
+                $.ajax({
+                      type: 'POST',
+                      url: '/expense_settlements/delete_cash_handover',
+                      data: {
+                        id: cash_handover.find('.id').val()
+                      },
+                      success: function(data){
+                        cash_handover.last().remove(); 
+                      }
+                    });
+                }else{
+                    cash_handover.last().remove();    
+                }      
+            validate_row_manipulations();
         });
 
         $('.generate_settlement').click(function(event){

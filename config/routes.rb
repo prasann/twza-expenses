@@ -36,6 +36,7 @@ Mankatha::Application.routes.draw do
       get  :show_uploads
       post :generate_report
       post :file_upload
+      post :delete_cash_handover
     end
     member do
       get :load_by_travel
