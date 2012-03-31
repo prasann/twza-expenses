@@ -18,7 +18,7 @@ describe ProfilesController do
     assigns(:profiles).collect(&:employee_id).should include("2")
     assigns(:profiles).collect(&:employee_id).should_not include("3")
     response.should be_success
-    response.body.should == "[{\"common_name\":\"test\",\"employee_id\":\"1\"},{\"common_name\":\"b test a\",\"employee_id\":\"2\"}]"
+    response.body.should == "[{\"common_name\":\"b test a\",\"employee_id\":\"2\"},{\"common_name\":\"test\",\"employee_id\":\"1\"}]"
   end
 
   it "should fetch the profile for the given id using like" do
