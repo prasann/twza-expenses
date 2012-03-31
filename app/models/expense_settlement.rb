@@ -52,6 +52,23 @@ class ExpenseSettlement
       completed_settlements = with_status(COMPLETE).to_a
       completed_settlements.collect { |settlement| settlement.create_bank_reimbursement(mark_as_closed) }.compact
     end
+
+    def find_by_id_with_expenses_and_forex(settlement_id)
+      settlement = find(settlement_id)
+      settlement.populate_instance_data
+      settlement
+    end
+
+    def mark_as_complete(settlement_id)
+      settlement = find(settlement_id)
+      settlement.complete
+    end
+
+    def find_and_notify_employee(settlement_id)
+      settlement = find(settlement_id)
+      settlement.notify_employee
+      settlement
+    end
   end
 
   def profile

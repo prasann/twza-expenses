@@ -26,8 +26,7 @@ class ExpenseSettlementsController < ApplicationController
   end
 
   def show
-    @expense_settlement = ExpenseSettlement.find(params[:id])
-    @expense_settlement.populate_instance_data
+    @expense_report = ExpenseSettlement.find_by_id_with_expenses_and_forex(params[:id])
     render 'generate_report'
   end
 
@@ -46,19 +45,19 @@ class ExpenseSettlementsController < ApplicationController
   end
 
   def set_processed
-    expense_settlement = ExpenseSettlement.find(params[:id])
-    # TODO: What if the save failed?
-    expense_settlement.complete
-    redirect_to outbound_travels_path
+    is_processed = ExpenseSettlement.mark_as_complete(params[:id])
+    
+    redirect_to outbound_travels_path, :flash => get_flash_message(is_processed, 
+                                                                  "Completed processing Travel settlement",
+                                                                  "Failed to complete Travel settlement")
   end
 
   def notify
-    expense_settlement = ExpenseSettlement.find(params[:id])
-    expense_settlement.notify_employee
-    # TODO: What if the save failed?
+    expense_report = ExpenseSettlement.find_and_notify_employee(params[:id])
+    # TODO: What if the save or notify failed?
     # TODO: In the "Rails 3.1" way, flash should be part of the redirect (options hash) - so need to make sure that this actually works
-    flash[:success] = "Expense settlement e-mail successfully sent to '#{expense_settlement.profile.try(:common_name)}'"
-    redirect_to(:action => :index, :anchor => 'expense_settlements', :empl_id => expense_settlement.empl_id)
+    flash[:success] = "Expense settlement e-mail successfully sent to '#{expense_report.profile.try(:common_name)}'"
+    redirect_to(:action => :index, :anchor => 'expense_settlements', :empl_id => expense_report.empl_id)
   end
 
   def show_uploads
@@ -113,5 +112,13 @@ class ExpenseSettlementsController < ApplicationController
                                                                   :forex_payments => @forex_payments.collect(&:id),
                                                                   :expenses => @expenses.collect(&:id),
                                                                   :cash_handovers => [CashHandover.new])
+  end
+
+  def get_flash_message(flag, success_message, error_message)
+    if(flag)
+      return {:success => success_message} 
+    else
+      return {:error => error_message}
+    end
   end
 end
