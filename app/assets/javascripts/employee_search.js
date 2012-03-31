@@ -2,6 +2,7 @@ $(document).ready(function(){
   $('.emp_name, .emp_id').autocomplete({
     source: function(request, response) {
       var autocompleteUrl = this.element.attr('data-href');
+      var isEmpId = (this.element.attr('id') == "emp_id");
       $.ajax({
         url: autocompleteUrl,
         data: {
@@ -9,8 +10,14 @@ $(document).ready(function(){
         },
         success: function(data) {
           response($.map(data, function(item) {
+            var lbl;
+            if (isEmpId == true) {
+              lbl = item.employee_id + " - " + item.common_name;
+            } else {
+              lbl = item.common_name + " - " + item.employee_id;
+            }
             return {
-              label: item.common_name + " - " + item.employee_id,
+              label: lbl,
               common_name: item.common_name,
               employee_id: item.employee_id
             }
