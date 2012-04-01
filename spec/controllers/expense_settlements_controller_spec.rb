@@ -254,7 +254,7 @@ describe ExpenseSettlementsController do
     assigns(:expense_settlement).instance_variable_get('@net_payable').should == 13732.5
   end
 
-  it "should delete a cash_handover model" do    
+  it "should delete a cash_handover model" do
     cash_handover = FactoryGirl.create(:cash_handover, :amount => 100, :currency => 'USD', :conversion_rate => 72.30)
     post :delete_cash_handover, {:id => cash_handover.id}
     lambda {CashHandover.find(cash_handover.id) }.should raise_exception

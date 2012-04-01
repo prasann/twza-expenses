@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ExpenseReimbursement do
-  
+
   describe "get_expenses_grouped_by_project_code" do
     it "should get expenses by project code" do
       expense_1 = FactoryGirl.create(:expense, project: 'Project', subproject: 'Sub Project 1')
@@ -57,7 +57,7 @@ describe ExpenseReimbursement do
     it { should allow_value('Faulty').for(:status) }
     it { should allow_value('Closed').for(:status) }
   end
-  
+
   describe "fields" do
     let(:expense_reimbursement) { FactoryGirl.create(:expense_reimbursement) }
 

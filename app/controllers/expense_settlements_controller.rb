@@ -46,8 +46,8 @@ class ExpenseSettlementsController < ApplicationController
 
   def set_processed
     is_processed = ExpenseSettlement.mark_as_complete(params[:id])
-    
-    redirect_to outbound_travels_path, :flash => get_flash_message(is_processed, 
+
+    redirect_to outbound_travels_path, :flash => get_flash_message(is_processed,
                                                                   "Completed processing Travel settlement",
                                                                   "Failed to complete Travel settlement")
   end
@@ -121,7 +121,7 @@ class ExpenseSettlementsController < ApplicationController
 
   def get_flash_message(flag, success_message, error_message)
     if(flag)
-      return {:success => success_message} 
+      return {:success => success_message}
     else
       return {:error => error_message}
     end

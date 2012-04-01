@@ -46,7 +46,7 @@ $(document).ready(function() {
             validate_row_manipulations();
         });
 
-        $('.delete_row').live("click",function(event){ 
+        $('.delete_row').live("click",function(event){
             var _this = this;
             var cash_handover = $(this).parents('.cash_handover');
             var input = cash_handover.next();
@@ -58,12 +58,12 @@ $(document).ready(function() {
                         id: input.val()
                       },
                       success: function(data){
-                        cash_handover.last().remove(); 
+                        cash_handover.last().remove();
                       }
                     });
                 }else{
-                    cash_handover.last().remove();    
-                }      
+                    cash_handover.last().remove();
+                }
             validate_row_manipulations();
         });
 
