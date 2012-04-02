@@ -50,7 +50,7 @@ class ExpenseSettlement
 
     def get_reimbursable_expense_reports(mark_as_closed = false)
       completed_settlements = with_status(COMPLETE).to_a
-      completed_settlements.collect { |settlement| settlement.create_bank_reimbursement(mark_as_closed) }.compact
+      completed_settlements.collect { |settlement| settlement.__send__(:create_bank_reimbursement, mark_as_closed) }.compact
     end
 
     def find_by_id_with_expenses_and_forex(settlement_id)
@@ -210,9 +210,10 @@ class ExpenseSettlement
     @consolidated_expenses.collect { |expense| expense['report_id'] }.uniq
   end
 
+  private
   def create_bank_reimbursement(mark_as_closed)
     self.populate_instance_data
-    return if self.get_receivable_amount.negative?
+    return unless self.get_receivable_amount.negative?
 
     self.close if mark_as_closed
 
