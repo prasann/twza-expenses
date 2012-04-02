@@ -58,6 +58,7 @@ $(document).ready(function() {
                         id: input.val()
                       },
                       success: function(data){
+                        cash_handover.next().remove();
                         cash_handover.last().remove();
                       }
                     });
