@@ -6,8 +6,9 @@ namespace :data_import do
 
   desc "Cleans and recreates Import forex details"
   task :forex => :environment do
-    ForexPayment.delete_all
-    Rake::Task['data_import:forex_addon'].invoke
+    if ForexPayment.count() == 0
+      Rake::Task['data_import:forex_addon'].invoke
+    end
   end
 
   desc "Import outbound travel details - Adds onto the existing DB"
@@ -15,16 +16,18 @@ namespace :data_import do
     TravelDataImporter.new.import('data/Inbound-Outbound Travel.xls')
   end
 
-  desc "Cleans and recreates travel details"
+  desc "Creates travel details one time"
   task :travel => :environment do
-    OutboundTravel.delete_all
-    Rake::Task['data_import:travel_addon'].invoke
+    if OutboundTravel.count() == 0
+      Rake::Task['data_import:travel_addon'].invoke
+    end
   end
 
-  desc "Cleans and recreates bank details"
+  desc "Creates bank details one time"
   task :bank => :environment do
-    BankDetail.delete_all
-    BankDetailsImporter.new.import('data/SCB_nos.xlsx')
+    if BankDetail.count() == 0
+      BankDetailsImporter.new.import('data/SCB_nos.xlsx')
+    end
   end
 
   desc "Imports Expense sheet into DB"

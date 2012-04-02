@@ -166,19 +166,25 @@ describe ExpenseSettlementsController do
       empl_id = "123"
       outbound_travel = FactoryGirl.create(:outbound_travel, :expense_settlement => nil)
 
-      post :generate_report, :expense_settlement => { :outbound_travel_id => outbound_travel.id, :empl_id => empl_id }
+      post :generate_report, :expense_settlement => { :outbound_travel_id =>
+        outbound_travel.id, :empl_id => empl_id, :emp_name => 'name' }
 
-      expected_expense_settlement = FactoryGirl.build(:expense_settlement, :outbound_travel => outbound_travel, :empl_id => empl_id)
+      expected_expense_settlement = FactoryGirl.build(:expense_settlement,
+                                                      :outbound_travel => outbound_travel,
+                                                      :empl_id => empl_id,
+                                                      :emp_name => 'name')
       assigns(:expense_settlement).should have_same_attributes_as(expected_expense_settlement)
       expected_expense_settlement.should have_same_attributes_as(outbound_travel.expense_settlement)
     end
 
     it "should update expense report if it already exists in the travel" do
       empl_id = "123"
-      expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => empl_id)
+      expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => empl_id,
+                                              :emp_name => 'name')
       outbound_travel = FactoryGirl.create(:outbound_travel, :expense_settlement => expense_settlement)
 
-      post :generate_report, :expense_settlement => { :outbound_travel_id => outbound_travel.id, :empl_id => empl_id }
+      post :generate_report, :expense_settlement => { :outbound_travel_id =>
+        outbound_travel.id, :empl_id => empl_id, :emp_name => 'name' }
 
       assigns(:expense_settlement).should have_same_attributes_as(expense_settlement)
     end
@@ -237,7 +243,8 @@ describe ExpenseSettlementsController do
     expenses = [FactoryGirl.create(:expense)]
 
     expense_settlement = FactoryGirl.create(:expense_settlement, :forex_payments => forex_payments.collect(&:id),
-                              :expenses => expenses.collect(&:id), :empl_id => outbound_travel.emp_id, :outbound_travel_id => outbound_travel.id.to_s,
+                              :expenses => expenses.collect(&:id), :outbound_travel_id => outbound_travel.id.to_s,
+                              :empl_id => outbound_travel.emp_id, :emp_name => employee_name,
                               :cash_handovers => cash_handovers)
     expense_settlement.should_receive(:get_receivable_amount).and_return(13732.5)
 
