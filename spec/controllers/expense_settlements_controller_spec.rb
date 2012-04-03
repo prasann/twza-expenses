@@ -123,7 +123,7 @@ describe ExpenseSettlementsController do
       outbound_travel = FactoryGirl.create(:outbound_travel, :emp_id => empl_id)
       forex_payment = FactoryGirl.create(:forex_payment)
       expense = FactoryGirl.create(:expense)
-      expense_settlement = FactoryGirl.build(:expense_settlement, :empl_id => empl_id, :expenses => [expense.id],
+      expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => empl_id, :expenses => [expense.id],
                                               :forex_payments => [forex_payment.id],
                                               :status => ExpenseSettlement::GENERATED_DRAFT,
                                               :outbound_travel_id => outbound_travel.id,
@@ -135,7 +135,6 @@ describe ExpenseSettlementsController do
                                                     [CashHandover.new(:amount => 100, :currency => forex_payment.currency,
                                                                       :conversion_rate => 72.50)])
       expense_settlement.cash_handovers.map(&:save!)
-      expense_settlement.save!
       ForexPayment.should_receive(:fetch_for).with(outbound_travel.emp_id, forex_from, forex_to, anything)
                       .and_return([forex_payment])
       ForexPayment.should_receive(:find).with([forex_payment.id]).and_return([forex_payment])
