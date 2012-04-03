@@ -13,7 +13,7 @@
 <br/><br/>
 
 <%= label_tag 'Total Amount : ', nil, :class => 'reimb_heading' %>
-<%= label_tag @expense_reimbursement.total_amount, nil, :class => 'reimb_value' %>
+<%= label_tag number_with_precision(@expense_reimbursement.total_amount, :precision => 2), nil, :class => 'reimb_value' %>
 
 <%= label_tag 'Status : ', nil, :class => 'reimb_heading' %>
 <%= label_tag @expense_reimbursement.status, nil, :class => 'reimb_value' %>
