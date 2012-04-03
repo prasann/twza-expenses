@@ -81,7 +81,7 @@ class ExpenseReimbursementsController < ApplicationController
                                                         :status => status,
                                                         :total_amount => total_amount)
     if @expense_reimbursement.save
-      redirect_to :action => 'index', :empl_id => params[:empl_id], :flash => {:success => 'Expense reimbursements are successfully updated.'}
+      redirect_to :action => 'index', :anchor => 'expense_reimbursements', :empl_id => params[:empl_id], :flash => {:success => 'Expense reimbursements are successfully updated.'}
     else
       render action: "edit"
     end
