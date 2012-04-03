@@ -5,7 +5,7 @@
     <td>
       <div class="left_button">
         <%
-        back_path = @expense_settlement.is_complete? || @expense_settlement.is_closed? ? expense_settlements_path(:anchor => 'expense_reimbursements') : edit_expense_settlement(:id => @expense_settlement.id)
+        back_path = @expense_settlement.is_complete? || @expense_settlement.is_closed? ? expense_settlements_path(:anchor => 'expense_reimbursements') : edit_expense_settlement_path(:id => @expense_settlement.id)
         %>
         <%= button_to('<< Back', back_path, :method => :get) %>
       </div>
