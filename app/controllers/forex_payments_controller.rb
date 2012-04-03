@@ -32,18 +32,18 @@ class ForexPaymentsController < ApplicationController
   def create
     @forex_payment = ForexPayment.new(params[:forex_payment])
     if @forex_payment.save
-      redirect_to @forex_payment, :flash => {:success => 'Forex payment options are successfully created.'}
+      redirect_to(forex_payment_path(:id => @forex_payment.id), :flash => {:success => 'Forex payment was successfully created.'})
     else
-      render action: "new"
+      render :action => "new"
     end
   end
 
   def update
     @forex_payment = ForexPayment.find(params[:id])
     if @forex_payment.update_attributes(params[:forex_payment])
-      redirect_to @forex_payment, :flash => {:success => 'Forex payment options are successfully updated.'}
+      redirect_to(forex_payment_path(:id => @forex_payment.id), :flash => {:success => 'Forex payment was successfully updated.'})
     else
-      render action: "edit"
+      render :action => "edit"
     end
   end
 
@@ -51,7 +51,7 @@ class ForexPaymentsController < ApplicationController
     @forex_payment = ForexPayment.find(params[:id])
     # TODO: What happens if the destroy fails?
     @forex_payment.destroy
-    redirect_to forex_payments_path, :flash => {:success => 'Forex payment options are successfully deleted.'}
+    redirect_to(forex_payments_path, :flash => {:success => 'Forex payment was successfully deleted.'})
   end
 
   def export

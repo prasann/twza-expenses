@@ -31,18 +31,18 @@ class OutboundTravelsController < ApplicationController
   def create
     @outbound_travel = OutboundTravel.new(params[:outbound_travel])
     if @outbound_travel.save
-      redirect_to @outbound_travel, :flash => {:success => 'Outbound travel was successfully created.'}
+      redirect_to(outbound_travel_path(:id => @outbound_travel.id), :flash => {:success => 'Outbound travel was successfully created.'})
     else
-      render action: "new"
+      render :action => "new"
     end
   end
 
   def update
     @outbound_travel = OutboundTravel.find(params[:id])
     if @outbound_travel.update_attributes(params[:outbound_travel])
-      redirect_to @outbound_travel, :flash => {:success => 'Outbound travel was successfully updated.'}
+      redirect_to(outbound_travel_path(:id => @outbound_travel.id), :flash => {:success => 'Outbound travel was successfully updated.'})
     else
-      render action: "edit"
+      render :action => "edit"
     end
   end
 
@@ -50,7 +50,7 @@ class OutboundTravelsController < ApplicationController
     @outbound_travel = OutboundTravel.find(params[:id])
     # TODO: What happens if the destroy fails?
     @outbound_travel.destroy
-    redirect_to outbound_travels_path, :flash => {:success => 'Outbound travel was successfully deleted.'}
+    redirect_to(outbound_travels_path, :flash => {:success => 'Outbound travel was successfully deleted.'})
   end
 
   def export

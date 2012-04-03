@@ -73,17 +73,14 @@ class ExpenseReimbursementsController < ApplicationController
       total_amount += modified_amount
     end
     status = !params[:process_reimbursement].blank? ? ExpenseReimbursement::PROCESSED : ExpenseReimbursement::FAULTY
-    @expense_reimbursement = ExpenseReimbursement.new(:expense_report_id => params[:expense_report_id],
-                                                        :empl_id => params[:empl_id],
-                                                        :submitted_on => params[:submitted_on],
-                                                        :notes => params[:notes],
-                                                        :expenses => expenses,
-                                                        :status => status,
-                                                        :total_amount => total_amount)
+    @expense_reimbursement = ExpenseReimbursement.new({:expenses => expenses,
+                                                       :status => status,
+                                                       :total_amount => total_amount}.merge(
+                                                          params.slice(:expense_report_id, :empl_id, :submitted_on, :notes)))
     if @expense_reimbursement.save
-      redirect_to :action => 'index', :anchor => 'expense_reimbursements', :empl_id => params[:empl_id], :flash => {:success => 'Expense reimbursements are successfully updated.'}
+      redirect_to(expense_reimbursements_path({:anchor => 'expense_reimbursements'}.merge(params.slice(:empl_id))), :flash => {:success => 'Expense reimbursements are successfully updated.'})
     else
-      render action: "edit"
+      render :action => "edit"
     end
   end
 
@@ -100,5 +97,4 @@ class ExpenseReimbursementsController < ApplicationController
   def has_param_keys?(params)
     return params.has_key?(:empl_id) || params.has_key?(:expense_rpt_id) || params.has_key?(:name)
   end
-
 end

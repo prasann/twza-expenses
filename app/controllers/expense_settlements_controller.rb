@@ -49,17 +49,15 @@ class ExpenseSettlementsController < ApplicationController
   def set_processed
     is_processed = ExpenseSettlement.mark_as_complete(params[:id])
 
-    redirect_to outbound_travels_path, :flash => get_flash_message(is_processed,
+    redirect_to(outbound_travels_path, :flash => get_flash_message(is_processed,
                                                                   "Completed processing Travel settlement",
-                                                                  "Failed to complete Travel settlement")
+                                                                  "Failed to complete Travel settlement"))
   end
 
   def notify
     expense_report = ExpenseSettlement.find_and_notify_employee(params[:id])
     # TODO: What if the save or notify failed?
-    # TODO: In the "Rails 3.1" way, flash should be part of the redirect (options hash) - so need to make sure that this actually works
-    flash[:success] = "Expense settlement e-mail successfully sent to '#{expense_report.profile.try(:common_name)}'"
-    redirect_to(:action => :index, :anchor => 'expense_settlements', :empl_id => expense_report.empl_id)
+    redirect_to(expense_settlements_path(:anchor => 'expense_settlements'), :flash => {:success => "Expense settlement e-mail successfully sent to '#{expense_report.profile.try(:common_name)}'"})
   end
 
   def show_uploads
@@ -81,7 +79,7 @@ class ExpenseSettlementsController < ApplicationController
       # TODO: In the "Rails 3.1" way, flash should be part of the redirect (options hash) - so need to make sure that this actually works
       flash[:error] = 'No records uploaded. Either this file has already been uploaded or all rows have errors'
     end
-    redirect_to :action => 'show_uploads'
+    redirect_to(show_uploads_expense_settlements_path)
   end
 
   private

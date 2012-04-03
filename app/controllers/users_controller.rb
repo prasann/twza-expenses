@@ -9,6 +9,6 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     # TODO: What if there is an error?
-    redirect_to root_path if @user.save
+    redirect_to(root_path) if @user.save
   end
 end
