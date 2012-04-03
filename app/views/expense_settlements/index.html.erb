@@ -34,12 +34,11 @@
     %>
       <tr class="<%= cycle("even", "odd") %>">
         <td>
-          <!-- TODO: Move logic for editable? into model -->
-          <% if expense_settlement.is_complete? || expense_settlement.is_closed? %>
-          <%= link_to expense_settlement.empl_id, :action => 'show', :id => expense_settlement.id.to_s %>
-          <% else %>
-          <%= link_to expense_settlement.empl_id, :action => 'edit', :id => expense_settlement.id.to_s %>
-          <% end %>
+          <%
+          # TODO: Move logic for editable? into model
+          back_path = (expense_settlement.is_complete? || expense_settlement.is_closed?) ? expense_settlement_path(:id => expense_settlement.id.to_s) : edit_expense_settlement_path(:id => expense_settlement.id.to_s)
+          %>
+          <%= link_to(expense_settlement.empl_id, back_path) %>
         </td>
         <td><%= expense_settlement.emp_name %></td>
         <td><%= DateHelper.date_fmt(travel.try(:departure_date)) %></td>
@@ -49,7 +48,7 @@
         <td><%= DateHelper.date_fmt(expense_settlement.updated_at) %></td>
         <td>
           <% if expense_settlement.is_notified_employee? %>
-            <%= button_to 'Mark as Processed', :action => 'set_processed', :id => expense_settlement.id.to_s %>
+            <%= button_to('Mark as Processed', set_processed_expense_settlement_path(:id => expense_settlement.id.to_s, :anchor => 'expense_settlements') %>
           <% else %>
             <label>N/A</label>
           <% end %>
