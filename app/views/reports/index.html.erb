@@ -10,6 +10,6 @@
   <h2>Bank Reimbursement Statement</h2>
   <%= link_to(image_tag("excel.png") + "Mark as Sent to Bank and Generate Bank Reimbursement Statement", mark_processed_and_export_consolidated_expenses_path(:format => :xls)) %>
   &nbsp;
-  <%= link_to(image_tag("excel.png") + "Generate Bank Reimbursement Statement", :controller => 'consolidated_expenses', :action => 'export', :format => :xls) %>
+  <%= link_to(image_tag("excel.png") + "Generate Bank Reimbursement Statement", export_consolidated_expenses_path(:format => :xls)) %>
 </div>
 <br/>

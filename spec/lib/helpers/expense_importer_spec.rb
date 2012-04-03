@@ -46,8 +46,8 @@ describe ExpenseImporter do
       end
     end
 
-    UploadedExpense.should_receive(:create).with(file_name: "file1")
-    UploadedExpense.should_not_receive(:create).with(file_name: "file2")
+    UploadedExpense.should_receive(:create!).with(file_name: "file1")
+    UploadedExpense.should_not_receive(:create!).with(file_name: "file2")
 
     importer.load
 

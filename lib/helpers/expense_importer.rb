@@ -36,7 +36,7 @@ class ExpenseImporter
       end
       expense
     end
-    UploadedExpense.create(file_name: file_name) if at_least_one_successful_record
+    UploadedExpense.create!(file_name: file_name) if at_least_one_successful_record
   end
 
   def file_exists?(file_name)

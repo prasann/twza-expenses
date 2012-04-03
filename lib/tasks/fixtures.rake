@@ -73,7 +73,7 @@ namespace :db do
 
       rand(1..5).times.each do
         amount = rand(1000..2500)
-        ForexPayment.create(
+        ForexPayment.create!(
           :emp_id => employee_id, :emp_name => user_name,
           :amount => amount,
           :currency => currency,
@@ -88,7 +88,7 @@ namespace :db do
     end
 
     def insert_travel(employee_id, user_name, travel_start_date, travel_end_date, place_of_visit)
-      OutboundTravel.create(
+      OutboundTravel.create!(
         :emp_id => employee_id, :emp_name => user_name,
         :departure_date => travel_start_date,
         :return_date => travel_end_date,
@@ -101,7 +101,7 @@ namespace :db do
       rand(1..10).times.each do
         original_cost = rand(10..10000)
         expense_date = generate_random_date_between(start_date, travel_end_date)
-        expense = Expense.create(
+        expense = Expense.create!(
           :empl_id => employee_id, 
           :expense_rpt_id => rand(100000..900000),
           :cost_in_home_currency => original_cost * currency_rate,

@@ -73,18 +73,18 @@ class ExpenseReimbursementsController < ApplicationController
       total_amount += modified_amount
     end
     status = !params[:process_reimbursement].blank? ? ExpenseReimbursement::PROCESSED : ExpenseReimbursement::FAULTY
-    @expense_reimbursement = ExpenseReimbursement.create(:expense_report_id => params[:expense_report_id],
+    @expense_reimbursement = ExpenseReimbursement.new(:expense_report_id => params[:expense_report_id],
                                                         :empl_id => params[:empl_id],
                                                         :submitted_on => params[:submitted_on],
                                                         :notes => params[:notes],
                                                         :expenses => expenses,
                                                         :status => status,
                                                         :total_amount => total_amount)
-    # TODO: This be moved to the point when reimbursements are sent to the bank and closed
-    #EmployeeMailer.non_travel_expense_reimbursement(@expense_reimbursement).deliver
-
-    # TODO: What if the creation failed?
-    redirect_to :action => 'index', :empl_id => params[:empl_id]
+    if @expense_reimbursement.save
+      redirect_to :action => 'index', :empl_id => params[:empl_id], :flash => {:success => 'Expense reimbursements are successfully updated.'}
+    else
+      render action: "edit"
+    end
   end
 
   private

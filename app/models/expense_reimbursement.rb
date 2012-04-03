@@ -61,8 +61,7 @@ class ExpenseReimbursement
 
   def close
     self.status = CLOSED
-    # TODO: What happens if the save fails?
-    self.save
+    self.save!
   end
 
   def is_processed?

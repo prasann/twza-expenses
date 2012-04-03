@@ -63,7 +63,6 @@ class OutboundTravelsController < ApplicationController
 
   def update_field
     @outbound_travel = OutboundTravel.find(params[:id])
-    # TODO: What if this fails?
     @outbound_travel.update_attributes(params[:name] => params[:value])
     render :nothing => true
   end

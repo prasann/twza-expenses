@@ -89,22 +89,19 @@ class ExpenseSettlement
 
   def notify_employee
     populate_instance_data
-    EmployeeMailer.expense_settlement(self).deliver
     self.status = NOTIFIED_EMPLOYEE
-    # TODO: What happens if the save fails?
-    self.save
+    self.save!
+    EmployeeMailer.expense_settlement(self).deliver
   end
 
   def complete
     self.status = COMPLETE
-    # TODO: What happens if the save fails?
-    self.save
+    self.save!
   end
 
   def close
     self.status = CLOSED
-    # TODO: What happens if the save fails?
-    self.save
+    self.save!
   end
 
   def is_generated_draft?

@@ -68,7 +68,7 @@
           <% if (outbound_travel.return_date.nil?) %>
             <%= link_to_function 'Process Expense', 'no_travel_return_date()', :class => 'no_travel_return_date' %>
           <% else %>
-            <%= link_to 'Process Expense', :controller => "expense_settlements", :action => "load_by_travel", :id => outbound_travel.id.to_s %>
+            <%= link_to 'Process Expense', load_by_travel_expense_settlement_path(:id => outbound_travel.id.to_s) %>
           <% end %>
         <% end %>
       </td>
