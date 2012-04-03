@@ -124,13 +124,13 @@
           <%= settlement_form.fields_for :cash_handovers do |handover_form| %>
               <tr class="cash_handover <%= cycle('even', 'odd') %>">
                 <td>
-                  <%= handover_form.text_field :amount, class: 'amount' %>
+                  <%= handover_form.text_field :amount, :autocomplete => "off", class: 'amount' %>
                 </td>
                 <td>
-                  <%= handover_form.text_field :currency, class: 'handover_currency' %>
+                  <%= handover_form.text_field :currency, :autocomplete => "off", class: 'handover_currency' %>
                 </td>
                 <td>
-                  <%= handover_form.text_field :conversion_rate, class: 'conversion_rate' %>
+                  <%= handover_form.text_field :conversion_rate, :autocomplete => "off", class: 'conversion_rate' %>
                 </td>
                 <td>
                   <%= handover_form.select :payment_mode, @payment_modes, class: 'conversion_rate' %>
