@@ -3,6 +3,7 @@ require 'spec_helper'
 describe BankDetail do
   describe "validations" do
     it { should validate_presence_of(:empl_id) }
+    it { should validate_presence_of(:empl_name) }
 
     it { should validate_presence_of(:account_no) }
     it "should validate uniqueness of account_no" do

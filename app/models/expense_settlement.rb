@@ -16,13 +16,17 @@ class ExpenseSettlement
   field :empl_id, type: String    #TODO: Why is this in a different type than in other models? Also, why the different names?
   field :emp_name, type: String    #TODO: Why does this have a different name than in other models?
   field :status, type: String
+  field :expense_from, :type => Date
+  field :expense_to, :type => Date
+  field :forex_from, :type => Date
+  field :forex_to, :type => Date
 
   belongs_to :outbound_travel
 
   has_many :cash_handovers
   accepts_nested_attributes_for :cash_handovers
 
-  validates_presence_of :empl_id, :outbound_travel_id, :status, :allow_blank => false
+  validates_presence_of :empl_id, :emp_name, :outbound_travel_id, :status, :expense_from, :expense_to, :forex_from, :forex_to, :allow_blank => false
   validates_inclusion_of :status, :in => [GENERATED_DRAFT, NOTIFIED_EMPLOYEE, COMPLETE, CLOSED]
 
   class << self

@@ -7,7 +7,6 @@ module ExcelDataExtractor
   EXCEL_HANDLERS = {"xls" => Excel, "xlsx" => Excelx}
 
   def read_from_excel(file_name, sheet_id, &callback)
-    puts "in upload file " + file_name
     ignored_records_count = 0
     file = handler(file_name)
     file.default_sheet = file.sheets[sheet_id]

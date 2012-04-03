@@ -3,8 +3,13 @@ require 'spec_helper'
 describe ExpenseSettlement do
   describe "validations" do
     it { should validate_presence_of(:empl_id) }
+    it { should validate_presence_of(:emp_name) }
     it { should validate_presence_of(:outbound_travel_id) }
     it { should validate_presence_of(:status) }
+    it { should validate_presence_of(:expense_from) }
+    it { should validate_presence_of(:expense_to) }
+    it { should validate_presence_of(:forex_from) }
+    it { should validate_presence_of(:forex_to) }
 
     it { should allow_value(ExpenseSettlement::GENERATED_DRAFT).for(:status) }
     it { should allow_value(ExpenseSettlement::NOTIFIED_EMPLOYEE).for(:status) }

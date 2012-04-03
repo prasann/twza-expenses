@@ -46,12 +46,18 @@ FactoryGirl.define do
 
   factory :expense_settlement do
     sequence(:empl_id) { |n| "#{n}" }
+    sequence(:emp_name) { |n| "emp_name: #{n}" }
+    expense_from { Date.today - 10.days }
+    expense_to { Date.today - 5.days }
+    forex_from { Date.today - 6.days }
+    forex_to { Date.today - 3.days }
     association :outbound_travel
     status { ExpenseSettlement::GENERATED_DRAFT }
   end
 
   factory :bank_detail do
     sequence(:empl_id) { |n| "#{n}" }
+    sequence(:empl_name) { |n| "empl_name: #{n}" }
     sequence(:account_no) { |n| "#{n}" }
   end
 

@@ -19,10 +19,10 @@ describe ForexPaymentsController do
     it "searches for the given employee id" do
       expense = FactoryGirl.create(:expense)
       outbound_travel = FactoryGirl.create(:outbound_travel)
-      expense_settlement = ExpenseSettlement.create!(:empl_id => 10001, :forex_payments => [@forex_payments_1.id],
-                                                    :expenses => [expense.id],
-                                                    :outbound_travel => outbound_travel.id,
-                                                    :status => ExpenseSettlement::GENERATED_DRAFT)
+      expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => 10001, :forex_payments => [@forex_payments_1.id],
+                                                                   :expenses => [expense.id],
+                                                                   :outbound_travel => outbound_travel.id,
+                                                                   :status => ExpenseSettlement::GENERATED_DRAFT)
 
       get :index, :emp_id => 10001
 

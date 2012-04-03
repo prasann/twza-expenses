@@ -16,10 +16,10 @@ class ExpenseSettlementsController < ApplicationController
 
   def edit
     settlement_from_db = ExpenseSettlement.load_with_deps(params[:id])
-    @expenses_from_date = DateHelper.date_from_str(settlement_from_db.expense_from)
-    @expenses_to_date = DateHelper.date_from_str(settlement_from_db.expense_to)
-    @forex_from_date = DateHelper.date_from_str(settlement_from_db.forex_from)
-    @forex_to_date = DateHelper.date_from_str(settlement_from_db.forex_to)
+    @expenses_from_date = settlement_from_db.expense_from
+    @expenses_to_date = settlement_from_db.expense_to
+    @forex_from_date = settlement_from_db.forex_from
+    @forex_to_date = settlement_from_db.forex_to
     travel = OutboundTravel.find(settlement_from_db.outbound_travel_id)
     create_settlement_report_from_dates(travel, settlement_from_db)
     render 'load_by_travel'
@@ -33,22 +33,23 @@ class ExpenseSettlementsController < ApplicationController
   def generate_report
     outbound_travel = OutboundTravel.find(params[:expense_settlement][:outbound_travel_id])
     @expense_settlement = outbound_travel.find_or_initialize_expense_settlement
-    @expense_settlement.update_attributes({:cash_handovers => params[:expense_settlement][:cash_handovers_attributes],
+    @expense_settlement.update_attributes!({:cash_handovers => params[:expense_settlement][:cash_handovers_attributes],
                                            :status => ExpenseSettlement::GENERATED_DRAFT,
                                            :empl_id =>  params[:expense_settlement][:empl_id],
-                                           :emp_name => params[:expense_settlement][:emp_name]
-                                          }.merge(
-                                             params.slice(:expenses, :forex_payments,:expense_from,
-                                                       :expense_to, :forex_from, :forex_to).symbolize_keys)
-                                          )
+                                           :emp_name => params[:expense_settlement][:emp_name],
+                                           :expense_from => DateHelper.date_from_str(params[:expense_from]),
+                                           :expense_to => DateHelper.date_from_str(params[:expense_to]),
+                                           :forex_from => DateHelper.date_from_str(params[:forex_from]),
+                                           :forex_to => DateHelper.date_from_str(params[:forex_to])
+                                          }.merge(params.slice(:expenses, :forex_payments).symbolize_keys))
     @expense_settlement.cash_handovers.map(&:save!)
     @expense_settlement.populate_instance_data
   end
 
   def set_processed
     is_processed = ExpenseSettlement.mark_as_complete(params[:id])
-    
-    redirect_to outbound_travels_path, :flash => get_flash_message(is_processed, 
+
+    redirect_to outbound_travels_path, :flash => get_flash_message(is_processed,
                                                                   "Completed processing Travel settlement",
                                                                   "Failed to complete Travel settlement")
   end
@@ -109,7 +110,7 @@ class ExpenseSettlementsController < ApplicationController
     processed_forex_ids = processed_expenses.collect(&:forex_payments).flatten.compact
 
     @expenses = Expense.fetch_for_employee_between_dates(travel.emp_id, @expenses_from_date, @expenses_to_date, processed_expense_ids)
-    @forex_payments = ForexPayment.fetch_for travel.emp_id, @forex_from_date, @forex_to_date, processed_forex_ids
+    @forex_payments = ForexPayment.fetch_for(travel.emp_id, @forex_from_date, @forex_to_date, processed_forex_ids)
     @applicable_currencies = ForexPayment.get_json_to_populate('currency')['currency']
     @payment_modes = [CashHandover::CASH, CashHandover::CREDIT_CARD]
     @has_cash_handovers = !expense_settlement.nil? && expense_settlement.cash_handovers.size() > 0

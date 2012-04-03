@@ -123,14 +123,15 @@ describe ExpenseSettlementsController do
       outbound_travel = FactoryGirl.create(:outbound_travel, :emp_id => empl_id)
       forex_payment = FactoryGirl.create(:forex_payment)
       expense = FactoryGirl.create(:expense)
-      expense_settlement = ExpenseSettlement.new(:empl_id => empl_id, :expenses => [expense.id], :forex_payments => [forex_payment.id],
-                                                 :status => ExpenseSettlement::GENERATED_DRAFT,
-                                                 :outbound_travel_id => outbound_travel.id,
-                                                 :expense_from => DateHelper::date_fmt(expense_from),
-                                                 :expense_to => DateHelper::date_fmt(expense_to),
-                                                 :forex_from => DateHelper::date_fmt(forex_from),
-                                                 :forex_to => DateHelper::date_fmt(forex_to),
-                                                 :cash_handovers =>
+      expense_settlement = FactoryGirl.build(:expense_settlement, :empl_id => empl_id, :expenses => [expense.id],
+                                              :forex_payments => [forex_payment.id],
+                                              :status => ExpenseSettlement::GENERATED_DRAFT,
+                                              :outbound_travel_id => outbound_travel.id,
+                                              :expense_from => expense_from,
+                                              :expense_to => expense_to,
+                                              :forex_from => forex_from,
+                                              :forex_to => forex_to,
+                                              :cash_handovers =>
                                                     [CashHandover.new(:amount => 100, :currency => forex_payment.currency,
                                                                       :conversion_rate => 72.50)])
       expense_settlement.cash_handovers.map(&:save!)
@@ -164,29 +165,34 @@ describe ExpenseSettlementsController do
   describe "generate report" do
     it "should create expense report for chosen expenses, forex and travel" do
       empl_id = "123"
-      outbound_travel = FactoryGirl.create(:outbound_travel, :expense_settlement => nil)
+      outbound_travel = FactoryGirl.create(:outbound_travel)
 
-      post :generate_report, :expense_settlement => { :outbound_travel_id =>
-        outbound_travel.id, :empl_id => empl_id, :emp_name => 'name' }
+      expect {
+        post :generate_report, :expense_settlement => { :outbound_travel_id => outbound_travel.id,
+                                                        :empl_id => empl_id, :emp_name => 'name' },
+                               :forex_from => "27-Nov-2011", :forex_to => "17-Dec-2011",
+                               :expense_from => "07-Dec-2011", :expense_to => "22-Dec-2011"
+      }.to change(ExpenseSettlement, :count).by(1)
 
-      expected_expense_settlement = FactoryGirl.build(:expense_settlement,
-                                                      :outbound_travel => outbound_travel,
-                                                      :empl_id => empl_id,
-                                                      :emp_name => 'name')
-      assigns(:expense_settlement).should have_same_attributes_as(expected_expense_settlement)
-      expected_expense_settlement.should have_same_attributes_as(outbound_travel.expense_settlement)
+      assigns(:expense_settlement).should_not be_nil
+      assigns(:expense_settlement).should == outbound_travel.reload.expense_settlement
     end
 
     it "should update expense report if it already exists in the travel" do
       empl_id = "123"
+      outbound_travel = FactoryGirl.create(:outbound_travel)
       expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => empl_id,
-                                              :emp_name => 'name')
-      outbound_travel = FactoryGirl.create(:outbound_travel, :expense_settlement => expense_settlement)
+                                              :emp_name => 'name', :outbound_travel => outbound_travel)
 
-      post :generate_report, :expense_settlement => { :outbound_travel_id =>
-        outbound_travel.id, :empl_id => empl_id, :emp_name => 'name' }
+      expect {
+        post :generate_report, :expense_settlement => { :outbound_travel_id => outbound_travel.id,
+                               :empl_id => empl_id, :emp_name => 'name' },
+                               :forex_from => "27-Nov-2011", :forex_to => "17-Dec-2011",
+                               :expense_from => "07-Dec-2011", :expense_to => "22-Dec-2011"
+      }.to_not change(ExpenseSettlement, :count)
 
-      assigns(:expense_settlement).should have_same_attributes_as(expense_settlement)
+      assigns(:expense_settlement).should_not be_nil
+      assigns(:expense_settlement).should == expense_settlement
     end
   end
 
@@ -254,7 +260,9 @@ describe ExpenseSettlementsController do
     post :generate_report, {:expense_settlement => {:id => expense_settlement.id.to_s, :empl_id => outbound_travel.emp_id.to_s,
                                                    :outbound_travel_id => outbound_travel.id.to_s, :emp_name => employee_name,
                                                    :cash_handovers_attributes => handovers},
-                            :forex_payments => forex_payments.collect(&:id), :expenses => expenses.collect(&:id)
+                            :forex_payments => forex_payments.collect(&:id), :expenses => expenses.collect(&:id),
+                            :forex_from => "27-Nov-2011", :forex_to => "17-Dec-2011",
+                            :expense_from => "07-Dec-2011", :expense_to => "22-Dec-2011"
     }
 
     assigns(:expense_settlement).should have_same_attributes_as(expense_settlement)

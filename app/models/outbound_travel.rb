@@ -31,6 +31,7 @@ class OutboundTravel
     end
   end
 
+  # TODO: Isnt there a dynamic method that rails provides for this functionality?
   def find_or_initialize_expense_settlement
     self.create_expense_settlement if self.expense_settlement.nil?
     self.expense_settlement
