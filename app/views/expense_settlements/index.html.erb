@@ -48,7 +48,7 @@
         <td><%= DateHelper.date_fmt(expense_settlement.updated_at) %></td>
         <td>
           <% if expense_settlement.is_notified_employee? %>
-            <%= button_to('Mark as Processed', set_processed_expense_settlement_path(:id => expense_settlement.id.to_s, :anchor => 'expense_settlements') %>
+            <%= button_to('Mark as Processed', set_processed_expense_settlement_path(:id => expense_settlement.id.to_s, :anchor => 'expense_settlements')) %>
           <% else %>
             <label>N/A</label>
           <% end %>
