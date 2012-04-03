@@ -20,36 +20,36 @@
 <br/><br/>
 
 <% @all_expenses.each do |project_code, expenses| %>
-    <%= label_tag 'Project Code : ', nil, :class => 'reimb_heading' %>
-    <%= label_tag project_code, nil, :class => 'reimb_value' %>
-    <table>
-      <tr>
-        <th>Expense Type</th>
-        <th>Expense Date</th>
-        <th>Cost</th>
-        <th>Currency</th>
-        <th>Description</th>
-        <th>Vendor</th>
-        <th>Payment Type</th>
-        <th>Attendees</th>
-        <th>Personal</th>
+  <%= label_tag 'Project Code : ', nil, :class => 'reimb_heading' %>
+  <%= label_tag project_code, nil, :class => 'reimb_value' %>
+  <table>
+    <tr>
+      <th>Expense Type</th>
+      <th>Expense Date</th>
+      <th>Cost</th>
+      <th>Currency</th>
+      <th>Description</th>
+      <th>Vendor</th>
+      <th>Payment Type</th>
+      <th>Attendees</th>
+      <th>Personal</th>
+    </tr>
+    <% expenses.each do |expense| %>
+      <tr class="<%= cycle("even", "odd") %>">
+        <td><%= expense.expense_type %></td>
+        <td><%= DateHelper.date_fmt(DateHelper.date_from_str(expense.expense_date)) %></td>
+        <!-- TODO: Use detect -->
+        <td><%= modified_expense = @expense_reimbursement.expenses.select{|e| e['expense_id'] == expense.id.to_s}
+                modified_expense.first["modified_amount"] %></td>
+        <td>INR</td>
+        <td><%= expense.description %></td>
+        <td><%= expense.vendor %></td>
+        <td><%= expense.payment_type %></td>
+        <td><%= expense.attendees %></td>
+        <td><%= expense.is_personal %></td>
       </tr>
-      <% expenses.each do |expense| %>
-          <tr class="<%= cycle("even", "odd") %>">
-            <td><%= expense.expense_type %></td>
-            <td><%= DateHelper.date_fmt(DateHelper.date_from_str(expense.expense_date)) %></td>
-            <!-- TODO: Use detect -->
-            <td><%= modified_expense = @expense_reimbursement.expenses.select{|e| e['expense_id'] == expense.id.to_s}
-                    modified_expense.first["modified_amount"] %></td>
-            <td>INR</td>
-            <td><%= expense.description %></td>
-            <td><%= expense.vendor %></td>
-            <td><%= expense.payment_type %></td>
-            <td><%= expense.attendees %></td>
-            <td><%= expense.is_personal %></td>
-          </tr>
-      <% end %>
-    </table>
+    <% end %>
+  </table>
 <% end %>
 <div style="float: left">
   <%= label_tag 'Notes : ', nil, :class => 'reimb_heading' %>

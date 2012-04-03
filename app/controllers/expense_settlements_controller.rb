@@ -123,7 +123,7 @@ class ExpenseSettlementsController < ApplicationController
 
   def get_flash_message(flag, success_message, error_message)
     if(flag)
-      return {:success => success_message} 
+      return {:success => success_message}
     else
       return {:error => error_message}
     end
