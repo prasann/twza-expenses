@@ -59,7 +59,7 @@
 
   <div class='right_align'>
     <%= label_tag 'Total Amount : ', nil, :class => 'reimb_heading' %>
-    <label id="total_amount"><%= @expense_reimbursement['total_amount'] %></label>
+    <label id="total_amount"><%= number_with_precision(@expense_reimbursement['total_amount'], :precision => 2) %></label>
   </div>
   <table id='report_buttons'>
     <tr>
