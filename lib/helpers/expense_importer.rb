@@ -5,10 +5,7 @@ class ExpenseImporter
   include ExcelDataExtractor
 
   def load
-    all_files = Dir.glob("data/TWIND*.xlsx")
-    all_files.each do |excelxfile|
-      load_expense excelxfile
-    end
+    Dir.glob("data/TWIND*.xlsx").each { |excelxfile| load_expense(excelxfile) }
   end
 
   def load_expense(excelxfile)
@@ -35,8 +32,7 @@ class ExpenseImporter
                   description: extractor.call("Q"))
       rescue Exception => e
         puts "exception during expense create: " + e.message
-        puts "could not create expense for employee: " + extractor.call("C").to_s + " report
-        id: " + extractor.call("B").to_s + " expense_date: " + extractor.call("J").to_s
+        puts "could not create expense for employee: " + extractor.call("C").to_s + " report id: " + extractor.call("B").to_s + " expense_date: " + extractor.call("J").to_s
       end
       expense
     end
@@ -52,7 +48,7 @@ class ExpenseImporter
   end
 
   def to_date(date_str)
-    Date.parse(date_str.to_s) if !date_str.nil?
+    DateHelper.date_from_str(date_str.to_s)
   end
 
   def get_employee_id(id_str)
