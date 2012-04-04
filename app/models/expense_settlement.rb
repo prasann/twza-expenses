@@ -120,6 +120,10 @@ class ExpenseSettlement
     self.status == CLOSED
   end
 
+  def is_editable?
+    !is_complete? && !is_closed?
+  end
+
   # TODO: Remove asap
   def populate_instance_data
     populate_forex_payments

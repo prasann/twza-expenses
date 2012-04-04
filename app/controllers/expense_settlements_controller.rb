@@ -72,14 +72,9 @@ class ExpenseSettlementsController < ApplicationController
   def file_upload
     require 'fileutils'
     @file_name = params[:file_upload][:my_file].original_filename
-    if load_to_db
-      # TODO: In the "Rails 3.1" way, flash should be part of the redirect (options hash) - so need to make sure that this actually works
-      flash[:success] = "File: '#{@file_name}' has been uploaded successfully"
-    else
-      # TODO: In the "Rails 3.1" way, flash should be part of the redirect (options hash) - so need to make sure that this actually works
-      flash[:error] = 'No records uploaded. Either this file has already been uploaded or all rows have errors'
-    end
-    redirect_to(show_uploads_expense_settlements_path)
+    redirect_to(show_uploads_expense_settlements_path, :flash => get_flash_message(load_to_db,
+                                                              "File: '#{@file_name}' has been uploaded successfully",
+                                                              'No records uploaded. Either this file has already been uploaded or all rows have errors'))
   end
 
   private

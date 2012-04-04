@@ -220,6 +220,10 @@ describe ExpenseSettlement do
     it "should be tested"
   end
 
+  describe "is_editable?" do
+    it "should be tested"
+  end
+
   describe "populate_consolidated_expenses" do
     it "should be tested"
   end

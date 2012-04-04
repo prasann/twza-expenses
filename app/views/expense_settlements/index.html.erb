@@ -35,8 +35,7 @@
       <tr class="<%= cycle("even", "odd") %>">
         <td>
           <%
-          # TODO: Move logic for editable? into model
-          back_path = (expense_settlement.is_complete? || expense_settlement.is_closed?) ? expense_settlement_path(:id => expense_settlement.id.to_s) : edit_expense_settlement_path(:id => expense_settlement.id.to_s)
+          back_path = !expense_settlement.is_editable? ? expense_settlement_path(:id => expense_settlement.id.to_s) : edit_expense_settlement_path(:id => expense_settlement.id.to_s)
           %>
           <%= link_to(expense_settlement.empl_id, back_path) %>
         </td>

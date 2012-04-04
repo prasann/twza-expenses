@@ -99,4 +99,10 @@ describe ExpenseReimbursement do
   describe "is_closed?" do
     it "should return true if status is CLOSED"
   end
+
+  describe "is_editable?" do
+    it "should return true if status is NOT CLOSED or FAULTY or PROCESSED"
+
+    it "should return false for all other statuses"
+  end
 end

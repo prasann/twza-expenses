@@ -40,21 +40,20 @@ class ExpenseReimbursementsController < ApplicationController
   def edit
     expenses = Expense.for_expense_report_id(params[:id].to_i).to_a
 
-    @empl_name = expenses.first.try(:profile).try(:get_full_name) || ""
-
     existing_expense_reimbursements = ExpenseReimbursement.find_for_expense_report_id(params[:id])
-
     # TODO: Performance: Can we move this filter logic into the db?
     if existing_expense_reimbursements.present? && !existing_expense_reimbursements.empty?
       expenses = expenses - existing_expense_reimbursements.collect(&:get_expenses).flatten
     end
     @all_expenses = expenses.group_by(&:project_subproject)
 
+    @empl_name = expenses.first.try(:profile).try(:get_full_name) || ""
+
     # TODO: Should this be an ExpenseReimbursement so that we can do method calls instead of hash-like access?
     @expense_reimbursement = {'expense_report_id' => params[:id],
       'empl_id' => expenses.first.try(:get_employee_id),
       'submitted_on' => expenses.first.try(:report_submitted_at),
-    'total_amount' => expenses.sum { |expense| expense.cost_in_home_currency.to_f }}
+      'total_amount' => expenses.sum { |expense| expense.cost_in_home_currency.to_f }}
   end
 
   def process_reimbursement

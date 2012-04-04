@@ -76,6 +76,10 @@ class ExpenseReimbursement
     self.status == CLOSED
   end
 
+  def is_editable?
+    !is_processed? && !is_faulty? && !is_closed?
+  end
+
   private
   def create_bank_reimbursement(mark_as_closed)
     self.close if mark_as_closed
