@@ -76,7 +76,7 @@ class ExpenseReimbursementsController < ApplicationController
                                                        :total_amount => total_amount}.merge(
                                                           params.slice(:expense_report_id, :empl_id, :submitted_on, :notes)))
     if @expense_reimbursement.save
-      redirect_to(expense_reimbursements_path({:anchor => 'expense_reimbursements'}.merge(params.slice(:empl_id))), :flash => {:success => 'Expense reimbursements are successfully updated.'})
+      redirect_to(expense_reimbursements_path(params.slice(:empl_id)), :flash => {:success => 'Expense reimbursements are successfully updated.'})
     else
       render :action => "edit"
     end

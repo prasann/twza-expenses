@@ -33,7 +33,11 @@
         },
         select: function(event, ui) {
           var tab = $(ui.tab);
-          window.location = tab.attr('data-url') + tab.attr('href');
+          if (tab.attr('data-url').indexOf('#') != -1) {
+            window.location = tab.attr('data-url');
+          } else {
+            window.location = tab.attr('data-url') + tab.attr('href');
+          }
         }
       });
     });
