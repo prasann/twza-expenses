@@ -9,8 +9,7 @@ class ExpenseReimbursementsController < ApplicationController
     elsif !params[:expense_rpt_id].blank?
       @expense_reimbursements = ExpenseReimbursement.find_for_expense_report_id(params[:expense_rpt_id])
       expenses_criteria = Expense.for_expense_report_id(params[:expense_rpt_id].to_i)
-      expense = expenses_criteria.first
-      empl_id = expense.try(:empl_id)
+      empl_id = expenses_criteria.first.try(:empl_id)
     end
 
     if !empl_id.blank?
