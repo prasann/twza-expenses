@@ -224,6 +224,7 @@ class ExpenseSettlement
 
     bank_detail = BankDetail.for_empl_id(self.empl_id).first
     # TODO: What if bank_detail is nil?
+    # TODO: Why are we returning a non-object?
     OpenStruct.new({:empl_id => self.empl_id,
                     :empl_name => bank_detail.empl_name,
                     :expense_report_ids => self.get_unique_report_ids.join(","),
