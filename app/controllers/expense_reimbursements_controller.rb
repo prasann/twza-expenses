@@ -53,7 +53,7 @@ class ExpenseReimbursementsController < ApplicationController
     @expense_reimbursement = {'expense_report_id' => params[:id],
       'empl_id' => expenses.first.try(:get_employee_id),
       'submitted_on' => expenses.first.try(:report_submitted_at),
-      'total_amount' => expenses.sum { |expense| expense.cost_in_home_currency.to_f }}
+      'total_amount' => expenses.collect(&:cost_in_home_currency).compact.sum.to_f}
   end
 
   def process_reimbursement
@@ -89,7 +89,7 @@ class ExpenseReimbursementsController < ApplicationController
       @expense_reimbursements.push(ExpenseReimbursement.new(:expense_report_id => expense_report_id,
                                                             :empl_id => empl_id,
                                                             :submitted_on => expenses.first.report_submitted_at,
-                                                            :total_amount => expenses.sum { |expense| expense.cost_in_home_currency.to_f })) if !expenses.empty?
+                                                            :total_amount => expenses.collect(&:cost_in_home_currency).compact.sum.to_f)) if !expenses.empty?
     end
   end
 
