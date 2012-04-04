@@ -26,7 +26,8 @@
         <th>Issue Date</th>
         <th>Amount</th>
         <th>Currency</th>
-        <th>Conversion Rate</th>
+        <th>Conversion Rate*</th>
+        <th>Amount (INR)</th>
         <th>Place</th>
       </tr>
       <%
@@ -34,13 +35,14 @@
          if forexes_avlbl
           @forex_payments.each do |payment| %>
             <tr class="<%= cycle("even", "odd") %>">
-              <td><%= check_box_tag 'forex_payments[]', payment.id.to_s, :checked => true %></td>
+              <td><%= check_box_tag 'forex_payments[]', payment.id.to_s, :checked => true%></td>
               <td><%= payment.emp_id %></td>
               <td><%= payment.emp_name %></td>
               <td><%= payment.issue_date %></td>
-              <td><%= payment.amount %></td>
-              <td><%= payment.currency %></td>
+              <td class='amount'><%= payment.amount%></td>
+		          <td><%= payment.currency %></td>
               <td><%= number_with_precision(payment.conversion_rate, :precision => 2) %></td>
+              <td class='inr'><%= payment.inr%></td>
               <td><%= payment.place %></td>
             </tr>
           <% end
@@ -50,7 +52,10 @@
           </tr>
       <% end %>
     </table>
-
+    <div class='right_button'>
+      <h3> Calculated conversion rate: </span><span id='final_conversion_rate'></span></h3>
+    </div>
+    <div>* Rounded off to two decimal places.</div><br/>
     <span class="heading">Expenses</span>
 
     <div>

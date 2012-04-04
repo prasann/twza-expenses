@@ -3,6 +3,7 @@ $(document).ready(function() {
     var _this = this;
     display_cash_handover_section();
     validate_row_manipulations();
+    calculate_conversion_rate();
     $(function($) {
         $('.handover_selector').click(function(){
             $('.cash_handover_selector').hide();
@@ -92,6 +93,11 @@ $(document).ready(function() {
                 set_index_nested_form_attribute($(item).find('.conversion_rate'), index);
             })
         });
+        
+        $('input[name="forex_payments[]"]').change(function(){
+            calculate_conversion_rate();    
+        })
+
     })
 
     function search_and_replace(target, regex, replace_pattern) {
@@ -136,5 +142,39 @@ $(document).ready(function() {
             .focus(function(){
                 $(this).trigger(down_arrow_event);
             });
+    }
+
+
+    function calculate_conversion_rate(){
+        var trs = $('#forex_payments_:checked').parent().parent();
+        var amount = 0,amount_inr = 0;
+        $.each(trs, function(index,element){
+            amount += parseFloat($(element).find('.amount').text());
+            amount_inr += parseFloat($(element).find('.inr').text());    
+        })
+        var conversion_rate = Math.round((amount_inr/amount)*100)/100;
+        var cur = $('#final_conversion_rate').text();
+        cashFlow($('#final_conversion_rate'),cur,isNaN(conversion_rate) ? 0 : conversion_rate,500,2)
+    }
+
+    function cashFlow(elem, from, to, duration, decimal) {
+    var magicObject;
+    if (typeof magicObject === 'undefined') {
+        magicObject = $('<div></div>').appendTo('body');
+    }
+    magicObject.css({
+        position: "fixed",
+        left: from
+    }).animate({
+        left: to
+    }, {
+        duration: duration,
+        step: function(currentLeft) {
+            elem.html(Number(currentLeft).toFixed(decimal));
+        },
+        complete: function() {
+            magicObject.remove();
+        }
+    });
     }
 });
