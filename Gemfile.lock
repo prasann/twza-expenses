@@ -265,6 +265,8 @@ GEM
     treetop (1.4.10)
       polyglot
       polyglot (>= 0.3.1)
+    typhoeus (0.3.3)
+      mime-types
     tzinfo (0.3.32)
     uniform_notifier (1.0.2)
 
@@ -295,3 +297,4 @@ DEPENDENCIES
   shoulda-matchers
   simplecov
   to_xls
+  typhoeus
