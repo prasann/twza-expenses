@@ -3,5 +3,5 @@
 <%= render :partial => '/partial/expense_reimbursement/report' %>
 
 <div style="float: left">
-  <input type="button" name='Back' value="Back" onclick="javascript:history.go(-1);" />
+  <%= button_to('<< Back', "javascript:history.go(-1);") %>
 </div>

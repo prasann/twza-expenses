@@ -38,7 +38,7 @@
           <td><input type='checkbox' id='selected_expenses_' name='selected_expenses[]' value='<%= expense.id.to_s %>'
                                        class='affects_total' checked="true"/></td>
           <td><%= expense.expense_type %></td>
-          <td><%= DateHelper.date_fmt(DateHelper.date_from_str(expense.expense_date)) %></td>
+          <td><%= DateHelper.date_fmt(expense.expense_date) %></td>
           <td><input type="text" name="expense_amount[<%= expense.id.to_s %>]"
                      value="<%= number_with_precision(expense.cost_in_home_currency, :precision => 2) %>" class='affects_total'/></td>
           <td>INR</td>
@@ -51,9 +51,9 @@
       <% end %>
     </table>
   <% end %>
-  <input type="hidden" name="submitted_on" value="<%= @expense_reimbursement['submitted_on'] %>"/>
-  <input type="hidden" name="empl_id" value="<%= @expense_reimbursement['empl_id'] %>"/>
-  <input type="hidden" name="expense_report_id" value="<%= @expense_reimbursement['expense_report_id'] %>"/>
+  <%= hidden_field_tag('submitted_on', @expense_reimbursement['submitted_on']) %>
+  <%= hidden_field_tag('empl_id', @expense_reimbursement['empl_id']) %>
+  <%= hidden_field_tag('expense_report_id', @expense_reimbursement['expense_report_id']) %>
   <%= label_tag "Notes : " %>
   <textarea name="notes"></textarea>
 
@@ -63,9 +63,9 @@
   </div>
   <table id='report_buttons'>
     <tr>
-      <td><input type="button" name='Back' value="Back" onclick="javascript:history.go(-1);"/></td>
-      <td><%= submit_tag "Process", :name=>"process_reimbursement" %></td>
-      <td><%= submit_tag "Mark as Faulty", :name=>"mark_as_faulty" %></td>
+      <td><%= button_to('<< Back', "javascript:history.go(-1);") %></td>
+      <td><%= submit_tag("Process", :name=>"process_reimbursement") %></td>
+      <td><%= submit_tag("Mark as Faulty", :name=>"mark_as_faulty") %></td>
     </tr>
   </table>
   </div>

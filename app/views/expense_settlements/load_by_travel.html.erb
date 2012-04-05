@@ -35,14 +35,14 @@
          if forexes_avlbl
           @forex_payments.each do |payment| %>
             <tr class="<%= cycle("even", "odd") %>">
-              <td><%= check_box_tag 'forex_payments[]', payment.id.to_s, :checked => true%></td>
+              <td><%= check_box_tag 'forex_payments[]', payment.id.to_s, :checked => true %></td>
               <td><%= payment.emp_id %></td>
               <td><%= payment.emp_name %></td>
               <td><%= payment.issue_date %></td>
-              <td class='amount'><%= payment.amount%></td>
-		          <td><%= payment.currency %></td>
+              <td class='amount'><%= payment.amount %></td>
+              <td><%= payment.currency %></td>
               <td><%= number_with_precision(payment.conversion_rate, :precision => 2) %></td>
-              <td class='inr'><%= payment.inr%></td>
+              <td class='inr'><%= payment.inr %></td>
               <td><%= payment.place %></td>
             </tr>
           <% end
@@ -93,7 +93,7 @@
                         <td><%= check_box_tag 'expenses[]', expense.id.to_s %></td>
                         <td><%= expense.expense_rpt_id %></td>
                         <td><%= expense.project %></td>
-                        <td><%= DateHelper.date_fmt(DateHelper.date_from_str(expense.expense_date)) %></td>
+                        <td><%= DateHelper.date_fmt(expense.expense_date) %></td>
                         <td><%= expense.expense_type %></td>
                         <td><%= expense.description %></td>
                         <td><%= expense.original_cost %> <%= expense.original_currency %></td>
