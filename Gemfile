@@ -44,5 +44,5 @@ group :test do
   gem 'shoulda-matchers'
   gem 'factory_girl'
   gem 'metrical'
-  # gem 'churn', '0.0.13' # Secondary dependency from metrical, v0.0.15 brings in git as dependency
+  gem 'churn', '0.0.13' # Secondary dependency from metrical, v0.0.15 brings in git as dependency
 end
