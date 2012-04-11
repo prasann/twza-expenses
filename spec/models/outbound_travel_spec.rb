@@ -2,13 +2,16 @@ require 'spec_helper'
 
 describe OutboundTravel do
 
-  describe "find_or_initialize_expense_settlement" do
-    it "should create expense_settlement if none present for the travel" do
-      outbound_travel = FactoryGirl.build(:outbound_travel)
-      outbound_travel.should_receive(:create_expense_settlement)
+  describe "set as processed" do
+    it "should set travel as processed" do
 
-      actual = outbound_travel.find_or_initialize_expense_settlement
-      actual.should == outbound_travel.expense_settlement
+      outbound_travel = FactoryGirl.create(:outbound_travel)
+      outbound_travel.is_processed.should == false
+      
+      OutboundTravel.set_as_processed outbound_travel.id
+
+      OutboundTravel.find(outbound_travel.id).is_processed.should == true
+
     end
   end
 

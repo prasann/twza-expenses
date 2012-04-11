@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :forex_payment do
-    sequence(:emp_id) { |n| "#{n}" }
+    sequence(:emp_id) { |n| n }
     emp_name "Some name"
     amount { Random.rand(125) }
     currency 'INR'
@@ -11,7 +11,7 @@ FactoryGirl.define do
   end
 
   factory :outbound_travel do
-    sequence(:emp_id) { |n| "#{n}" }
+    sequence(:emp_id) { |n| n }
     emp_name "Some name"
     place 'US'
     departure_date { Time.now }
@@ -20,7 +20,7 @@ FactoryGirl.define do
   end
 
   factory :expense do
-    sequence(:empl_id) { |n| "#{n}" }
+    sequence(:empl_id) { |n| n }
     expense_date { Date.today - 10.days }
     expense_rpt_id { Random.rand(101010) }
     payment_type 'Personal Cash or Check'
@@ -31,7 +31,7 @@ FactoryGirl.define do
   end
 
   factory :expense_reimbursement do
-    sequence(:expense_report_id) { |n| "#{n}" }
+    sequence(:expense_report_id) { |n| n }
     sequence(:empl_id) { |n| "#{n}" }
     submitted_on { Time.now }
     total_amount { Random.rand(125) }
@@ -51,7 +51,6 @@ FactoryGirl.define do
     expense_to { Date.today - 5.days }
     forex_from { Date.today - 6.days }
     forex_to { Date.today - 3.days }
-    association :outbound_travel
     status { ExpenseSettlement::GENERATED_DRAFT }
   end
 

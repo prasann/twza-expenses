@@ -8,7 +8,10 @@ describe EmployeeMailer do
       forex = FactoryGirl.create(:forex_payment)
       travel = FactoryGirl.create(:outbound_travel, :place => 'UK', :departure_date => Time.parse('2011-10-01'))
       @travel_id = travel.id
-      @expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => @employee_id, :cash_handovers => [], :outbound_travel => travel)
+      @expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id =>
+                                               @employee_id, :cash_handovers => [],
+                                                 :expense_from => Time.parse('2011-10-01'),
+                                                :expense_to => Time.parse('2011-10-11'))
       expense = {"report_id" => 123, "currency" => 'USD', "amount" => 1000, "conversion_rate" => 52.30, "local_currency_amount" => 52300}
       @expense_settlement.should_receive(:profile).and_return(@profile)
       @expense_settlement.should_receive(:employee_email).and_return('johns' + ::Rails.application.config.email_domain)
@@ -32,7 +35,8 @@ describe EmployeeMailer do
         @email.to[0].should == @profile.email_id + ::Rails.application.config.email_domain
         @email.from.size.should == 1
         @email.from[0].should == ::Rails.application.config.email_sender
-        @email.subject.should == 'test - ' + EmployeeMailer::EXPENSE_SETTLEMENT_SUBJECT.sub('$place','UK').sub('$start_date','01-Oct-2011')
+        @email.subject.should == 'test - ' +
+          EmployeeMailer::EXPENSE_SETTLEMENT_SUBJECT.sub('$start_date','01-Oct-2011').sub('$end_date','11-Oct-2011')
         @email.body.should include(@expense_settlement.get_receivable_amount)
       end
 

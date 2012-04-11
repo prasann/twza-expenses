@@ -4,7 +4,6 @@ describe ExpenseSettlement do
   describe "validations" do
     it { should validate_presence_of(:empl_id) }
     it { should validate_presence_of(:emp_name) }
-    it { should validate_presence_of(:outbound_travel_id) }
     it { should validate_presence_of(:status) }
     it { should validate_presence_of(:expense_from) }
     it { should validate_presence_of(:expense_to) }
@@ -18,7 +17,6 @@ describe ExpenseSettlement do
   end
 
   describe "relationships" do
-    xit { should belong_to(:outbound_travel) }
     xit { should have_many(:cash_handovers) }
   end
 
@@ -183,8 +181,7 @@ describe ExpenseSettlement do
     it "should load cash handovers and expenses eagerly on call of load with deps" do
       settlement = FactoryGirl.create(:expense_settlement)
       mock_criteria = mock('Object')
-      ExpenseSettlement.should_receive(:includes).with(:cash_handovers,
-                                                       :outbound_travel).and_return(mock_criteria)
+      ExpenseSettlement.should_receive(:includes).with(:cash_handovers).and_return(mock_criteria)
       mock_criteria.should_receive(:find).with(settlement.id).and_return(settlement)
       settlement.should_receive(:populate_instance_data)
 

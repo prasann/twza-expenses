@@ -15,8 +15,7 @@ class OutboundTravel
   field :project
   field :comments
   field :actions
-
-  has_one :expense_settlement
+  field :is_processed, type: Boolean, default: false
 
   validates_presence_of :emp_id, :emp_name, :departure_date, :place, :allow_blank => false
 
@@ -29,12 +28,12 @@ class OutboundTravel
         hash
       end
     end
-  end
 
-  # TODO: Isnt there a dynamic method that rails provides for this functionality?
-  def find_or_initialize_expense_settlement
-    self.create_expense_settlement if self.expense_settlement.nil?
-    self.expense_settlement
+    def set_as_processed(travel_id)
+      outbound_travel = OutboundTravel.find(travel_id)
+      outbound_travel.is_processed = true
+      outbound_travel.save!
+    end
   end
 
   def stay_duration

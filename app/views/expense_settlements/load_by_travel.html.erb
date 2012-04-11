@@ -1,8 +1,8 @@
 <%= form_for @expense_settlement, :url => expense_settlement_url('generate_report'), :method => 'post' do |settlement_form| %>
 
-    <%= settlement_form.hidden_field :id %>
+    <%= settlement_form.hidden_field :id, :value => @expense_settlement.id.to_s %>
     <%= settlement_form.hidden_field :empl_id %>
-    <%= settlement_form.hidden_field :outbound_travel_id %>
+    <%= settlement_form.hidden_field :outbound_travel_id, :value => @travel.try{|t|t.id.to_s}%>
     <%= settlement_form.hidden_field :emp_name, :value => (@forex_payments.first.emp_name unless @forex_payments.first.nil?) %>
     <br/>
 

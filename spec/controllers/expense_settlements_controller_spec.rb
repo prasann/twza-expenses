@@ -22,7 +22,6 @@ describe ExpenseSettlementsController do
 
       assigned_expense_settlement = assigns(:expense_settlement)
       assigned_expense_settlement.should_not be_nil
-      assigned_expense_settlement.outbound_travel_id.should_not be_nil
       assigned_expense_settlement.expenses.should == expenses.collect(&:id)
       assigned_expense_settlement.forex_payments.should == forex_payments.collect(&:id)
 
@@ -40,7 +39,6 @@ describe ExpenseSettlementsController do
                                                    nil, []).and_return(forex_payments)
 
       expected_expense_settlement = ExpenseSettlement.new(:empl_id => outbound_travel.emp_id,
-                                                          :outbound_travel_id => outbound_travel.id.to_s,
                                                           :expenses => expenses.collect(&:id),
                                                           :forex_payments => forex_payments.collect(&:id),
                                                           :cash_handovers => [])
@@ -66,7 +64,6 @@ describe ExpenseSettlementsController do
       ForexPayment.should_receive(:fetch_for).with(outbound_travel.emp_id, forex_from, forex_to, forex_payments.collect(&:id)).and_return(forex_payments)
 
       expected_expense_settlement = ExpenseSettlement.new(:empl_id => outbound_travel.emp_id,
-                                                          :outbound_travel_id => outbound_travel.id.to_s,
                                                           :expenses => expenses.collect(&:id),
                                                           :forex_payments => forex_payments.collect(&:id),
                                                           :cash_handovers => [])
@@ -101,7 +98,7 @@ describe ExpenseSettlementsController do
       expense_report_id = '1'
       employee_id = 1
       profile = Profile.new(:common_name => employee_name)
-      expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => employee_id)
+      expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => employee_id.to_s)
       ExpenseSettlement.should_receive(:find).with(expense_report_id).and_return(expense_settlement)
       expense_settlement.should_receive(:notify_employee)
       expense_settlement.should_receive(:profile).and_return(profile)
@@ -123,10 +120,10 @@ describe ExpenseSettlementsController do
       outbound_travel = FactoryGirl.create(:outbound_travel, :emp_id => empl_id)
       forex_payment = FactoryGirl.create(:forex_payment)
       expense = FactoryGirl.create(:expense)
-      expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => empl_id, :expenses => [expense.id],
+      expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => empl_id.to_s, 
+                                              :expenses => [expense.id],
                                               :forex_payments => [forex_payment.id],
                                               :status => ExpenseSettlement::GENERATED_DRAFT,
-                                              :outbound_travel_id => outbound_travel.id,
                                               :expense_from => expense_from,
                                               :expense_to => expense_to,
                                               :forex_from => forex_from,
@@ -144,7 +141,7 @@ describe ExpenseSettlementsController do
                       .and_return([expense])
       Expense.should_receive(:find).with([expense.id]).and_return([expense])
       stub_expense_settlement = mock('Object')
-      ExpenseSettlement.should_receive(:includes).with(:cash_handovers, :outbound_travel).and_return(stub_expense_settlement)
+      ExpenseSettlement.should_receive(:includes).with(:cash_handovers).and_return(stub_expense_settlement)
       stub_expense_settlement.should_receive(:find).with(expense_settlement.id.to_s).and_return(expense_settlement)
 
       get :edit, :id => expense_settlement.id.to_s
@@ -165,6 +162,11 @@ describe ExpenseSettlementsController do
     it "should create expense report for chosen expenses, forex and travel" do
       empl_id = "123"
       outbound_travel = FactoryGirl.create(:outbound_travel)
+      expected_expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => empl_id,
+                                              :emp_name => 'name', 
+                                              :forex_from => "27-Nov-2011", :forex_to => "17-Dec-2011",
+                                             :expense_from => "07-Dec-2011", :expense_to => "22-Dec-2011")
+
 
       expect {
         post :generate_report, :expense_settlement => { :outbound_travel_id => outbound_travel.id,
@@ -174,24 +176,27 @@ describe ExpenseSettlementsController do
       }.to change(ExpenseSettlement, :count).by(1)
 
       assigns(:expense_settlement).should_not be_nil
-      assigns(:expense_settlement).should == outbound_travel.reload.expense_settlement
+      assigns(:expense_settlement).should have_same_attributes_as(expected_expense_settlement)
     end
 
     it "should update expense report if it already exists in the travel" do
       empl_id = "123"
       outbound_travel = FactoryGirl.create(:outbound_travel)
-      expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => empl_id,
-                                              :emp_name => 'name', :outbound_travel => outbound_travel)
+      expected_expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => empl_id,
+                                              :emp_name => 'name', 
+                                              :forex_from => "27-Nov-2011", :forex_to => "17-Dec-2011",
+                                             :expense_from => "07-Dec-2011", :expense_to => "22-Dec-2011")
 
       expect {
-        post :generate_report, :expense_settlement => { :outbound_travel_id => outbound_travel.id,
+        post :generate_report, :expense_settlement => {:id => expected_expense_settlement.id.to_s, 
+                               :outbound_travel_id => outbound_travel.id,
                                :empl_id => empl_id, :emp_name => 'name' },
                                :forex_from => "27-Nov-2011", :forex_to => "17-Dec-2011",
                                :expense_from => "07-Dec-2011", :expense_to => "22-Dec-2011"
       }.to_not change(ExpenseSettlement, :count)
 
       assigns(:expense_settlement).should_not be_nil
-      assigns(:expense_settlement).should == expense_settlement
+      assigns(:expense_settlement).should have_same_attributes_as(expected_expense_settlement)
     end
   end
 
@@ -214,7 +219,7 @@ describe ExpenseSettlementsController do
     ForexPayment.should_receive(:fetch_for).with(outbound_travel.emp_id, outbound_travel.departure_date - ExpenseSettlementsController::FOREX_PAYMENT_DATES_PADDED_BY,
                                                  outbound_travel.return_date, []).and_return(forex_payments)
 
-    expected_expense_settlement = ExpenseSettlement.new(:outbound_travel_id => outbound_travel.id, :empl_id => outbound_travel.emp_id,
+    expected_expense_settlement = ExpenseSettlement.new(:empl_id => outbound_travel.emp_id,
                                                         :expenses => expenses.collect(&:id),
                                                         :forex_payments => forex_ids,
                                                         :cash_handovers => [CashHandover.new])
@@ -248,13 +253,13 @@ describe ExpenseSettlementsController do
     expenses = [FactoryGirl.create(:expense)]
 
     expense_settlement = FactoryGirl.create(:expense_settlement, :forex_payments => forex_payments.collect(&:id),
-                              :expenses => expenses.collect(&:id), :outbound_travel_id => outbound_travel.id.to_s,
+                              :expenses => expenses.collect(&:id), 
                               :empl_id => outbound_travel.emp_id, :emp_name => employee_name,
                               :cash_handovers => cash_handovers)
     expense_settlement.should_receive(:get_receivable_amount).and_return(13732.5)
 
-    OutboundTravel.should_receive(:find).with(outbound_travel.id.to_s).and_return(outbound_travel)
-    outbound_travel.should_receive(:find_or_initialize_expense_settlement).and_return(expense_settlement)
+    ExpenseSettlement.should_receive(:find_or_initialize).and_return(expense_settlement)
+    OutboundTravel.should_receive(:set_as_processed).with(outbound_travel.id.to_s)
 
     post :generate_report, {:expense_settlement => {:id => expense_settlement.id.to_s, :empl_id => outbound_travel.emp_id.to_s,
                                                    :outbound_travel_id => outbound_travel.id.to_s, :emp_name => employee_name,
@@ -263,7 +268,6 @@ describe ExpenseSettlementsController do
                             :forex_from => "27-Nov-2011", :forex_to => "17-Dec-2011",
                             :expense_from => "07-Dec-2011", :expense_to => "22-Dec-2011"
     }
-
     assigns(:expense_settlement).should have_same_attributes_as(expense_settlement)
     assigns(:expense_settlement).instance_variable_get('@net_payable').should == 13732.5
   end

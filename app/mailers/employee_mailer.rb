@@ -4,7 +4,7 @@ require "#{Rails.root}/app/helpers/application_helper"
 class EmployeeMailer < ActionMailer::Base
   helper ApplicationHelper
 
-  EXPENSE_SETTLEMENT_SUBJECT = "Expense settlement for your travel to $place dated $start_date"
+  EXPENSE_SETTLEMENT_SUBJECT = "Expense settlement for your expenses from $start_date to $end_date"
   EXPENSE_REIMBURSEMENT_SUBJECT = "Expense reimbursement for your expense report $expense_report_id"
 
   default :from => ::Rails.application.config.email_sender
@@ -12,8 +12,8 @@ class EmployeeMailer < ActionMailer::Base
   def expense_settlement(expense_settlement)
     @expense_settlement = expense_settlement
     @profile = @expense_settlement.profile
-    travel = @expense_settlement.outbound_travel
-    subject = EXPENSE_SETTLEMENT_SUBJECT.sub("$place", travel.place).sub('$start_date', DateHelper.date_fmt(travel.departure_date))
+    subject = EXPENSE_SETTLEMENT_SUBJECT.sub("$start_date", DateHelper.date_fmt(@expense_settlement.expense_from))
+                                        .sub('$end_date', DateHelper.date_fmt(@expense_settlement.expense_to))
     subject.insert(0, "#{Rails.env} - ") unless Rails.env.production?
 
     mail(:to => @expense_settlement.employee_email, :subject => subject, :content_type => "text/html") do |format|

@@ -21,8 +21,8 @@
     <tr>
       <th>Employee Id</th>
       <th>Employee Name</th>
-      <th>Travel Date</th>
-      <th>Return Date</th>
+      <th>Expenses From Date</th>
+      <th>Expenses To Date</th>
       <th>Amount</th>
       <th>Status</th>
       <th>Last Updated</th>
@@ -30,7 +30,6 @@
     </tr>
     <% @expense_settlements.each do |expense_settlement|
       expense_settlement.populate_instance_data
-      travel = expense_settlement.outbound_travel
     %>
       <tr class="<%= cycle("even", "odd") %>">
         <td>
@@ -40,8 +39,8 @@
           <%= link_to(expense_settlement.empl_id, back_path) %>
         </td>
         <td><%= expense_settlement.emp_name %></td>
-        <td><%= DateHelper.date_fmt(travel.try(:departure_date)) %></td>
-        <td><%= DateHelper.date_fmt(travel.try(:return_date)) %></td>
+        <td><%= DateHelper.date_fmt(expense_settlement.expense_from) %></td>
+        <td><%= DateHelper.date_fmt(expense_settlement.expense_to) %></td>
         <td><%= number_with_precision(expense_settlement.get_receivable_amount, :precision => 2) %></td>
         <td><%= expense_settlement.status %></td>
         <td><%= DateHelper.date_fmt(expense_settlement.updated_at) %></td>
