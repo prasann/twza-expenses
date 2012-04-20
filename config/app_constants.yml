@@ -15,7 +15,7 @@ test:
   SMTP_SETTINGS:
     <<: *default_smtp_settings
 
-uat:
+uat: &uat
   <<: *defaults
   SMTP_SETTINGS:
     <<: *default_smtp_settings
@@ -24,9 +24,4 @@ uat:
     :enable_starttls_auto: true
 
 production:
-  <<: *defaults
-  SMTP_SETTINGS:
-    <<: *default_smtp_settings
-    :address: "10.10.1.5"
-    :port: 25
-    :enable_starttls_auto: true
+  <<: *uat

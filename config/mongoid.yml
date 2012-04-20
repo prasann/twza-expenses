@@ -1,7 +1,6 @@
 defaults: &defaults
   host: localhost
 
-
 development:
   <<: *defaults
   database: dev
@@ -13,3 +12,7 @@ test:
 uat:
   <<: *defaults
   database: uat
+
+production:
+  <<: *defaults
+  database: production

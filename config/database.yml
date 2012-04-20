@@ -12,7 +12,7 @@ test:
   host: localhost
   port: 3306
 
-uat:
+uat: &uat
   adapter: mysql2
   database: rampup_production
   username: root
@@ -20,4 +20,5 @@ uat:
   host: 10.10.1.79
   port: 3306
 
-
+production:
+  <<: *uat
