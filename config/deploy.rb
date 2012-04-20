@@ -15,13 +15,16 @@ set :password, "!abcd1234"
 set :deploy_to, '/home/mankatha/mangatha'
 set :use_sudo, false
 set :bundle_cmd, '~/.rvm/bin/rvm exec bundle'
+set :stage, nil
 
 task :uat do
+  set :stage, "uat"
   role :web, "10.10.5.34"                          # Your HTTP server, Apache/etc
   role :app, "10.10.5.34"                          # This may be the same as your `Web` server
 end
 
 task :production do
+  set :stage, "production"
   role :web, "10.10.5.54"                          # Your HTTP server, Apache/etc
   role :app, "10.10.5.54"                          # This may be the same as your `Web` server
 end
@@ -31,18 +34,21 @@ end
 
 # If you are using Passenger mod_rails uncomment this:
 
- namespace :deploy do
-   task :start do
-     environment = ENV['env'] || 'uat'
-     run "cd #{current_path}; bin/passenger start -d -e#{environment}"
-   end
-   task :stop do
-     run "cd #{current_path}; bin/passenger stop"
-   end
-   task :restart, :roles => :app, :except => { :no_release => true } do
-     run " touch #{File.join(current_path,'tmp','restart.txt')}"
-   end
- end
+namespace :deploy do
+  task :before_deploy do
+    abort "ERROR: No stage specified. Please specify one of: uat, production (e.g. `cap uat deploy')" if stage.nil?
+  end
+
+  task :start do
+    run "cd #{current_path}; bin/passenger start -d -e#{stage}"
+  end
+  task :stop do
+    run "cd #{current_path}; bin/passenger stop"
+  end
+  task :restart, :roles => :app, :except => { :no_release => true } do
+    run " touch #{File.join(current_path, 'tmp', 'restart.txt')}"
+  end
+end
 
 namespace :bundler do
   desc "Install for production"
@@ -57,4 +63,5 @@ namespace :git do
   end
 end
 
+before 'deploy:update_code', 'deploy:before_deploy'
 after 'deploy:update_code', 'bundler:install'
