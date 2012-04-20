@@ -16,10 +16,15 @@ set :deploy_to, '/home/mankatha/mangatha'
 set :use_sudo, false
 set :bundle_cmd, '~/.rvm/bin/rvm exec bundle'
 
-role :web, "10.10.5.34"                          # Your HTTP server, Apache/etc
-role :app, "10.10.5.34"                          # This may be the same as your `Web` server
-#role :db,  "your primary db-server here", :primary => true # This is where Rails migrations will run
-#role :db,  "your slave db-server here"
+task :uat do
+  role :web, "10.10.5.34"                          # Your HTTP server, Apache/etc
+  role :app, "10.10.5.34"                          # This may be the same as your `Web` server
+end
+
+task :production do
+  role :web, "10.10.5.54"                          # Your HTTP server, Apache/etc
+  role :app, "10.10.5.54"                          # This may be the same as your `Web` server
+end
 
 # if you're still using the script/reaper helper you will need
 # these http://github.com/rails/irs_process_scripts
