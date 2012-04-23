@@ -40,13 +40,13 @@ namespace :deploy do
   end
 
   task :start do
-    run "sudo /etc/init.d/nginx start"
+    run "sudo service nginx start"
   end
   task :stop do
-    run "sudo /etc/init.d/nginx stop"
+    run "sudo service nginx stop"
   end
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "sudo /etc/init.d/nginx restart"
+    run "sudo service nginx restart"
   end
 end
 
