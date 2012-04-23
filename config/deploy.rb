@@ -40,13 +40,13 @@ namespace :deploy do
   end
 
   task :start do
-    run "sudo /sbin/service nginx start"
+    run "cd #{current_path}; bin/passenger start -d -e#{stage}"
   end
   task :stop do
-    run "sudo /sbin/service nginx stop"
+    run "cd #{current_path}; bin/passenger stop"
   end
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "sudo /sbin/service nginx restart"
+    run " touch #{File.join(current_path, 'tmp', 'restart.txt')}"
   end
 end
 

@@ -24,6 +24,10 @@ gem 'typhoeus'
 # Deploy with Capistrano
 gem 'capistrano'
 
+group :uat, :production do
+  gem 'passenger'
+end
+
 group :development do
   gem 'mailcatcher'
   gem 'bullet'
