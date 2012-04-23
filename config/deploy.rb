@@ -38,16 +38,6 @@ namespace :deploy do
   task :before_deploy do
     abort "ERROR: No stage specified. Please specify one of: uat, production (e.g. `cap uat deploy')" if stage.nil?
   end
-
-  task :start do
-    run "sudo /sbin/service nginx start"
-  end
-  task :stop do
-    run "sudo /sbin/service nginx stop"
-  end
-  task :restart, :roles => :app, :except => { :no_release => true } do
-    run "sudo /sbin/service nginx restart"
-  end
 end
 
 namespace :bundler do
