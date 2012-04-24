@@ -14,12 +14,12 @@ gem 'jquery-rails'
 gem 'app_constants'
 gem 'typhoeus'
 
-# TODO: Uncomment after putting the required line(s) into the Capfile
-#group :assets do
-#  gem 'sass-rails',   '~> 3.2.3'
-#  gem 'coffee-rails', '~> 3.2.1'
-#  gem 'uglifier', '>= 1.0.3'
-#end
+group :assets do
+  gem 'therubyracer'
+  gem 'sass-rails'
+  gem 'coffee-rails'
+  gem 'uglifier'
+end
 
 # Deploy with Capistrano
 gem 'capistrano'
