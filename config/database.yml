@@ -25,5 +25,5 @@ production:
   database: rampup_production
   username: root
   password: PASSWORD
-  host: 10.10.5.79
+  host: 10.10.1.79
   port: 3306
