@@ -14,7 +14,7 @@ set :user, "mankatha"
 set :password, "!abcd1234"
 set :deploy_to, '/home/mankatha/mangatha'
 set :use_sudo, false
-set :sudo_prompt, ""
+default_run_options[:pty] = true
 set :bundle_cmd, '~/.rvm/bin/rvm exec bundle'
 set :stage, nil
 
