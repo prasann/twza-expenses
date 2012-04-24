@@ -46,7 +46,7 @@ namespace :deploy do
     sudo "/sbin/service nginx stop"
   end
   task :restart, :roles => :app, :except => { :no_release => true } do
-    sudo "/etc/init.d/nginx restart"
+    run "sudo /sbin/service nginx restart"
   end
 end
 
