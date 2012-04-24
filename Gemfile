@@ -15,6 +15,7 @@ gem 'app_constants'
 gem 'typhoeus'
 
 group :assets do
+  gem 'execjs'
   gem 'therubyracer'
   gem 'uglifier'
 end
