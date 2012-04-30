@@ -113,8 +113,8 @@ class ExpenseSettlementsController < ApplicationController
     @expense_settlement = expense_settlement || ExpenseSettlement.new(:id => nil,
                                                                   :empl_id => empl_id,
                                                                   :forex_payments => @forex_payments.collect(&:id),
-                                                                  :expenses => @expenses.collect(&:id),
-                                                                  :cash_handovers => [CashHandover.new])
+                                                                  :expenses => @expenses.collect(&:id))
+    @expense_settlement.cash_handovers << CashHandover.new if @expense_settlement.new_record?
   end
 
   def get_flash_message(flag, success_message, error_message)
