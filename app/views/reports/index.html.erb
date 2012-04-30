@@ -8,8 +8,9 @@
 </div>
 <div class="report_section">
   <h2>Bank Reimbursement Statement</h2>
-  <%= link_to(image_tag("excel.png") + "Mark as Sent to Bank and Generate Bank Reimbursement Statement", mark_processed_and_export_consolidated_expenses_path(:format => :xls)) %>
-  &nbsp;
   <%= link_to(image_tag("excel.png") + "Generate Bank Reimbursement Statement", export_consolidated_expenses_path(:format => :xls)) %>
+</div>
+<div>
+  <%= link_to(image_tag("excel.png") + "Mark as Sent to Bank and Generate Bank Reimbursement Statement", mark_processed_and_export_consolidated_expenses_path(:format => :xls),:confirm => 'This will be a one time task. After exporting once you cannot export again.') %>
 </div>
 <br/>
