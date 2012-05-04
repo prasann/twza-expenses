@@ -277,4 +277,22 @@ describe ExpenseSettlementsController do
     post :delete_cash_handover, {:id => cash_handover.id}
     lambda {CashHandover.find(cash_handover.id) }.should raise_exception
   end
+
+  it "should delete expense and uploaded expense and set upon flash success" do
+    expenses = [FactoryGirl.create(:expense, :file_name => "file_1"),FactoryGirl.create(:expense, :file_name => "file_2")]
+    uploaded_expenses = [FactoryGirl.create(:uploaded_expense, :file_name => "file_1"),FactoryGirl.create(:uploaded_expense, :file_name => "file_2")]
+    post :delete_expense, {:file_name => "file_1"}
+    Expense.all.should == [expenses[1]]
+    UploadedExpense.all.should == [uploaded_expenses[1]]
+    flash[:success].should == "File: 'file_1' has been deleted successfully"
+  end
+
+  it "should not throw exception when a unknown file is been asked for deletion" do
+    expenses = [FactoryGirl.create(:expense, :file_name => "file_1"),FactoryGirl.create(:expense, :file_name => "file_2")]
+    uploaded_expenses = [FactoryGirl.create(:uploaded_expense, :file_name => "file_1"),FactoryGirl.create(:uploaded_expense, :file_name => "file_2")]
+    expect {
+      post :delete_expense, {:file_name => "unknown_file"}
+      }.to_not change(Expense, :count)
+    flash[:error].should == "No records deleted"
+  end
 end

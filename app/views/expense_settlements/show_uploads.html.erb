@@ -7,11 +7,13 @@
   <tr>
     <th>File Name</th>
     <th>Uploaded At</th>
+    <th>Delete</th>
   </tr>
   <% @uploaded_files.each do |file| %>
     <tr class="<%= cycle("even", "odd") %>">
       <td><%= file.file_name %></td>
       <td><%= file.created_at.strftime("%d-%b-%Y :: %H:%M:%S") %></td>
+      <td><%= button_to 'Delete', delete_expense_expense_settlements_path(:file_name => file.file_name), {:method => :delete} %></td>
     </tr>
   <% end %>
 </table>

@@ -80,6 +80,15 @@ class ExpenseSettlementsController < ApplicationController
                                                               'No records uploaded. Either this file has already been uploaded or all rows have errors'))
   end
 
+  def delete_expense
+    file_name = params[:file_name]
+    no_of_rows_deleted = Expense.delete_all(conditions: {file_name: file_name})
+    doc_deleted = UploadedExpense.delete_all(conditions: {file_name: file_name})
+    redirect_to(show_uploads_expense_settlements_path, :flash => get_flash_message(no_of_rows_deleted > 0 && doc_deleted ==1,
+                                                              "File: '#{file_name}' has been deleted successfully",
+                                                              'No records deleted'))
+  end
+
   private
   def load_to_db
     tmp = params[:file_upload][:my_file].tempfile

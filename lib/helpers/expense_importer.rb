@@ -29,7 +29,8 @@ class ExpenseImporter
                   expense_type: extractor.call("K"),
                   is_personal: extractor.call("S"),
                   attendees: extractor.call("V"),
-                  description: extractor.call("Q"))
+                  description: extractor.call("Q"),
+                  file_name: file_name.to_s)
       rescue Exception => e
         puts "exception during expense create: " + e.message
         puts "could not create expense for employee: " + extractor.call("C").to_s + " report id: " + extractor.call("B").to_s + " expense_date: " + extractor.call("J").to_s
