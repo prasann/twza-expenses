@@ -4,8 +4,11 @@
   </head>
   <body>
     Dear <%= @profile.try(:get_full_name) %>, <br/><br/>
-
-    Please refer the travel expense settlement sheet. Kindly confirm the same from your end for payroll processing.
+    <%if @expense_settlement.is_closed?%> 
+      Following Travel settlement will be credited to your bank account in the next pay cycle (5th /15th /25th of every month)
+    <%else%> 
+      Please refer the travel expense settlement sheet. Kindly confirm the same from your end for payroll processing.
+    <%end%>
     <br/><br/>
 
     <%= render :partial => '/partial/expense_settlement/report' %>

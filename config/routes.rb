@@ -46,10 +46,10 @@ Mankatha::Application.routes.draw do
     end
   end
 
-  resources :consolidated_expenses, :only => [] do
+  resources :consolidated_expenses, :only => [:index] do
     collection do
       get :export
-      get :mark_processed_and_export
+      post :mark_processed_and_export
     end
   end
 

@@ -71,6 +71,15 @@ class ExpenseSettlement
       settlement.complete
     end
 
+    def mark_all_as_complete(settlement_ids)
+      completed_reimbursements = []
+      if(!settlement_ids.nil?)
+        settlements = find(settlement_ids)
+        completed_reimbursements = settlements.collect { |settlement| settlement.__send__(:create_bank_reimbursement, true) }.compact
+      end
+      completed_reimbursements
+    end
+
     def find_and_notify_employee(settlement_id)
       settlement = find(settlement_id)
       settlement.notify_employee
@@ -223,7 +232,10 @@ class ExpenseSettlement
     self.populate_instance_data
     return unless self.get_receivable_amount.negative?
 
-    self.close if mark_as_closed
+    if mark_as_closed
+      self.close
+      EmployeeMailer.expense_settlement(self).deliver
+    end
 
     bank_detail = BankDetail.for_empl_id(self.empl_id).first
     # TODO: What if bank_detail is nil?
@@ -232,7 +244,9 @@ class ExpenseSettlement
                     :empl_name => bank_detail.empl_name,
                     :expense_report_ids => self.get_unique_report_ids.join(","),
                     :reimbursable_amount => self.get_receivable_amount.abs,
-                    :bank_account_no => bank_detail.account_no
+                    :bank_account_no => bank_detail.account_no,
+                    :type => 'travel_reimbursements',
+                    :id => self.id.to_s
                    })
   end
 end

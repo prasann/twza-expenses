@@ -1,0 +1,34 @@
+<br/>
+<%= flash_message %>
+<h1>Completed Expenses</h1>
+<div>
+<% if !@reimbursable_expense_reports.empty? %>
+  <%= form_tag(mark_processed_and_export_consolidated_expenses_path(:format => :xls), :method => "post") do %>
+  <table>
+    <tr>
+      <th>Select</th>
+      <th>Employee Id</th>
+      <th>Employee Name</th>
+      <th>Expense Report Ids</th>
+      <th>Bank Account No</th>
+      <th>Amount</th>
+    </tr>
+    <% @reimbursable_expense_reports.each do |reimbursable_expense|%>
+      <tr class="<%= cycle("even", "odd") %>">
+        <td><%= check_box_tag reimbursable_expense.type + '[]', reimbursable_expense.id %></td>
+        <td><%= reimbursable_expense.empl_id %></td>
+        <td><%= reimbursable_expense.empl_name %></td>
+        <td><%= reimbursable_expense.expense_report_ids %></td>
+        <td><%= reimbursable_expense.bank_account_no %></td>
+        <td><%= number_with_precision(reimbursable_expense.reimbursable_amount, :precision => 2) %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td colspan="6">
+          <%= submit_tag 'Mark Complete and Send to bank', :confirm => 'Are you sure you want to close all selected reimbursements and send to the bank?' %>
+      </td>
+    </tr>
+  <% end %>
+  </table>
+<% end %>
+</div>

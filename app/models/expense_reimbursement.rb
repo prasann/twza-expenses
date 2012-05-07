@@ -37,6 +37,16 @@ class ExpenseReimbursement
       completed_reimbursements = with_status(PROCESSED).to_a
       completed_reimbursements.collect { |reimbursement| reimbursement.__send__(:create_bank_reimbursement, mark_as_closed) }.compact
     end
+
+    def mark_all_as_complete(reimbursement_ids)
+      completed_reimbursements = []
+      if(!reimbursement_ids.nil?)
+        reimbursements = find(reimbursement_ids)
+        completed_reimbursements = reimbursements.collect { |reimbursement| reimbursement.__send__(:create_bank_reimbursement, true) }.compact
+      end
+      completed_reimbursements
+    end
+
   end
 
   def get_expenses_grouped_by_project_code
@@ -82,7 +92,10 @@ class ExpenseReimbursement
 
   private
   def create_bank_reimbursement(mark_as_closed)
-    self.close if mark_as_closed
+    if mark_as_closed
+      self.close
+      EmployeeMailer.non_travel_expense_reimbursement(self).deliver
+    end
 
     bank_detail = BankDetail.for_empl_id(self.empl_id).first
     # TODO: What if bank_detail is nil?
@@ -91,7 +104,9 @@ class ExpenseReimbursement
                     :empl_name => bank_detail.empl_name,
                     :expense_report_ids => self.expense_report_id,
                     :reimbursable_amount => self.total_amount,
-                    :bank_account_no => bank_detail.account_no
+                    :bank_account_no => bank_detail.account_no,
+                    :type => 'nontravel_reimbursements',
+                    :id => self.id.to_s
                    })
   end
 end

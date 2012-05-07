@@ -1,9 +1,9 @@
 defaults: &defaults
-  host: 10.10.5.54
+  host: localhost
 
 development:
   <<: *defaults
-  database: production
+  database: dev
 
 test:
   <<: *defaults
@@ -14,5 +14,5 @@ uat:
   database: uat
 
 production:
-  <<: *defaults
+  host: 10.10.5.54 
   database: production

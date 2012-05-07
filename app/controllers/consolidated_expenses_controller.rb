@@ -6,7 +6,6 @@ class ConsolidatedExpensesController < ApplicationController
 
   def index
     @reimbursable_expense_reports = get_reimbursable_expenses
-    render :layout => 'tabs'
   rescue => e
     redirect_to(:index, :flash => {:error => 'Could not fetch records'})
   end
@@ -20,7 +19,9 @@ class ConsolidatedExpensesController < ApplicationController
 
   # TODO: Merge into the index method - based on the request format (which is already 'xls)
   def mark_processed_and_export
-    render_excel(get_reimbursable_expenses(true))
+    completed_travel_reimbursements = ExpenseSettlement.mark_all_as_complete(params[:travel_reimbursements])
+    completed_nontravel_reimbursements = ExpenseReimbursement.mark_all_as_complete(params[:nontravel_reimbursements])
+    render_excel(completed_travel_reimbursements.concat(completed_nontravel_reimbursements))
   rescue => e
     redirect_to(:index, :flash => {:error => 'Could not fetch records'})
   end
