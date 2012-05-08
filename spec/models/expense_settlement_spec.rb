@@ -189,6 +189,14 @@ describe ExpenseSettlement do
     end
   end
 
+  describe "mark all as complete" do
+    it "should return empty completed settlement ids when no settlement ids passed" do
+      actual_settlement_results = ExpenseSettlement.mark_all_as_complete(nil)
+      actual_settlement_results.should be_empty
+    end
+
+
+  end
   describe "notify_employee" do
     it "should be tested"
   end
