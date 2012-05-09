@@ -33,7 +33,11 @@ class ExpenseReimbursementsController < ApplicationController
     @expense_reimbursement = ExpenseReimbursement.find(params[:id])
     profile = @expense_reimbursement.profile
     @empl_name = profile.try(:get_full_name) || ""
-    @all_expenses = @expense_reimbursement.get_expenses_grouped_by_project_code
+    begin
+      @all_expenses = @expense_reimbursement.get_expenses_grouped_by_project_code
+    rescue Exception => e
+      redirect_to(expense_reimbursements_path, :flash => {:error => e.to_s})
+    end
   end
 
   def edit

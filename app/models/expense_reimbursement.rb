@@ -54,7 +54,11 @@ class ExpenseReimbursement
   end
 
   def get_expenses
-    Expense.find(expenses.collect { |expense| expense['expense_id'] })
+    begin
+      Expense.find(expenses.collect { |expense| expense['expense_id'] })
+    rescue Exception => e
+      raise "No matching expense found for this settlement. The expense would have been deleted by the user.  "
+    end
   end
 
   def profile
@@ -62,7 +66,7 @@ class ExpenseReimbursement
   end
 
   def email_id
-    @email_id ||= (profile.nil? || profile.email_id.blank?) ? empl_id.to_s : profile.email_id 
+    @email_id ||= profile.email_id.blank? ? empl_id.to_s : profile.email_id
   end
 
   def employee_email
