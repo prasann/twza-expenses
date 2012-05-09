@@ -23,7 +23,7 @@ class ConsolidatedExpensesController < ApplicationController
     completed_nontravel_reimbursements = ExpenseReimbursement.mark_all_as_complete(params[:nontravel_reimbursements])
     render_excel(completed_travel_reimbursements.concat(completed_nontravel_reimbursements))
   rescue => e
-    puts "exception in excel export: " + e.to_s
+    logger.error "exception in excel export: " + e.inspect
     redirect_to(:index, :flash => {:error => 'Could not fetch records'})
   end
 

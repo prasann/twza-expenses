@@ -62,7 +62,7 @@ class ExpenseReimbursement
   end
 
   def email_id
-    @email_id ||= profile.try(:email_id.length) ? profile.email_id : empl_id.to_s
+    @email_id ||= (profile.nil? || profile.email_id.blank?) ? empl_id.to_s : profile.email_id 
   end
 
   def employee_email
