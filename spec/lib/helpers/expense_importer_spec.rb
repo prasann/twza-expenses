@@ -9,7 +9,7 @@ describe ExpenseImporter do
     importer = ExpenseImporter.new
     Expense.delete_all
     importer.should_receive(:read_from_excel).with(file_with_valid_expenses, 0).and_return do |filename, sheetno, &block|
-      1
+      10
     end
 
     importer.should_receive(:read_from_excel).with(file_with_invalid_expense, 0).and_return do |filename, sheetno, &block|
@@ -20,5 +20,7 @@ describe ExpenseImporter do
     UploadedExpense.should_not_receive(:create!).with(file_name: "file2")
 
     importer.load
+
+    Expense.find(:all).count.should == 2
   end
 end
