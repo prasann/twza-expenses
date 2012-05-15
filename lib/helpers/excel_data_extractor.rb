@@ -20,7 +20,7 @@ module ExcelDataExtractor
     end
     $stderr.puts "\n"
     $stderr.puts "#{pluralize(ignored_records_count, 'record')} (out of a total count of #{file.last_row - 1}) ignored due to the above errors" if ignored_records_count > 0
-    ignored_records_count == 0 && file.last_row > 2
+    (file.last_row - 1) - ignored_records_count
   end
 
   private

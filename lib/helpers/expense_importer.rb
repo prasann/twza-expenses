@@ -10,9 +10,9 @@ class ExpenseImporter
 
   def load_expense(excelxfile)
     file_name = excelxfile.split("/")[1]
-    return false if file_exists?(file_name)
+    return 0 if file_exists?(file_name)
     puts "Processing expense file: #{file_name.to_s}"
-    at_least_one_successful_record = read_from_excel(excelxfile, 0) do |extractor|
+    inserted_record_count = read_from_excel(excelxfile, 0) do |extractor|
       expense = nil
       begin
         expense = Expense.new(empl_id: get_employee_id(extractor.call("C")),
@@ -37,7 +37,8 @@ class ExpenseImporter
       end
       expense
     end
-    UploadedExpense.create!(file_name: file_name) if at_least_one_successful_record
+    UploadedExpense.create!(file_name: file_name) if inserted_record_count > 0
+    return inserted_record_count
   end
 
   def file_exists?(file_name)

@@ -75,8 +75,9 @@ class ExpenseSettlementsController < ApplicationController
   def file_upload
     require 'fileutils'
     @file_name = params[:file_upload][:my_file].original_filename
-    redirect_to(show_uploads_expense_settlements_path, :flash => get_flash_message(load_to_db,
-                                                              "File: '#{@file_name}' has been uploaded successfully",
+    inserted_record_count = load_to_db()
+    redirect_to(show_uploads_expense_settlements_path, :flash => get_flash_message(inserted_record_count > 0,
+                                                              "Totally #{inserted_record_count} records from file #{@file_name} are been uploaded successfully",
                                                               'No records uploaded. Either this file has already been uploaded or all rows have errors'))
   end
 
@@ -94,9 +95,9 @@ class ExpenseSettlementsController < ApplicationController
     tmp = params[:file_upload][:my_file].tempfile
     file = File.join("public", @file_name)
     FileUtils.cp(tmp.path, file)
-    success = ExpenseImporter.new.load_expense(file)
+    inserted_record_count = ExpenseImporter.new.load_expense(file)
     FileUtils.rm(file)
-    success
+    inserted_record_count
   end
 
   def padded_dates(travel)
