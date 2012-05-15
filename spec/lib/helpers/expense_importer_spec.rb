@@ -20,7 +20,5 @@ describe ExpenseImporter do
     UploadedExpense.should_not_receive(:create!).with(file_name: "file2")
 
     importer.load
-
-    Expense.find(:all).count.should == 2
   end
 end
