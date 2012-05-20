@@ -20,11 +20,12 @@ class ExpenseSettlement
   field :expense_to, :type => Date
   field :forex_from, :type => Date
   field :forex_to, :type => Date
+  field :created_by, type: String
 
   has_many :cash_handovers
   accepts_nested_attributes_for :cash_handovers
 
-  validates_presence_of :empl_id, :emp_name, :status, :expense_from, :expense_to, :forex_from, :forex_to, :allow_blank => false
+  validates_presence_of :empl_id, :emp_name, :status, :expense_from, :expense_to, :forex_from, :forex_to, :created_by, :allow_blank => false
   validates_inclusion_of :status, :in => [GENERATED_DRAFT, NOTIFIED_EMPLOYEE, COMPLETE, CLOSED]
 
   class << self
@@ -245,6 +246,8 @@ class ExpenseSettlement
                     :expense_report_ids => self.get_unique_report_ids.join(","),
                     :reimbursable_amount => self.get_receivable_amount.abs,
                     :bank_account_no => bank_detail.account_no,
+                    :created_by => self.created_by,
+                    :created_at => self.created_at,
                     :type => 'travel_reimbursements',
                     :id => self.id.to_s
                    })

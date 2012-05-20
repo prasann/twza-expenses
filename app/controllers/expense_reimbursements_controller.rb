@@ -77,22 +77,23 @@ class ExpenseReimbursementsController < ApplicationController
     status = !params[:process_reimbursement].blank? ? ExpenseReimbursement::PROCESSED : ExpenseReimbursement::FAULTY
     @expense_reimbursement = ExpenseReimbursement.new({:expenses => expenses,
                                                        :status => status,
+                                                       :created_by => User.find(session[:user_id]).user_name,
                                                        :total_amount => total_amount}.merge(
                                                           params.slice(:expense_report_id, :empl_id, :submitted_on, :notes)))
     if @expense_reimbursement.save
       redirect_to(expense_reimbursements_path(params.slice(:empl_id)), :flash => {:success => 'Expense reimbursements are successfully updated.'})
     else
-      render :action => "edit"
+      raise "error"
     end
   end
 
   private
   def create_unprocessed_expense_reports(empl_id, unprocessed_expenses)
     unprocessed_expenses.each do |expense_report_id, expenses|
-      @expense_reimbursements.push(ExpenseReimbursement.new(:expense_report_id => expense_report_id,
-                                                            :empl_id => empl_id,
-                                                            :submitted_on => expenses.first.report_submitted_at,
-                                                            :total_amount => expenses.collect(&:cost_in_home_currency).compact.sum.to_f)) if !expenses.empty?
+    @expense_reimbursements.push(ExpenseReimbursement.new(:expense_report_id => expense_report_id,
+                                                           :empl_id => empl_id,
+                                                           :submitted_on => expenses.first.report_submitted_at,
+                                                           :total_amount => expenses.collect(&:cost_in_home_currency).compact.sum.to_f)) if !expenses.empty?
     end
   end
 

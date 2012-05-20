@@ -1,20 +1,18 @@
 class ConsolidatedExpensesController < ApplicationController
   include ExcelDataExporter
 
-  HEADERS = ['Employee Id', 'Employee Name', 'Expense Report Id(s)', 'Account No', 'Amount']
-  COLUMNS = [:empl_id, :empl_name, :expense_report_ids, :bank_account_no, :reimbursable_amount]
+  HEADERS = ['Employee Id', 'Employee Name', 'Expense Report Id(s)', 'Account No', 'Amount', 'Created By', 'Created At']
+  COLUMNS = [:empl_id, :empl_name, :expense_report_ids, :bank_account_no, :reimbursable_amount, :created_by, :created_at]
 
   def index
     @reimbursable_expense_reports = get_reimbursable_expenses
-  rescue => e
-    redirect_to(:index, :flash => {:error => 'Could not fetch records'})
   end
 
   # TODO: Merge into the index method - based on the request format (which is already 'xls)
   def export
     render_excel(get_reimbursable_expenses)
   rescue => e
-    redirect_to(:index, :flash => {:error => 'Could not fetch records'})
+    redirect_to(consolidated_expenses_path, :flash => {:error => 'Could not fetch records'})
   end
 
   # TODO: Merge into the index method - based on the request format (which is already 'xls)
@@ -24,7 +22,7 @@ class ConsolidatedExpensesController < ApplicationController
     render_excel(completed_travel_reimbursements.concat(completed_nontravel_reimbursements))
   rescue => e
     logger.error "exception in excel export: " + e.inspect
-    redirect_to(:index, :flash => {:error => 'Could not fetch records'})
+    redirect_to(consolidated_expenses_path, :flash => {:error => 'Could not fetch records'})
   end
 
   private

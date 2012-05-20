@@ -38,7 +38,8 @@ class ExpenseSettlementsController < ApplicationController
                                            :expense_from => DateHelper.date_from_str(params[:expense_from]),
                                            :expense_to => DateHelper.date_from_str(params[:expense_to]),
                                            :forex_from => DateHelper.date_from_str(params[:forex_from]),
-                                           :forex_to => DateHelper.date_from_str(params[:forex_to])
+                                           :forex_to => DateHelper.date_from_str(params[:forex_to]),
+                                           :created_by => User.find(session[:user_id]).user_name
                                           }.merge(params.slice(:expenses, :forex_payments).symbolize_keys))
     @expense_settlement.cash_handovers.map(&:save!)
 

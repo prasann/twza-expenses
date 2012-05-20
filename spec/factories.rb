@@ -35,6 +35,7 @@ FactoryGirl.define do
     sequence(:empl_id) { |n| "#{n}" }
     submitted_on { Time.now }
     total_amount { Random.rand(125) }
+    created_by 'prasann'
   end
 
   factory :cash_handover do
@@ -52,6 +53,7 @@ FactoryGirl.define do
     forex_from { Date.today - 6.days }
     forex_to { Date.today - 3.days }
     status { ExpenseSettlement::GENERATED_DRAFT }
+    created_by 'prasann'
   end
 
   factory :bank_detail do

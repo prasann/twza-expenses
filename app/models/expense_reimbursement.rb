@@ -16,8 +16,9 @@ class ExpenseReimbursement
   field :submitted_on, type: Date
   field :total_amount, type: Float
   field :notes, type: String
+  field :created_by, type: String
 
-  validates_presence_of :expense_report_id, :empl_id, :submitted_on, :total_amount, :status, :allow_blank => false
+  validates_presence_of :expense_report_id, :empl_id, :submitted_on, :total_amount, :status, :created_by, :allow_blank => false
   validates_inclusion_of :status, :in => [PROCESSED, FAULTY, UNPROCESSED, CLOSED]
 
   class << self
@@ -102,13 +103,13 @@ class ExpenseReimbursement
     end
 
     bank_detail = BankDetail.for_empl_id(self.empl_id).first
-    # TODO: What if bank_detail is nil?
-    # TODO: Why are we returning a non-object?
     OpenStruct.new({:empl_id => self.empl_id,
-                    :empl_name => bank_detail.empl_name,
+                    :empl_name => bank_detail.try(:empl_name),
                     :expense_report_ids => self.expense_report_id,
                     :reimbursable_amount => self.total_amount,
-                    :bank_account_no => bank_detail.account_no,
+                    :bank_account_no => bank_detail.try(:account_no),
+                    :created_by => self.created_by,
+                    :created_at => self.created_at,
                     :type => 'nontravel_reimbursements',
                     :id => self.id.to_s
                    })
