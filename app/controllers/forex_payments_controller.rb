@@ -14,7 +14,7 @@ class ForexPaymentsController < ApplicationController
     forex_payments_criteria = !params[:emp_id].blank? || !params[:name].blank? ?
                                   ForexPayment.any_of({emp_id: params[:emp_id].to_i}, {emp_name: params[:name]}) :
                                   ForexPayment
-    @forex_payments = forex_payments_criteria.desc(:travel_date).page(params[:page]).per(default_per_page)
+    @forex_payments = forex_payments_criteria.desc(:issue_date).page(params[:page]).per(default_per_page)
   end
 
   def show
@@ -27,6 +27,14 @@ class ForexPaymentsController < ApplicationController
 
   def edit
     @forex_payment = ForexPayment.find(params[:id])
+  end
+
+  def clone
+    orig_payment = ForexPayment.find(params[:id])
+    @forex_payment = orig_payment.dup
+    @forex_payment.clear_clone_fields
+    # raise @forex_payment.inspect << orig_payment.inspect
+    render 'edit'
   end
 
   def create

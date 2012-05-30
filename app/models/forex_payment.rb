@@ -39,6 +39,12 @@ class ForexPayment
     end
   end
 
+  def clear_clone_fields
+    self.amount = nil
+    self.inr = nil  
+    self.issue_date = nil
+  end
+
   def convert_inr(conversion_factor)
     conversion_factor = conversion_factor || 1
     ((amount.to_f * conversion_factor) * 100).round.to_f/100

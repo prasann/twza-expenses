@@ -59,6 +59,20 @@ describe ForexPaymentsController do
     end
   end
 
+  describe "GET clone" do
+    it "duplicates a forex_payment and clears some field" do
+      forex_payment = FactoryGirl.create(:forex_payment)
+
+      get :clone, :id => forex_payment.id
+
+      actual_forex_payment = assigns(:forex_payment)
+      actual_forex_payment.amount == nil
+      actual_forex_payment.inr == nil
+      actual_forex_payment.issue_date == nil
+      response.should render_template("edit")
+    end
+  end
+
   describe "POST create" do
     describe "with valid params" do
       it "creates a new ForexPayment" do

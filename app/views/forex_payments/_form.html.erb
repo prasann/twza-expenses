@@ -39,6 +39,11 @@
           <span class="mandatory_mark">*</span></td>
       </tr>
       <tr>
+        <td class="text"><%= f.label :inr, 'INR: ' %></td>
+        <td><%= f.text_field :inr, :autocomplete => "off" %>
+          <span class="mandatory_mark">*</span></td>
+      </tr>
+      <tr>
         <td class="text"><%= f.label :place, 'Place: ' %></td>
         <td><%= f.text_field :place, :autocomplete => "off" %></td>
       </tr>
@@ -68,11 +73,6 @@
       <tr>
         <td class="text"><%= f.label :office, 'Office: ' %></td>
         <td><%= f.text_field :office, :autocomplete => "off" %></td>
-      </tr>
-      <tr>
-        <td class="text"><%= f.label :inr, 'INR: ' %></td>
-        <td><%= f.text_field :inr, :autocomplete => "off" %>
-          <span class="mandatory_mark">*</span></td>
       </tr>
     </table>
   </div>

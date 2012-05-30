@@ -33,6 +33,7 @@
     <th>Currency</th>
     <th>Place</th>
     <th></th>
+    <th></th>
   </tr>
 
   <% @forex_payments.each do |payment| %>
@@ -44,7 +45,7 @@
       <td><%= number_with_precision(payment.amount, :precision => 2) %></td>
       <td><%= payment.currency %></td>
       <td><%= payment.place %></td>
-
+      <td><%= link_to('Reload', clone_forex_payment_path(payment)) %></td>
       <td><%= link_to('Show', payment) %> |
           <%= link_to('Edit', edit_forex_payment_path(payment)) %>
           <% if (@forex_ids_with_settlement && @forex_ids_with_settlement.length && !@forex_ids_with_settlement.include?(payment.id.to_s)) %>
