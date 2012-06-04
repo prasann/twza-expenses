@@ -39,7 +39,7 @@ class ExpenseSettlementsController < ApplicationController
                                            :expense_to => DateHelper.date_from_str(params[:expense_to]),
                                            :forex_from => DateHelper.date_from_str(params[:forex_from]),
                                            :forex_to => DateHelper.date_from_str(params[:forex_to]),
-                                           :created_by => User.find(session[:user_id]).user_name
+                                           :created_by => current_user.user_name
                                           }.merge(params.slice(:expenses, :forex_payments).symbolize_keys))
     @expense_settlement.cash_handovers.map(&:save!)
 
@@ -76,7 +76,7 @@ class ExpenseSettlementsController < ApplicationController
   def file_upload
     require 'fileutils'
     @file_name = params[:file_upload][:my_file].original_filename
-    inserted_record_count = load_to_db()
+    inserted_record_count = load_to_db
     redirect_to(show_uploads_expense_settlements_path, :flash => get_flash_message(inserted_record_count > 0,
                                                               "Totally #{inserted_record_count} records from file #{@file_name} are been uploaded successfully",
                                                               'No records uploaded. Either this file has already been uploaded or all rows have errors'))
@@ -96,9 +96,9 @@ class ExpenseSettlementsController < ApplicationController
     tmp = params[:file_upload][:my_file].tempfile
     file = File.join("public", @file_name)
     FileUtils.cp(tmp.path, file)
-    inserted_record_count = ExpenseImporter.new.load_expense(file)
+    return ExpenseImporter.new.load_expense(file)
+  ensure
     FileUtils.rm(file)
-    inserted_record_count
   end
 
   def padded_dates(travel)

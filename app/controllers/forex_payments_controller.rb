@@ -33,7 +33,6 @@ class ForexPaymentsController < ApplicationController
     orig_payment = ForexPayment.find(params[:id])
     @forex_payment = orig_payment.dup
     @forex_payment.clear_clone_fields
-    # raise @forex_payment.inspect << orig_payment.inspect
     render 'edit'
   end
 

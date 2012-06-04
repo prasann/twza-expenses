@@ -169,7 +169,7 @@ describe ExpenseSettlementsController do
                                              :expense_from => "07-Dec-2011", :expense_to => "22-Dec-2011",:created_by => user_name)
 
       user = FactoryGirl.create(:user, :user_name => user_name)
-      User.stub(:find){user}
+      session[:user_id] = user.id
       expect {
         post :generate_report, :expense_settlement => { :outbound_travel_id => outbound_travel.id,
                                                         :empl_id => empl_id, :emp_name => 'name' },
@@ -190,7 +190,7 @@ describe ExpenseSettlementsController do
                                               :forex_from => "27-Nov-2011", :forex_to => "17-Dec-2011",
                                              :expense_from => "07-Dec-2011", :expense_to => "22-Dec-2011",:created_by => user_name)
       user = FactoryGirl.create(:user, :user_name => user_name)
-      User.stub(:find){user}
+      session[:user_id] = user.id
 
       expect {
         post :generate_report, :expense_settlement => {:id => expected_expense_settlement.id.to_s, 
@@ -263,7 +263,7 @@ describe ExpenseSettlementsController do
                               :cash_handovers => cash_handovers, :created_by => 'prasann')
     expense_settlement.should_receive(:get_receivable_amount).and_return(13732.5)
     user = FactoryGirl.create(:user)
-    User.stub(:find) {user}
+    session[:user_id] = user.id
     ExpenseSettlement.should_receive(:find_or_initialize).and_return(expense_settlement)
     OutboundTravel.should_receive(:set_as_processed).with(outbound_travel.id.to_s)
 

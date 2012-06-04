@@ -5,13 +5,14 @@ Mankatha::Application.routes.draw do
 
   resources :users, :only => [:new, :create]
   resources :sessions, :only => [:new, :create, :destroy]     # TODO: Usually, you dont expose the session directly - its just a mechanism to validate and carry current login state
-  
-  match "/forex_payments/:id/clone", :to => "forex_payments#clone", :as => "clone_forex_payment", :via => :get
 
   resources :forex_payments do
     collection do
       get :export
       get :data_to_suggest
+    end
+    member do
+      get :clone
     end
   end
 

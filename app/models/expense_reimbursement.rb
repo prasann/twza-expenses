@@ -47,7 +47,6 @@ class ExpenseReimbursement
       end
       completed_reimbursements
     end
-
   end
 
   def get_expenses_grouped_by_project_code
@@ -56,6 +55,7 @@ class ExpenseReimbursement
 
   def get_expenses
     begin
+      # REDTAG: If the whole loop is rescued in one fell swoop, then its "all or none" - but is that correct?
       Expense.find(expenses.collect { |expense| expense['expense_id'] })
     rescue Exception => e
       raise "No matching expense found for this settlement. The expense would have been deleted by the user.  "
@@ -95,6 +95,7 @@ class ExpenseReimbursement
     end
 
     bank_detail = BankDetail.for_empl_id(self.empl_id).first
+    # TODO: Why are we returning an OStruct rather than an object?
     OpenStruct.new({:empl_id => self.empl_id,
                     :empl_name => bank_detail.try(:empl_name),
                     :expense_report_ids => self.expense_report_id,

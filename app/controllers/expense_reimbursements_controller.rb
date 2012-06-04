@@ -75,7 +75,7 @@ class ExpenseReimbursementsController < ApplicationController
     status = !params[:process_reimbursement].blank? ? ExpenseReimbursement::PROCESSED : ExpenseReimbursement::FAULTY
     @expense_reimbursement = ExpenseReimbursement.new({:expenses => expenses,
                                                        :status => status,
-                                                       :created_by => User.find(session[:user_id]).user_name,
+                                                       :created_by => current_user.user_name,
                                                        :total_amount => total_amount}.merge(
                                                           params.slice(:expense_report_id, :empl_id, :submitted_on, :notes)))
     if @expense_reimbursement.save
