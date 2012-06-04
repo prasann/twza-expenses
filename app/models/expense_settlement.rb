@@ -219,7 +219,7 @@ class ExpenseSettlement
   end
 
   def employee_detail
-    @employee_detail ||= EmployeeDetail.find_by_emp_id(self.empl_id)
+    @employee_detail ||= EmployeeDetail.where(:emp_id => self.empl_id).first
   end
 
   private

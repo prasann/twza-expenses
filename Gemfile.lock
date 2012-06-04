@@ -137,7 +137,6 @@ GEM
       tzinfo (~> 0.3.22)
     multi_json (1.2.0)
     multipart-post (1.1.5)
-    mysql2 (0.3.10)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
@@ -289,7 +288,6 @@ DEPENDENCIES
   mailcatcher
   metrical
   mongoid
-  mysql2 (= 0.3.10)
   premailer-rails3
   rails (~> 3.2.0)
   roo
