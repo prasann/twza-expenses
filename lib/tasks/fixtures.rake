@@ -60,12 +60,11 @@ namespace :db do
     end
 
     def insert_profile(user_name, employee_id, email_id)
-      matchingProfiles = Profile.where(:employee_id => employee_id).first
-      return if !matchingProfiles.nil?
-      sql = "insert into profiles(name, common_name, employee_id, email_id) " +
-            "values ('#{user_name}', '#{user_name}', #{employee_id}, '#{email_id}')"
-      ActiveRecord::Base.establish_connection
-      ActiveRecord::Base.connection.execute(sql)
+      EmployeeDetail.create!(
+        :emp_name => user_name,
+        :emp_id => employee_id,
+        :email => email_id
+      )
     end
 
     def insert_forex(employee_id, user_name, travel_start_date, travel_end_date, currency, currency_rate, place_of_visit)

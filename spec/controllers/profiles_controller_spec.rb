@@ -1,38 +1,25 @@
 require 'spec_helper'
 
 describe ProfilesController do
-  before(:each) do
-    Profile.any_instance.stub(:readonly?).and_return(false)
-    Profile.delete_all
-  end
-
   it "should fetch the profile for the given name using like" do
-    profile_1 = Profile.create!(:common_name => "test", :employee_id => "1", :name => "test", :email_id => "a@b.com")
-    profile_2 = Profile.create!(:common_name => "b test a", :employee_id => "2", :name => "test", :email_id => "a@b.com")
-    profile_3 = Profile.create!(:common_name => "b te st a", :employee_id => "3", :name => "test", :email_id => "a@b.com")
+    emp_detail_1 = EmployeeDetail.create!(:emp_name => "test", :emp_id => "1", :email => 'a@b.com')
+    emp_detail_2 = EmployeeDetail.create!(:emp_name => "b test a", :emp_id => "2", :email => 'a@b1.com')
+    emp_detail_3 = EmployeeDetail.create!(:emp_name => "b te st a", :emp_id => "3", :email => 'a@b2.com')
 
     get :search_by_name, :term => 'test'
 
-    assigns(:profiles).size.should == 2
-    assigns(:profiles).collect(&:employee_id).should include("1")
-    assigns(:profiles).collect(&:employee_id).should include("2")
-    assigns(:profiles).collect(&:employee_id).should_not include("3")
     response.should be_success
-    response.body.should == "[{\"common_name\":\"b test a\",\"employee_id\":\"2\"},{\"common_name\":\"test\",\"employee_id\":\"1\"}]"
+    response.body.should == "[{\"emp_id\":\"1\",\"emp_name\":\"test\"},{\"emp_id\":\"2\",\"emp_name\":\"b test a\"}]"
   end
 
   it "should fetch the profile for the given id using like" do
-    profile_1 = Profile.create!(:common_name => "test", :employee_id => "1234", :name => "test", :email_id => "a@b.com")
-    profile_2 = Profile.create!(:common_name => "test a", :employee_id => "123456", :name => "test", :email_id => "a@b.com")
-    profile_3 = Profile.create!(:common_name => "a test b", :employee_id => "124356", :name => "test", :email_id => "a@b.com")
+    emp_detail_1 = EmployeeDetail.create!(:emp_name => "test", :emp_id => "1234", :email => 'a@b.com')
+    emp_detail_2 = EmployeeDetail.create!(:emp_name => "test a", :emp_id => "123456", :email => 'a@b1.com')
+    emp_detail_3 = EmployeeDetail.create!(:emp_name => "b te st a", :emp_id => "43212", :email => 'a@b2.com')
 
     get :search_by_id, :term => '234'
 
-    assigns(:profiles).size.should == 2
-    assigns(:profiles).collect(&:employee_id).should include("1234")
-    assigns(:profiles).collect(&:employee_id).should include("123456")
-    assigns(:profiles).collect(&:employee_id).should_not include("124356")
     response.should be_success
-    response.body.should == "[{\"common_name\":\"test\",\"employee_id\":\"1234\"},{\"common_name\":\"test a\",\"employee_id\":\"123456\"}]"
+    response.body.should == "[{\"emp_id\":\"1234\",\"emp_name\":\"test\"},{\"emp_id\":\"123456\",\"emp_name\":\"test a\"}]"
   end
 end

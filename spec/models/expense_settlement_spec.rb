@@ -124,24 +124,6 @@ describe ExpenseSettlement do
     end
   end
 
-  describe "employee_email" do
-    it "should return employee id appended with e-mail domain as employee e-mail ID if email_id is not available" do
-      profile = Profile.new(:email_id => '')
-      expense_settlement = FactoryGirl.build(:expense_settlement, :empl_id => 13552)
-      expense_settlement.should_receive(:profile).exactly(2).times.and_return(profile)
-      email = expense_settlement.employee_email
-      email.should == '13552' + ::Rails.application.config.email_domain
-    end
-
-    it "should return e-mail ID as employee email if it is available" do
-      profile = Profile.new(:email_id => 'johns')
-      expense_settlement = FactoryGirl.build(:expense_settlement)
-      expense_settlement.should_receive(:profile).exactly(3).times.and_return(profile)
-      email = expense_settlement.employee_email
-      email.should == 'johns' + ::Rails.application.config.email_domain
-    end
-  end
-
   describe "populate_instance_data" do
     it "should compute settlement properly when forex of multiple currencies are involved" do
       employee_id = '12321'

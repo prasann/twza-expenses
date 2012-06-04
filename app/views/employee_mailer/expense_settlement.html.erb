@@ -3,7 +3,7 @@
     <%= stylesheet_link_tag "style" %>
   </head>
   <body>
-    Dear <%= @profile.try(:get_full_name) %>, <br/><br/>
+    Dear <%= @employee_detail.try(:emp_name) %>, <br/><br/>
     <%if @expense_settlement.is_closed?%> 
       Following Travel settlement will be credited to your bank account in the next pay cycle (5th /15th /25th of every month)
     <%else%> 

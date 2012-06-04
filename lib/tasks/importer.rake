@@ -30,6 +30,13 @@ namespace :data_import do
     end
   end
 
+  desc "Creates Employee details"
+  task :employee_details => :environment do
+    if EmployeeDetail.count() == 0
+      EmployeeDetailsImporter.new.import('data/employee_details.xlsx')
+    end
+  end
+
   desc "Imports Expense sheet into DB"
   task :expense_sheet => :environment do
     ExpenseImporter.new.load

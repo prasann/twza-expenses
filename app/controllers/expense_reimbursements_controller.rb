@@ -31,8 +31,7 @@ class ExpenseReimbursementsController < ApplicationController
 
   def show
     @expense_reimbursement = ExpenseReimbursement.find(params[:id])
-    profile = @expense_reimbursement.profile
-    @empl_name = profile.try(:get_full_name) || ""
+    @empl_name = @expense_reimbursement.employee_detail.try(:emp_name) || ""
     begin
       @all_expenses = @expense_reimbursement.get_expenses_grouped_by_project_code
     rescue Exception => e
@@ -49,12 +48,11 @@ class ExpenseReimbursementsController < ApplicationController
       expenses = expenses - existing_expense_reimbursements.collect(&:get_expenses).flatten
     end
     @all_expenses = expenses.group_by(&:project_subproject)
-
-    @empl_name = expenses.first.try(:profile).try(:get_full_name) || ""
+    @empl_name = expenses.first.try(:employee_detail).try(:emp_name) || ""
 
     # TODO: Should this be an ExpenseReimbursement so that we can do method calls instead of hash-like access?
     @expense_reimbursement = {'expense_report_id' => params[:id],
-      'empl_id' => expenses.first.try(:get_employee_id),
+      'empl_id' => expenses.first.try(:empl_id),
       'submitted_on' => expenses.first.try(:report_submitted_at),
       'total_amount' => expenses.collect(&:cost_in_home_currency).compact.sum.to_f}
   end

@@ -70,20 +70,6 @@ describe ExpenseReimbursement do
     it { should contain_field(:notes, :type => String) }
   end
 
-  describe "profile" do
-    it "should fetch employee profile"
-  end
-
-  describe "email_id" do
-    it "should fetch profile email id"
-
-    it "should fetch employee id as email id"
-  end
-
-  describe "employee_email" do
-    it "should fetch email with domain"
-  end
-
   describe "is_processed?" do
     it "should return true if status is PROCESSED"
   end

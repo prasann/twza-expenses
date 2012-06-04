@@ -4,7 +4,7 @@ describe EmployeeMailer do
   describe 'expense_settlement' do
     before(:each) do
       @employee_id = 1
-      @profile = Profile.new(:employee_id => @employee_id, :email_id => 'johns', :common_name => 'John Smith', :name => 'John', :surname => 'Smith')
+      @employee_detail = EmployeeDetail.new(:emp_id => @employee_id, :email => 'johns', :emp_name => 'John Smith')
       forex = FactoryGirl.create(:forex_payment)
       travel = FactoryGirl.create(:outbound_travel, :place => 'UK', :departure_date => Time.parse('2011-10-01'))
       @travel_id = travel.id
@@ -13,8 +13,7 @@ describe EmployeeMailer do
                                                  :expense_from => Time.parse('2011-10-01'),
                                                 :expense_to => Time.parse('2011-10-11'))
       expense = {"report_id" => 123, "currency" => 'USD', "amount" => 1000, "conversion_rate" => 52.30, "local_currency_amount" => 52300}
-      @expense_settlement.should_receive(:profile).and_return(@profile)
-      @expense_settlement.should_receive(:employee_email).and_return('johns' + ::Rails.application.config.email_domain)
+      @expense_settlement.should_receive(:employee_detail).and_return(@employee_detail)
       @expense_settlement.should_receive(:get_consolidated_expenses).and_return([expense])
       @expense_settlement.should_receive(:get_forex_payments).and_return([forex])
       # @expense_settlement.should_receive(:get_conversion_rate).and_return(expense["conversion_rate"])
@@ -32,7 +31,7 @@ describe EmployeeMailer do
 
       it "should have the e-mail components properly set" do
         @email.to.size.should == 1
-        @email.to[0].should == @profile.email_id + ::Rails.application.config.email_domain
+        @email.to[0].should == @employee_detail.email
         @email.from.size.should == 1
         @email.from[0].should == ::Rails.application.config.email_sender
         @email.subject.should == 'test - ' +

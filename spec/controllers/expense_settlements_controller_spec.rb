@@ -97,11 +97,11 @@ describe ExpenseSettlementsController do
     it "should send notification to employee upon expense settlement computation" do
       expense_report_id = '1'
       employee_id = 1
-      profile = Profile.new(:common_name => employee_name)
+      employee_detail = EmployeeDetail.new(:emp_name => employee_name)
       expense_settlement = FactoryGirl.create(:expense_settlement, :empl_id => employee_id.to_s)
       ExpenseSettlement.should_receive(:find).with(expense_report_id).and_return(expense_settlement)
       expense_settlement.should_receive(:notify_employee)
-      expense_settlement.should_receive(:profile).and_return(profile)
+      expense_settlement.should_receive(:employee_detail).and_return(employee_detail)
 
       post :notify, :id => expense_report_id
 

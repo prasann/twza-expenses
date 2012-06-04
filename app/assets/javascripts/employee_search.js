@@ -12,14 +12,14 @@ $(document).ready(function(){
           response($.map(data, function(item) {
             var lbl;
             if (isEmpId == true) {
-              lbl = item.employee_id + " - " + item.common_name;
+              lbl = item.emp_id + " - " + item.emp_name;
             } else {
-              lbl = item.common_name + " - " + item.employee_id;
+              lbl = item.emp_name + " - " + item.emp_id;
             }
             return {
               label: lbl,
-              common_name: item.common_name,
-              employee_id: item.employee_id
+              emp_name: item.emp_name,
+              emp_id: item.emp_id
             }
           }));
         }
@@ -28,8 +28,8 @@ $(document).ready(function(){
     minLength: 2,
     select: function(event, ui) {
       $('.no_emp').hide();
-      $('.emp_name').val(ui.item.common_name);
-      $('.emp_id').val(ui.item.employee_id);
+      $('.emp_name').val(ui.item.emp_name);
+      $('.emp_id').val(ui.item.emp_id);
       return false;
     }
   })

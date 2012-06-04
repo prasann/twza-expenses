@@ -88,17 +88,7 @@ class ExpenseSettlement
     end
   end
 
-  def profile
-    @profile ||= Profile.find_by_employee_id(self.empl_id)
-  end
 
-  def email_id
-    @email_id ||= (profile.nil? || profile.email_id.blank?) ? empl_id.to_s : profile.email_id
-  end
-
-  def employee_email
-    email_id + ::Rails.application.config.email_domain
-  end
 
   def notify_employee
     populate_instance_data
@@ -226,6 +216,10 @@ class ExpenseSettlement
 
   def get_unique_report_ids
     @consolidated_expenses.collect { |expense| expense['report_id'] }.uniq
+  end
+
+  def employee_detail
+    @employee_detail ||= EmployeeDetail.find_by_emp_id(self.empl_id)
   end
 
   private

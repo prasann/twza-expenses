@@ -61,7 +61,7 @@ class ExpenseSettlementsController < ApplicationController
   def notify
     expense_report = ExpenseSettlement.find_and_notify_employee(params[:id])
     # TODO: What if the save or notify failed?
-    redirect_to(expense_settlements_path, :flash => {:success => "Expense settlement e-mail successfully sent to '#{expense_report.profile.try(:common_name)}'"})
+    redirect_to(expense_settlements_path, :flash => {:success => "Expense settlement e-mail successfully sent to '#{expense_report.employee_detail.try(:emp_name)}'"})
   end
 
   def show_uploads

@@ -5,8 +5,8 @@ describe ExpenseReimbursementsController do
     it "should show expense reimbursement details" do
       dummy_expense_reimbursement = FactoryGirl.create(:expense_reimbursement)
       expected_expense_reimbursement = FactoryGirl.create(:expense_reimbursement)
-      profile = Profile.new(:name => 'John', :surname => "smith")
-      expected_expense_reimbursement.should_receive(:profile).and_return(profile)
+      employee_detail = EmployeeDetail.new(:emp_name => 'John')
+      expected_expense_reimbursement.should_receive(:employee_detail).and_return(employee_detail)
       expected_expenses = FactoryGirl.create(:expense)
 
       ExpenseReimbursement.should_receive(:find).with(expected_expense_reimbursement.id.to_s).and_return(expected_expense_reimbursement)
@@ -17,7 +17,7 @@ describe ExpenseReimbursementsController do
 
       assigns(:expense_reimbursement).should == expected_expense_reimbursement
       assigns(:all_expenses).should == expected_expenses
-      assigns(:empl_name).should == 'John Smith'
+      assigns(:empl_name).should == 'John'
     end
   end
 
@@ -28,7 +28,7 @@ describe ExpenseReimbursementsController do
       expense_2 = FactoryGirl.create(:expense)
 
       existing_expense_reimbursement = FactoryGirl.create(:expense_reimbursement, :expenses => [{'expense_id' => expense_2.id}])
-      profile = Profile.new(:name => 'John', :surname => "smith")
+      employee_detail = EmployeeDetail.new(:emp_name => 'John')
       expected_expenses = {"projectsubproject" => [expense_1]}
 
       expected_expense_reimbursement = {'expense_report_id' => '123',
@@ -39,14 +39,14 @@ describe ExpenseReimbursementsController do
       ExpenseReimbursement.stub_chain(:where, :to_a).and_return([existing_expense_reimbursement])
       Expense.stub_chain(:where, :to_a).and_return([expense_1, expense_2])
 
-      expense_1.should_receive(:profile).and_return(profile)
+      expense_1.should_receive(:employee_detail).and_return(employee_detail)
 
       get :edit, :id => 123
 
       assigns(:expense_reimbursement).should == expected_expense_reimbursement
       assigns(:all_expenses).count == 1
       assigns(:all_expenses).should == expected_expenses
-      assigns(:empl_name).should == 'John Smith'
+      assigns(:empl_name).should == 'John'
     end
 
     it "should load all expenses for new expense reimbursement" do
@@ -54,8 +54,7 @@ describe ExpenseReimbursementsController do
                        :cost_in_home_currency => 1000)
       expense_2 = FactoryGirl.create(:expense, :project => 'project', :subproject => 'subproject',
                        :cost_in_home_currency => 200)
-
-      profile = Profile.new(:name => 'John', :surname => "smith")
+      employee_detail = EmployeeDetail.new(:emp_name => 'John')
       expected_expenses = {"projectsubproject" => [expense_1, expense_2]}
 
       expected_expense_reimbursement = {'expense_report_id' => '123',
@@ -66,14 +65,14 @@ describe ExpenseReimbursementsController do
       ExpenseReimbursement.stub_chain(:where, :to_a).and_return([])
       Expense.stub_chain(:where, :to_a).and_return([expense_1, expense_2])
 
-      expense_1.should_receive(:profile).and_return(profile)
+      expense_1.should_receive(:employee_detail).and_return(employee_detail)
 
       get :edit, :id => 123
 
       assigns(:expense_reimbursement).should == expected_expense_reimbursement
       assigns(:all_expenses).count == 1
       assigns(:all_expenses).should == expected_expenses
-      assigns(:empl_name).should == 'John Smith'
+      assigns(:empl_name).should == 'John'
     end
   end
 
