@@ -233,13 +233,17 @@ class ExpenseSettlement
     end
 
     bank_detail = BankDetail.for_empl_id(self.empl_id).first
+    forex_details = ForexPayment.find(forex_payments)
     # TODO: What if bank_detail is nil?
     # TODO: Why are we returning an OStruct rather than an object?
     OpenStruct.new({:empl_id => self.empl_id,
-                    :empl_name => bank_detail.empl_name,
-                    :expense_report_ids => self.get_unique_report_ids.join(","),
+                    :empl_name => bank_detail.try(:empl_name),
+                    :bank_account_no => bank_detail.try(:account_no),
+                    :cost_in_home_currency => self.get_consolidated_expenses.sum{|consolidated_expense| consolidated_expense['local_currency_amount']},
+                    :deductions => 0.0,
+                    :advance => self.get_forex_payments.sum(&:inr),
                     :reimbursable_amount => self.get_receivable_amount.abs,
-                    :bank_account_no => bank_detail.account_no,
+                    :expense_report_ids => self.get_unique_report_ids.join(","),
                     :created_by => self.created_by,
                     :created_at => self.created_at,
                     :type => 'travel_reimbursements',

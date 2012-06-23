@@ -43,7 +43,8 @@ class ExpenseReimbursement
       completed_reimbursements = []
       if(!reimbursement_ids.nil?)
         reimbursements = find(reimbursement_ids)
-        completed_reimbursements = reimbursements.collect { |reimbursement| reimbursement.__send__(:create_bank_reimbursement, true) }.compact
+        completed_reimbursements = reimbursements.collect { |reimbursement|
+         reimbursement.__send__(:create_bank_reimbursement, true) }.compact
       end
       completed_reimbursements
     end
@@ -98,9 +99,12 @@ class ExpenseReimbursement
     # TODO: Why are we returning an OStruct rather than an object?
     OpenStruct.new({:empl_id => self.empl_id,
                     :empl_name => bank_detail.try(:empl_name),
-                    :expense_report_ids => self.expense_report_id,
-                    :reimbursable_amount => self.total_amount,
                     :bank_account_no => bank_detail.try(:account_no),
+                    :cost_in_home_currency => self.total_amount,
+                    :deductions => 0.0,
+                    :advance => 0.0,
+                    :reimbursable_amount => self.total_amount,
+                    :expense_report_ids => self.expense_report_id,
                     :created_by => self.created_by,
                     :created_at => self.created_at,
                     :type => 'nontravel_reimbursements',

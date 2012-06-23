@@ -154,7 +154,9 @@ describe ExpenseSettlement do
                                    :forex_payments => forex_payments.collect(&:id),
                                    :cash_handovers => cash_handovers)
 
+
       expense_settlement.populate_instance_data
+
       expense_settlement.instance_variable_get('@net_payable').should eq 13732.5
     end
   end
@@ -176,8 +178,23 @@ describe ExpenseSettlement do
       actual_settlement_results = ExpenseSettlement.mark_all_as_complete(nil)
       actual_settlement_results.should be_empty
     end
+  end
 
-
+  describe "get_reimbursable_expense_reports" do
+     it "should generate bank settlement struct from expense settlement" do
+       persisted_expenses = [
+                    FactoryGirl.create(:expense, :expense_rpt_id => 123, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200')),
+                    FactoryGirl.create(:expense, :expense_rpt_id => 124, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
+                    FactoryGirl.create(:expense, :expense_rpt_id => 125, :original_currency => 'INR', :original_cost => BigDecimal.new('1000'),:cost_in_home_currency => BigDecimal.new('4000')),
+                    FactoryGirl.create(:expense, :expense_rpt_id => 126, :original_currency => 'EUR', :original_cost => BigDecimal.new('100'), :cost_in_home_currency => BigDecimal.new('100')),
+                    FactoryGirl.create(:expense, :expense_rpt_id => 127, :original_currency => 'EUR', :original_cost => BigDecimal.new('200'), :cost_in_home_currency => BigDecimal.new('200'))
+                  ]
+        forex_payments = [FactoryGirl.create(:forex_payment, :currency => 'USD', :inr => BigDecimal.new('100'), :amount => BigDecimal.new('100'))]
+        exp_rpt = FactoryGirl.create(:expense_settlement, :expenses => persisted_expenses.collect(&:id), :forex_payments => forex_payments.collect(&:id), :created_by => 'prasann', :status => 'Complete')
+        bank_settlement = ExpenseSettlement.get_reimbursable_expense_reports()
+        bank_settlement.size.should == 1
+        bank_settlement.first.reimbursable_amount.should == 4500.0
+      end
   end
   describe "notify_employee" do
     it "should be tested"
@@ -236,10 +253,6 @@ describe ExpenseSettlement do
   end
 
   describe "get_receivable_amount" do
-    it "should be tested"
-  end
-
-  describe "get_reimbursable_expense_reports" do
     it "should be tested"
   end
 

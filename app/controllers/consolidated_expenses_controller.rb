@@ -1,8 +1,8 @@
 class ConsolidatedExpensesController < ApplicationController
   include ExcelDataExporter
 
-  HEADERS = ['Employee Id', 'Employee Name', 'Expense Report Id(s)', 'Account No', 'Amount', 'Created By', 'Created At']
-  COLUMNS = [:empl_id, :empl_name, :expense_report_ids, :bank_account_no, :reimbursable_amount, :created_by, :created_at]
+  HEADERS = ['Employee Id', 'Name', 'Bank A/C No', 'Cost In Home Currency', 'Deduction','Amount Payable After Deduction', 'Advance', 'Net Payable', 'Created By','Created At']
+  COLUMNS = [:empl_id, :empl_name, :bank_account_no, :cost_in_home_currency, :deductions, :cost_in_home_currency, :advance, :reimbursable_amount, :created_by, :created_at]
 
   def index
     @reimbursable_expense_reports = get_reimbursable_expenses
