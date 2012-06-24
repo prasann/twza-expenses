@@ -71,24 +71,54 @@ describe ExpenseReimbursement do
   end
 
   describe "is_processed?" do
-    it "should return true if status is PROCESSED"
+    it "should return true if status is PROCESSED" do
+      expense_reimbursement_faulty = FactoryGirl.create(:expense_reimbursement,:status => ExpenseReimbursement::FAULTY)
+      expense_reimbursement_faulty.is_processed?.should be_false
+      expense_reimbursement_processed = FactoryGirl.create(:expense_reimbursement,:status => ExpenseReimbursement::PROCESSED)
+      expense_reimbursement_processed.is_processed?.should be_true
+    end
   end
 
   describe "close" do
-    it "should return true if status is CLOSED"
+    it "should set the status to Close and save the object" do
+      expense_reimbursement = FactoryGirl.create(:expense_reimbursement,:status => ExpenseReimbursement::FAULTY)
+      expense_reimbursement.is_closed?.should be_false
+      expense_reimbursement.close
+      expense_reimbursement.is_closed?.should be_true
+    end
   end
 
   describe "is_faulty?" do
-    it "should return true if status is FAULTY"
+    it "should return true if status is FAULTY" do
+      expense_reimbursement_faulty = FactoryGirl.create(:expense_reimbursement,:status => ExpenseReimbursement::FAULTY)
+      expense_reimbursement_faulty.is_faulty?.should be_true
+      expense_reimbursement_closed = FactoryGirl.create(:expense_reimbursement,:status => ExpenseReimbursement::CLOSED)
+      expense_reimbursement_closed.is_faulty?.should be_false
+    end
   end
 
   describe "is_closed?" do
-    it "should return true if status is CLOSED"
+    it "should return true if status is CLOSED" do
+      expense_reimbursement_faulty = FactoryGirl.create(:expense_reimbursement,:status => ExpenseReimbursement::FAULTY)
+      expense_reimbursement_faulty.is_closed?.should be_false
+      expense_reimbursement_closed = FactoryGirl.create(:expense_reimbursement,:status => ExpenseReimbursement::CLOSED)
+      expense_reimbursement_closed.is_closed?.should be_true
+    end
   end
 
   describe "is_editable?" do
-    it "should return true if status is NOT CLOSED or FAULTY or PROCESSED"
+    it "should return true if status is NOT CLOSED or FAULTY or PROCESSED" do
+      expense_reimbursement = FactoryGirl.create(:expense_reimbursement)
+      expense_reimbursement.is_editable?.should be_true
+    end
 
-    it "should return false for all other statuses"
+    it "should return false for all other statuses" do
+      expense_reimbursement_faulty = FactoryGirl.create(:expense_reimbursement,:status => ExpenseReimbursement::FAULTY)
+      expense_reimbursement_closed = FactoryGirl.create(:expense_reimbursement,:status => ExpenseReimbursement::CLOSED)
+      expense_reimbursement_processed = FactoryGirl.create(:expense_reimbursement,:status => ExpenseReimbursement::PROCESSED)
+      expense_reimbursement_faulty.is_editable?.should be_false
+      expense_reimbursement_closed.is_editable?.should be_false
+      expense_reimbursement_processed.is_editable?.should be_false
+    end
   end
 end
