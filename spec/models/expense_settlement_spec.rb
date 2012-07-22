@@ -30,30 +30,6 @@ describe ExpenseSettlement do
     it { should contain_field(:status, :type => String) }
   end
 
-  describe "for_empl_id" do
-    it "should be tested"
-  end
-
-  describe "with_status" do
-    it "should be tested"
-  end
-
-  describe "find_expense_ids_for_empl_id" do
-    it "should be tested"
-  end
-
-  describe "load_processed_for" do
-    it "should be tested"
-  end
-
-  describe "profile" do
-    it "should be tested"
-  end
-
-  describe "email_id" do
-    it "should be tested"
-  end
-
   describe "get_consolidated_expenses" do
     it "should consolidate expenses by rpt and currency considering conversion rate" do
       persisted_expenses = [
@@ -196,6 +172,50 @@ describe ExpenseSettlement do
         bank_settlement.first.reimbursable_amount.should == 4500.0
       end
   end
+
+  describe "for_empl_id" do
+    it "should return expense settlements with the given empl_id" do
+      expense_settlement_1 = FactoryGirl.create(:expense_settlement, :empl_id => '123')
+      expense_settlement_2 = FactoryGirl.create(:expense_settlement, :empl_id => '111')
+      expense_settlement_3 = FactoryGirl.create(:expense_settlement, :empl_id => '123')
+      expense_settlements = ExpenseSettlement.for_empl_id('123')
+      expense_settlements.size.should == 2
+      expense_settlements.should include expense_settlement_1
+      expense_settlements.should include expense_settlement_3
+    end
+  end
+
+  describe "with_status" do
+    it "should return expense settlements with the given status" do
+      expense_settlement_1 = FactoryGirl.create(:expense_settlement, :status => ExpenseSettlement::NOTIFIED_EMPLOYEE)
+      expense_settlement_2 = FactoryGirl.create(:expense_settlement, :status => ExpenseSettlement::GENERATED_DRAFT)
+      expense_settlement_3 = FactoryGirl.create(:expense_settlement, :status => ExpenseSettlement::NOTIFIED_EMPLOYEE)
+      expense_settlements = ExpenseSettlement.with_status(ExpenseSettlement::NOTIFIED_EMPLOYEE)
+      expense_settlements.size.should == 2
+      expense_settlements.should include expense_settlement_1
+      expense_settlements.should include expense_settlement_3
+    end
+  end
+
+  describe "find_expense_ids_for_empl_id" do
+    it "should find expense_settlements with expenes correspongding to an empl_id" do
+      
+
+    end
+  end
+
+  describe "load_processed_for" do
+    it "should be tested"
+  end
+
+  describe "profile" do
+    it "should be tested"
+  end
+
+  describe "email_id" do
+    it "should be tested"
+  end
+
   describe "notify_employee" do
     it "should be tested"
   end

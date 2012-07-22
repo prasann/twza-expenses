@@ -1,13 +1,13 @@
 namespace :data_import do
   desc "Import forex details - Adds onto the existing DB"
   task :forex_addon => :environment do
-    ForexDataImporter.new.import('data/Forex Details.xls')
+    ForexDataImporter.new.import('data/Forex Details Addon Latest.xls')
   end
 
   desc "Cleans and recreates Import forex details"
   task :forex => :environment do
     if ForexPayment.count() == 0
-      Rake::Task['data_import:forex_addon'].invoke
+      ForexDataImporter.new.import('data/Forex Details.xls')
     end
   end
 
