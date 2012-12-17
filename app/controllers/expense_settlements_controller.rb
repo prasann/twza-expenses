@@ -96,7 +96,7 @@ class ExpenseSettlementsController < ApplicationController
     tmp = params[:file_upload][:my_file].tempfile
     file = File.join("public", @file_name)
     FileUtils.cp(tmp.path, file)
-    return ExpenseImporter.new.load_expense(file)
+    return ExpenseImporter.new.load_expense(file,params[:file_upload][:is_new_type_expense]!="0")
   ensure
     FileUtils.rm(file)
   end

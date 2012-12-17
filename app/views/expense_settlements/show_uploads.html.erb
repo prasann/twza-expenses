@@ -1,5 +1,6 @@
 <%= form_for :file_upload,:url => {:action => 'file_upload'}, :html => {:multipart => true}, :method => "post" do |f| %>
   <%= f.file_field :my_file %>
+  <%= f.check_box :is_new_type_expense%>Is New type of expense?
   <%= f.submit "Upload" %>
 <% end %>
 
