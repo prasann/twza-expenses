@@ -14,5 +14,5 @@ uat:
   database: uat
 
 production:
-  host: 10.10.5.54 
+  host: 10.10.5.116
   database: production
