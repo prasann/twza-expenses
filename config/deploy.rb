@@ -20,14 +20,14 @@ set :stage, nil
 
 task :uat do
   set :stage, "uat"
-  role :web, "10.10.5.34"                          # Your HTTP server, Apache/etc
-  role :app, "10.10.5.34"                          # This may be the same as your `Web` server
+  role :web, "10.10.5.108"                          # Your HTTP server, Apache/etc
+  role :app, "10.10.5.108"                          # This may be the same as your `Web` server
 end
 
 task :production do
   set :stage, "production"
-  role :web, "10.10.5.54"                          # Your HTTP server, Apache/etc
-  role :app, "10.10.5.54"                          # This may be the same as your `Web` server
+  role :web, "10.10.5.116"                          # Your HTTP server, Apache/etc
+  role :app, "10.10.5.116"                          # This may be the same as your `Web` server
 end
 
 # if you're still using the script/reaper helper you will need
