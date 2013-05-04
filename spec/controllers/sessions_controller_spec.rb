@@ -27,7 +27,7 @@ describe SessionsController do
 
     it 'removes session id when the user logs out' do
       session[:user_id].should_not be_nil
-      get :destroy
+      delete :destroy, :id => 1
       session[:user_id].should be_nil
       response.should redirect_to(root_path)
     end

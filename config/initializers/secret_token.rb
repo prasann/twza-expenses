@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Mankatha::Application.config.secret_token = '9610d4356984da8a317e2a3b349e7dfed81c389e172bc985bbe6f0ba1c0abb753fbf172199973388f8e0bc4b0b752f24cade8fd7e98af3262499185426b39fd1'
+Mankatha::Application.config.secret_token = '5d37d626517df00c96826b6d565470e9f8c0ee900afb1b2ab70c00ae660210e64824321a063a1de2a634eedb154931858b79e3868984c48fc971254fe8811839'

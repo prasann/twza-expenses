@@ -108,7 +108,8 @@ namespace :db do
           :expense_type => EXPENSE_TYPES[rand(EXPENSE_TYPES.length)],
           :original_cost => original_cost,
           :original_currency => currency,
-          :report_submitted_date => expense_date.strftime(EXPENSE_SHEET_DATE_FORMAT)
+          :report_submitted_at => expense_date.strftime(EXPENSE_SHEET_DATE_FORMAT),
+          :payment_type => EXPENSE_TYPES[rand(EXPENSE_TYPES.length)]    # TODO: Not sure what values are acceptable for this field
         )
         start_date = generate_random_date_between(start_date, travel_end_date)
       end

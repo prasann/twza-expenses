@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~>3.2.0'
-gem 'mongoid'
+gem 'rails', '~>3.2.11'
+gem 'mongoid', '~>2.4.7'
 gem 'bson_ext'
 gem 'roo'
 gem 'kaminari'
@@ -15,7 +15,7 @@ gem 'typhoeus'
 
 group :assets do
   gem 'execjs'
-  gem 'therubyracer'
+  # gem 'therubyracer'
   gem 'uglifier'
 end
 
@@ -24,7 +24,7 @@ gem 'capistrano'
 
 group :development do
   gem 'mailcatcher'
-  gem 'bullet'
+  # gem 'bullet'
 end
 
 group :test do
@@ -38,5 +38,5 @@ group :test do
   gem 'shoulda-matchers'
   gem 'factory_girl'
   gem 'metrical'
-  gem 'churn', '0.0.13' # Secondary dependency from metrical, v0.0.15 brings in git as dependency
+  # gem 'churn'
 end
