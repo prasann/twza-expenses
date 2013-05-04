@@ -37,6 +37,8 @@ GEM
     bson_ext (1.6.2)
       bson (~> 1.6.2)
     builder (3.0.4)
+    bullet (4.6.0)
+      uniform_notifier
     cancan (1.6.7)
     capistrano (2.11.2)
       highline
@@ -264,6 +266,7 @@ GEM
     uglifier (1.2.4)
       execjs (>= 0.3.0)
       multi_json (>= 1.0.2)
+    uniform_notifier (1.2.0)
 
 PLATFORMS
   ruby
@@ -272,8 +275,10 @@ DEPENDENCIES
   app_constants
   bcrypt-ruby
   bson_ext
+  bullet
   cancan
   capistrano
+  churn
   execjs
   factory_girl
   jquery-rails

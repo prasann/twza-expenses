@@ -24,7 +24,7 @@ gem 'capistrano'
 
 group :development do
   gem 'mailcatcher'
-  # gem 'bullet'
+  gem 'bullet'
 end
 
 group :test do
@@ -38,5 +38,5 @@ group :test do
   gem 'shoulda-matchers'
   gem 'factory_girl'
   gem 'metrical'
-  # gem 'churn'
+  gem 'churn'
 end
