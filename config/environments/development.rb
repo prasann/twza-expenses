@@ -55,12 +55,9 @@ Mankatha::Application.configure do
 
     if defined?(::Bullet)
       Bullet.enable = true
-      # Bullet.alert = true
       Bullet.bullet_logger = true
       Bullet.console = true
-      # Bullet.growl = true
       Bullet.rails_logger = false
-      Bullet.disable_browser_cache = true
     end
 
     if should_load_non_rake_gems

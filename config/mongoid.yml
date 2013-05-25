@@ -1,18 +1,18 @@
-defaults: &defaults
-  host: localhost
-
 development:
-  <<: *defaults
-  database: dev
-
+  sessions:
+    default:
+      database: expense_dev
+      hosts:
+        - localhost:27017
+      options:
+  options:
 test:
-  <<: *defaults
-  database: test
-
-uat:
-  <<: *defaults
-  database: uat
-
-production:
-  host: 10.10.5.116
-  database: production
+  sessions:
+    default:
+      database: expense_test
+      hosts:
+        - localhost:27017
+      options:
+        consistency: :strong
+        max_retries: 1
+        retry_interval: 0

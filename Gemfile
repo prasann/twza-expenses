@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~>3.2.11'
-gem 'mongoid', '~>2.4.7'
+gem 'rails'
+gem 'mongoid'
 gem 'bson_ext'
 gem 'roo'
 gem 'kaminari'
