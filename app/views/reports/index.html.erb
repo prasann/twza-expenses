@@ -8,9 +8,5 @@
 </div>
 <div class="report_section">
   <h2>Bank Reimbursement Statement</h2>
-  <%= link_to(image_tag("excel.png") + "Generate Bank Reimbursement Statement", export_consolidated_expenses_path(:format => :xls)) %>
+  <%= link_to(image_tag("excel.png") + "Download Expense Excel sheet.", export_consolidated_expenses_path(:format => :xls)) %>
 </div>
-<div>
-  <%= link_to("Generate Final Bank Reimbursement Statement", consolidated_expenses_path) %>
-</div>
-<br/>

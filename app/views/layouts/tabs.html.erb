@@ -14,11 +14,12 @@
     <div class="content">
       <div id="menu">
         <ul class="tabs">
+          <li><%= link_to("Non-travel Reimbursement", "#expense_reimbursements", :title => "Expense Reimbursement", :"data-url" => expense_reimbursements_path) %></li>
+          <li><%= link_to("Completed Expenses", "#consolidated_expenses", :title => "Completed Expenses", :"data-url" => consolidated_expenses_path) %></li>
+          <li><%= link_to("Uploads & Reports", "#reports", :title => "Reports", :"data-url" => reports_path) %></li>
           <li><%= link_to("Outbound Travels", "#outbound_travels", :title => "Outbound Travels", :"data-url" => outbound_travels_path) %></li>
           <li><%= link_to("Forex Payments", "#forex_payments", :title => "Forex Payments", :"data-url" => forex_payments_path) %></li>
           <li><%= link_to("Travel Settlement", "#expense_settlements", :title => "Expense Settlement", :"data-url" => expense_settlements_path) %></li>
-          <li><%= link_to("Non-travel Reimbursement", "#expense_reimbursements", :title => "Expense Reimbursement", :"data-url" => expense_reimbursements_path) %></li>
-          <li><%= link_to("Uploads & Reports", "#reports", :title => "Reports", :"data-url" => reports_path) %></li>
         </ul>
         <%= yield %>
       </div>

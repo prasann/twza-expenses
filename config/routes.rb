@@ -1,7 +1,7 @@
 # TODO: Need to review and limit routes to only those methods that are implemented (eg using 'only')
 # TODO: Need to review and set the method (POST vs GET va DELETE) appropriately
 Mankatha::Application.routes.draw do
-  root :to => 'outbound_travels#index'
+  root :to => 'expense_reimbursements#index'
 
   resources :users, :only => [:new, :create]
   resources :sessions, :only => [:new, :create, :destroy]     # TODO: Usually, you dont expose the session directly - its just a mechanism to validate and carry current login state
