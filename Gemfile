@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails'
-gem 'mongoid'
+gem 'mysql2'
 gem 'bson_ext'
 gem 'roo'
 gem 'kaminari'
@@ -31,12 +31,10 @@ group :test do
   gem 'rspec'
   gem 'rspec-rails'
   gem 'rspec-instafail'
-  gem 'simplecov', :require => false
 
   # TODO: Convert to use the below gems for better code
   # gem 'mocha'
   gem 'shoulda-matchers'
   gem 'factory_girl'
-  gem 'metrical'
   gem 'churn'
 end

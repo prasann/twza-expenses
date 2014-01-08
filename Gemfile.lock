@@ -33,7 +33,6 @@ GEM
     arel (3.0.2)
     arrayfields (4.7.4)
     bcrypt-ruby (3.0.1)
-    bluff (0.1.0)
     bson (1.8.6)
     bson_ext (1.8.6)
       bson (~> 1.8.6)
@@ -55,8 +54,6 @@ GEM
       main
       ruby_parser (~> 2.3)
       sexp_processor (~> 3.0)
-    coderay (1.0.9)
-    colored (1.2)
     css_parser (1.3.4)
       addressable
     daemons (1.1.9)
@@ -72,13 +69,6 @@ GEM
       activesupport (>= 3.0.0)
     fattr (2.2.1)
     ffi (1.8.1)
-    flay (1.2.1)
-      ruby_parser (>= 1.1.0)
-      sexp_processor (>= 3.0.0)
-    flog (2.3.0)
-      ruby_parser (~> 2.0)
-      sexp_processor (~> 3.0)
-    googlecharts (1.6.8)
     haml (4.0.3)
       tilt
     highline (1.6.19)
@@ -87,7 +77,6 @@ GEM
     hpricot (0.8.6)
     htmlentities (4.3.1)
     i18n (0.6.4)
-    japgolly-Saikuro (1.1.1.0)
     journey (1.0.4)
     jquery-rails (2.2.1)
       railties (>= 3.0, < 5.0)
@@ -116,36 +105,9 @@ GEM
       fattr (>= 2.2.0)
       map (>= 5.1.0)
     map (6.2.0)
-    metric_fu (2.1.3.7.19)
-      activesupport (>= 2.0.0)
-      arrayfields (= 4.7.4)
-      bluff
-      churn (= 0.0.25)
-      coderay
-      fattr (= 2.2.1)
-      flay (= 1.2.1)
-      flog (= 2.3.0)
-      googlecharts
-      japgolly-Saikuro (>= 1.1.1.0)
-      map (= 6.2.0)
-      metric_fu-roodi (>= 2.2.0)
-      rails_best_practices (~> 0.10.1)
-      rcov (~> 0.8)
-      reek (= 1.2.12)
-      sexp_processor (~> 3.0.3)
-    metric_fu-roodi (2.2.1)
-      ruby_parser
-    metrical (0.1.0)
-      metric_fu (~> 2.1.1)
-      rcov (~> 0.9)
     mime-types (1.23)
-    mongoid (3.1.4)
-      activemodel (~> 3.2)
-      moped (~> 1.4)
-      origin (~> 1.0)
-      tzinfo (~> 0.3.22)
-    moped (1.5.0)
     multi_json (1.7.3)
+    mysql2 (0.3.14)
     net-scp (1.1.1)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
@@ -154,7 +116,6 @@ GEM
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
     nokogiri (1.5.9)
-    origin (1.1.0)
     polyglot (0.3.3)
     premailer (1.7.3)
       css_parser (>= 1.1.9)
@@ -179,14 +140,6 @@ GEM
       activesupport (= 3.2.12)
       bundler (~> 1.0)
       railties (= 3.2.12)
-    rails_best_practices (0.10.1)
-      activesupport
-      colored
-      erubis
-      haml
-      i18n
-      ruby-progressbar
-      ruby_parser
     railties (3.2.12)
       actionpack (= 3.2.12)
       activesupport (= 3.2.12)
@@ -195,16 +148,8 @@ GEM
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
     rake (10.0.4)
-    rcov (0.9.11)
     rdoc (3.12.2)
       json (~> 1.4)
-    reek (1.2.12)
-      ripper_ruby_parser (~> 0.0.7)
-      ruby2ruby (~> 1.2.5)
-      ruby_parser (~> 2.0)
-      sexp_processor (~> 3.0)
-    ripper_ruby_parser (0.0.8)
-      sexp_processor (~> 3.0)
     roo (1.11.2)
       nokogiri
       rubyzip
@@ -226,20 +171,12 @@ GEM
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
     ruby-ole (1.2.11.6)
-    ruby-progressbar (1.0.2)
-    ruby2ruby (1.2.5)
-      ruby_parser (~> 2.0)
-      sexp_processor (~> 3.0)
     ruby_parser (2.3.1)
       sexp_processor (~> 3.0)
     rubyzip (0.9.9)
     sexp_processor (3.0.10)
     shoulda-matchers (2.0.0)
       activesupport (>= 3.0.0)
-    simplecov (0.7.1)
-      multi_json (~> 1.0)
-      simplecov-html (~> 0.7.1)
-    simplecov-html (0.7.1)
     sinatra (1.3.6)
       rack (~> 1.4)
       rack-protection (~> 1.3)
@@ -290,8 +227,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   mailcatcher
-  metrical
-  mongoid
+  mysql2
   premailer-rails3
   rails
   roo
@@ -299,7 +235,6 @@ DEPENDENCIES
   rspec-instafail
   rspec-rails
   shoulda-matchers
-  simplecov
   to_xls
   typhoeus
   uglifier
