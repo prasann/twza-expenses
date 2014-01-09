@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails'
-gem 'mysql2'
+gem 'mongoid'
 gem 'bson_ext'
 gem 'roo'
 gem 'kaminari'
