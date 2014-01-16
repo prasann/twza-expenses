@@ -52,6 +52,7 @@ class ExpenseReimbursementsController < ApplicationController
 
     # TODO: Should this be an ExpenseReimbursement so that we can do method calls instead of hash-like access?
     @expense_reimbursement = {'expense_report_id' => params[:id],
+      'old_te_id' => expenses.first.try(:old_te_id),
       'empl_id' => expenses.first.try(:empl_id),
       'submitted_on' => expenses.first.try(:report_submitted_at),
       'total_amount' => expenses.collect(&:cost_in_home_currency).compact.sum.to_f}
@@ -77,7 +78,7 @@ class ExpenseReimbursementsController < ApplicationController
                                                        :status => status,
                                                        :created_by => current_user.user_name,
                                                        :total_amount => total_amount}.merge(
-                                                          params.slice(:expense_report_id, :empl_id, :submitted_on, :notes)))
+                                                          params.slice(:expense_report_id, :empl_id, :submitted_on, :notes, :old_te_id)))
     if @expense_reimbursement.save
       redirect_to(expense_reimbursements_path(params.slice(:empl_id)), :flash => {:success => 'Expense reimbursements are successfully updated.'})
     else
