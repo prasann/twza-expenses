@@ -1,15 +1,16 @@
 source 'http://rubygems.org'
 
-gem 'rails'
-gem 'mongoid'
+gem 'rails', '~>3.2.11'
+gem 'mongoid', '~>2.4.7'
 gem 'bson_ext'
-gem 'roo'
+gem 'rubyzip', '< 1.0.0'
+gem 'roo', '1.10.1'
 gem 'kaminari'
 gem 'premailer-rails3'
 gem 'to_xls'
 gem 'bcrypt-ruby'
 gem 'cancan'
-gem 'jquery-rails'
+gem "jquery-rails", "2.0.2"
 gem 'app_constants'
 gem 'typhoeus'
 
@@ -28,13 +29,8 @@ group :development do
 end
 
 group :test do
-  gem 'rspec'
-  gem 'rspec-rails'
+  gem 'rspec', '2.9.0'
+  gem "rspec-rails", "2.9.0"
   gem 'rspec-instafail'
 
-  # TODO: Convert to use the below gems for better code
-  # gem 'mocha'
-  gem 'shoulda-matchers'
-  gem 'factory_girl'
-  gem 'churn'
 end

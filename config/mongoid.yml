@@ -1,18 +1,7 @@
 development:
-  sessions:
-    default:
-      database: expense_dev
-      hosts:
-        - localhost:27017
-      options:
-  options:
+  host: localhost
+  database: expense_dev
+
 test:
-  sessions:
-    default:
-      database: expense_test
-      hosts:
-        - localhost:27017
-      options:
-        consistency: :strong
-        max_retries: 1
-        retry_interval: 0
+  host: localhost
+  database: expense_test
