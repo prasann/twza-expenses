@@ -72,7 +72,7 @@ class ExpenseReimbursementsController < ApplicationController
       expenses.push({'expense_id' => expense_id, 'modified_amount' => modified_amount})
       total_amount += modified_amount
     end
-    status = !params[:process_reimbursement].blank? ? ExpenseReimbursement::PROCESSED : ExpenseReimbursement::FAULTY
+    status = params[:process_reimbursement].blank? ? ExpenseReimbursement::FAULTY : ExpenseReimbursement::PROCESSED
     @expense_reimbursement = ExpenseReimbursement.new({:expenses => expenses,
                                                        :status => status,
                                                        :created_by => current_user.user_name,

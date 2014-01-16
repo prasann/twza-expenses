@@ -20,4 +20,8 @@ $(document).ready(function() {
   $('.date_picker').datepicker({
     dateFormat : 'dd-M-yy'
   });
+
+  $('.back_btn').click(function(){
+      window.history.back();
+  })
 });

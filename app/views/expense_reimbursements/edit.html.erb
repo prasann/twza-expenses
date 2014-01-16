@@ -63,7 +63,7 @@
   </div>
   <table id='report_buttons'>
     <tr>
-      <td><%= button_to('<< Back', "javascript:history.go(-1);") %></td>
+      <td><%= submit_tag("<< Back", :type=> "button", :class => 'back_btn') %></td>
       <td><%= submit_tag("Process", :name=>"process_reimbursement") %></td>
       <td><%= submit_tag("Mark as Faulty", :name=>"mark_as_faulty") %></td>
     </tr>
