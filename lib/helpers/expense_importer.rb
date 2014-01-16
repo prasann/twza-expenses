@@ -42,9 +42,12 @@ class ExpenseImporter
   private
   def expense(extractor, file_name)
     expense = nil
+    expensify_expense_rpt_id = extractor.call("B").split('_')
+    p expensify_expense_rpt_id
     begin
       expense = Expense.new(empl_id: get_employee_id(extractor.call("C")),
-                            expense_rpt_id: extractor.call("B").to_i,
+                            expense_rpt_id: expensify_expense_rpt_id[0].to_i,
+                            old_te_id: expensify_expense_rpt_id[1].to_i,
                             original_cost: to_money(extractor.call("M")),
                             original_currency: extractor.call("N"),
                             cost_in_home_currency: to_money(extractor.call("E")),
@@ -61,16 +64,18 @@ class ExpenseImporter
                             file_name: file_name.to_s)
     rescue Exception => e
       puts "exception during expense create: " + e.message
-      puts "could not create expense for employee: " + extractor.call("C").to_s + " report id: " + extractor.call("B").to_s + " expense_date: " + extractor.call("J").to_s
+      puts "could not create expense for employee: " + extractor.call("C").to_s + " report id: " + expensify_expense_rpt_id.to_s + " expense_date: " + extractor.call("J").to_s
     end
     expense
   end
 
   def expense_as_per_new_te(extractor, file_name)
     expense = nil
+    expensify_expense_rpt_id = extractor.call("B").split('_')
     begin
       expense = Expense.new(empl_id: get_employee_id(extractor.call("D")),
-                            expense_rpt_id: extractor.call("B").to_i,
+                            expense_rpt_id: expensify_expense_rpt_id[0].to_i,
+                            old_te_id: expensify_expense_rpt_id[1].to_i,
                             original_cost: to_money(extractor.call("L")),
                             original_currency: extractor.call("M"),
                             cost_in_home_currency: to_money(extractor.call("L")),

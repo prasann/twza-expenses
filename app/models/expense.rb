@@ -2,6 +2,7 @@ class Expense
   include Mongoid::Document
 
   field :empl_id, type: Integer    #TODO: Why is this in a different type than in other models? Also, why the different names?
+  field :old_te_id, type: Integer
   field :expense_rpt_id, type: Integer
   field :original_cost, type: BigDecimal
   field :original_currency, type: String

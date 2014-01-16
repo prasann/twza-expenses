@@ -89,6 +89,7 @@ class ExpenseReimbursementsController < ApplicationController
   def create_unprocessed_expense_reports(empl_id, unprocessed_expenses)
     unprocessed_expenses.each do |expense_report_id, expenses|
     @expense_reimbursements.push(ExpenseReimbursement.new(:expense_report_id => expense_report_id,
+                                                          :old_te_id => expenses.first.old_te_id,
                                                            :empl_id => empl_id,
                                                            :submitted_on => expenses.first.report_submitted_at,
                                                            :total_amount => expenses.collect(&:cost_in_home_currency).compact.sum.to_f)) if !expenses.empty?
