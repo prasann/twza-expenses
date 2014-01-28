@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/mongoid/mongoid.git
-  revision: 56862bd5a6f09ae83e7c371d52fa472631e7761e
+  revision: 01013e8bc55abf5ab6c40538381f3c2be371fe60
   specs:
     mongoid (4.0.0.alpha2)
       activemodel (>= 4.0.0)
@@ -46,7 +46,7 @@ GEM
     atomic (1.1.14)
     bcrypt-ruby (3.1.2)
     bluff (0.1.0)
-    bson (2.1.2)
+    bson (2.2.0)
     bson_ext (1.5.1)
     builder (3.1.4)
     bullet (4.7.1)
@@ -111,7 +111,7 @@ GEM
       thor (~> 0.14)
     json (1.8.1)
     json_pure (1.8.1)
-    jwt (0.1.10)
+    jwt (0.1.11)
       multi_json (>= 1.5)
     kaminari (0.15.1)
       actionpack (>= 3.0.0)
@@ -250,7 +250,7 @@ GEM
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
     ruby-ole (1.2.11.7)
-    ruby-progressbar (1.4.0)
+    ruby-progressbar (1.4.1)
     ruby2ruby (1.2.5)
       ruby_parser (~> 2.0)
       sexp_processor (~> 3.0)

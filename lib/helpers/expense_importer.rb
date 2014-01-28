@@ -24,7 +24,7 @@ class ExpenseImporter
   end
 
   def file_exists?(file_name)
-    UploadedExpense.exists?(conditions: {file_name: file_name})
+    UploadedExpense.where(file_name: file_name).exists?
   end
 
   def to_money(money_str)
@@ -49,7 +49,8 @@ class ExpenseImporter
                             expense_rpt_id: expensify_expense_rpt_id[0].to_i,
                             old_te_id: expensify_expense_rpt_id[1].to_i,
                             original_cost: to_money(extractor.call("M")),
-                            original_currency: extractor.call("N"),
+                            original_currency: extractor.call("A"),
+                            home_currency: getCurrencyType(extractor.call("A")),
                             cost_in_home_currency: to_money(extractor.call("E")),
                             expense_date: to_date(extractor.call("J")),
                             report_submitted_at: to_date(extractor.call("T")),
@@ -67,6 +68,11 @@ class ExpenseImporter
       puts "could not create expense for employee: " + extractor.call("C").to_s + " report id: " + expensify_expense_rpt_id.to_s + " expense_date: " + extractor.call("J").to_s
     end
     expense
+  end
+
+  def getCurrencyType(office_name)
+    {'TWZAF'=>'ZAR','TWIND' => 'INR','TWUGA' => 'UGX'}[office_name];
+
   end
 
   def expense_as_per_new_te(extractor, file_name)

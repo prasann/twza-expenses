@@ -39,7 +39,7 @@
         <td><%= expense.expense_type %></td>
         <td><%= DateHelper.date_fmt(expense.expense_date) %></td>
         <td><%= @expense_reimbursement.expenses.detect{|e| e['expense_id'] == expense.id.to_s}["modified_amount"] %></td>
-        <td>INR</td>
+        <td><%= expense.home_currency %></td>
         <td><%= expense.description %></td>
         <td><%= expense.vendor %></td>
         <td><%= expense.payment_type %></td>

@@ -18,6 +18,7 @@ class Expense
   field :expense_type, type: String
   field :description, type: String
   field :file_name, type: String
+  field :home_currency, type: String
 
   # TODO: report submitted need not be marked as mandatory as it has no functional significance but submitted on in expense reimbursement is derived from this
   #       if submitted on is removed from mandatory list there report submitted at can be removed from here anycase it is harmless as T&E has that date auto anycase
