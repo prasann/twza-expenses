@@ -19,7 +19,7 @@ uat: &uat
   <<: *defaults
   SMTP_SETTINGS:
     <<: *default_smtp_settings
-    :address: "10.10.1.5"
+    :address: "localhost"
     :port: 25
     :enable_starttls_auto: true
 
