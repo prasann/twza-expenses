@@ -14,6 +14,7 @@ gem 'cancan'
 gem "jquery-rails", "2.0.2"
 gem 'app_constants'
 gem 'typhoeus'
+gem 'sqlite3'
 
 group :assets do
   gem 'execjs'
