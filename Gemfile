@@ -22,7 +22,6 @@ group :assets do
 end
 
 # Deploy with Capistrano
-gem 'net-ssh', '2.8.1', git: 'https://github.com/net-ssh/net-ssh.git'
 gem 'capistrano'
 
 group :development do

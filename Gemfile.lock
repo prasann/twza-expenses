@@ -8,12 +8,6 @@ GIT
       origin (~> 2.1)
       tzinfo (>= 0.3.37)
 
-GIT
-  remote: https://github.com/net-ssh/net-ssh.git
-  revision: 6fc2b4d782a45ead3cf2ca14b3c3fad1d738acc2
-  specs:
-    net-ssh (2.8.1)
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -179,6 +173,7 @@ GEM
     multipart-post (2.0.0)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
+    net-ssh (2.8.0)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
     oauth (0.4.7)
@@ -349,7 +344,6 @@ DEPENDENCIES
   mailcatcher
   metrical
   mongoid!
-  net-ssh (= 2.8.1)!
   premailer-rails3
   rails (= 4.0.2)
   roo (= 1.10.1)
