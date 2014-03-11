@@ -22,7 +22,7 @@ group :assets do
 end
 
 # Deploy with Capistrano
-gem 'capistrano'
+gem 'capistrano', '2.11.2'
 
 group :development do
   gem 'mailcatcher'
