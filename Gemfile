@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'rails', '4.0.2'
 gem 'activeresource'
-gem 'mongoid', github: 'mongoid/mongoid'
+gem 'mongoid', git: 'git://github.com/mongoid/mongoid.git'
 gem 'bson_ext'
 gem 'rubyzip', '< 1.0.0'
 gem 'roo', '1.10.1'
