@@ -43,8 +43,4 @@ describe EmployeeMailer do
       end
     end
   end
-
-  describe "non_travel_expense_reimbursement" do
-    it "should be tested"
-  end
 end
