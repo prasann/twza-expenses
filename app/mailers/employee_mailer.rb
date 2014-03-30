@@ -30,7 +30,7 @@ class EmployeeMailer < ActionMailer::Base
     subject = EXPENSE_REIMBURSEMENT_SUBJECT.sub('$expense_report_id', @expense_reimbursement.expense_report_id.to_s)
     subject.insert(0, "#{Rails.env} - ") unless Rails.env.production?
 
-    mail(:from => from_addres(expense_reimbursement) :to => to_address(expense_reimbursement.empl_id), :subject => subject, :content_type => "text/html") do |format|
+    mail(:from => from_addres(expense_reimbursement), :to => to_address(expense_reimbursement.empl_id), :subject => subject, :content_type => "text/html") do |format|
       format.html { render :action => 'non_travel_expense_reimbursement' }
     end
   end
