@@ -72,7 +72,6 @@ class ExpenseImporter
 
   def getCurrencyType(office_name)
     {'TWZAF'=>'ZAR','TWIND' => 'INR','TWUGA' => 'UGX'}[office_name];
-
   end
 
   def expense_as_per_new_te(extractor, file_name)

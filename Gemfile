@@ -26,7 +26,6 @@ end
 gem 'capistrano'
 
 group :development do
-  gem 'mailcatcher'
   gem 'bullet'
 end
 

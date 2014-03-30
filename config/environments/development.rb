@@ -53,13 +53,6 @@ Mankatha::Application.configure do
 
     require 'open3'
 
-    if defined?(::Bullet)
-      Bullet.enable = true
-      Bullet.bullet_logger = true
-      Bullet.console = true
-      Bullet.rails_logger = false
-    end
-
     if should_load_non_rake_gems
       stdin, stdout, stderr = Open3.popen3('mailcatcher')
       output = stdout.readlines.join

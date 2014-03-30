@@ -67,10 +67,9 @@ class ExpenseReimbursementsController < ApplicationController
     # TODO: Is 'expense_map' even being used?
     expense_map = Hash.new
     Expense.for_expense_report_id(params[:expense_report_id]).to_a.map { |expense| expense_map[expense.id.to_s] = expense }
-
     expense_ids.each do |expense_id|
       modified_amount = expense_amount[expense_id].to_f
-      expenses.push({'expense_id' => expense_id, 'modified_amount' => modified_amount})
+      expenses.push({'expense_id' => expense_id, 'modified_amount' => modified_amount, 'home_currency' => expense_map[expense_id].home_currency})
       total_amount += modified_amount
     end
     status = params[:process_reimbursement].blank? ? ExpenseReimbursement::FAULTY : ExpenseReimbursement::PROCESSED

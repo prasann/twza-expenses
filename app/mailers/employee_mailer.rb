@@ -8,7 +8,6 @@ class EmployeeMailer < ActionMailer::Base
   EXPENSE_REIMBURSEMENT_SUBJECT = "Expense reimbursement for your expense report $expense_report_id"
 
   default :from => ::Rails.application.config.email_sender
-  mail_addr_currency_hash = {'ZAR'=>'twzafinance@thoughtworks.com','INR' => 'twindfinance@thoughtworks.com','UGX' => 'financeuganda@thoughtworks.com'}
 
   def expense_settlement(expense_settlement)
     @expense_settlement = expense_settlement
@@ -30,7 +29,7 @@ class EmployeeMailer < ActionMailer::Base
     subject = EXPENSE_REIMBURSEMENT_SUBJECT.sub('$expense_report_id', @expense_reimbursement.expense_report_id.to_s)
     subject.insert(0, "#{Rails.env} - ") unless Rails.env.production?
 
-    mail(:from => from_addres(expense_reimbursement), :to => to_address(expense_reimbursement.empl_id), :subject => subject, :content_type => "text/html") do |format|
+    mail(:from => from_address(expense_reimbursement), :to => to_address(expense_reimbursement.empl_id), :subject => subject, :content_type => "text/html") do |format|
       format.html { render :action => 'non_travel_expense_reimbursement' }
     end
   end
@@ -40,9 +39,13 @@ class EmployeeMailer < ActionMailer::Base
   end
 
   def from_address(expense_reimbursement)
-    home_currencies = er.expenses.collect {|expense| expense.home_currency }
-    freq = home_currencies.inject(Hash.new(0)) {|currency_hash,currency| currency_hash[currency]+=1; currrency_hash}
+    home_currencies = expense_reimbursement.expenses.collect {|expense| expense['home_currency']}
+    freq = home_currencies.inject(Hash.new(0)) {|currency_hash,currency| currency_hash[currency]+=1; currency_hash}
     predominant_home_currency = home_currencies.max_by{|v| freq[v]}
-    mail_addr_currency_hash[predominant_home_currency] || 'twindfinance@thoughtworks.com'
+    mail_addr_currency_hash(predominant_home_currency) || 'twindfinance@thoughtworks.com'
+  end
+
+  def mail_addr_currency_hash(home_currency)
+    {'ZAR'=>'twzafinance@thoughtworks.com','INR' => 'twindfinance@thoughtworks.com','UGX' => 'financeuganda@thoughtworks.com'}[home_currency]  
   end
 end
